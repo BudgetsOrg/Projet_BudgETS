@@ -1,9 +1,9 @@
 # Projet_BudgETS
 # Projet Intégrateur TCH099
 ## Description du projet
-  ### Le public cible: Étudiants pour tous les genres dans une établissement québécoise. 
-  ### L'application est en français. Facultatif en anglais.
-  ### le but: Aider les étudiants québecois à planifier leur dépenses et à mieux gérer leur porte-feuille sur une période d'une sessions, sur la période de leur études.
+  Le public cible: Étudiants pour tous les genres dans un établissement québécois. 
+  L'application est en français. Facultatif en anglais.
+  Le but: Aider les étudiants québecois à planifier leur dépenses et à mieux gérer leur porte-feuille sur une période d'une sessions, sur la période de leur études.
   ### les fonctionalités principales: 
     - Faciliter l'épargne de l'argent
     - Spotify wrapped - mais pour tes finances
@@ -20,7 +20,7 @@
     - Page d'éducation financière
     
 ## choix des deux interfaces et stacks technologiques utilisés:
-  ### Web deveope avec Visual Studio Code (HTML, CSS (Tailwind, SASS), REACT (Typescript ou js), NestJs(TypeORM /php) , REST API)   
+  ### Web deveope avec Visual Studio Code (HTML, CSS (Tailwind, SASS), REACT, NestJs(TypeORM), REST API)   
   ### Mobile develope avec Android Studio (Developpé en Java) REACT
   
 

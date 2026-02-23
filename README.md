@@ -24,7 +24,7 @@
   - Mobile développé avec: Android Studio (Developpé en Java) REACT
   
 
-## choix de bases de donnéés et des tables:
+## Choix de bases de donnéés et des tables:
   ### MySQL/SQLite (Version 1):
     - Client
     - Compte

@@ -24,21 +24,14 @@
   - Mobile développé avec: Android Studio (Developpé en Java)
 
 ## Choix de bases de donnéés et des tables:
-  ### MySQL/SQLite (Version 1):
+  ### MySQL:
     - Client
     - Compte
-    - Dépenses mensuelles
-    - Dépenses variables
-    - Revenue
-    - Épargne
-  ### MySQL/SQLite (Version 2):
-    - Client
-    - Compte
-    - Dépense
+    - Dépenses
     - Revenue
     - Catégories des dépenses
     - Épargne
 
 ## Présentation des informations multiusagers:
-  Tout les utilisateurs seront des clients. Pas d'administrateur.
+  Tous les utilisateurs seront des clients. Pas d'administrateur.
 

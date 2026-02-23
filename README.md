@@ -19,9 +19,9 @@
     - Objectifs d'épargne en commun
     - Page d'éducation financière
     
-## choix des deux interfaces et stacks technologiques utilisés:
-  ### Web deveope avec Visual Studio Code (HTML, CSS (Tailwind, SASS), REACT, NestJs(TypeORM), REST API)   
-  ### Mobile develope avec Android Studio (Developpé en Java) REACT
+## Choix des deux interfaces et stacks technologiques utilisés:
+  - Web développé avec: Visual Studio Code (HTML, CSS (Tailwind, SASS), REACT, NestJs(TypeORM), REST API)   
+  - Mobile développé avec: Android Studio (Developpé en Java) REACT
   
 
 ## choix de bases de donnéés et des tables:

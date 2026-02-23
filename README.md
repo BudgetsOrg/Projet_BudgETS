@@ -1,7 +1,7 @@
 # Projet_BudgETS
 # Projet Intégrateur TCH099
 ## Description du projet
-  ### the target audience: étudiants pour tout les genres dans une etbalissement quebecoise. 
+  ### Le public cible: Étudiants pour tout les genres dans une établissement québécoise. 
   ### L'application est en francais. Facultatif en anglais.
   ### le but: Aider les etudiants quebecois à planifier leur depenses et à mieux gerer leur portefueille # sur une periode dune sessions, sur la perode de leur etudes.
   ### les fonctionalites prinicpales: 
@@ -19,8 +19,8 @@
     - Objectifs d'epargne en commun
     
 ## choix des deux interfaces et stacks technologiques utilisés:
-  ### Web deveope avec Visual Studio Code (HTML, CSS (Tailwind, SASS), Django*, Typescript ou js, TypeORM ou php, NestJs, REST API)   
-  ### Mobile develope avec Android Studio (Developpé en Java)
+  ### Web deveope avec Visual Studio Code (HTML, CSS (Tailwind, SASS), REACT, Typescript ou js, TypeORM ou php, NestJs, REST API)   
+  ### Mobile develope avec Android Studio (Developpé en Java) REACT
   
 
 ## choix de bases de donnéés et des tables:

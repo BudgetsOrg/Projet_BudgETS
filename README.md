@@ -40,6 +40,6 @@
     - Catégories des dépenses
     - Épargne
 
-## presentation des informations multiusagers:
+## Présentation des informations multiusagers:
   Tout les utilisateurs seront des clients. Pas d'administrateur.
 

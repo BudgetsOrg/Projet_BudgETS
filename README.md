@@ -28,7 +28,7 @@
     - Client
     - Compte
     - Dépenses
-    - Revenue
+    - Revenu
     - Catégories des dépenses
     - Épargne
 

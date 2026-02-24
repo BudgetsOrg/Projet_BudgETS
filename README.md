@@ -20,7 +20,7 @@
     - Page d'éducation financière
     
 ## Choix des deux interfaces et stacks technologiques utilisés:
-  - Web développé avec: HTML, CSS (Tailwind), REACT, NestJs(TypeORM), REST API   
+  - Web développé avec: HTML, CSS (Tailwind), REACT (Javascript), NestJs(TypeORM), REST API   
   - Mobile développé avec: Android Studio (Developpé en Java)
 
 ## Choix de bases de donnéés et des tables:

@@ -10,7 +10,7 @@
     - Prendre les statements de banque, puis les convertir en données qu'on peut manipuler
     - Création de catégorie (comme des enveloppes)
     - Déclaration des impots (en forme de notification)
-    - Dépenses mensuelles, dépenses variables
+    - Dépenses récurrentes, dépenses variables
     - gerer les retraits de banques, ajouter des depenses en cash.
     - Notification pour épargner de l'argent
     - Notification à chaque jour de rentrer les dépenses faits

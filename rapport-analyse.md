@@ -7,13 +7,18 @@
   - Koya Annabelle Lacombe Cardenas: annabellecard3nas
 
 ## Description l'objectif principal de l'application
-
+Le public ciblé sont les étudiants de tous les genres dans un établissement québécois. L'application est en français. Facultatif en anglais. Le but: Aider les étudiants québecois à planifier leur dépenses et à mieux gérer leur porte-feuille sur une période d'une sessions, sur la période de leur études.
 
 ## Choix technologique pour l'application
+ - Web développé avec: HTML, CSS, REST API, REACT (Javascript)   
+ - Mobile développé avec: Android Studio (Developpé en Java)
 
 ### Choix des deux interfaces et les technologies/framework/librairies utilisés
+ - Web développé avec: HTML, Tailwind), REACT , NestJs(TypeORM), REST API   
+ - Mobile développé avec: Android Studio (Java, XML)
 
 ### Choix de technologies/framework/librairies pour l'API REST
+ - Web développé avec:  NestJs(TypeORM)   
 
 # Planification du Sprint 1 
 

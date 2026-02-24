@@ -23,8 +23,7 @@ Le public ciblé sont les étudiants de tous les genres dans un établissement q
 # Planification du Sprint 1 
 
 ## Diagramme de cas d'utilisation
-
-Créez un diagramme de cas d'utilisation pour le système de votre projet. Celui-ci devra identifier les différents acteurs possibles du système et leurs cas d'utilisation comme vue en classe.
+<img width="1340" height="880" alt="Cas d&#39;utilisation système complet" src="https://github.com/user-attachments/assets/9ec84161-0b9d-4596-bd1b-a73684a0c23e" />
 
 ## Schéma initial de la base de données
 

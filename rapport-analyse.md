@@ -1,10 +1,10 @@
 ## Liste des membres de l'équipe avec identifiant Github et Discord
-  Panagiotis Katsanis: PKatETS
-  Sarah Salah: Harsa1
-  Hadjar Rafes: Hadjar18
-  Justine Ouellette: JuOuellette
-  Mohamed-Amine Allet: MohamedAmineAllet
-  Koya Annabelle Lacombe Cardenas: annabellecard3nas
+  - Panagiotis Katsanis: PKatETS
+  - Sarah Salah: Harsa1
+  - Hadjar Rafes: Hadjar18
+  - Justine Ouellette: JuOuellette
+  - Mohamed-Amine Allet: MohamedAmineAllet
+  - Koya Annabelle Lacombe Cardenas: annabellecard3nas
 
 ## Description l'objectif principal de l'application
 

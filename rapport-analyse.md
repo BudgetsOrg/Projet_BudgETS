@@ -48,9 +48,9 @@ Le public ciblé sont les étudiants de tous les genres dans un établissement q
    
 8. En tant que travailleur, je veux recevoir des rappels pour ma déclaration d'impôts afin d'éviter les pénalités de retard.
    
-9. En tant qu'utilisateur de commerces "cash-only", je veux saisir manuellement mes dépenses en liquide et gérer mes retraits afin que mon solde d'application soit toujours juste.
+9. En tant qu'utilisateur qui fréquente beaucoup de commerces "cash-only", je veux saisir manuellement mes dépenses en liquide et gérer mes retraits afin que mon solde d'application soit toujours juste.
     
-10. En tant qu'utilisateur quittant l'application, je veux supprimer mon compte et mes données personnelles afin de protéger ma vie privée après l'utilisation du service.
+10. En tant qu'utilisateur voulant quitter et supprimer l'application, l'administrateur veut pouvoir supprimer son compte et ses données personnelles.
 
 Complétez une dizaine de user stories pour votre projet. Ajoutez-les comme Issues (sur github) qui seront gérées dans votre projet.
 

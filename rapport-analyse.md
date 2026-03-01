@@ -31,9 +31,26 @@ Le public ciblé sont les étudiants de tous les genres dans un établissement q
     * Insérez soit un diagramme entités-relations ou un diagramme de classe à votre choix.
 
 ## Liste d’user stories
-Visité le site suivant pour comprendre les user stories :
 
-[User stories](https://www.atlassian.com/fr/agile/project-management/user-stories)
+1. En tant qu'ami d'un groupe, je veux créer un objectif d'épargne commun afin de financer un cadeau collectif (ex: bracelet en or) sans porter le coût seul.
+  
+2. En tant qu'utilisateur distrait, je veux recevoir une notification quotidienne pour entrer mes dépenses afin de garder une comptabilité rigoureuse sans effort.
+   
+3. En tant qu'étudiant occupé, je veux scanner mes relevés de banque (ou factures) afin de convertir automatiquement mes dépenses en données manipulables sans saisie manuelle.
+  
+4. En tant qu'étudiant ayant son permis, je veux définir un objectif d'épargne personnel afin de mettre de côté l'argent nécessaire pour l'achat de ma première voiture.
+   
+5. En tant qu'abonné à des services (ex: téléphone, streaming), je veux identifier mes dépenses récurrentes vs variables afin de prévoir mon solde à la fin du mois.
+
+6. En tant qu'utilisatrice sans budget fixe, je veux créer des catégories (système d'enveloppes) afin de répartir ma paye et ne pas tout dépenser impulsivement.
+   
+7. En tant que nouveau détenteur d'un compte bancaire, je veux accéder à une page d'éducation financière afin d'apprendre les bases de la gestion d'argent.
+   
+8. En tant que travailleur, je veux recevoir des rappels pour ma déclaration d'impôts afin d'éviter les pénalités de retard.
+   
+9. En tant qu'utilisateur de commerces "cash-only", je veux saisir manuellement mes dépenses en liquide et gérer mes retraits afin que mon solde d'application soit toujours juste.
+    
+10. En tant qu'utilisateur quittant l'application, je veux supprimer mon compte et mes données personnelles afin de protéger ma vie privée après l'utilisation du service.
 
 Complétez une dizaine de user stories pour votre projet. Ajoutez-les comme Issues (sur github) qui seront gérées dans votre projet.
 

@@ -27,8 +27,8 @@ Le public cible est les étudiants de tous genres dans un établissement québé
 
 ## Schéma initial de la base de données
 
-* Insérez une image du schéma de la base de données (vous pouvez amélioré changer le schéma durant le restant du développement)
-    * Insérez soit un diagramme entités-relations ou un diagramme de classe à votre choix.
+<img width="1055" height="571" alt="Capture d’écran 2026-03-04 131034" src="https://github.com/user-attachments/assets/7406d3ab-0c82-4206-9e6a-ec183aabbf60" />
+
 
 ## Liste d’user stories
 

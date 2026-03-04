@@ -55,5 +55,24 @@ Le public cible est les étudiants de tous genres dans un établissement québé
 ### Liste de requis technologiques
 Ajoutez les requis technologiques avec les liens vers les Issues de votre projet.
 
+NestJS : Gestion des routes de l'API (Ajouter, Supprimer, Lister).
+- Pour structurer le backend de façon modulaire et assurer une validation robuste des données entrantes.
+
+TypeORM : Communication entre l'API et la base de données.
+- Permet de manipuler la base de données MySQL en TypeScript. On évite d'écrire du SQL brut, ce qui réduit les erreurs et facilite la maintenance.
+
+MySQL : Stockage persistant des données.
+- Pour gérer les **relations** complexes (ex: une dépense est liée à une ou plusieurs catégories) grâce à son système relationnel robuste.
+
+Framework REACT : Création de l'interface utilisateur (UI)
+- **Composants Fonctionnels & Hooks (useState, useEffect) :**
+Pour créer une interface **dynamique**. Les Hooks permettent de mettre à jour l'affichage instantanément (ex: rafraîchir le solde après une dépense) sans recharger toute la page.
+
+Tailwind CSS : style visuel de l’application web 
+- Pour le design "Mobile-First" et le stylage rapide. Cela permet de créer une application esthétique, moderne et adaptée aux téléphones intelligents grâce à des classes utilitaires intégrées directement dans le code React. 
+
 ### Liste de requis non fonctionnels
 Ajoutez les requis non fonctionnels avec les liens vers les Issues de votre projet.
+
+Sécurité et Confidentialité : 
+- L'application doit garantir la protection des données financières en hachant les mots de passe

@@ -7,7 +7,7 @@
   - Koya Annabelle Lacombe Cardenas: annabellecard3nas
 
 ## Description l'objectif principal de l'application
-Le public ciblé sont les étudiants de tous les genres dans un établissement québécois. L'application est en français. Facultatif en anglais. Le but: Aider les étudiants québecois à planifier leur dépenses et à mieux gérer leur porte-feuille sur une période d'une sessions, sur la période de leur études.
+Le public cible est les étudiants de tous genres dans un établissement québécois. L'application est en français. Facultatif en anglais. Le but: aider les étudiants québecois à planifier leurs dépenses et à mieux gérer leur porte-feuille sur une période d'une session et pendant la durée de leurs études.
 
 ## Choix technologique pour l'application
  - Web développé avec: HTML, CSS, REST API, REACT (Javascript)   

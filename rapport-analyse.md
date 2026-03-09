@@ -76,3 +76,12 @@ Ajoutez les requis non fonctionnels avec les liens vers les Issues de votre proj
 
 Sécurité et Confidentialité : 
 - L'application doit garantir la protection des données financières en hachant les mots de passe
+
+Rapidité et Look : 
+- Le site doit s'afficher relativement vite et rester facile à utiliser grâce à un design simple qui s'adapte à tous les écrans.
+
+Clarté : 
+- L'interface doit être super simple pour qu'un nouvel utilisateur comprenne tout de suite comment ajouter son argent sans avoir besoin d'un manuel.
+
+Entretien du code : 
+- Le code doit être bien organisé et clair pour qu'on puisse facilement corriger des bugs ou ajouter des nouvelles options plus tard.

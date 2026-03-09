@@ -52,6 +52,10 @@ Le public cible est les étudiants de tous genres dans un établissement québé
     
 [10. En tant qu'utilisateur voulant quitter et supprimer l'application, l'administrateur veut pouvoir supprimer son compte et ses données personnelles.](https://github.com/PKatETS/Projet_BudgETS/issues/10#issue-4008292373)
 
+[11. En tant qu'utilisateur voulant s'inscrire à l'application, je veux me créer un compte pour gérer mieux mon argent.](https://github.com/BudgetsOrg/Projet_BudgETS/issues/11#issue-4045837502)
+
+[12. En tant qu'utilisateur voulant accéder à mon compte, je veux me connecter à mon compte.](https://github.com/BudgetsOrg/Projet_BudgETS/issues/12#issue-4045838721) 
+
 ### Liste de requis technologiques
 Ajoutez les requis technologiques avec les liens vers les Issues de votre projet.
 

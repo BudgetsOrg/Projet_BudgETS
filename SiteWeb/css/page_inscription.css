@@ -1,0 +1,61 @@
+
+h1 {
+    text-align: center;
+    color : white;
+}
+p.sous-titre {
+    text-align : center;  
+    font-size : 14px;  
+    color : white;
+}
+.form_vertical  input{
+    outline: none;
+    width : 458px;
+    height : 35px;
+    border-radius : 20px;
+    margin:5px;    
+    
+}
+.form_horizental  input {
+    outline: none;
+
+    width : 222px;
+    height : 35px;
+    border-radius : 20px;
+    margin:5px;
+}
+input {
+border: none;
+padding-left: 15px;
+}
+input:focus {
+    border: 2px solid rgb(0,166,85);
+}
+
+.avatar_default {
+    width : 125px;
+    height : 125px;
+    display : block;
+    margin : auto;
+}
+.form_horizental {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+.form_vertical {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+body {
+    background-color: rgb(147,195,101);
+    width : 100vw;
+    height : 100vh;
+}
+.main_inscription {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 50px;
+}

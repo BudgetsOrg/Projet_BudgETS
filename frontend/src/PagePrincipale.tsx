@@ -1,52 +1,69 @@
+//Justine
 import { PieChart } from "react-minimal-pie-chart";
-
-type PagePrincipaleProps = {
-  // it is not a string will have to be changed
-  utilisateurCourant: string;
-};
-
-type ProfilProps = {
-  utilisateurCourant: string;
-};
+// import react
 
 //prend en paramètre les budgets et calculer les proportions en pourcentage
 function GraphCirculaire() {
-  <PieChart
-    data={[
-      { title: "One", value: 10, color: "#E38627" },
-      { title: "Two", value: 15, color: "#C13C37" },
-      { title: "Three", value: 20, color: "#6A2135" },
-    ]}
-  />;
+  return (
+    <div>
+      <PieChart
+        data={[
+          { title: "One", value: 10, color: "#E38627" },
+          { title: "Two", value: 15, color: "#C13C37" },
+          { title: "Three", value: 20, color: "#6A2135" },
+        ]}
+        radius={10}
+      />
+    </div>
+  );
 }
 
 function MesEnveloppesBudgetaires() {
-  return <div>Mes enveloppes</div>;
+  return <div>Vous n'avez présentement aucune enveloppe budgétaires. </div>;
 }
 
 function MesBudgets() {
-  return <div>Mes budgets</div>;
+  return (
+    <div>
+      <h1>Mes BudgETS</h1>
+      <table>
+        <tr>
+          <th>Solde pour le mois: 500$</th>
+        </tr>
+        <tr>
+          <td>Nourriture</td>
+          <td>50$</td>
+        </tr>
+        <tr>
+          <button>Creer une enveloppe</button>
+        </tr>
+      </table>
+      <h3>Mes différentes enveloppes</h3>
+    </div>
+  );
 }
 
 function BudgetsContainer() {
-  return;
-  <div>Budgets</div>;
+  return (
+    <div className="container-budgets">
+      <MesBudgets />
+      <GraphCirculaire />
+      <MesEnveloppesBudgetaires />
+    </div>
+  );
 }
 
 function ObjectifsContainer() {
-  return <div>Objectifs</div>;
+  return <div>Vous n'avez présentement aucun objectif.</div>;
 }
 
-export function PagePrincipale({ utilisateurCourant }: PagePrincipaleProps) {
+export function PagePrincipale() {
   return (
-    <div>
-      <Profil utilisateurCourant={utilisateurCourant} />
+    <div className="mainPage">
       <BudgetsContainer />
       <ObjectifsContainer />
     </div>
   );
 }
 
-export default function App() {
-  return <PagePrincipale utilisateurCourant="yes" />;
-}
+export default PagePrincipale;

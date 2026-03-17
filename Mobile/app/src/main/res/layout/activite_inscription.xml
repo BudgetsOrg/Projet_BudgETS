@@ -41,6 +41,30 @@
             android:padding="15dp"
             android:layout_marginTop="15dp"
             />
+        <LinearLayout
+            android:layout_width="354dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="15dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:backgroundTint="@color/white"
+                android:text="Date de naissance: "
+                android:layout_marginTop="15dp"
+                android:textSize="15dp" />
+
+            <EditText
+                android:id="@+id/naissance"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:hint="AAAA/MM/JJ"
+                android:inputType="date"
+                android:padding="15dp" />
+        </LinearLayout>
 
         <EditText
             android:id="@+id/telephone"

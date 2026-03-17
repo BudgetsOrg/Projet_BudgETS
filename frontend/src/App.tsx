@@ -1,9 +1,12 @@
 import { useState } from "react";
+import React from "react";
+import ReactDom from "react-dom";
+import { BrowserRouter,Route, Routes} from "react-router-dom";
 import reactLogo from "./assets/react.svg";
 import viteLogo from "/vite.svg";
 import "./App.css";
 
-function App() {
+/*function App() {
   const [count, setCount] = useState(0);
 
   return (
@@ -24,12 +27,20 @@ function App() {
         <p>
           Edit <code>src/App.tsx</code> and save to test HMR
         </p>
-        <h1 className="text-3xl font-bold underline">Hello world!</h1>
+        <h1 className="text-3xl font-bold underline">Hello world !</h1>
       </div>
       <p className="read-the-docs">
         Click on the Vite and React logos to learn more
       </p>
     </>
+  );
+}
+  */
+function App() {
+  return (
+    <div className="App">
+
+    </div>
   );
 }
 

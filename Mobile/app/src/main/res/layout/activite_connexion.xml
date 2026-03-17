@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#9DBA7C"
+    xmlns:tools="http://schemas.android.com/tools"
+   >
+
+    <LinearLayout
+        tools:context=".ConnexionActivite"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:padding="30dp">
+
+        <ImageView
+            android:id="@+id/ImgProfil"
+            android:layout_width="160dp"
+            android:layout_height="160dp"
+            android:src="@drawable/page_connexion"
+            android:background="@drawable/img_ronde"
+            android:scaleType="centerCrop"
+            android:layout_marginBottom="20dp"
+            android:layout_marginTop="0dp"
+
+            android:clipToOutline="true"/>
+
+        <TextView
+            android:text="Connexion"
+            android:textSize="30sp"
+            android:textStyle="bold"
+            android:textColor="#FFFFFF"
+            android:layout_marginBottom="30dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <EditText
+            android:id="@+id/emailLogin"
+            android:hint="Adresse email"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="15dp"
+            />
+
+        <EditText
+            android:id="@+id/mdpConnexion"
+            android:hint="Mot de passe"
+            android:inputType="textPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="15dp"
+            android:layout_marginTop="15dp"
+            />
+
+        <TextView
+            android:id="@+id/mdpOublie"
+            android:text="Mot de passe oublié"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#FFFFFF"
+            android:layout_marginTop="10dp"
+            android:layout_gravity="end"
+            />
+
+        <Button
+            android:id="@+id/connexion"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="30dp"
+            android:backgroundTint="#FF000000"
+            android:text="Log in"
+            android:textColor="#FFFFFF" />
+
+        <Button
+            android:id="@+id/inscription"
+            android:text="Inscription"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:textColor="#1E2A3A"
+            android:backgroundTint="#FFFFFF"
+            android:layout_marginTop="15dp"
+            />
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -12,7 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.BudgETS">
         <activity
-            android:name=".MainActivity"
+            android:name=".ConnexionActivite"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -20,6 +20,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".InscriptionActivite"/>
+        <activity android:name=".MdpOublieActivite"/>
+        <activity android:name=".ModificationMdpActivite"/>
     </application>
 
 </manifest>

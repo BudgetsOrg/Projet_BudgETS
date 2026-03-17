@@ -38,9 +38,18 @@ import "./App.css";
   */
 function App() {
   return (
-    <div className="App">
-
-    </div>
+    <BrowserRouter>
+      <div className="App">
+        <Routes>
+          <Route/>
+          <Route/>
+          <Route/>
+          <Route/>
+          <Route/>
+        </Routes>
+      </div>
+    </BrowserRouter>
+    
   );
 }
 

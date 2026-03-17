@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
 import * as dotenv from 'dotenv';
 
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { Enveloppe, Objectif } from './entities';
+import { ObjectifModule } from './objectif/objectif.module';
 
 
 dotenv.config();
@@ -11,7 +11,7 @@ dotenv.config();
 @Module({
   imports: [
     TypeOrmModule.forRoot({
-      type: 'mysql',
+      type: 'mariadb',
       host: process.env.DB_HOST,
       port: Number(process.env.DB_PORT),
       username: process.env.DB_USERNAME,
@@ -19,11 +19,13 @@ dotenv.config();
       database: process.env.DB_DATABASE,
       //on  va ecrire manuellement les entites mais si on voudrais que les entites soient 
       // ecrit automatiquement alors autoLoadEntities: true
-      entities:[], 
+      entities:[Objectif, Enveloppe], //declarer ici les entite
       synchronize:true,
-    })
+    }),
+    ObjectifModule, //declarer ici les modules
+
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  controllers: [],
+  providers: [],
 })
 export class AppModule {}

@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import * as dotenv from 'dotenv';
 
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Enveloppe, Objectif } from './entities';
+import { Enveloppe, Objectif, Depense } from './entities';
 import { ObjectifModule } from './objectif/objectif.module';
 
 
@@ -19,7 +19,7 @@ dotenv.config();
       database: process.env.DB_DATABASE,
       //on  va ecrire manuellement les entites mais si on voudrais que les entites soient 
       // ecrit automatiquement alors autoLoadEntities: true
-      entities:[Objectif, Enveloppe], //declarer ici les entite
+      entities:[Objectif, Enveloppe, Depense], //declarer ici les entite
       synchronize:true,
     }),
     ObjectifModule, //declarer ici les modules

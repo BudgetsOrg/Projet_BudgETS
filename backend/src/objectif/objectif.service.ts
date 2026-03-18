@@ -7,6 +7,6 @@ import { Repository } from 'typeorm';
 
 @Injectable()
 export class ObjectifService {
-    constructor(@InjectRepository(Objectif ) private objectifRepository: Repository<Objectif>) {}  
+    constructor(@InjectRepository( Objectif ) private objectifRepository: Repository<Objectif>) {}  
 
 }

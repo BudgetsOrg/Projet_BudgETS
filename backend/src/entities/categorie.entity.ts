@@ -1,5 +1,5 @@
-import { Column, Entity } from "typeorm";
-import { PrimaryGeneratedColumn } from "typeorm/browser";
+import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+;
 
 @Entity()
 export class Categorie {

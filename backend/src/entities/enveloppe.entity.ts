@@ -1,19 +1,17 @@
-
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
-
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
-export class Enveloppe{
-    @PrimaryGeneratedColumn()
-      id_objectif: number;
+export class Enveloppe {
+  @PrimaryGeneratedColumn()
+  id_objectif: number;
 
-    @Column()
-    titre: string;
+  @Column()
+  titre: string;
 
-    //rajouter contrainte: < solde.budget
-    @Column()
-    montant: number;
+  //rajouter contrainte: < solde.budget
+  @Column()
+  montant: number;
 
-    @Column()
-    image: string;
+  @Column()
+  image: string;
 }

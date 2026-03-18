@@ -1,4 +1,5 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import { Budget } from './budget.entity';
 
 @Entity()
 export class User {
@@ -26,4 +27,7 @@ export class User {
 
   @Column()
   date_naissance: Date;
+
+  @OneToMany(()=> Budget, (budget) => budget.user)
+  budget: Budget[];
 }

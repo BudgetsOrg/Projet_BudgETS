@@ -12,6 +12,6 @@ export class Enveloppe {
   @Column()
   montant: number;
 
-  @Column()
-  image: string;
+  @Column({nullable: true})
+  image?: string|null;
 }

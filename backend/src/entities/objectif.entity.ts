@@ -16,6 +16,9 @@ export class Objectif {
   @Column({ type: 'varchar', nullable: true })
   image?: string | null;
 
+  @Column()
+  date_limite: Date;
+
   @ManyToMany(() => User, (user) => user.objectifs)
   users: User[];
 

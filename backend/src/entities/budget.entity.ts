@@ -10,6 +10,9 @@ export class Budget {
   @Column()
   solde: number;
 
+  @Column()
+  date_creation: Date;
+
   @ManyToOne(() => User, (user) => user.budgets)
   user: User;
 

@@ -11,8 +11,8 @@ export class Objectif {
   @Column()
   montant: number;
 
-  @Column({ nullable: true })
-  image?: string|null;
+  @Column({ type: 'varchar', nullable: true })
+  image?: string | null;
 
   //   @Column({ type: 'date' })
   //   date: string;

@@ -12,6 +12,6 @@ export class Enveloppe {
   @Column()
   montant: number;
 
-  @Column({nullable: true})
+  @Column({type: 'varchar',nullable: true})
   image?: string|null;
 }

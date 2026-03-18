@@ -11,6 +11,5 @@ export class Budget {
 
   //FK pour enveloppe
 
-  @ManyToOne(() => User, (user) => user.budget)
-  user: User;
+ //
 }

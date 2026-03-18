@@ -8,4 +8,7 @@ export class Categorie {
     
     @Column()
     nom_categorie: string;
+
+    @Column()
+    recurence: number;
 }

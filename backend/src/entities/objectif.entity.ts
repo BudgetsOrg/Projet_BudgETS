@@ -14,8 +14,5 @@ export class Objectif {
 
   @Column()
   image: string;
-
-//   @Column({ type: 'date' })
-//   date: string;
     
 }

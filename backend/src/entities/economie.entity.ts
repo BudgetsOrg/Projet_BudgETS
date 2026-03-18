@@ -3,17 +3,15 @@ import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
 
 @Entity()
-export class Enveloppe{
+export class Economie{
     @PrimaryGeneratedColumn()
-      id_objectif: number;
+      id_economie: number;
 
-    @Column()
-    titre: string;
-
-    //rajouter contrainte: < solde.budget
     @Column()
     montant: number;
 
     @Column()
-    image: string;
+    date: Date;
+
+    //FK pour objectif
 }

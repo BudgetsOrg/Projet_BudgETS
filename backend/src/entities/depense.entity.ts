@@ -16,6 +16,6 @@ export class Depense {
     @Column()
     Date: Date;
 
-    //rajouter pour categorie la relation 
+    //rajouter les FK pour categorie et enveloppe
 
 }

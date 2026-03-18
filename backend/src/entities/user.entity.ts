@@ -15,7 +15,8 @@ export class User {
   @Column()
   adresse_email: string
   
-  @Column()
+  //nullable
+  @Column({nullable: true})
   telephone:string;
 
   @Column()

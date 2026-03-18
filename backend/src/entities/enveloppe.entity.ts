@@ -5,7 +5,7 @@ import { Depense } from './depense.entity';
 @Entity()
 export class Enveloppe {
   @PrimaryGeneratedColumn()
-  id_objectif: number;
+  id_enveloppe: number;
 
   @Column()
   titre: string;

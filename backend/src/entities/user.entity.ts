@@ -1,5 +1,5 @@
-
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import { Budget } from './budget.entity';
 
 @Entity()
 export class User {
@@ -10,22 +10,23 @@ export class User {
   nom: string;
 
   @Column()
-  prenom: String;
+  prenom: string;
 
   @Column()
-  adresse_email: string
-  
+  adresse_email: string;
+
   //nullable
-  @Column({nullable: true})
-  telephone:string;
+  @Column({ type: 'varchar',nullable: true })
+  telephone?: string|null;
 
   @Column()
   password: string;
 
   @Column()
-  image:string;
+  image: string;
 
   @Column()
-  date_naissance:Date;
-    
+  date_naissance: Date;
+
+//
 }

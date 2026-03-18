@@ -1,14 +1,15 @@
-
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
-
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { User } from './user.entity';
 
 @Entity()
-export class Budget{
-    @PrimaryGeneratedColumn()
-      id_budget: number;
+export class Budget {
+  @PrimaryGeneratedColumn()
+  id_budget: number;
 
-    @Column()
-    solde: number;
+  @Column()
+  solde: number;
 
-    //FK pour enveloppe
+  //FK pour enveloppe
+
+ //
 }

@@ -1,17 +1,15 @@
-
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
-
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
-export class Economie{
-    @PrimaryGeneratedColumn()
-      id_economie: number;
+export class Economie {
+  @PrimaryGeneratedColumn()
+  id_economie: number;
 
-    @Column()
-    montant: number;
+  @Column()
+  montant: number;
 
-    @Column()
-    date: Date;
+  @Column()
+  date: Date;
 
-    //FK pour objectif
+  //FK pour objectif
 }

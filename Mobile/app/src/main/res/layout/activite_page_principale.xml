@@ -13,7 +13,7 @@
             android:id="@+id/ImgProfil"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:src="@drawable/profil"
+
             android:background="@drawable/img_ronde"
             android:scaleType="centerCrop"
             android:layout_marginBottom="20dp"

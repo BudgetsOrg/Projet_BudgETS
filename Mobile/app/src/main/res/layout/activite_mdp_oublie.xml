@@ -3,8 +3,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="#9DBA7C"
-    >
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="#125B49">
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:src="@drawable/bas_vert"
+        android:scaleType="fitXY"
+        app:layout_constraintBottom_toBottomOf="parent" />
     <LinearLayout
         tools:context=".MdpOublieActivite"
         android:layout_width="match_parent"
@@ -16,20 +22,21 @@
         <TextView
             android:text="Mot de passe oublié"
             android:textSize="25sp"
+            android:textColor="#AADD66"
             android:textStyle="bold"
-            android:textColor="#FFFFFF"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="40dp"
+            android:layout_marginBottom="90dp"
             />
 
         <EditText
-            android:id="@+id/email2"
-            android:hint="Adresse courriel"
-            android:inputType="textEmailAddress"
+            android:id="@+id/email"
+            android:hint="Adresse email"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="10dp"
+            android:layout_height="50dp"
+            android:padding="15dp"
+            android:background="@drawable/fond_blanc"
+            android:textColor="#F2F2F2"
             />
 
         <Button
@@ -44,10 +51,10 @@
         <Button
             android:id="@+id/retourConnexion2"
             android:text="Retour connexion"
-            android:textColor="#1E2A3A"
-            android:backgroundTint="#FFFFFF"
+            android:textColor="#FFFFFF"
             android:layout_width="match_parent"
             android:layout_marginTop="30dp"
+            android:backgroundTint="#FF000000"
             android:layout_height="50dp"/>
 
     </LinearLayout>

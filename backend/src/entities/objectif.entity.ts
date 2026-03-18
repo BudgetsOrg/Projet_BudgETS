@@ -1,4 +1,6 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToMany, OneToMany } from 'typeorm';
+import { User } from './user.entity';
+import { Economie } from './economie.entity';
 
 @Entity()
 export class Objectif {
@@ -14,6 +16,11 @@ export class Objectif {
   @Column({ type: 'varchar', nullable: true })
   image?: string | null;
 
+  @ManyToMany(() => User, (user) => user.objectifs)
+  users: User[];
+
+  @OneToMany(() => Economie, (economie) => economie.objectif)
+  economies: Economie[];
   //   @Column({ type: 'date' })
   //   date: string;
 

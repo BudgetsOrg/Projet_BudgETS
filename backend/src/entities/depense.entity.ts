@@ -1,4 +1,6 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn,ManyToOne, OneToOne } from 'typeorm';
+import { Enveloppe } from './enveloppe.entity';
+import { Categorie } from './categorie.entity';
 
 @Entity()
 export class Depense {
@@ -14,5 +16,9 @@ export class Depense {
   @Column()
   Date: Date;
 
-  //rajouter les FK pour categorie et enveloppe
+  @ManyToOne(() => Enveloppe, (enveloppe) => enveloppe.depenses)
+  enveloppe: Enveloppe;
+
+  @OneToOne(() => Categorie, (categorie) => categorie.depenses)
+  categorie: Categorie;
 }

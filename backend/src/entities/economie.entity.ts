@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Objectif } from './objectif.entity';
 
 @Entity()
 export class Economie {
@@ -11,5 +12,6 @@ export class Economie {
   @Column()
   date: Date;
 
-  //FK pour objectif
+  @ManyToOne(() => Objectif, (objectif) => objectif.economies)
+  objectif: Objectif;
 }

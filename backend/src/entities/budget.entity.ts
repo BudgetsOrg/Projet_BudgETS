@@ -1,5 +1,6 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { User } from './user.entity';
+import { Enveloppe } from './enveloppe.entity';
 
 @Entity()
 export class Budget {
@@ -9,7 +10,9 @@ export class Budget {
   @Column()
   solde: number;
 
-  //FK pour enveloppe
+  @ManyToOne(() => User, (user) => user.budgets)
+  user: User;
 
- //
+  @OneToMany(() => Enveloppe, (enveloppe) => enveloppe.budget)
+  enveloppes: Enveloppe[];
 }

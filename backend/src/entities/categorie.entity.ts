@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Depense } from './depense.entity';
 
 
 @Entity()
@@ -11,4 +12,7 @@ export class Categorie {
 
   @Column()
   recurence: number;
+
+  @OneToOne(() => Depense, (depense) => depense.categorie)
+  depenses: Depense;
 }

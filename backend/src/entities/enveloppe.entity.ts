@@ -1,4 +1,6 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn, ManyToOne, OneToMany } from 'typeorm';
+import { Budget } from './budget.entity';
+import { Depense } from './depense.entity';
 
 @Entity()
 export class Enveloppe {
@@ -14,4 +16,10 @@ export class Enveloppe {
 
   @Column({type: 'varchar',nullable: true})
   image?: string|null;
+
+  @ManyToOne(() => Budget, (budget) => budget.enveloppes)
+  budget: Budget;
+
+  @OneToMany(() => Depense, (depense) => depense.enveloppe)
+  depenses: Depense[];
 }

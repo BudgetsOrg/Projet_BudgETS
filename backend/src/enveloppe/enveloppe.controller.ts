@@ -10,7 +10,7 @@ export class EnveloppeController{
     constructor(private readonly enveloppeService: EnveloppeService) {}
 
 // Récupérer toutes les enveloppes
-  @Get() // GET http://localhost:8090/enveloppe
+  @Get() // GET http://localhost:3000/enveloppe
     findAll() {
         return this.enveloppeService.getAll();
     }

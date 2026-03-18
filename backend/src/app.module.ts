@@ -12,6 +12,7 @@ import {
   Economie,
 } from './entities';
 import { ObjectifModule } from './objectif/objectif.module';
+import { EnveloppeModule } from './enveloppe/enveloppe.module';
 
 dotenv.config();
 
@@ -37,7 +38,9 @@ dotenv.config();
       ], //declarer ici les entite
       synchronize: true,
     }),
-    ObjectifModule, //declarer ici les modules
+    //declarer ici les modules
+    ObjectifModule, 
+    EnveloppeModule,
   ],
   controllers: [],
   providers: [],

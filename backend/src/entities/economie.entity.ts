@@ -12,6 +12,6 @@ export class Economie {
   @Column()
   date: Date;
 
-  @ManyToOne(() => Objectif, (objectif) => objectif.economies)
+  @ManyToOne(() => Objectif, (objectif) => objectif.economies,{ onDelete: 'CASCADE' })
   objectif: Objectif;
 }

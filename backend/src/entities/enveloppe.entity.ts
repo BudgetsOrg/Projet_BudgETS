@@ -17,7 +17,7 @@ export class Enveloppe {
   @Column({type: 'varchar',nullable: true})
   image?: string|null;
 
-  @ManyToOne(() => Budget, (budget) => budget.enveloppes)
+  @ManyToOne(() => Budget, (budget) => budget.enveloppes,{ onDelete: 'CASCADE' })
   budget: Budget;
 
   @OneToMany(() => Depense, (depense) => depense.enveloppe)

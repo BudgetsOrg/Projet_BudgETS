@@ -16,9 +16,9 @@ export class Depense {
   @Column()
   Date: Date;
 
-  @ManyToOne(() => Enveloppe, (enveloppe) => enveloppe.depenses)
+  @ManyToOne(() => Enveloppe, (enveloppe) => enveloppe.depenses,{ onDelete: 'CASCADE' })
   enveloppe: Enveloppe;
 
-  @OneToOne(() => Categorie, (categorie) => categorie.depenses)
+  @ManyToOne(() => Categorie, (categorie) => categorie.depenses)
   categorie: Categorie;
 }

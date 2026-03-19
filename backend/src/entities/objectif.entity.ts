@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToMany, OneToMany } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany, ManyToOne } from 'typeorm';
 import { User } from './user.entity';
 import { Economie } from './economie.entity';
 
@@ -19,8 +19,8 @@ export class Objectif {
   @Column()
   date_limite: Date;
 
-  @ManyToMany(() => User, (user) => user.objectifs)
-  users: User[];
+  @ManyToOne(() => User, (user) => user.objectifs,{ onDelete: 'CASCADE' })
+  users: User;
 
   @OneToMany(() => Economie, (economie) => economie.objectif)
   economies: Economie[];

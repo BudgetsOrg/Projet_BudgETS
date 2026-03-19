@@ -13,7 +13,7 @@ export class Budget {
   @Column()
   date_creation: Date;
 
-  @ManyToOne(() => User, (user) => user.budgets)
+  @ManyToOne(() => User, (user) => user.budgets,{ onDelete: 'CASCADE' })
   user: User;
 
   @OneToMany(() => Enveloppe, (enveloppe) => enveloppe.budget)

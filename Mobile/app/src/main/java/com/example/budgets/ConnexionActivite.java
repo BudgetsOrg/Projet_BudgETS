@@ -14,6 +14,7 @@ import androidx.core.view.WindowInsetsCompat;
 public class ConnexionActivite extends AppCompatActivity {
     Button inscription;
     TextView mdpOublie;
+    Button connexion;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,6 +22,7 @@ public class ConnexionActivite extends AppCompatActivity {
         setContentView(R.layout.activite_connexion);
         inscription = findViewById(R.id.inscription);
         mdpOublie = findViewById(R.id.mdpOublie);
+        connexion = findViewById(R.id.connexion);
 
         inscription.setOnClickListener(v->{
             Intent intent = new Intent(ConnexionActivite.this,InscriptionActivite.class);
@@ -28,6 +30,10 @@ public class ConnexionActivite extends AppCompatActivity {
         });
         mdpOublie.setOnClickListener(v->{
             Intent intent = new Intent(ConnexionActivite.this,MdpOublieActivite.class);
+            startActivity(intent);
+        });
+        connexion.setOnClickListener(v->{
+            Intent intent = new Intent(ConnexionActivite.this,PagePrincipaleActivite.class);
             startActivity(intent);
         });
 

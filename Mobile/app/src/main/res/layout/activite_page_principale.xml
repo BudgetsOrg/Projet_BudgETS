@@ -76,10 +76,40 @@
                     android:layout_height="wrap_content"
                     android:text="0$"
                     android:textColor="#9A000000"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"
+                    android:layout_marginBottom="20dp"/>
 
 
             </LinearLayout>
+
+            <TextView
+                android:id="@+id/enveloppes"
+                android:layout_width="250dp"
+                android:layout_height="50dp"
+                android:background="@drawable/fond_vert"
+                android:padding="10dp"
+                android:textAlignment="center"
+                android:text="Mes enveloppes:"
+                android:textColor="#FFFFFF"
+                android:textSize="20sp"
+                android:layout_marginBottom="30dp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Vous n'avez aucune enveloppe pour le moment"
+                android:textColor="#9A000000"
+                android:textSize="16sp"
+                android:layout_marginBottom="20dp" />
+
+            <Button
+                android:id="@+id/creerBudjet"
+                android:text="Créer un budjet"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:backgroundTint="#FF000000"
+                android:layout_marginTop="15dp"
+                android:textColor="#FFFFFF"
+                />
         </LinearLayout>
     </LinearLayout>
 

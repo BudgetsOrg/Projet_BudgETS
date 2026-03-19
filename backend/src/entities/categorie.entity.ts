@@ -7,7 +7,7 @@ import { User } from './user.entity';
 export class Categorie {
   @PrimaryGeneratedColumn()
   id_categorie: number;
-
+  
   @Column({length: 50, default: 'Catégorie'})
   nom_categorie: string;
 
@@ -17,6 +17,7 @@ export class Categorie {
   @OneToMany(() => Depense, (depense) => depense.categorie)
   depenses: Depense[];
 
+  //Relation, Attribut de navigation, Si le user est supprimé alors toutes ses catégories sont supprimées aussi (CASCADE)
   @ManyToOne(() => User,(user)=> user.categories,{ onDelete: 'CASCADE' })
   user: User;
 }

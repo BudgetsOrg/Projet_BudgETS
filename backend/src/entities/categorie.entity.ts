@@ -7,7 +7,7 @@ export class Categorie {
   @PrimaryGeneratedColumn()
   id_categorie: number;
 
-  @Column()
+  @Column({length: 50})
   nom_categorie: string;
 
   @Column()

@@ -7,11 +7,11 @@ export class Enveloppe {
   @PrimaryGeneratedColumn()
   id_enveloppe: number;
 
-  @Column()
+  @Column({length: 100})
   titre: string;
 
   //rajouter contrainte: < solde.budget
-  @Column()
+  @Column('decimal', { precision: 10, scale: 2 })
   montant: number;
 
   @Column({type: 'varchar',nullable: true})

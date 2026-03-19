@@ -7,7 +7,7 @@ export class Budget {
   @PrimaryGeneratedColumn()
   id_budget: number;
 
-  @Column()
+  @Column('decimal', { precision: 10, scale: 2 })
   solde: number;
 
   @Column()

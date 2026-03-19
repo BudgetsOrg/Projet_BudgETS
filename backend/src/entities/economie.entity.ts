@@ -6,7 +6,7 @@ export class Economie {
   @PrimaryGeneratedColumn()
   id_economie: number;
 
-  @Column()
+  @Column('decimal', { precision: 10, scale: 2 })
   montant: number;
 
   @Column()

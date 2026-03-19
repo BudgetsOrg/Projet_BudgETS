@@ -7,13 +7,13 @@ export class User {
   @PrimaryGeneratedColumn()
   id_user: number;
 
-  @Column()
+  @Column({length: 50})
   nom: string;
 
-  @Column()
+  @Column({length: 50})
   prenom: string;
 
-  @Column()
+  @Column({unique: true})
   adresse_email: string;
 
   //nullable

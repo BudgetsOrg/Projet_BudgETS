@@ -7,10 +7,10 @@ export class Depense {
   @PrimaryGeneratedColumn()
   id_depense: number;
 
-  @Column()
+  @Column({length: 50})
   nom_depense: string;
 
-  @Column()
+  @Column('decimal', { precision: 10, scale: 2 })
   montant: number;
 
   @Column()

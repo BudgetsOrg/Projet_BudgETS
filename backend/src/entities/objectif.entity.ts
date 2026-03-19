@@ -7,10 +7,10 @@ export class Objectif {
   @PrimaryGeneratedColumn()
   id_objectif: number;
 
-  @Column()
+  @Column({length: 100})
   titre: string;
 
-  @Column()
+  @Column('decimal', { precision: 10, scale: 2 })
   montant: number;
 
   @Column({ type: 'varchar', nullable: true })

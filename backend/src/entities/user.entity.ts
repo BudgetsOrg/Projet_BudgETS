@@ -8,26 +8,26 @@ export class User {
   @PrimaryGeneratedColumn()
   id_user: number;
 
-  @Column({length: 50})
+  @Column({length: 50, default: 'Nom'})
   nom: string;
 
-  @Column({length: 50})
+  @Column({length: 50, default: 'Prénom'})
   prenom: string;
 
-  @Column({unique: true})
+  @Column({unique: true, default: 'Adresse email'})
   adresse_email: string;
 
   //nullable
-  @Column({ type: 'varchar',nullable: true })
+  @Column({ type: 'varchar',nullable: true, default: null })
   telephone?: string|null;
 
   @Column()
   password: string;
 
-  @Column()
+  @Column({type: 'varchar',nullable: true, default: null})
   image: string;
 
-  @Column()
+  @Column({ default: () => "DATE_SUB(CURRENT_TIMESTAMP, INTERVAL 18 YEAR)" })
   date_naissance: Date;
 
   @OneToMany(() => Budget, (budget) => budget.user)

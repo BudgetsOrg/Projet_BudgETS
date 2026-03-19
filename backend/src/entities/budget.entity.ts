@@ -7,10 +7,10 @@ export class Budget {
   @PrimaryGeneratedColumn()
   id_budget: number;
 
-  @Column('decimal', { precision: 10, scale: 2 })
+  @Column('decimal', { precision: 10, scale: 2 , default: 0 })
   solde: number;
 
-  @Column()
+  @Column({ default: () => 'CURRENT_TIMESTAMP' })
   date_creation: Date;
 
   @ManyToOne(() => User, (user) => user.budgets,{ onDelete: 'CASCADE' })
@@ -19,3 +19,6 @@ export class Budget {
   @OneToMany(() => Enveloppe, (enveloppe) => enveloppe.budget)
   enveloppes: Enveloppe[];
 }
+
+//check pour tout les soldes pas < 0
+//All efault values for fields that require it.

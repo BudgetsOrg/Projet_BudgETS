@@ -7,13 +7,13 @@ export class Depense {
   @PrimaryGeneratedColumn()
   id_depense: number;
 
-  @Column({length: 50})
+  @Column({length: 50, default: 'Dépense'})
   nom_depense: string;
 
-  @Column('decimal', { precision: 10, scale: 2 })
+  @Column('decimal', { precision: 10, scale: 2, default: 0 })
   montant: number;
 
-  @Column()
+  @Column({ default: () => 'CURRENT_TIMESTAMP' })
   Date: Date;
 
   @ManyToOne(() => Enveloppe, (enveloppe) => enveloppe.depenses,{ onDelete: 'CASCADE' })

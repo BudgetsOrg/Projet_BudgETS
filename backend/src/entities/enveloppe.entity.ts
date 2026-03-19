@@ -7,14 +7,14 @@ export class Enveloppe {
   @PrimaryGeneratedColumn()
   id_enveloppe: number;
 
-  @Column({length: 100})
+  @Column({length: 100, default: 'Enveloppe'})
   titre: string;
 
   //rajouter contrainte: < solde.budget
-  @Column('decimal', { precision: 10, scale: 2 })
+  @Column('decimal', { precision: 10, scale: 2, default: 0 })
   montant: number;
 
-  @Column({type: 'varchar',nullable: true})
+  @Column({type: 'varchar',nullable: true, default: null})
   image?: string|null;
 
   @ManyToOne(() => Budget, (budget) => budget.enveloppes,{ onDelete: 'CASCADE' })

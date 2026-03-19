@@ -8,10 +8,10 @@ export class Categorie {
   @PrimaryGeneratedColumn()
   id_categorie: number;
 
-  @Column({length: 50})
+  @Column({length: 50, default: 'Catégorie'})
   nom_categorie: string;
 
-  @Column()
+  @Column({ default: 0 })
   recurence: number;
 
   @OneToMany(() => Depense, (depense) => depense.categorie)

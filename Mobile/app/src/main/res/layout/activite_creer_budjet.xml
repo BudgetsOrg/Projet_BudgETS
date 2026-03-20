@@ -41,7 +41,7 @@
                 android:padding="15dp"
                 android:text="Titre de votre enveloppe:"
                 android:textColor="#FF000000"
-                android:textSize="20dp"
+                android:textSize="19dp"
                 android:textStyle="bold" />
 
             <EditText
@@ -52,7 +52,7 @@
                 android:background="@drawable/fond_gris"
                 android:hint="Nom"
                 android:padding="15dp"
-                android:textColor="#F2F2F2" />
+                android:textColor="#FF000000" />
 
 
             <TextView
@@ -60,9 +60,9 @@
                 android:layout_height="wrap_content"
 
                 android:padding="15dp"
-                android:text="Titre de votre enveloppe:"
+                android:text="Budjet alloué à votre enveloppe:"
                 android:textColor="#FF000000"
-                android:textSize="20dp"
+                android:textSize="19dp"
                 android:textStyle="bold" />
 
             <EditText
@@ -72,7 +72,7 @@
                 android:background="@drawable/fond_gris"
                 android:hint="Montant"
                 android:padding="15dp"
-                android:textColor="#F2F2F2"
+                android:textColor="#FF000000"
 
                 />
 

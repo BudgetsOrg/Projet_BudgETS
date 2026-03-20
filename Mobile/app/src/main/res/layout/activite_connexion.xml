@@ -47,7 +47,7 @@
             android:layout_height="50dp"
             android:padding="15dp"
             android:background="@drawable/fond_blanc"
-            android:textColor="#F2F2F2"
+            android:textColor="#FF000000"
             />
 
         <EditText

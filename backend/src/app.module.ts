@@ -13,6 +13,11 @@ import {
 } from './entities';
 import { ObjectifModule } from './objectif/objectif.module';
 import { EnveloppeModule } from './enveloppe/enveloppe.module';
+import { EconomieModule } from './economie/economie.module';
+import { DepenseModule } from './depense/depense.module';
+import { BudggetModule } from './budget/budget.module';
+import { CategorieModule } from './categorie/categorie.module';
+import { UserModule } from './user/user.module';
 
 dotenv.config();
 
@@ -41,6 +46,11 @@ dotenv.config();
     //declarer ici les modules
     ObjectifModule, 
     EnveloppeModule,
+    EconomieModule,
+    DepenseModule,
+    BudggetModule,
+    CategorieModule
+    UserModule,
   ],
   controllers: [],
   providers: [],

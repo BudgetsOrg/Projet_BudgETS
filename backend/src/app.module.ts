@@ -49,8 +49,8 @@ dotenv.config();
     EconomieModule,
     DepenseModule,
     BudggetModule,
-    CategorieModule
-    UserModule,
+    CategorieModule,
+    UserModule
   ],
   controllers: [],
   providers: [],

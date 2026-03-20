@@ -7,10 +7,15 @@ export class Budget {
   @PrimaryGeneratedColumn()
   id_budget: number;
 
-  @Column()
+  //valeur par défaut de 0 pour le solde du budget, avec precision pour la monnaie.
+  @Column('decimal', { precision: 10, scale: 2 , default: 0 })
   solde: number;
 
-  @ManyToOne(() => User, (user) => user.budgets)
+  @Column({ default: () => 'CURRENT_TIMESTAMP' })
+  date_creation: Date;
+
+  //Relation, Attribut de navigation, Si le user est supprimé alors tous ses budgets sont supprimés aussi (CASCADE)
+  @ManyToOne(() => User, (user) => user.budgets,{ onDelete: 'CASCADE' })
   user: User;
 
   @OneToMany(() => Enveloppe, (enveloppe) => enveloppe.budget)

@@ -7,18 +7,20 @@ export class Depense {
   @PrimaryGeneratedColumn()
   id_depense: number;
 
-  @Column()
+  @Column({length: 50, default: 'Dépense'})
   nom_depense: string;
 
-  @Column()
+  //valeur par défaut de 0 pour le montant de la dépense, avec precision pour la monnaie.
+  @Column('decimal', { precision: 10, scale: 2, default: 0 })
   montant: number;
 
-  @Column()
-  Date: Date;
+  @Column({ default: () => 'CURRENT_TIMESTAMP' })
+  date: Date;
 
-  @ManyToOne(() => Enveloppe, (enveloppe) => enveloppe.depenses)
+  //Relation, Attribut de navigation, Si l'enveloppe est supprimée alors toutes les dépenses associées sont supprimées aussi (CASCADE)
+  @ManyToOne(() => Enveloppe, (enveloppe) => enveloppe.depenses,{ onDelete: 'CASCADE' })
   enveloppe: Enveloppe;
 
-  @OneToOne(() => Categorie, (categorie) => categorie.depenses)
+  @ManyToOne(() => Categorie, (categorie) => categorie.depenses)
   categorie: Categorie;
 }

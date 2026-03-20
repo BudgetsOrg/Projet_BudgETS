@@ -13,6 +13,7 @@ import {
 } from './entities';
 import { ObjectifModule } from './objectif/objectif.module';
 import { EnveloppeModule } from './enveloppe/enveloppe.module';
+import { UserModule } from './user/user.module';
 
 dotenv.config();
 
@@ -41,6 +42,7 @@ dotenv.config();
     //declarer ici les modules
     ObjectifModule, 
     EnveloppeModule,
+    UserModule,
   ],
   controllers: [],
   providers: [],

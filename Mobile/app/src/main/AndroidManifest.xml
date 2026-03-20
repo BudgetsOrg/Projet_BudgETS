@@ -24,6 +24,7 @@
         <activity android:name=".MdpOublieActivite"/>
         <activity android:name=".ModificationMdpActivite"/>
         <activity android:name=".PagePrincipaleActivite"/>
+        <activity android:name=".CreerBudjet"/>
 
     </application>
 

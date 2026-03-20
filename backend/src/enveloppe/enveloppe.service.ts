@@ -15,16 +15,9 @@ export class EnveloppeService{
 
     // Récupère toutes les enveloppes présentes dans la base de données
     async getAll() {
-        return await this.enveloppeRepository.find();
+       const enveloppres= await this.enveloppeRepository.find();
+       return enveloppres
     }
-        
-//     async getAll() {
-//     const enveloppes = await this.enveloppeRepository.find({
-//       take: , // Prend la limite si fournie, sinon retourne tout
-//     });
-//     // console.log("Movies returned:", movies.length); 
-//     return enveloppes;
-//   }
-
+    
 
 }

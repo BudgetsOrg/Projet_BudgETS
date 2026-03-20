@@ -14,9 +14,11 @@ export class Enveloppe {
   @Column('decimal', { precision: 10, scale: 2, default: 0 })
   montant: number;
 
+  //nullable + typage explicite pour le champ vu qu'il est nullable 
   @Column({type: 'varchar',nullable: true, default: null})
   image?: string|null;
 
+  //Relation, Attribut de navigation, Si le budget est supprimé alors toutes les enveloppes associées sont supprimées aussi (CASCADE)
   @ManyToOne(() => Budget, (budget) => budget.enveloppes,{ onDelete: 'CASCADE' })
   budget: Budget;
 

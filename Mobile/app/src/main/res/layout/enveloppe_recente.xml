@@ -4,21 +4,17 @@
     android:layout_marginRight="15dp"
     android:orientation="vertical"
     android:background="#AADD66"
-    android:padding="15dp">
+    android:padding="15dp"
+    >
 
     <TextView
         android:id="@+id/nomRecent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
         android:text="Nourriture"
         android:textColor="#FFFFFF"
-        android:textStyle="bold"/>
+        android:textStyle="bold" />
 
-    <TextView
-        android:id="@+id/montantRecent"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="0$"
-        android:textColor="#FFFFFF"/>
 
 </LinearLayout>

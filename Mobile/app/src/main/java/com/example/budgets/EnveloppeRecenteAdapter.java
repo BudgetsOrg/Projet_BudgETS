@@ -28,7 +28,7 @@ public class EnveloppeRecenteAdapter extends RecyclerView.Adapter<EnveloppeRecen
 
         Enveloppe enveloppe = listeEnveloppe.get(position);
         holder.textViewNom.setText(enveloppe.getTitre());
-        holder.textViewMontant.setText(enveloppe.getMontant()+"$");
+
 
     }
 
@@ -38,11 +38,12 @@ public class EnveloppeRecenteAdapter extends RecyclerView.Adapter<EnveloppeRecen
     }
     public static class MyViewHolderRecent extends RecyclerView.ViewHolder{
         TextView textViewNom;
-        TextView textViewMontant;
+
         public MyViewHolderRecent(View itemView){
             super(itemView);
             textViewNom = itemView.findViewById(R.id.nomRecent);
-            textViewMontant = itemView.findViewById(R.id.montantRecent);
+
+
         }
     }
 }

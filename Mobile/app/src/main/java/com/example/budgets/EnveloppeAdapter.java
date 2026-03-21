@@ -30,7 +30,8 @@ public class EnveloppeAdapter extends RecyclerView.Adapter<EnveloppeAdapter.MyVi
 
         Enveloppe enveloppe = listeEnveloppe.get(position);
         holder.textViewNom.setText(enveloppe.getTitre());
-        holder.textViewMontant.setText(enveloppe.getMontant()+"$");
+        holder.textViewMontant.setText(enveloppe.getMontant() + "$");
+
 
     }
 
@@ -41,6 +42,7 @@ public class EnveloppeAdapter extends RecyclerView.Adapter<EnveloppeAdapter.MyVi
     public static class MyViewHolder extends RecyclerView.ViewHolder{
         TextView textViewNom;
         TextView textViewMontant;
+
         public MyViewHolder(View itemView){
             super(itemView);
             textViewNom = itemView.findViewById(R.id.nomEnveloppe);

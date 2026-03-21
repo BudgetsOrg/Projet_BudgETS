@@ -3,14 +3,17 @@ package com.example.budgets;
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 
+import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,6 +28,8 @@ public class PagePrincipaleActivite extends AppCompatActivity {
 
     TextView message;
     Button creerBudjet;
+    ProgressBar diagramme;
+    TextView pourcentage;
     RecyclerView recyclerView;
     RecyclerView recyclerViewRecent;
     EnveloppeRecenteAdapter recenteAdapter;
@@ -32,9 +37,13 @@ public class PagePrincipaleActivite extends AppCompatActivity {
     EnveloppeAdapter adapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activite_page_principale);
         message = findViewById(R.id.message);
+        diagramme = findViewById(R.id.diagramme);
+        pourcentage = findViewById(R.id.pourcentage);
+        mettreAJourCercle(0);
 
         recyclerView = findViewById(R.id.listeEnveloppes);
         listeEnveloppes = new ArrayList<>();
@@ -49,6 +58,7 @@ public class PagePrincipaleActivite extends AppCompatActivity {
         recenteAdapter = new EnveloppeRecenteAdapter(listeEnveloppes);
         recyclerViewRecent.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false));
         recyclerViewRecent.setAdapter(recenteAdapter);
+
         creerBudjet=findViewById(R.id.creerBudjet);
 
         creerBudjet.setOnClickListener(v -> afficherPopUp());
@@ -79,12 +89,25 @@ public class PagePrincipaleActivite extends AppCompatActivity {
             String titre = nom.getText().toString();
             String montant = montantEntre.getText().toString();
 
+
             if (!titre.isEmpty() && !montant.isEmpty()) {
                 Enveloppe enveloppe = new Enveloppe(titre,montant);
                 listeEnveloppes.add(0,enveloppe);
+                EditText soldeEdit = findViewById(R.id.soldeMois);
+                String solde = soldeEdit.getText().toString().replace("$", "");
+                double soldeTotal = Double.parseDouble(solde);
+                if (soldeTotal > 0) {
+                    double montantTot = 0;
+                    for (Enveloppe e : listeEnveloppes) {
+                        montantTot += Double.parseDouble(e.getMontant());
+                    }
+                    int score = (int) ((montantTot * 100) / soldeTotal);
+                    animerCercle(Math.min(score, 100));
+                }
                 adapter.notifyDataSetChanged();
                 recenteAdapter.notifyDataSetChanged();
                 message.setVisibility(GONE);
+
                 Toast.makeText(this, "L'enveloppe " + titre + " a été ajoutée!", Toast.LENGTH_SHORT).show();
                 dialog.dismiss();
             } else {
@@ -96,4 +119,20 @@ public class PagePrincipaleActivite extends AppCompatActivity {
 
         dialog.show();
     }
+    public void animerCercle(int pourcentageCible) {
+
+        diagramme = findViewById(R.id.diagramme);
+        pourcentage = findViewById(R.id.pourcentage);
+        ObjectAnimator animation = ObjectAnimator.ofInt(diagramme, "progress", 0, pourcentageCible);
+        animation.setDuration(1000);
+        animation.setInterpolator(new DecelerateInterpolator());
+        animation.start();
+
+        pourcentage.setText(pourcentageCible + "%");
+    }
+    public void mettreAJourCercle(int valeur) {
+        diagramme.setProgress(valeur);
+        pourcentage.setText(valeur + "%");
+    }
 }
+

@@ -18,6 +18,7 @@ import { DepenseModule } from './depense/depense.module';
 import { BudggetModule } from './budget/budget.module';
 import { CategorieModule } from './categorie/categorie.module';
 import { UserModule } from './user/user.module';
+import { AuthModule } from './auth/auth.module';
 
 dotenv.config();
 
@@ -44,6 +45,7 @@ dotenv.config();
       synchronize: true,
     }),
     //declarer ici les modules
+    AuthModule,
     ObjectifModule, 
     EnveloppeModule,
     EconomieModule,

@@ -62,7 +62,7 @@
                     android:textSize="16sp"
                     android:layout_marginRight="100dp"/>
 
-                <TextView
+                <EditText
                     android:id="@+id/soldeMois"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -94,6 +94,11 @@
                 android:textSize="16sp"
                 android:layout_marginBottom="20dp" />
 
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/listeEnveloppes"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"/>
             <Button
                 android:id="@+id/creerBudjet"
                 android:text="Créer un budjet"
@@ -104,6 +109,11 @@
                 android:textColor="#FFFFFF"
                 />
         </LinearLayout>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recemmentConsulte"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:layout_marginTop="20dp"/>
     </LinearLayout>
 
 </ScrollView>

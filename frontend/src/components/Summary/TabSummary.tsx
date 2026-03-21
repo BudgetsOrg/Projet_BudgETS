@@ -1,16 +1,24 @@
+import { useBudgets } from "../../hooks/UseBudgets";
 import { useEnveloppes } from "../../hooks/UseEnveloppes";
+import type { Budget } from "../../interfaces/interfaces";
 
 export function TabSummary() {
-  const { enveloppes, loading, error } = useEnveloppes();
+  const {
+    enveloppes,
+    loading: loadingEnveloppe,
+    error: errorEnveloppe,
+  } = useEnveloppes();
+  const { budgets, loading: loadingBudget, error: errorBudget } = useBudgets();
+  //TODO : Could be changed to a spinner or a cuter message
+  if (loadingEnveloppe || loadingBudget) return <div>Chargement...</div>;
 
-  //Could be changed to a spinner or a cuter message
-  if (loading) return <div>Chargement...</div>;
+  if (errorEnveloppe || errorBudget)
+    return <div>Erreur: {errorEnveloppe || errorBudget}</div>;
 
-  if (error) return <div>Erreur: {error}</div>;
   return (
     <div>
       <h3 className="text-xl font-semibold text-gray-800 my-4">
-        Solde pour le mois: {sumSolde(enveloppes)}
+        Solde pour le mois: {findBudget(budgets)?.solde || 0} $
       </h3>
       <table className="w-full text-left table-auto min-w-max text-slate-800">
         <tr>
@@ -28,7 +36,7 @@ export function TabSummary() {
         ))}
         <tr>
           <td className="p-4 " colSpan={2}>
-            <button className="bg-black hover:bg-gray-800 text-white font-bold py-2 px-4 rounded-lg">
+            <button className="cursor-pointer bg-black hover:bg-gray-800 text-white font-bold py-2 px-4 rounded-lg">
               Creer une enveloppe
             </button>
           </td>
@@ -38,10 +46,17 @@ export function TabSummary() {
   );
 }
 
-function sumSolde(enveloppes: any) {
-  let solde = 0;
-  enveloppes.forEach((env: any) => {
-    solde += env.montant;
-  });
-  return solde;
+//TODO : Ideally the backend should provide an endpoint to get the current budget
+// For now, we can implement a function to find the current budget based on the date
+function findBudget(budgets: Budget[]) {
+  // Implementation for finding a specific budget
+  const today = new Date();
+  const currentMonth = today.getMonth() + 1; // getMonth() returns 0-11
+  const currentYear = today.getFullYear();
+  console.log(budgets);
+  return budgets.find(
+    (budget) =>
+      budget.date_creation.getMonth() + 1 === currentMonth &&
+      budget.date_creation.getFullYear() === currentYear,
+  );
 }

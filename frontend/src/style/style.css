@@ -4,3 +4,20 @@
   --color-primary: #125b48;
   --color-secondary: #96c16e;
 }
+
+@layer utilities {
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 10px; /* or use @apply w-3 */
+  }
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: #f1f1f1; /* or use @apply bg-gray-100 */
+    border-radius: 100vh;
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: #888; /* or use @apply bg-gray-500 */
+    border-radius: 100vh;
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #555; /* or use @apply bg-gray-700 */
+  }
+}

@@ -12,7 +12,7 @@ export function EnveloppesBudgetaires() {
   if (enveloppes.length === 0)
     return <div>Vous n'avez présentement aucune enveloppe budgétaires. </div>;
   return (
-    <div className="overflow-x-auto">
+    <div className="custom-scrollbar overflow-x-scroll">
       <div className="flex gap-4 pb-4">
         {enveloppes.map((env) => (
           <div key={env.id_enveloppe} className="flex-shrink-0 w-64">

@@ -24,3 +24,12 @@ export interface Budget {
   date_creation: Date;
   user_id: number;
 }
+
+export interface Objectif {
+  id_objectif: number;
+  titre: string;
+  montant: number;
+  date_limite: Date;
+  image: string;
+  user_id: number;
+}

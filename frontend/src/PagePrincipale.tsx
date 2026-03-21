@@ -5,10 +5,9 @@ import type { Enveloppe } from "./interfaces/interfaces.ts";
 import { EnveloppesBudgetaires } from "./components/Enveloppe/EnveloppeDisplayer.tsx";
 import { Summary } from "./components/Summary/Summary.tsx";
 import { TabSummary } from "./components/Summary/TabSummary.tsx";
+import { ObjectifList } from "./components/Objectif/ObjectifList.tsx";
 
 const tab_objectifs: Enveloppe[] = [];
-
-function fetchObjectifs() {}
 
 //prend en paramètre les budgets et calculer les proportions en pourcentage
 // function GraphCirculaire() {
@@ -47,46 +46,48 @@ function fetchObjectifs() {}
 //   );
 // }
 
-function BudgetsContainer() {
-  return (
-    <div className="container-budgets">
-      {/* <MesBudgets />
-      <GraphCirculaire /> */}
-      <EnveloppesBudgetaires />
-    </div>
-  );
-}
+// function BudgetsContainer() {
+//   return (
+//     <div className="container-budgets">
+//       {/* <MesBudgets />
+//       <GraphCirculaire /> */}
+//       <EnveloppesBudgetaires />
+//     </div>
+//   );
+// }
 
-function ObjectifsContainer() {
-  if (tab_objectifs.length === 0)
-    return <div>Vous n'avez présentement aucun objectif. </div>;
-  // return (
-  //   // <div>
-  //   //   {tab_enveloppes.map((env) => (
-  //   //     <div key={obj.id} className="objectifs">
-  //   //       <Objectif id={env.id} name={env.name} image={env.content} />
-  //   //     </div>
-  //   //   ))}
-  //   // </div>
-  // );
-}
+// function ObjectifsContainer() {
+//   if (tab_objectifs.length === 0)
+//     return <div>Vous n'avez présentement aucun objectif. </div>;
+//   // return (
+//   //   // <div>
+//   //   //   {tab_enveloppes.map((env) => (
+//   //   //     <div key={obj.id} className="objectifs">
+//   //   //       <Objectif id={env.id} name={env.name} image={env.content} />
+//   //   //     </div>
+//   //   //   ))}
+//   //   // </div>
+//   // );
+// }
 
-function Objectif({ id, name, image }: Obj) {
-  return (
-    <div className="objectif" id={String(id)}>
-      <img src={image} alt="{id}"></img>
-      <h3 className="title-objectif">{name}</h3>
-    </div>
-  );
-}
+// function Objectif({ id, name, image }: Obj) {
+//   return (
+//     <div className="objectif" id={String(id)}>
+//       <img src={image} alt="{id}"></img>
+//       <h3 className="title-objectif">{name}</h3>
+//     </div>
+//   );
+// }
 
 export function PagePrincipale() {
   return (
-    <div className="mainPage">
-      <h2 className="text-4xl font-bold">BudgETS</h2>
+    <div className="space-y-8 px-4">
+      <h2 className="mb-4 text-4xl font-bold tracking-tight text-heading md:text-5xl lg:text-6xl">
+        BudgETS
+      </h2>
       <Summary />
-      <BudgetsContainer />
-      <ObjectifsContainer />
+      <EnveloppesBudgetaires />
+      <ObjectifList />
     </div>
   );
 }

@@ -17,8 +17,12 @@ export function SummaryPieChart() {
   }));
 
   return (
-    <div>
-      <PieChart data={dataTab} radius={30} />
+    <div className="relative h-full">
+      <PieChart
+        data={dataTab}
+        radius={50}
+        className="absolute inset-0 h-full w-full"
+      />
     </div>
   );
 }

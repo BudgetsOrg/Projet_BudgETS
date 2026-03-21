@@ -33,3 +33,13 @@ export interface Objectif {
   image: string;
   user_id: number;
 }
+
+export interface User {
+  id_user: number;
+  nom: string;
+  prenom: string;
+  adresse_email: string;
+  telephone: string;
+  image: string;
+  date_naissance: Date;
+}

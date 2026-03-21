@@ -3,6 +3,7 @@
 @theme {
   --color-primary: #125b48;
   --color-secondary: #96c16e;
+  --color-delete: #e93939;
 }
 
 @layer utilities {
@@ -19,5 +20,27 @@
   }
   .custom-scrollbar::-webkit-scrollbar-thumb:hover {
     background: #555; /* or use @apply bg-gray-700 */
+  }
+}
+
+@layer components {
+  .confirm-button {
+    cursor: pointer;
+    background: var(--color-secondary);
+    color: white;
+    font-weight: bold;
+  }
+
+  .confirm-button:hover {
+    background: #888;
+  }
+
+  .delete-button {
+    cursor: pointer;
+    background: white;
+    color: var(--color-delete);
+    border-color: var(--color-delete);
+    border: 2px solid var(--color-delete);
+    font-weight: bold;
   }
 }

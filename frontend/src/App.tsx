@@ -2,6 +2,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom"; // pour avoir a
 import "./style/style.css";
 import Inscription from "./Inscription";
 import PagePrincipale from "./PagePrincipale";
+import PageProfile from "./Profile";
 
 function App() {
   return (
@@ -10,6 +11,7 @@ function App() {
         <Routes>
           <Route path="/" element={<PagePrincipale />} />
           <Route path="/Inscription" element={<Inscription />} />
+          <Route path="/Profil" element={<PageProfile />} />
           <Route />
         </Routes>
       </div>

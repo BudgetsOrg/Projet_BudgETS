@@ -1,5 +1,3 @@
-import type { Enveloppe } from "../interfaces/interfaces";
-
 const API_URL = "http://localhost:3000";
 const debug = true;
 

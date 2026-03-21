@@ -1,0 +1,84 @@
+@import url("../general/general.css");
+
+:root {
+  --theLightGreen: #96c16e;
+  --theDarkGreen: #125b48;
+}
+
+table {
+  padding-bottom: 2%;
+  padding-top: 2%;
+  width: 100%;
+}
+
+tr {
+  border-color: black;
+  border-radius: 8px;
+}
+
+td {
+  max-width: none;
+  width: 100%;
+}
+
+button {
+  background-color: black;
+  color: whitesmoke;
+}
+
+.container-budgets {
+  display: grid;
+  grid-template-areas:
+    "budgets graph"
+    "enveloppes enveloppes";
+  grid-template-columns: 2fr 1fr;
+  gap: 1.5rem;
+}
+
+.container-budgets > :nth-child(2) {
+  grid-area: graph;
+}
+.container-budgets > :nth-child(1) {
+  grid-area: budgets;
+}
+.container-budgets > :nth-child(3) {
+  grid-area: enveloppes;
+}
+
+.mainPage {
+  display: block;
+}
+
+th {
+  text-align: center;
+}
+
+.cards {
+  overflow-x: scroll;
+}
+
+.card {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  border-radius: 5px; /* Rounded corners */
+  width: 150px; /* Example width, can be responsive */
+  height: match-parent;
+  padding: 4px; /* Spacing inside the card */
+  margin: 20px; /* Spacing around the card */
+  background-color: white;
+}
+
+.card h2 {
+  text-align: left;
+  vertical-align: text-top;
+}
+
+h3 {
+  background-color: var(--theDarkGreen);
+  color: white;
+}
+
+.title-objectif {
+  position: relative;
+  top: 8px;
+  left: 16px;
+}

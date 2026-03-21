@@ -1,1 +1,6 @@
-@import "./pages/PagePrincipale.css";
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #125b48;
+  --color-secondary: #96c16e;
+}

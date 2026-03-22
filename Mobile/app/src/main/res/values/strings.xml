@@ -11,4 +11,15 @@
     <string name="question_solde">Quel est votre solde de ce mois :</string>
     <string name="txt_mdp">Mot de passe</string>
     <string name="txt_inscription">Inscription</string>
+    <string name="page_profil">Page Profil</string>
+    <string name="info_perso">Vos Informations Personnels</string>
+    <string name="nom_profil">Nom :</string>
+    <string name="prenom_profil">Prénom :</string>
+    <string name="email_profil">Email :</string>
+    <string name="date_profil">Date de naissance :</string>
+    <string name="numero_de_telephone">Numero de telephone :</string>
+    <string name="mot_de_passe">Mot de passe :</string>
+    <string name="mdp_pv">************</string>
+    <string name="modifier_info">modifier information</string>
+    <string name="supprimer">Supprimer mon compte</string>
 </resources>

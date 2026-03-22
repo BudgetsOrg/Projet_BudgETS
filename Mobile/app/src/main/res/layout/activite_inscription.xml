@@ -1,193 +1,207 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#0B5C3F">
+    android:background="#0B5C3F"
+    android:padding="24dp">
 
-    <LinearLayout
-        android:layout_width="match_parent"
+    <!-- Titre -->
+    <TextView
+        android:id="@+id/tvTitle"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="24dp">
+        android:letterSpacing="0.05"
+        android:text="@string/inscription"
+        android:textColor="#FFFFFF"
+        android:textSize="32sp"
+        android:textStyle="bold"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
-        <!-- Titre -->
-        <TextView
-            android:id="@+id/tvTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:letterSpacing="0.05"
-            android:text="@string/inscription"
-            android:textColor="#FFFFFF"
-            android:textSize="32sp"
-            android:textStyle="bold" />
+    <!-- Sous‑titre -->
+    <TextView
+        android:id="@+id/tvSubtitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/txt_remplissez_informations"
+        android:textColor="#FFFFFF"
+        android:textSize="14sp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@id/tvTitle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
-        <!-- Sous‑titre -->
-        <TextView
-            android:id="@+id/tvSubtitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/txt_remplissez_informations"
-            android:textColor="#FFFFFF"
-            android:textSize="14sp"
-            android:layout_marginTop="8dp"
-            android:layout_gravity="center_horizontal" />
+    <!-- Avatar -->
+    <FrameLayout
+        android:id="@+id/flAvatar"
+        android:layout_width="96dp"
+        android:layout_height="96dp"
+        android:layout_marginTop="24dp"
+        app:layout_constraintTop_toBottomOf="@id/tvSubtitle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
 
-        <!-- Avatar -->
-        <FrameLayout
-            android:id="@+id/flAvatar"
-            android:layout_width="96dp"
-            android:layout_height="96dp"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="24dp">
-
-            <ImageView
-                android:id="@+id/ivAvatar"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:src="@drawable/ic_avatar_placeholder"
-                android:background="@drawable/bg_avatar_circle" />
-
-            <ImageView
-                android:id="@+id/ivEditAvatar"
-                android:layout_width="28dp"
-                android:layout_height="28dp"
-                android:src="@drawable/ic_edit"
-                android:background="@drawable/bg_edit_circle"
-                android:layout_gravity="bottom|end"
-                android:padding="4dp" />
-        </FrameLayout>
-
-        <!-- Ligne Nom / Prénom -->
-        <LinearLayout
+        <ImageView
+            android:id="@+id/ivAvatar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="32dp"
-            android:weightSum="2">
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_avatar_placeholder"
+            android:background="@drawable/bg_avatar_circle" />
 
-            <EditText
-                android:id="@+id/nom"
-                android:layout_width="0dp"
-                android:layout_height="48dp"
-                android:layout_weight="1"
-                android:background="@drawable/bg_input_rounded"
-                android:hint="@string/nom"
-                android:inputType="textPersonName"
-                android:paddingHorizontal="16dp"
-                android:textColor="#009688"
-                android:textColorHint="#009688" />
+        <ImageView
+            android:id="@+id/ivEditAvatar"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:src="@drawable/ic_edit"
+            android:background="@drawable/bg_edit_circle"
+            android:layout_gravity="bottom|end"
+            android:padding="4dp" />
+    </FrameLayout>
 
-            <Space
-                android:layout_width="12dp"
-                android:layout_height="0dp" />
+    <!-- Nom -->
+    <EditText
+        android:id="@+id/nom"
+        android:layout_width="0dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="32dp"
+        android:background="@drawable/bg_input_rounded"
+        android:hint="@string/nom"
+        android:inputType="textPersonName"
+        android:paddingHorizontal="16dp"
+        android:textColor="#009688"
+        android:textColorHint="#009688"
+        app:layout_constraintTop_toBottomOf="@id/flAvatar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/prenom" />
 
-            <EditText
-                android:id="@+id/prenom"
-                android:layout_width="0dp"
-                android:layout_height="48dp"
-                android:layout_weight="1"
-                android:background="@drawable/bg_input_rounded"
-                android:hint="@string/prenom"
-                android:inputType="textPersonName"
-                android:paddingHorizontal="16dp"
-                android:textColor="#009688"
-                android:textColorHint="#009688" />
-        </LinearLayout>
+    <!-- Prénom -->
+    <EditText
+        android:id="@+id/prenom"
+        android:layout_width="0dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="32dp"
+        android:background="@drawable/bg_input_rounded"
+        android:hint="@string/prenom"
+        android:inputType="textPersonName"
+        android:paddingHorizontal="16dp"
+        android:textColor="#009688"
+        android:textColorHint="#009688"
+        app:layout_constraintTop_toBottomOf="@id/flAvatar"
+        app:layout_constraintStart_toEndOf="@id/nom"
+        app:layout_constraintEnd_toEndOf="parent" />
 
-        <!-- Date de naissance -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="20dp"
-            android:gravity="center_vertical">
+    <!-- Libellé date -->
+    <TextView
+        android:id="@+id/lblDateNaissance"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="@string/date_de_naissance"
+        android:textColor="#FFFFFF"
+        android:textSize="14sp"
+        app:layout_constraintTop_toBottomOf="@id/nom"
+        app:layout_constraintStart_toStartOf="parent" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/date_de_naissance"
-                android:textColor="#FFFFFF"
-                android:textSize="14sp" />
+    <!-- Date de naissance -->
+    <EditText
+        android:id="@+id/etDateNaissance"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="12dp"
+        android:background="@drawable/bg_input_rounded"
+        android:clickable="true"
+        android:focusable="true"
+        android:hint="@string/format_date"
+        android:inputType="date"
+        android:paddingHorizontal="16dp"
+        android:textColor="#009688"
+        android:textColorHint="#009688"
+        tools:ignore="TouchTargetSizeCheck"
+        app:layout_constraintTop_toTopOf="@id/lblDateNaissance"
+        app:layout_constraintBottom_toBottomOf="@id/lblDateNaissance"
+        app:layout_constraintStart_toEndOf="@id/lblDateNaissance"
+        app:layout_constraintEnd_toEndOf="parent" />
 
-            <EditText
-                android:id="@+id/etDateNaissance"
-                android:layout_width="0dp"
-                android:layout_height="40dp"
-                android:layout_marginStart="12dp"
-                android:layout_weight="1"
-                android:background="@drawable/bg_input_rounded"
-                android:clickable="true"
-                android:focusable="true"
-                android:hint="@string/format_date"
-                android:inputType="date"
-                android:paddingHorizontal="16dp"
-                android:textColor="#009688"
-                android:textColorHint="#009688"
-                tools:ignore="TouchTargetSizeCheck" />
-        </LinearLayout>
+    <!-- Email -->
+    <EditText
+        android:id="@+id/etEmail"
+        android:layout_width="0dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/bg_input_rounded"
+        android:hint="@string/email"
+        android:inputType="textEmailAddress"
+        android:paddingHorizontal="16dp"
+        android:textColor="#009688"
+        android:textColorHint="#009688"
+        app:layout_constraintTop_toBottomOf="@id/lblDateNaissance"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
-        <!-- Email -->
-        <EditText
-            android:id="@+id/etEmail"
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:layout_marginTop="20dp"
-            android:background="@drawable/bg_input_rounded"
-            android:hint="@string/email"
-            android:inputType="textEmailAddress"
-            android:paddingHorizontal="16dp"
-            android:textColor="#009688"
-            android:textColorHint="#009688" />
+    <!-- Mot de passe -->
+    <EditText
+        android:id="@+id/etPassword"
+        android:layout_width="0dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/bg_input_rounded"
+        android:hint="@string/mdp"
+        android:inputType="textPassword"
+        android:paddingHorizontal="16dp"
+        android:textColor="#009688"
+        android:textColorHint="#009688"
+        app:layout_constraintTop_toBottomOf="@id/etEmail"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
-        <!-- Mot de passe -->
-        <EditText
-            android:id="@+id/etPassword"
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:layout_marginTop="16dp"
-            android:background="@drawable/bg_input_rounded"
-            android:hint="@string/mdp"
-            android:inputType="textPassword"
-            android:paddingHorizontal="16dp"
-            android:textColor="#009688"
-            android:textColorHint="#009688" />
+    <!-- Question solde -->
+    <TextView
+        android:id="@+id/tvSoldeQuestion"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="@string/question_solde"
+        android:textColor="#FFFFFF"
+        android:textSize="14sp"
+        app:layout_constraintTop_toBottomOf="@id/etPassword"
+        app:layout_constraintStart_toStartOf="parent" />
 
-        <!-- Question solde -->
-        <TextView
-            android:id="@+id/tvSoldeQuestion"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/question_solde"
-            android:textColor="#FFFFFF"
-            android:textSize="14sp"
-            android:layout_marginTop="20dp" />
+    <!-- Solde -->
+    <EditText
+        android:id="@+id/etSoldeMois"
+        android:layout_width="0dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/bg_input_rounded"
+        android:hint="@string/txt_mdp"
+        android:inputType="numberDecimal"
+        android:paddingHorizontal="16dp"
+        android:textColor="#009688"
+        android:textColorHint="#009688"
+        app:layout_constraintTop_toBottomOf="@id/tvSoldeQuestion"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
-        <EditText
-            android:id="@+id/etSoldeMois"
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:layout_marginTop="8dp"
-            android:background="@drawable/bg_input_rounded"
-            android:hint="@string/txt_mdp"
-            android:inputType="numberDecimal"
-            android:paddingHorizontal="16dp"
-            android:textColor="#009688"
-            android:textColorHint="#009688" />
+    <!-- Bouton Inscription -->
+    <Button
+        android:id="@+id/btnInscription"
+        android:layout_width="220dp"
+        android:layout_height="56dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginBottom="24dp"
+        android:background="@drawable/bg_button_inscription"
+        android:backgroundTint="@null"
+        android:text="@string/txt_inscription"
+        android:textAllCaps="false"
+        android:textColor="#FFFFFF"
+        android:textSize="18sp"
+        app:layout_constraintTop_toBottomOf="@id/etSoldeMois"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent" />
 
-        <!-- Bouton Inscription -->
-        <Button
-            android:id="@+id/btnInscription"
-            android:layout_width="220dp"
-            android:layout_height="56dp"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="40dp"
-            android:background="@drawable/bg_button_inscription"
-            android:text="@string/txt_inscription"
-            android:textAllCaps="false"
-            android:textColor="#FFFFFF"
-            android:textSize="18sp" />
-
-    </LinearLayout>
-</ScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>

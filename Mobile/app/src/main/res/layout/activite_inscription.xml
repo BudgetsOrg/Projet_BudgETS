@@ -1,119 +1,193 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#9DBA7C"
-   >
+    android:background="#0B5C3F">
 
     <LinearLayout
-
-        tools:context=".InscriptionActivite"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:gravity="center"
-        android:padding="30dp">
+        android:padding="24dp">
 
+        <!-- Titre -->
         <TextView
-            android:text="Inscription"
+            android:id="@+id/tvTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="32dp"
-            android:textStyle="bold"
+            android:layout_gravity="center_horizontal"
+            android:letterSpacing="0.05"
+            android:text="@string/inscription"
             android:textColor="#FFFFFF"
-            android:layout_marginBottom="40dp" />
+            android:textSize="32sp"
+            android:textStyle="bold" />
 
-        <EditText
-            android:id="@+id/nom"
-            android:hint="Nom"
-            android:padding="15dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-
-        <EditText
-            android:id="@+id/prenom"
-            android:hint="Prénom"
-            android:layout_width="match_parent"
+        <!-- Sous‑titre -->
+        <TextView
+            android:id="@+id/tvSubtitle"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="15dp"
-            android:layout_marginTop="15dp"
-            />
+            android:text="@string/txt_remplissez_informations"
+            android:textColor="#FFFFFF"
+            android:textSize="14sp"
+            android:layout_marginTop="8dp"
+            android:layout_gravity="center_horizontal" />
+
+        <!-- Avatar -->
+        <FrameLayout
+            android:id="@+id/flAvatar"
+            android:layout_width="96dp"
+            android:layout_height="96dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="24dp">
+
+            <ImageView
+                android:id="@+id/ivAvatar"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/ic_avatar_placeholder"
+                android:background="@drawable/bg_avatar_circle" />
+
+            <ImageView
+                android:id="@+id/ivEditAvatar"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:src="@drawable/ic_edit"
+                android:background="@drawable/bg_edit_circle"
+                android:layout_gravity="bottom|end"
+                android:padding="4dp" />
+        </FrameLayout>
+
+        <!-- Ligne Nom / Prénom -->
         <LinearLayout
-            android:layout_width="354dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            android:layout_marginBottom="15dp"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:layout_marginTop="32dp"
+            android:weightSum="2">
+
+            <EditText
+                android:id="@+id/nom"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_weight="1"
+                android:background="@drawable/bg_input_rounded"
+                android:hint="@string/nom"
+                android:inputType="textPersonName"
+                android:paddingHorizontal="16dp"
+                android:textColor="#009688"
+                android:textColorHint="#009688" />
+
+            <Space
+                android:layout_width="12dp"
+                android:layout_height="0dp" />
+
+            <EditText
+                android:id="@+id/prenom"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_weight="1"
+                android:background="@drawable/bg_input_rounded"
+                android:hint="@string/prenom"
+                android:inputType="textPersonName"
+                android:paddingHorizontal="16dp"
+                android:textColor="#009688"
+                android:textColorHint="#009688" />
+        </LinearLayout>
+
+        <!-- Date de naissance -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="20dp"
+            android:gravity="center_vertical">
 
             <TextView
                 android:layout_width="wrap_content"
-                android:layout_height="40dp"
-                android:backgroundTint="@color/white"
-                android:text="Date de naissance: "
-                android:layout_marginTop="15dp"
-                android:textSize="15dp" />
+                android:layout_height="wrap_content"
+                android:text="@string/date_de_naissance"
+                android:textColor="#FFFFFF"
+                android:textSize="14sp" />
 
             <EditText
-                android:id="@+id/naissance"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
-                android:hint="AAAA/MM/JJ"
+                android:id="@+id/etDateNaissance"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="12dp"
+                android:layout_weight="1"
+                android:background="@drawable/bg_input_rounded"
+                android:clickable="true"
+                android:focusable="true"
+                android:hint="@string/format_date"
                 android:inputType="date"
-                android:padding="15dp" />
+                android:paddingHorizontal="16dp"
+                android:textColor="#009688"
+                android:textColorHint="#009688"
+                tools:ignore="TouchTargetSizeCheck" />
         </LinearLayout>
 
+        <!-- Email -->
         <EditText
-            android:id="@+id/telephone"
-            android:hint="Numéro de téléphone"
+            android:id="@+id/etEmail"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="phone"
-            android:padding="15dp"
-            android:layout_marginTop="15dp"
-            />
-
-        <EditText
-            android:id="@+id/email"
-            android:hint="Adresse courriel"
+            android:layout_height="48dp"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/bg_input_rounded"
+            android:hint="@string/email"
             android:inputType="textEmailAddress"
+            android:paddingHorizontal="16dp"
+            android:textColor="#009688"
+            android:textColorHint="#009688" />
+
+        <!-- Mot de passe -->
+        <EditText
+            android:id="@+id/etPassword"
             android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/bg_input_rounded"
+            android:hint="@string/mdp"
+            android:inputType="textPassword"
+            android:paddingHorizontal="16dp"
+            android:textColor="#009688"
+            android:textColorHint="#009688" />
+
+        <!-- Question solde -->
+        <TextView
+            android:id="@+id/tvSoldeQuestion"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="15dp"
-            android:layout_marginTop="15dp"
-            />
+            android:text="@string/question_solde"
+            android:textColor="#FFFFFF"
+            android:textSize="14sp"
+            android:layout_marginTop="20dp" />
 
         <EditText
-            android:id="@+id/mdp"
-            android:hint="Mot de passe"
-            android:inputType="textPassword"
+            android:id="@+id/etSoldeMois"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="15dp"
-            android:layout_marginTop="15dp"
-            />
+            android:layout_height="48dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/bg_input_rounded"
+            android:hint="@string/txt_mdp"
+            android:inputType="numberDecimal"
+            android:paddingHorizontal="16dp"
+            android:textColor="#009688"
+            android:textColorHint="#009688" />
 
+        <!-- Bouton Inscription -->
         <Button
-            android:id="@+id/inscrire"
-            android:text="S'inscrire"
-            android:layout_width="match_parent"
-            android:layout_height="55dp"
+            android:id="@+id/btnInscription"
+            android:layout_width="220dp"
+            android:layout_height="56dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="40dp"
+            android:background="@drawable/bg_button_inscription"
+            android:text="@string/txt_inscription"
+            android:textAllCaps="false"
             android:textColor="#FFFFFF"
-            android:backgroundTint="#FF000000"
-            android:layout_marginTop="30dp"
-            />
-
-        <Button
-            android:id="@+id/retourConnexion1"
-            android:text="Retour connexion"
-            android:textColor="#1E2A3A"
-            android:backgroundTint="#FFFFFF"
-            android:layout_marginTop="15dp"
-            android:layout_width="match_parent"
-            android:layout_height="55dp"/>
+            android:textSize="18sp" />
 
     </LinearLayout>
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

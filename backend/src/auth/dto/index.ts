@@ -1,2 +1,2 @@
-export * from './Connexion.dto';
-export * from './Inscription.dto';
+export * from './connexion.dto';
+export * from './inscription.dto';

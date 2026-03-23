@@ -1,12 +1,14 @@
-import { Controller, Post, Get, Patch, Delete, Param, Body, ParseIntPipe } from "@nestjs/common";
+import { Controller, Post, Get, Patch, Delete, Param, Body, ParseIntPipe, UseGuards } from "@nestjs/common";
 import { BudgetService } from "./budget.service";
 import { CreateBudgetDto } from "./dto/create_budget.dto";
 import { UpdateBudgetDto } from "./dto/update_budget.dto";
+import { Request } from "@nestjs/common";
+import { JwtAuthGuard } from "../auth/guard/jwt.guard";
 
-
+@UseGuards(JwtAuthGuard)
 @Controller('budget')
 export class BudgetController{
-    constructor(private readonly budgetService: BudgetService) {}
+    /**constructor(private readonly budgetService: BudgetService) { }
 
     //Prends les donées des champs lors de l'inscription et les envoie au service pour créer un nouveau budget.
     @Post()
@@ -15,9 +17,9 @@ export class BudgetController{
     }
 
     //Récupère le budget du user avec l'id du budget
-    @Get(':id')
-    findOne(@Param('id', ParseIntPipe) id: number) {
-        return this.budgetService.findOne(id);
+    @Get('me')
+    findOne(@Request() req) {
+        return this.budgetService.findOne(req.user.id);
     }
 
     //Plans futur: findAll pour récupérer tous les budgets d'un user avec l'historique (Sprint 2)
@@ -32,5 +34,5 @@ export class BudgetController{
     @Delete(':id')
     remove(@Param('id', ParseIntPipe) id: number) {
         return this.budgetService.delete(id);
-    }
+    } */
 }

@@ -1,4 +1,4 @@
-import { useObjectif } from "../../hooks/UseObjectifs";
+import { useObjectif } from "../../../hooks/useObjectifs";
 import { ObjectifRow } from "./ObjectifRow";
 
 export function ObjectifList() {

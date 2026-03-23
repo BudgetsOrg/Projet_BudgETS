@@ -1,4 +1,4 @@
-import type { Objectif } from "../../interfaces/interfaces";
+import type { Objectif } from "../../../interfaces/interfaces";
 export function ObjectifRow(objectif: Objectif) {
   return (
     <div

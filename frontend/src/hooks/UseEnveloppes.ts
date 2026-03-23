@@ -2,11 +2,12 @@ import { useEffect, useState } from "react";
 import { getEnveloppe } from "../api/api";
 import type { Enveloppe } from "../interfaces/interfaces";
 
-export function useEnveloppes() {
+export default function useEnveloppes() {
   const [enveloppes, setEnveloppes] = useState<Enveloppe[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  // useEffect pour synchroniser avec un système extérieur (backend)
   useEffect(() => {
     async function fetchData() {
       try {

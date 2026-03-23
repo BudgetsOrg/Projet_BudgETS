@@ -1,4 +1,4 @@
-import { useEnveloppes } from "../../hooks/UseEnveloppes";
+import useEnveloppes from "../../../hooks/useEnveloppes";
 import { EnveloppeCard } from "./EnveloppeCard";
 
 export function EnveloppesBudgetaires() {

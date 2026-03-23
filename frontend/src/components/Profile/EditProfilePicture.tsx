@@ -23,6 +23,6 @@ export function EditProfilePicture({
   );
 }
 function clicked() {
-  //Should open a file dialog to select a new profile picture
+  // TODO:Should open a file dialog to select a new profile picture
   console.log("Clicked");
 }

@@ -1,6 +1,6 @@
-import { useBudgets } from "../../hooks/UseBudgets";
-import { useEnveloppes } from "../../hooks/UseEnveloppes";
-import type { Budget } from "../../interfaces/interfaces";
+import useBudgets from "../../../hooks/useBudgets";
+import useEnveloppes from "../../../hooks/useEnveloppes";
+import type { Budget } from "../../../interfaces/interfaces";
 
 export function TabSummary() {
   const {
@@ -9,7 +9,8 @@ export function TabSummary() {
     error: errorEnveloppe,
   } = useEnveloppes();
   const { budgets, loading: loadingBudget, error: errorBudget } = useBudgets();
-  //TODO : Could be changed to a spinner or a cuter message
+
+  //TODO : Pourrait être plus cute
   if (loadingEnveloppe || loadingBudget) return <div>Chargement...</div>;
 
   if (errorEnveloppe || errorBudget)

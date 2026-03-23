@@ -1,10 +1,9 @@
-import { IsDateString, IsDecimal, IsNumber, IsPositive, Min } from "class-validator";
+import { IsDateString, IsNumber, IsPositive, Min } from "class-validator";
 
 export class CreateBudgetDto {
-    @IsNumber()
+    @IsNumber({maxDecimalPlaces: 2})
     @Min(0)
     @IsPositive()
-    @IsDecimal({ decimal_digits: '2'})
     solde: number;
 
     @IsDateString()

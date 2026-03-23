@@ -39,7 +39,7 @@
             android:layout_height="wrap_content"
 
             android:background="@drawable/fond_blanc"
-            android:textColor="#F2F2F2"/>
+            android:textColor="#FF000000"/>
 
         <EditText
             android:id="@+id/nouveauMdp"
@@ -51,7 +51,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/fond_blanc"
-            android:textColor="#F2F2F2"/>
+            android:textColor="#FF000000"/>
 
         <Button
             android:id="@+id/changerMdp"

@@ -31,7 +31,7 @@ public class ProfilActivite extends AppCompatActivity {
 
         ivAvatarProfil = findViewById(R.id.ivAvatarProfil);
         ivEditAvatarProfil = findViewById(R.id.ivEditAvatarProfil);
-        ivPetitAvatar = findViewById(R.id.ivPetitAvatar);
+        //ivPetitAvatar = findViewById(R.id.ivPetitAvatar);
 
         btnModifier = findViewById(R.id.btnModifier);
         btnSupprimer = findViewById(R.id.btnSupprimer);

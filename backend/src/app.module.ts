@@ -15,7 +15,7 @@ import { ObjectifModule } from './objectif/objectif.module';
 import { EnveloppeModule } from './enveloppe/enveloppe.module';
 import { EconomieModule } from './economie/economie.module';
 import { DepenseModule } from './depense/depense.module';
-import { BudggetModule } from './budget/budget.module';
+import { BudgetModule } from './budget/budget.module';
 import { CategorieModule } from './categorie/categorie.module';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
@@ -50,7 +50,7 @@ dotenv.config();
     EnveloppeModule,
     EconomieModule,
     DepenseModule,
-    BudggetModule,
+    BudgetModule,
     CategorieModule,
     UserModule
   ],

@@ -1,9 +1,9 @@
 // Justine
 
-import { getLoggedInUser } from "./api/userApi";
-import { EditProfilePicture } from "./components/Profile/EditProfilePicture";
-import { ProfileHeader } from "./components/Profile/ProfileHeader";
-import { TableInfoProfil } from "./components/Profile/TableInfoProfil";
+import { getLoggedInUser } from "../api/userApi";
+import { EditProfilePicture } from "../components/Profile/EditProfilePicture";
+import { ProfileHeader } from "../components/Profile/ProfileHeader";
+import { TableInfoProfil } from "../components/Profile/TableInfoProfil";
 
 // + popup suppression Justine
 export function PageProfile() {
@@ -16,7 +16,7 @@ export function PageProfile() {
           <EditProfilePicture profilePicture={user.image} />
         </div>
       </div>
-      <div className="px-10 w-1/2 h-full mx-auto">
+      <div className="px-4 sm:px-6 md:px-10 w-full md:w-3/4 lg:w-1/2 mx-auto">
         <TableInfoProfil {...user} />
       </div>
     </div>

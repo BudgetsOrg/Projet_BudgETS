@@ -43,4 +43,9 @@
     border: 2px solid var(--color-delete);
     font-weight: bold;
   }
+
+  .delete-button:hover {
+    background: var(--color-delete);
+    color: white;
+  }
 }

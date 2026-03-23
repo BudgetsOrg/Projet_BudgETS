@@ -4,6 +4,7 @@ import { UserService } from './user.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from 'src/entities';
 
+//utilisé pour partager le service et le controller avec les autres modules de l'application.
 @Module({
   imports: [TypeOrmModule.forFeature([User])],
   controllers: [UserController], //servent a definir les routes donc https:// get post ou  put

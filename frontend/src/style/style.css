@@ -1,1 +1,5 @@
 @import "./pages/PagePrincipale.css";
+@import "./pages/Inscription.css";
+@import "./pages/Connexion.css";
+@import "./pages/Enveloppe.css";
+@import "./general/Header.css";

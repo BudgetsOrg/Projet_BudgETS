@@ -13,6 +13,13 @@ npm install @nestjs/passport passport passport-jwt
 
 npm install -D @types/passport @types/passport-jwt
 
+//argon
+npm install argon2
+
+//pas encore utiliser
+$ npm i bcrypt
+$ npm i -D @types/bcrypt
+
 //pour la page d'incriptioon le front end doit sassurer de convertir le , en .
 pour les décimales, car JavaScript (et donc @Type) ne reconnaît pas la 
 virgule comme un séparateur mathématique par défaut.

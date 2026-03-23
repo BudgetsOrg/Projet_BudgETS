@@ -1,9 +1,8 @@
-import { Injectable } from "@nestjs/common";
+import { ForbiddenException, Injectable } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
-import { InjectRepository } from "@nestjs/typeorm";
-import { User } from "src/entities";
 import { UserService } from "src/user/user.service";
-import { InscriptionDto } from "./dto";
+import { ConnexionDto, InscriptionDto } from "./dto";
+import * as argon from 'argon2';
 
 //bibliothèque officielle de NestJS pour gérer les JSON Web Tokens (JWT).
 //npm i --save @nestjs/jwt installer
@@ -16,12 +15,58 @@ export class AuthService{
     private readonly jwtService: JwtService
   ){}
 
-  // Ajoute cette fonction ici !
-    async inscription(dto: InscriptionDto) {
-        // C'est ici qu'on fera la logique plus tard
-        return {
-            message: "L'inscription a été reçue !",
-            data: dto
-        };
+     async inscription(dto:InscriptionDto) {
+    try {
+      ///genere un  mot de passe hashed
+      const hash = await argon.hash(dto.password);
+
+      // Cree une instance d'un user
+      const user = await this.userService.create({
+        nom: dto.nom,
+        prenom: dto.prenom,
+        adresse_email: dto.adresse_email,
+        password: hash,
+        date_naissance:new Date( dto.date_naissance),
+      });
+
+    //returne token
+      return this.signToken((await user).id_user, (await user).adresse_email);
+
+    } catch (error) {
+      if (error.code === 'ER_DUP_ENTRY') {
+        
+        throw new ForbiddenException('Credentiel pris');
+      }
+      throw error; 
     }
+  }
+
+  async connexion(dto: ConnexionDto) {
+    // findByEmail au lieu de findOne
+    const user = await this.userService.findByEmail(dto.adresse_email);
+
+    if (!user) {
+        throw new ForbiddenException('Identifiants incorrects');
+    }
+    }
+
+    //le token
+    async signToken(userID: number, email: string): Promise<{access_token:string}> {
+    const payload = { sub:userID, email };
+  
+
+    const token = await this.jwtService.signAsync(payload, {
+        expiresIn: '1d',
+        secret: process.env.JWT_SECRET,
+      });
+  
+    return {
+      access_token: token,
+    }
+
+    // return this.jwtService.signAsync(payload, {
+    //   expiresIn: '1h',
+    //   secret: 'secret',
+    // });
+  }
 }

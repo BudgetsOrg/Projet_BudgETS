@@ -8,5 +8,6 @@ import { User } from 'src/entities';
   imports: [TypeOrmModule.forFeature([User])],
   controllers: [UserController], //servent a definir les routes donc https:// get post ou  put
   providers: [UserService],
+  exports: [UserService],
 })
 export class UserModule {}

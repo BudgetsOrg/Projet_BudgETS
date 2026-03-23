@@ -28,7 +28,7 @@ export class UserService {
     return { message: 'User deleted' };
   }
 
-  //// Méthode utilitaire pour calculer l'âge
+  //// methode utilitaire pour calculer l'age
   private calculAge(date_naissance: Date): number {
     const aujourdhui = new Date()
     const jourNaissance = new Date (date_naissance);
@@ -65,4 +65,11 @@ export class UserService {
     const newUser = this.userRepository.create(userData);
     return await this.userRepository.save(newUser);
   }
+
+  async findByEmail(email: string) {
+  return await this.userRepository.findOne({ 
+    where: { adresse_email: email } 
+  });
+}
+   
 }

@@ -10,7 +10,6 @@ import { UserModule } from "src/user/user.module";
     UserModule,
     JwtModule.register({}),
   ],
-
   controllers: [AuthController], 
   providers: [AuthService],
 })

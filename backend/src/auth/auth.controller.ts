@@ -1,6 +1,6 @@
-import { Body, Controller, Post } from "@nestjs/common";
+import { Body, Controller, HttpCode, HttpStatus, Post } from "@nestjs/common";
 import { AuthService } from "./auth.service";
-import { InscriptionDto } from "./dto";
+import { ConnexionDto, InscriptionDto } from "./dto";
 
 
 
@@ -10,8 +10,14 @@ export class AuthController{
 
     @Post('inscription')
     inscription(@Body() dto: InscriptionDto) {
-    // On utilise le service qu'on a "injecté" dans le constructeur
+    // on utilise le service qu'on 'injecte' dans le contructeur
     return this.authService.inscription(dto); 
+    }
+    
+    @HttpCode(HttpStatus.OK)
+    @Post('connexion')
+    signin(@Body() dto: ConnexionDto) {
+        return this.authService.connexion(dto);
     }
 
 }

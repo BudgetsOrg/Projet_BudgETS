@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-export default function Nouveau({
+export default function NouvelleEnveloppe({
   showPopup,
   closePopup,
 }: {
@@ -10,11 +10,11 @@ export default function Nouveau({
   if (!showPopup) return null;
 
   return (
-    <div className="fixed inset-40 bg-white bg-opacity-2 flex-col items-center justify-center rounded-lg p-6 shadow-lg">
-      <h4 className="font-bold bg-var(--color-primary) p-4 text-align-center">
-        ...
+    <div className="fixed top-40 h-100 w-100 left-20 bg-white bg-opacity-2 flex-col items-center justify-center rounded-lg p-6 shadow-lg">
+      <h4 className="font-bold bg-var(--color-primary) p-4 text-align-center text-white">
+        Créer une nouvelle enveloppe
       </h4>
-      <label htmlFor="titre">...</label>
+      <label htmlFor="titre">Titre de l'enveloppe</label>
       <input
         type="text"
         id="titre"
@@ -22,7 +22,7 @@ export default function Nouveau({
         className="border border-gray-300 rounded-lg p-2 w-full"
       />
 
-      <label htmlFor="montant">...</label>
+      <label htmlFor="montant">Montant de l'enveloppe</label>
       <input
         type="text"
         id="montant"
@@ -38,7 +38,7 @@ export default function Nouveau({
           Annuler
         </button>
 
-        <button className="py-2 px-4 rounded-lg bg-var(--color-secondary) text-white hover:bg-white hover:text-var(--color-secondary) border-2 border-var(--color-secondary) transition-colors duration-300">
+        <button className="py-2 px-4 rounded-lg bg-var(--color-secondary) text-white hover:bg-white hover:text-var(--color-secondary) border-2">
           Ajouter
         </button>
       </div>

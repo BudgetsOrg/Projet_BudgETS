@@ -1,8 +1,12 @@
-import useBudgets from "../../../hooks/useBudgets";
-import useEnveloppes from "../../../hooks/useEnveloppes";
+import { useState } from "react";
+import useBudgets from "../../../hooks/UseBudgets";
+import useEnveloppes from "../../../hooks/UseEnveloppes";
 import type { Budget } from "../../../interfaces/interfaces";
+import Nouveau from "../../../popups/AjoutPopup/NouvelleEnveloppe";
+import NouvelleEnveloppe from "../../../popups/AjoutPopup/NouvelleEnveloppe";
 
 export function TabSummary() {
+  const [showNouveauPopup, setShowNouveauPopup] = useState(false);
   const {
     enveloppes,
     loading: loadingEnveloppe,
@@ -37,12 +41,21 @@ export function TabSummary() {
         ))}
         <tr>
           <td className="p-4 " colSpan={2}>
-            <button className="cursor-pointer bg-black hover:bg-gray-800 text-white font-bold py-2 px-4 rounded-lg">
+            <button
+              className="cursor-pointer bg-black hover:bg-gray-800 text-white font-bold py-2 px-4 rounded-lg"
+              onClick={() => setShowNouveauPopup(true)}
+            >
               Creer une enveloppe
             </button>
           </td>
         </tr>
       </table>
+      <div className="">
+        <NouvelleEnveloppe
+          showPopup={showNouveauPopup}
+          closePopup={() => setShowNouveauPopup(false)}
+        ></NouvelleEnveloppe>
+      </div>
     </div>
   );
 }

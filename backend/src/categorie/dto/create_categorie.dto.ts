@@ -1,0 +1,10 @@
+import {IsString, MaxLength} from 'class-validator';
+
+export class CreateCategorieDto {
+    @IsString()
+    @MaxLength(50)
+    nom_categorie: string;
+    // Je n'ai pas inclus la recurence dans le DTO puisqu'il est set à default : 0
+}
+
+

@@ -1,7 +1,13 @@
 // Mohamed
 function Connexion() {
+
+    
+const redirigerPageInscription = () => {
+    window.location.href = "/PageInscription";
+}
     return (
         <>
+        <div className="page_connexion">
             <div className="connexion_container">
                 <div className="container_gauche">
                     <img src="/img/image_inscription_plante.png" className="image_connexion"/>
@@ -12,7 +18,7 @@ function Connexion() {
                     <input type="password" name="btn_password" placeholder="Mot de passe" />
                     <label>Mot de passe oublié ?</label>
                     <button className="btn_connexion" type="submit">Connexion</button>
-                    <button className="btn_inscription" type="submit">S'inscrire</button>
+                    <button className="btn_inscription" type="submit" onClick={redirigerPageInscription}>S'inscrire</button>
 
                     
                 </div>
@@ -22,6 +28,7 @@ function Connexion() {
                 <div className="triangle triangle-gauche"/>
 
             </div>
+        </div>
         </>
     );
 }

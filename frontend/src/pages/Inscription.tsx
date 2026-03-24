@@ -1,7 +1,8 @@
 //Mohamed
 // Page d'inscription pour les nouveaux utilisateurs
-
+// Dans le cas ou le significateur soit un , alors le transformer en .
 function Inscription() {
+
   return (
     <>
 

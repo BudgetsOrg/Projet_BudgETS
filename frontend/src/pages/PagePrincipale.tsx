@@ -9,7 +9,7 @@ import { ObjectifList } from "../components/componentsPagePrincipale/Objectif/Ob
 
 export function PagePrincipale() {
   return (
-    <div className="space-y-8 px-4">
+    <div className="space-y-8 px-4 bg-white">
       <h2 className="mb-4 text-4xl font-bold tracking-tight text-heading md:text-5xl lg:text-6xl">
         BudgETS
       </h2>

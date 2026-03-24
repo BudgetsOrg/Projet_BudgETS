@@ -26,7 +26,10 @@ export class AuthService{
         prenom: dto.prenom,
         adresse_email: dto.adresse_email,
         password: hash,
-        date_naissance:new Date( dto.date_naissance),
+        date_naissance:dto.date_naissance,
+        telephone:dto.telephone ,
+        image:dto.image,
+        soldeDumois: dto.soldeDumois
       });
       
 

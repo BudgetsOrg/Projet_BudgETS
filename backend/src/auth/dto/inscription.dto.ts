@@ -33,6 +33,10 @@ export class InscriptionDto {
   @IsOptional()
   telephone: string;
 
+  @IsString()
+  @IsOptional()
+  image: string;
+
   @IsNotEmpty({ message: 'Le solde initial est obligatoire' })
   // convertit la String reçue du JSON en type Number AVANT la validation
   @Type(() => Number)

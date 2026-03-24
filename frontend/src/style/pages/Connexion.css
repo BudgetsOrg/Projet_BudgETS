@@ -49,6 +49,7 @@
     color: rgb(170,221,102);
     font-size: 45px;
     margin-bottom: 10px;
+    font-weight: bold;
 }
 
 .connexion_information input {

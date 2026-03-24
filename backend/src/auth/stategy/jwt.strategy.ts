@@ -3,8 +3,7 @@ import { PassportStrategy } from '@nestjs/passport';
 import { InjectRepository } from '@nestjs/typeorm';
 
 import { ExtractJwt, Strategy } from 'passport-jwt';
-import { User } from 'src/entities';
-import { Repository } from 'typeorm';
+import { UserRepository } from 'src/repositories/index';
 
 type userResponse = {
   id: number;
@@ -16,8 +15,7 @@ type userResponse = {
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
   constructor(
-    @InjectRepository(User)
-    private readonly userRepository: Repository<User>,
+    private readonly userRepository: UserRepository
   ) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
@@ -26,9 +24,9 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
   }
 
   async validate(payload: { sub: number; email: string }) {
-    const user = await this.userRepository.findOne({
-      where: { adresse_email: payload.email },
-    });
+    const user = await this.userRepository.findByEmail(
+      payload.email ,
+    );
 
     if (!user) {
       throw new UnauthorizedException('Utilisateur non trouvé');

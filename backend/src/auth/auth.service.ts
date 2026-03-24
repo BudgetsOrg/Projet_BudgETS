@@ -28,9 +28,10 @@ export class AuthService{
         password: hash,
         date_naissance:new Date( dto.date_naissance),
       });
+      
 
     //returne token
-      return this.signToken((await user).id_user, (await user).adresse_email);
+      return this.signToken(user.id_user, user.adresse_email);
 
     } catch (error) {
       if (error.code === 'ER_DUP_ENTRY') {
@@ -48,6 +49,16 @@ export class AuthService{
     if (!user) {
         throw new ForbiddenException('Identifiants incorrects');
     }
+
+    // Comparer le mot de passe en clair du DTO avec le hash de la DB
+    const matches = await argon.verify(user.password, dto.password);
+
+    if (!matches) {
+        throw new ForbiddenException('Identifiants incorrects');
+    }
+
+    return this.signToken(user.id_user, user.adresse_email);
+
     }
 
     //le token

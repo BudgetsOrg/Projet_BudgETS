@@ -1,5 +1,6 @@
-import { Controller, Get, Post, Delete, Param, Body, ParseIntPipe } from '@nestjs/common';
+import { Controller, Get, Post, Delete, Param, Body, ParseIntPipe, UseGuards,Request } from '@nestjs/common';
 import { UserService } from './user.service';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('users')
 export class UserController {
@@ -14,5 +15,10 @@ export class UserController {
         return this.userService.delete(id);
     }
 
+    @UseGuards(AuthGuard('jwt')) // C'est ce verrou qui teste ton token
+    @Get('me')
+    getProfile(@Request() req) {
+        return req.user; // Retourne les infos de l'utilisateur extraites du token
+    }
 
 }

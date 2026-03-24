@@ -8,3 +8,5 @@
  * Delete       delete(id)         Supprimer une entrée.
  * 
  */
+
+export * from './user.repository';

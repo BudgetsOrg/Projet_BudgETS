@@ -12,7 +12,7 @@ export class UserRepository{
   ) {}
 
     //Create
-    async create(userData){
+    async create(userData: Partial<User>):Promise<User>{
         const newUser = this.repo.create(userData) // .create() prépare l'entité
         return await this.repo.save(newUser)
     }

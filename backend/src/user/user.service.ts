@@ -1,75 +1,105 @@
-import { BadRequestException, ConflictException, Injectable, NotFoundException } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import {
+  BadRequestException,
+  ConflictException,
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
+
 import { User } from '../entities/user.entity';
+import { UserRepository } from 'src/repositories/index';
 
 @Injectable()
 export class UserService {
   constructor(
-    @InjectRepository(User) 
-    /*@InjectRepository(User) call pour le repository du user (un classe préparée avec des méthodes deja définies)
-    donne un nom pour le pointer local vers le repository + declare qu'il utilise des objets de types user.*/
-    private userRepository: Repository<User>, 
+        private readonly userRepository: UserRepository,
   ) {}
 
   //Trouve le user par son id, si il n'existe pas, throw une exception, puis retourne le user trouvé.
   async findOne(id: number) {
-    const user = await this.userRepository.findOne({ where: { id_user: id } });
+    const user = await this.userRepository.get(id);
     if (!user) {
       throw new NotFoundException('User not found');
     }
     return user;
   }
-  
+
   //Supprime le user trouvé par son id, puis retourne un message de confirmation.
   async delete(id: number) {
-    const user = await this.findOne(id);
-    await this.userRepository.remove(user);
+    await this.findOne(id);
+    await this.userRepository.delete(id);
     return { message: 'User deleted' };
   }
 
   //// methode utilitaire pour calculer l'age
   private calculAge(date_naissance: Date): number {
-    const aujourdhui = new Date()
-    const jourNaissance = new Date (date_naissance);
+    const aujourdhui = new Date();
+    const jourNaissance = new Date(date_naissance);
 
     //age theorique
-    let age= aujourdhui.getFullYear() - jourNaissance.getFullYear();
-    
-    const mois= aujourdhui.getMonth() - jourNaissance.getMonth();
+    let age = aujourdhui.getFullYear() - jourNaissance.getFullYear();
 
-    if (mois < 0 || (mois === 0 && aujourdhui.getDate() < jourNaissance.getDate())) {
+    const mois = aujourdhui.getMonth() - jourNaissance.getMonth();
+
+    if (
+      mois < 0 ||
+      (mois === 0 && aujourdhui.getDate() < jourNaissance.getDate())
+    ) {
       age--;
     }
     return age;
   }
 
-  async create(userData: Partial<User>) {
+  //vallidation des champ
+  private validationChamp(userData:Partial<User>){
+    if (!userData.nom) {
+      throw new BadRequestException('Le nom est obligatoire.');
+    }
+    if (!userData.prenom) {
+      throw new BadRequestException('Le prénom est obligatoire.');
+    }
+    if (!userData.adresse_email) {
+      throw new BadRequestException("L'adresse email est obligatoire.");
+    }
+    if (!userData.password) {
+      throw new InternalServerErrorException("Le mot de passe n'a pas été traité.");
+    }
+  }
+
+  async create(userData: Partial<User>):Promise<User> {
+    //verifier que tu as bel est bien un nom ,un prenom et un email
+    this.validationChamp(userData)
+    
     //  Vérification de l'âge
     if (userData.date_naissance) {
       const age = this.calculAge(userData.date_naissance);
       if (age < 18) {
-        throw new BadRequestException("Désolé, tu dois avoir 18 ans pour utiliser budgETS.");
+        throw new BadRequestException(
+          'Désolé, tu dois avoir 18 ans pour utiliser budgETS.',
+        );
       }
+    }
+    //verifie que il y a bel est bein un email
+    if (!userData.adresse_email) {
+      throw new BadRequestException("L'email est obligatoire.");
     }
 
     // Vérification si l'email existe déjà
-    const existingUser = await this.userRepository.findOne({ 
-      where: { adresse_email: userData.adresse_email } 
-    });
+    const existingUser = await this.userRepository.findByEmail(
+      userData.adresse_email,
+    );
     if (existingUser) {
-      throw new ConflictException("Cet email est déjà utilisé.");
+      throw new ConflictException('Cet email est déjà utilisé.');
+    }
+    if (!userData.date_naissance) {
+      throw new BadRequestException("La date de naissance est obligatoire.");
     }
 
-    // Création et sauvegarde
-    const newUser = this.userRepository.create(userData);
-    return await this.userRepository.save(newUser);
+    // Création
+    return await this.userRepository.create(userData);
   }
 
   async findByEmail(email: string) {
-  return await this.userRepository.findOne({ 
-    where: { adresse_email: email } 
-  });
-}
-   
+    return await this.userRepository.findByEmail(email);
+  }
 }

@@ -1,8 +1,9 @@
 import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, UseGuards } from "@nestjs/common";
 import { EnveloppeService } from "./enveloppe.service";
-import { CreateEnveloppeDto } from "./dto/update_enveloppe.dto copy";
+import { UpdateEnveloppeDto } from "./dto/update_enveloppe.dto";
 import { JwtAuthGuard } from "../auth/guard/jwt.guard";
 import { Request } from "@nestjs/common";
+import { CreateEnveloppeDto } from "./dto/create_enveloppe.dto";
 
 @UseGuards(JwtAuthGuard)
 @Controller('enveloppe')
@@ -22,7 +23,7 @@ export class EnveloppeController{
     }
 
     @Patch(':id')
-    update(@Request() request, @Body() updateEnveloppeDto: CreateEnveloppeDto, @Param('id', ParseIntPipe) id: number) {
+    update(@Request() request, @Body() updateEnveloppeDto: UpdateEnveloppeDto, @Param('id', ParseIntPipe) id: number) {
         return this.enveloppeService.update(request.user.id, updateEnveloppeDto, id);
     }
 

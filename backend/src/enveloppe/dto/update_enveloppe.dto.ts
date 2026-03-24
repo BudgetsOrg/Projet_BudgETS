@@ -1,6 +1,6 @@
 import { IsNotEmpty, IsNumber, IsOptional, IsPositive, IsString} from "class-validator";
 
-export class CreateEnveloppeDto {
+export class UpdateEnveloppeDto {
     @IsOptional()
     @IsString()
     @IsNotEmpty()

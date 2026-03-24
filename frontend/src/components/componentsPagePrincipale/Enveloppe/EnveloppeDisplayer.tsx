@@ -1,4 +1,4 @@
-import useEnveloppes from "../../../hooks/useEnveloppes";
+import useEnveloppes from "../../../hooks/UseEnveloppes";
 import { EnveloppeCard } from "./EnveloppeCard";
 
 export function EnveloppesBudgetaires() {
@@ -13,6 +13,9 @@ export function EnveloppesBudgetaires() {
     return <div>Vous n'avez présentement aucune enveloppe budgétaires. </div>;
   return (
     <div className="custom-scrollbar overflow-x-scroll">
+      <h6 className=" text-md p-4 text-align-center text-black">
+        {enveloppes.length} enveloppes
+      </h6>
       <div className="flex gap-4 pb-4">
         {enveloppes.map((env) => (
           <div key={env.id_enveloppe} className="flex-shrink-0 w-64">

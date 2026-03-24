@@ -29,7 +29,7 @@ export function TableInfoProfil(user: User) {
             <td className="font-semibold p-4" colSpan={2}>
               Email:
             </td>
-            <td>{user.adresse_email}</td>
+            <td colSpan={2}>{user.adresse_email}</td>
           </tr>
           <tr>
             <td className="font-semibold p-4" colSpan={2}>

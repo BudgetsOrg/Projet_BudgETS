@@ -231,3 +231,33 @@
 .ligne_selectionnee td {
   background-color: #fde8e4 !important;
 }
+/*  Colonne Action */
+.enveloppe_table th:last-child,
+.enveloppe_table td:last-child {
+  text-align: center;
+}
+
+/* Cellule actions */
+.cell_actions {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+}
+
+/* Bouton Modifier */
+.btn_modifier {
+  background-color: #3b82f6;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 5px 12px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn_modifier:hover {
+  background-color: #2563eb;
+  transform: translateY(-1px);
+}

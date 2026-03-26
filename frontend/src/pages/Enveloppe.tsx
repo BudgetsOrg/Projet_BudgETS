@@ -2,45 +2,22 @@
 import { useState } from "react";
 
 interface Depense {
+  id?: number;
   titre: string;
   categorie: string;
   prix: number;
   date: string;
 }
 
-interface DonneesEnveloppe {
-  titre: string;
-  budgetAlloue: number;
-  depenses: Depense[];
-}
+// Plus tard gerer avec le backend.
+const enveloppeId = 1;
 
-const donneesInitiales: DonneesEnveloppe = {
+const donneesInitiales = {
   titre: "Titre de mon enveloppe",
   budgetAlloue: 150,
-
-  /*
-    // Pour recuperer les depenses de la db.
-  useEffect(() => {
-    fetch("/api/depenses")
-      .then(res => {
-        if (!res.ok) throw new Error("Erreur réseau");
-        return res.json();
-      })
-      .then((data: Depense[]) => {
-        setDepenses(data);
-        setLoading(false);
-      })
-      .catch(err => {
-        console.error(err);
-        setError("Impossible de charger les dépenses");
-        setLoading(false);
-      });
-  }, []);
-  */
   depenses: [
-    { titre: "MC Donalds", categorie: "Restaurant", prix: 15.00, date: "2026-10-10" },
-    { titre: "MC Donalds", categorie: "Restaurant", prix: 15.00, date: "2026-10-10" },
-    { titre: "MC Donalds", categorie: "Restaurant", prix: 15.00, date: "2026-10-10" },
+    { id: 1, titre: "MC Donalds", categorie: "Restaurant", prix: 15.0, date: "2026-10-10" },
+    { id: 2, titre: "Uber", categorie: "Transport", prix: 25.0, date: "2026-10-11" },
   ],
 };
 
@@ -49,9 +26,15 @@ function Enveloppe() {
 
   const [depenses, setDepenses] = useState<Depense[]>(donneesInitiales.depenses);
   const [modalOuvert, setModalOuvert] = useState(false);
-  const [nouvelleDepense, setNouvelleDepense] = useState<Depense>({ titre: "", categorie: "", prix: 0, date: "" });
-  const [modeSupprimer, setModeSupprimer] = useState(false);
-  const [selectionnes, setSelectionnes] = useState<number[]>([]);
+  const [modeEdition, setModeEdition] = useState(false);
+  const [indexEdition, setIndexEdition] = useState<number | null>(null);
+
+  const [nouvelleDepense, setNouvelleDepense] = useState<Depense>({
+    titre: "",
+    categorie: "",
+    prix: 0,
+    date: "",
+  });
 
   const totalDepenses = depenses.reduce((acc, d) => acc + d.prix, 0);
   const pourcentage = Math.min((totalDepenses / budgetAlloue) * 100, 100);
@@ -63,49 +46,75 @@ function Enveloppe() {
   };
 
   const ouvrirModal = () => setModalOuvert(true);
+
   const fermerModal = () => {
     setModalOuvert(false);
+    setModeEdition(false);
+    setIndexEdition(null);
     setNouvelleDepense({ titre: "", categorie: "", prix: 0, date: "" });
   };
+
+  // Lorsqu'on relie le backend au frontend on utilisera la version en bas.
   const confirmerAjout = () => {
     if (!nouvelleDepense.titre || !nouvelleDepense.date || nouvelleDepense.prix <= 0) return;
-    /*
-    //Pour ajouter a la db notre nouvelle depense mise dans le form.
-      fetch("http://localhost:8080/api/depenses", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify(nouvelleDepense)
-  })
-    .then(res => res.json())
-    .then(data => {
-      setDepenses([...depenses, data]);
-      fermerModal();
-    })
-    .catch(err => console.error("Erreur :", err));
-};
-    */ 
-    setDepenses([...depenses, nouvelleDepense]);
+
+    if (modeEdition && indexEdition !== null) {
+      const copie = [...depenses];
+      copie[indexEdition] = nouvelleDepense;
+      setDepenses(copie);
+
+    } else {
+      setDepenses([...depenses, nouvelleDepense]);
+    }
+
     fermerModal();
   };
 
-  const activerModeSupprimer = () => { setModeSupprimer(true); setSelectionnes([]); };
-  const annulerSupprimer = () => { setModeSupprimer(false); setSelectionnes([]); };
-  const toggleSelection = (index: number) => {
-    setSelectionnes(prev =>
-      prev.includes(index) ? prev.filter(i => i !== index) : [...prev, index]
-    );
-  };
-  const confirmerSuppression = () => {
-    setDepenses(depenses.filter((_, i) => !selectionnes.includes(i)));
-    setModeSupprimer(false);
-    setSelectionnes([]);
-  };
+  /*
+ const confirmerAjout = async () => {
+  if (!nouvelleDepense.titre || !nouvelleDepense.date || nouvelleDepense.prix <= 0) return;
 
+  try {
+    if (modeEdition && indexEdition !== null && nouvelleDepense.id) {
+      // Modification d'une dépense existante
+      await fetch(`http://localhost:8080/api/enveloppes/${enveloppeId}/depenses/${nouvelleDepense.id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(nouvelleDepense),
+      });
+
+      const copie = [...depenses];
+      copie[indexEdition] = nouvelleDepense;
+      setDepenses(copie);
+    } else {
+      // Création d'une nouvelle dépense (le backend génère l'id)
+      const res = await fetch(`http://localhost:8080/api/enveloppes/${enveloppeId}/depenses`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(nouvelleDepense),
+      });
+
+      const data: Depense = await res.json(); // data contient maintenant l'id généré par le backend
+      setDepenses([...depenses, data]);
+    }
+
+    fermerModal();
+  } catch (err) {
+    console.error("Erreur :", err);
+  }
+};
+  */
+
+
+  const handleEdit = (depense: Depense, index: number) => {
+    setNouvelleDepense(depense);
+    setIndexEdition(index);
+    setModeEdition(true);
+    setModalOuvert(true);
+  };
+  
   return (
     <div className="enveloppe_container">
-
       <div className="enveloppe_header">
         <h1 className="enveloppe_titre">{titre}</h1>
         <div className="enveloppe_budget">
@@ -119,101 +128,91 @@ function Enveloppe() {
         <span className="enveloppe_barre_pourcentage">{Math.round(pourcentage)}%</span>
       </div>
 
-      <div className="enveloppe_depenses">
-        <div className="enveloppe_depenses_header">
-          <h2 className="enveloppe_depenses_titre">Dépenses</h2>
-          <div className="enveloppe_depenses_actions">
-            {!modeSupprimer ? (
-              <>
-                <button className="btn_ajouter" onClick={ouvrirModal}>Ajouter +</button>
-                <button className="btn_supprimer" onClick={activerModeSupprimer}>Supprimer</button>
-              </>
-            ) : (
-              <>
-                <button className="btn_ajouter" onClick={confirmerSuppression} disabled={selectionnes.length === 0}>
-                  Confirmer ({selectionnes.length})
+      <table className="enveloppe_table">
+        <thead>
+          <tr>
+            <th>Titre</th>
+            <th>Catégorie</th>
+            <th>Prix</th>
+            <th>Date</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          {depenses.map((depense, index) => (
+            <tr key={index}>
+              <td>{depense.titre}</td>
+              <td>{depense.categorie}</td>
+              <td>{formatPrix(depense.prix)}</td>
+              <td>{formatDate(depense.date)}</td>
+
+              <td className="cell_actions">
+                <button
+                  className="btn_modifier"
+                  onClick={() => handleEdit(depense, index)}
+                >
+                  Modifier
                 </button>
-                <button className="btn_supprimer" onClick={annulerSupprimer}>Annuler</button>
-              </>
-            )}
-          </div>
-        </div>
-
-        <table className="enveloppe_table">
-          <thead>
-            <tr>
-              {modeSupprimer && <th></th>}
-              <th>Titre</th>
-              <th>Categorie</th>
-              <th>Prix</th>
-              <th>Date</th>
+              </td>
             </tr>
-          </thead>
-          <tbody>
-            {depenses.map((depense, index) => (
-              <tr
-                key={index}
-                onClick={() => modeSupprimer && toggleSelection(index)}
-                className={modeSupprimer ? (selectionnes.includes(index) ? "ligne_selectionnee" : "ligne_supprimable") : ""}
-              >
-                {modeSupprimer && (
-                  <td>
-                    <input
-                      type="checkbox"
-                      checked={selectionnes.includes(index)}
-                      onChange={() => toggleSelection(index)}
-                      onClick={e => e.stopPropagation()}
-                    />
-                  </td>
-                )}
-                <td>{depense.titre}</td>
-                <td>{depense.categorie}</td>
-                <td>{formatPrix(depense.prix)}</td>
-                <td>{formatDate(depense.date)}</td>
-              </tr>
-            ))}
-            {Array.from({ length: Math.max(0, 5 - depenses.length) }).map((_, i) => (
-              <tr key={`vide-${i}`} className="ligne_vide">
-                {modeSupprimer && <td></td>}
-                <td></td><td></td><td></td><td></td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+          ))}
+        </tbody>
+      </table>
 
+      {/* MODAL */}
       {modalOuvert && (
         <div className="modal_overlay" onClick={fermerModal}>
-          <div className="modal_contenu" onClick={e => e.stopPropagation()}>
-            <h2>Ajouter une dépense</h2>
-            <label>Titre</label>
-            <input type="text" placeholder="Ex: MC Donalds"
+          <div className="modal_contenu" onClick={(e) => e.stopPropagation()}>
+            <h2>{modeEdition ? "Modifier" : "Ajouter"} une dépense</h2>
+
+            <input
+              placeholder="Titre"
               value={nouvelleDepense.titre}
-              onChange={e => setNouvelleDepense({ ...nouvelleDepense, titre: e.target.value })}
+              onChange={(e) =>
+                setNouvelleDepense({ ...nouvelleDepense, titre: e.target.value })
+              }
             />
-            <label>Catégorie</label>
-            <input type="text" placeholder="Ex: Restaurant"
+
+            <input
+              placeholder="Catégorie"
               value={nouvelleDepense.categorie}
-              onChange={e => setNouvelleDepense({ ...nouvelleDepense, categorie: e.target.value })}
+              onChange={(e) =>
+                setNouvelleDepense({ ...nouvelleDepense, categorie: e.target.value })
+              }
             />
-            <label>Prix ($)</label>
-            <input type="number" placeholder="Ex: 15.00" min="0"
+
+            <input
+              type="number"
               value={nouvelleDepense.prix || ""}
-              onChange={e => setNouvelleDepense({ ...nouvelleDepense, prix: parseFloat(e.target.value) })}
+              onChange={(e) =>
+                setNouvelleDepense({
+                  ...nouvelleDepense,
+                  prix: parseFloat(e.target.value),
+                })
+              }
             />
-            <label>Date</label>
-            <input type="date"
+
+            <input
+              type="date"
               value={nouvelleDepense.date}
-              onChange={e => setNouvelleDepense({ ...nouvelleDepense, date: e.target.value })}
+              onChange={(e) =>
+                setNouvelleDepense({ ...nouvelleDepense, date: e.target.value })
+              }
             />
+
             <div className="modal_boutons">
-              <button className="btn_ajouter" onClick={confirmerAjout}>Confirmer</button>
-              <button className="btn_supprimer" onClick={fermerModal}>Annuler</button>
+              <button className="btn_ajouter" onClick={confirmerAjout}>
+                {modeEdition ? "Modifier" : "Ajouter"}
+              </button>
+
+              <button className="btn_supprimer" onClick={fermerModal}>
+                Annuler
+              </button>
             </div>
           </div>
         </div>
       )}
-
     </div>
   );
 }

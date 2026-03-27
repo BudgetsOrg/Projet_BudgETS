@@ -29,8 +29,6 @@ export class User {
   @Column({ type:'date' })
   date_naissance: Date;
 
-  @Column({type: 'decimal', precision: 10, scale:2, default:0})
-  soldeDumois: Number;
 
   @Column({type: 'varchar',nullable: true, default: null})
   image: string;

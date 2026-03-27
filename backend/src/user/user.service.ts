@@ -7,12 +7,15 @@ import {
 } from '@nestjs/common';
 
 import { User } from '../entities/user.entity';
-import { UserRepository } from 'src/repositories/index';
+import { BudgetRepository, UserRepository } from 'src/repositories/index';
+import { InscriptionDto } from 'src/auth/dto';
 
 @Injectable()
 export class UserService {
   constructor(
-        private readonly userRepository: UserRepository,
+      private readonly userRepository: UserRepository,
+      private readonly budgetRepository: BudgetRepository
+       
   ) {}
 
   //Trouve le user par son id, si il n'existe pas, throw une exception, puis retourne le user trouvé.
@@ -50,8 +53,8 @@ export class UserService {
     return age;
   }
 
-  //vallidation des champ
-  private validationChamp(userData:Partial<User>){
+  // vallidation des champ
+  private validationChamp(userData:InscriptionDto){
     if (!userData.nom) {
       throw new BadRequestException('Le nom est obligatoire.');
     }
@@ -66,13 +69,14 @@ export class UserService {
     }
   }
 
-  async create(userData: Partial<User>):Promise<User> {
+  async create(userData: InscriptionDto):Promise<User> {
     //verifier que tu as bel est bien un nom ,un prenom et un email
-    this.validationChamp(userData)
-    
+     this.validationChamp(userData)
+
     //  Vérification de l'âge
     if (userData.date_naissance) {
-      const age = this.calculAge(userData.date_naissance);
+      const dateUser = new Date(userData.date_naissance);
+      const age = this.calculAge(dateUser);
       if (age < 18) {
         throw new BadRequestException(
           'Désolé, tu dois avoir 18 ans pour utiliser budgETS.',
@@ -94,9 +98,10 @@ export class UserService {
     if (!userData.date_naissance) {
       throw new BadRequestException("La date de naissance est obligatoire.");
     }
-
+    const newUser = await this.userRepository.create(userData);
+    await this.budgetRepository.create(userData.soldeDumois, newUser);
     // Création
-    return await this.userRepository.create(userData);
+    return newUser;
   }
 
   async findByEmail(email: string) {

@@ -25,11 +25,13 @@
 background-color: rgba(23, 22, 27,0.1);
 }
 .container_header .btn_connexion_header {
+  width: 153px;
+  height: 32px;
+  text-justify: center;
   background: linear-gradient(to top, rgb(18,91,72) 40%, rgb(92,151,89) 86%, rgb(147,195,101) );
   color: white;
   border: none;
-  border-radius: 8px;
-  padding: 10px 20px;
+  border-radius: 999px;
   cursor: pointer;
 }
 .left {

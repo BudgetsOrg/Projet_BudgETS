@@ -86,7 +86,7 @@
 .enveloppe_depenses_actions {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 12px;
 }
 
 .btn_ajouter {
@@ -94,7 +94,7 @@
   color: white;
   border: none;
   border-radius: 999px;
-  padding: 6px 18px;
+  padding: 6px 12px;
   font-size: 0.9rem;
   font-weight: 600;
   cursor: pointer;

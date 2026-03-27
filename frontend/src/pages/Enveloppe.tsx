@@ -24,6 +24,9 @@ const donneesInitiales = {
 function Enveloppe() {
   const { titre, budgetAlloue } = donneesInitiales;
 
+  const [modeSupprimer, setModeSupprimer] = useState(false);
+  const [selectionnes, setSelectionnes] = useState<number[]>([]);
+
   const [depenses, setDepenses] = useState<Depense[]>(donneesInitiales.depenses);
   const [modalOuvert, setModalOuvert] = useState(false);
   const [modeEdition, setModeEdition] = useState(false);
@@ -112,7 +115,59 @@ function Enveloppe() {
     setModeEdition(true);
     setModalOuvert(true);
   };
+
+  const activerModeSupprimer = () => {
+    setModeSupprimer(true);
+    setSelectionnes([]);
+  };
+
+  const annulerSupprimer = () => {
+    setModeSupprimer(false);
+    setSelectionnes([]);
+  };
+
+  const toggleSelection = (index: number) => {
+    setSelectionnes(prev =>
+      prev.includes(index)
+        ? prev.filter(i => i !== index)
+        : [...prev, index]
+    );
+  };
+  const confirmerSuppression = () => {
+    const nouvellesDepenses = depenses.filter(
+      (_, i) => !selectionnes.includes(i)
+    );
+
+    setDepenses(nouvellesDepenses);
+    setModeSupprimer(false);
+    setSelectionnes([]);
+  };
+
+
+  //Lorsqu'on va relier avec le backend ici utiliser ce code pour supprimer les dépenses sélectionnées.
+  /*
+  const confirmerSuppression = async () => {
+    try {
+      for (const index of selectionnes) {
+        const depense = depenses[index];
   
+        if (depense.id) {
+          await fetch(
+            `http://localhost:8080/api/enveloppes/${enveloppeId}/depenses/${depense.id}`,
+            { method: "DELETE" }
+          );
+        }
+      }
+  
+      setDepenses(depenses.filter((_, i) => !selectionnes.includes(i)));
+      setModeSupprimer(false);
+      setSelectionnes([]);
+  
+    } catch (err) {
+      console.error("Erreur suppression :", err);
+    }
+  };*/
+
   return (
     <div className="enveloppe_container">
       <div className="enveloppe_header">
@@ -127,36 +182,72 @@ function Enveloppe() {
         <div className="enveloppe_barre_remplie" style={{ width: `${pourcentage}%` }} />
         <span className="enveloppe_barre_pourcentage">{Math.round(pourcentage)}%</span>
       </div>
+      <div className="enveloppe_depenses_header">
+        <h2>Dépenses</h2>
 
+        <div className="enveloppe_depenses_actions">
+          {!modeSupprimer ? (
+            <>
+              <button className="btn_ajouter" onClick={ouvrirModal}>
+                Ajouter +
+              </button>
+
+              <button className="btn_supprimer" onClick={activerModeSupprimer}>
+                Supprimer
+              </button>
+            </>
+          ) : (
+            <>
+              <button className="btn_ajouter" onClick={confirmerSuppression}>
+                Confirmer ({selectionnes.length})
+              </button>
+
+              <button className="btn_supprimer" onClick={annulerSupprimer}>
+                Annuler
+              </button>
+            </>
+          )}
+        </div>
+      </div>
       <table className="enveloppe_table">
         <thead>
           <tr>
+            {modeSupprimer && <th></th>}
             <th>Titre</th>
             <th>Catégorie</th>
             <th>Prix</th>
             <th>Date</th>
-            <th>Action</th>
+            {!modeSupprimer && <th>Action</th>}
           </tr>
         </thead>
 
         <tbody>
           {depenses.map((depense, index) => (
             <tr key={index}>
+              {modeSupprimer && (
+                <td>
+                  <input
+                    type="checkbox"
+                    checked={selectionnes.includes(index)}
+                    onChange={() => toggleSelection(index)}
+                  />
+                </td>
+              )}
+
               <td>{depense.titre}</td>
               <td>{depense.categorie}</td>
               <td>{formatPrix(depense.prix)}</td>
               <td>{formatDate(depense.date)}</td>
 
-              <td className="cell_actions">
-                <button
-                  className="btn_modifier"
-                  onClick={() => handleEdit(depense, index)}
-                >
-                  Modifier
-                </button>
-              </td>
+              {!modeSupprimer && (
+                <td className="cell_actions">
+                  <button className="btn_modifier"
+                    onClick={() => handleEdit(depense, index)}>Modifier</button>
+                </td>
+              )}
             </tr>
           ))}
+
         </tbody>
       </table>
 

@@ -1,7 +1,7 @@
 // mes fonctions pour aller chercher les données à l'API
 // par contre, nous sommes en debug pour l'instant donc debug = true et nous avons des données préparées.
 
-const API_URL = "http://localhost:3000";
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
 const debug = true;
 
 export async function getEnveloppe() {

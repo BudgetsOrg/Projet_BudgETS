@@ -1,5 +1,5 @@
 import { PieChart } from "react-minimal-pie-chart";
-import useEnveloppes from "../../../hooks/useEnveloppes";
+import useEnveloppes from "../../../hooks//UseEnveloppes";
 import type { Data } from "../../../interfaces/interfaces";
 
 export function SummaryPieChart() {

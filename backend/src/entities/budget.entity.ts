@@ -9,7 +9,7 @@ export class Budget {
 
   //valeur par défaut de 0 pour le solde du budget, avec precision pour la monnaie.
   @Column('decimal', { precision: 10, scale: 2 , default: 0 })
-  solde: number;
+  soldeDuMois: number;
 
   @Column({ default: () => 'CURRENT_TIMESTAMP' })
   date_creation: Date;

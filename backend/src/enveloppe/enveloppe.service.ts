@@ -38,7 +38,7 @@ export class EnveloppeService{
         const totalAllocated = budget.enveloppes.reduce(
             (sum, env) => sum + Number(env.montant), 0,
         );
-        const remainder = Number(budget.solde) - totalAllocated;
+        const remainder = Number(budget.soldeDuMois) - totalAllocated;
 
         if (Number(createEnveloppeDto.montant) > remainder) {
             throw new BadRequestException(

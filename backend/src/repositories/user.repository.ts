@@ -1,5 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
+import { InscriptionDto } from "src/auth/dto";
 import { User } from "src/entities";
 import { Repository } from "typeorm";
 
@@ -12,9 +13,19 @@ export class UserRepository{
   ) {}
 
     //Create
-    async create(userData: Partial<User>):Promise<User>{
-        const newUser = this.repo.create(userData) // .create() prépare l'entité
-        return await this.repo.save(newUser)
+    async create(userData: InscriptionDto):Promise<User>{
+    const newUser = this.repo.create({
+        nom: userData.nom,
+        prenom: userData.prenom,
+        adresse_email: userData.adresse_email,
+        password: userData.password,
+        date_naissance: new Date(userData.date_naissance),
+        telephone: userData.telephone ,
+        image: userData.image 
+    });
+
+    // TypeORM a un objet complet a sauvegarder
+    return await this.repo.save(newUser);
     }
     // READ (un seul)
     async get(id: number) {

@@ -20,7 +20,12 @@ export async function getEnveloppe() {
     };
     return [mockEnveloppe1, mockEnveloppe2];
   } else {
-    const response = await fetch(`${API_URL}/enveloppe`);
+    const token = localStorage.getItem("token");
+    const response = await fetch(`${API_URL}/enveloppe`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
     if (!response.ok) {
       throw new Error("Erreur lors du fetch");
     }

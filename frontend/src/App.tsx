@@ -1,25 +1,41 @@
-import { BrowserRouter, Route, Routes } from "react-router-dom"; // pour avoir accès au npm install react-router-dom
+import { BrowserRouter, Route, Routes, useLocation } from "react-router-dom";
 import "./style/style.css";
-import Header from "./Header";
-import Inscription from "./Inscription";
-import PagePrincipale from "./PagePrincipale";
-import Connexion from "./Connexion";
-import Enveloppe from "./Enveloppe";
+
+import Header from "./components/Header";
+import Inscription from "./pages/Inscription";
+import PagePrincipale from "./pages/PagePrincipale";
+import Connexion from "./pages/Connexion";
+import Enveloppe from "./pages/Enveloppe";
+
+function AppContent() {
+  const location = useLocation();
+
+  // Pages où on NE veut pas afficher le header
+  const noHeaderRoutes = ["/PageConnexion", "/PageInscription"];
+
+  const showHeader = !noHeaderRoutes.includes(location.pathname);
+
+  return (
+    <>
+      {showHeader && <Header />}
+
+      <Routes>
+        <Route path="/PageConnexion" element={<Connexion />} />
+        <Route path="/PageInscription" element={<Inscription />} />
+        <Route path="/PagePrincipale" element={<PagePrincipale />} />
+        <Route path="/PageEnveloppe" element={<Enveloppe />} />
+      </Routes>
+    </>
+  );
+}
 
 function App() {
   return (
-      <div className="App">
-      <Header />
-        <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<PagePrincipale />} />
-            <Route path="/Inscription" element={<Inscription />} />
-            <Route path="/Connexion" element={<Connexion />} />
-            <Route path="/Enveloppe" element={<Enveloppe />} />
-          </Routes>
-        </BrowserRouter>
-      </div>
-
+    <div className="App">
+      <BrowserRouter>
+        <AppContent />
+      </BrowserRouter>
+    </div>
   );
 }
 

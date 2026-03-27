@@ -1,9 +1,20 @@
 import type { Config } from "tailwindcss";
 
-export default {
+const config: Config & { corePlugins?: any } = {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        primary: "#125b48",
+        secondary: "#96c16e",
+        delete: "#e93939",
+      },
+    },
   },
   plugins: [],
-} satisfies Config;
+  corePlugins: {
+    preflight: false, // désactive le reset global
+  },
+};
+
+export default config;

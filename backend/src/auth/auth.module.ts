@@ -4,7 +4,6 @@ import { AuthController } from "./auth.controller";
 import { AuthService } from "./auth.service";
 import { UserModule } from "src/user/user.module";
 import { JwtStrategy } from "./stategy/jwt.strategy";
-import { BudgetModule } from "src/budget/budget.module";
 
 
 
@@ -14,7 +13,7 @@ import { BudgetModule } from "src/budget/budget.module";
     JwtModule.register({}),
   ],
   controllers: [AuthController], 
-  providers: [AuthService,JwtStrategy],
+  providers: [AuthService, JwtStrategy],
   
 })
 

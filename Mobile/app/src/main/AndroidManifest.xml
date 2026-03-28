@@ -24,6 +24,10 @@
         <activity android:name=".MdpOublieActivite"/>
         <activity android:name=".ModificationMdpActivite"/>
         <activity android:name=".PagePrincipaleActivite"/>
+        <activity android:name=".PageUneEnveloppe" />
+        <activity android:name=".PageAjouterDepense" />
+        <activity android:name=".PageSupprimerDepense" />
+
 
 
     </application>

@@ -1,5 +1,6 @@
 package com.example.budgets;
 
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,8 +30,17 @@ public class EnveloppeRecenteAdapter extends RecyclerView.Adapter<EnveloppeRecen
         Enveloppe enveloppe = listeEnveloppe.get(position);
         holder.textViewNom.setText(enveloppe.getTitre());
 
+        //pour quand on clique sur une enveloppe ca mene a sa page
+        holder.itemView.setOnClickListener(v -> {
+            Intent intent = new Intent(v.getContext(), PageUneEnveloppe.class);
+            intent.putExtra("titre", enveloppe.getTitre());
+            intent.putExtra("budget", enveloppe.getMontant());
+            v.getContext().startActivity(intent);
+        });
+
 
     }
+
 
     @Override
     public int getItemCount() {

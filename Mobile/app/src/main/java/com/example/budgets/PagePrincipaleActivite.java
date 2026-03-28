@@ -134,5 +134,27 @@ public class PagePrincipaleActivite extends AppCompatActivity {
         diagramme.setProgress(valeur);
         pourcentage.setText(valeur + "%");
     }
+    public void recalculerCercle() {
+        EditText soldeEdit = findViewById(R.id.soldeMois);
+        String solde = soldeEdit.getText().toString().replace("$", "");
+
+        if (!solde.isEmpty()) {
+            double soldeTotal = Double.parseDouble(solde);
+            double montantTot = 0;
+
+            for (Enveloppe e : listeEnveloppes) {
+                montantTot += Double.parseDouble(e.getMontant());
+            }
+            int score = 0;
+            if (soldeTotal > 0) {
+                score = (int) ((montantTot * 100) / soldeTotal);
+            }
+            animerCercle(Math.min(score, 100));
+            if (listeEnveloppes.isEmpty()) {
+                message.setVisibility(View.VISIBLE);
+            }
+        }
+    }
+
 }
 

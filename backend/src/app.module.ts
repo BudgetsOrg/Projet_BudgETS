@@ -19,6 +19,7 @@ import { BudgetModule } from './budget/budget.module';
 import { CategorieModule } from './categorie/categorie.module';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
+import { MailModule } from './mail/mail.module';
 
 dotenv.config();
 
@@ -52,7 +53,8 @@ dotenv.config();
     DepenseModule,
     BudgetModule,
     CategorieModule,
-    UserModule
+    UserModule,
+    MailModule
   ],
   controllers: [],
   providers: [],

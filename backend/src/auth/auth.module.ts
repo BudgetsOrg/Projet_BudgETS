@@ -4,12 +4,14 @@ import { AuthController } from "./auth.controller";
 import { AuthService } from "./auth.service";
 import { UserModule } from "src/user/user.module";
 import { JwtStrategy } from "./stategy/jwt.strategy";
+import { MailModule } from "src/mail/mail.module";
 
 
 
 @Module({
   imports: [
     UserModule,
+    MailModule,
     JwtModule.register({}),
   ],
   controllers: [AuthController], 

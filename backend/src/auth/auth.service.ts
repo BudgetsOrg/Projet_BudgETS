@@ -2,7 +2,7 @@ import { ForbiddenException, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UserService } from 'src/user/user.service';
 import { MailService } from 'src/mail/mail.service';
-import { ConnexionDto, InscriptionDto } from './dto';
+import { ConnexionDto, InscriptionDto, ResetPasswordDto } from './dto';
 import * as argon from 'argon2';
 
 //bibliothèque officielle de NestJS pour gérer les JSON Web Tokens (JWT).
@@ -104,5 +104,30 @@ export class AuthService {
     );
 
     return { message: 'Email de récupération envoyé.' };
+  }
+
+  // Dans auth.service.ts
+
+async resetPassword(dto: ResetPasswordDto) {
+    try {
+        // Vérifier et décoder le token (on vérifie s'il n'est pas expiré)
+        const payload = await this.jwtService.verifyAsync(dto.token, {
+            secret: process.env.JWT_SECRET,
+        });
+
+        // Extraire l'ID de l'utilisateur (le 'sub' qu'on a mis dedans lors du forgotPassword)
+        const userId = payload.sub;
+
+        // Hasher le nouveau mot de passe
+        const newHash = await argon.hash(dto.password);
+
+        // Demander au UserService de mettre à jour en DB
+        await this.userService.updatePassword(userId, newHash);
+
+        return { message: "Mot de passe modifié avec succès !" };
+    } catch (error) {
+        // Si le token est expiré ou corrompu, NestJS lancera une erreur
+        throw new ForbiddenException("Lien invalide ou expiré.");
+    }
   }
 }

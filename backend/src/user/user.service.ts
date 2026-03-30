@@ -104,6 +104,10 @@ export class UserService {
     return newUser;
   }
 
+  async updatePassword(id: number, hash: string) {
+    return await this.userRepository.update(id, { password: hash });
+}
+
   async findByEmail(email: string) {
     return await this.userRepository.findByEmail(email);
   }

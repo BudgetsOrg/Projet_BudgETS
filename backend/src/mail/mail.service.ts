@@ -23,7 +23,7 @@ export class MailService {
     await this.resend.emails.send({
       from: 'BudgETS <onboarding@resend.dev>',
       to: email,
-      subject: 'Réinitialisation',
+      subject: 'Réinitialisation de mot de passe',
       html: `<p>Cliquez ici pour changer votre mot de passe :</p>
             <a href="http://localhost:3000/auth/reset-password?token=${token}"> Réinitialiser </a>`,
     });

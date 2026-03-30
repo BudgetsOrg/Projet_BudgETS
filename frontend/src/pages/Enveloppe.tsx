@@ -1,14 +1,7 @@
 // Mohamed
 import { useState } from "react"; // npm install
-
-interface Depense {
-  id?: number;
-  titre: string;
-  categorie: string;
-  prix: number;
-  date: string;
-}
-
+import type { Depense } from "../interfaces/interfaces"; // ton interface est rendu dans la page pour ceux-ci
+import graphiquePageEnveloppe from "../components/graphiquePageEnveloppe"; // le graphique de la page enveloppe
 // Plus tard gerer avec le backend.
 const enveloppeId = 1;
 
@@ -16,8 +9,20 @@ const donneesInitiales = {
   titre: "Titre de mon enveloppe",
   budgetAlloue: 150,
   depenses: [
-    { id: 1, titre: "MC Donalds", categorie: "Restaurant", prix: 15.0, date: "2026-10-10" },
-    { id: 2, titre: "Uber", categorie: "Transport", prix: 25.0, date: "2026-10-11" },
+    {
+      id: 1,
+      titre: "MC Donalds",
+      categorie: "Restaurant",
+      prix: 15.0,
+      date: "2026-10-10",
+    },
+    {
+      id: 2,
+      titre: "Uber",
+      categorie: "Transport",
+      prix: 25.0,
+      date: "2026-10-11",
+    },
   ],
 };
 
@@ -27,7 +32,9 @@ function Enveloppe() {
   const [modeSupprimer, setModeSupprimer] = useState(false);
   const [selectionnes, setSelectionnes] = useState<number[]>([]);
 
-  const [depenses, setDepenses] = useState<Depense[]>(donneesInitiales.depenses);
+  const [depenses, setDepenses] = useState<Depense[]>(
+    donneesInitiales.depenses,
+  );
   const [modalOuvert, setModalOuvert] = useState(false);
   const [modeEdition, setModeEdition] = useState(false);
   const [indexEdition, setIndexEdition] = useState<number | null>(null);
@@ -59,13 +66,17 @@ function Enveloppe() {
 
   // Lorsqu'on relie le backend au frontend on utilisera la version en bas.
   const confirmerAjout = () => {
-    if (!nouvelleDepense.titre || !nouvelleDepense.date || nouvelleDepense.prix <= 0) return;
+    if (
+      !nouvelleDepense.titre ||
+      !nouvelleDepense.date ||
+      nouvelleDepense.prix <= 0
+    )
+      return;
 
     if (modeEdition && indexEdition !== null) {
       const copie = [...depenses];
       copie[indexEdition] = nouvelleDepense;
       setDepenses(copie);
-
     } else {
       setDepenses([...depenses, nouvelleDepense]);
     }
@@ -108,7 +119,6 @@ function Enveloppe() {
 };
   */
 
-
   const handleEdit = (depense: Depense, index: number) => {
     setNouvelleDepense(depense);
     setIndexEdition(index);
@@ -127,22 +137,19 @@ function Enveloppe() {
   };
 
   const toggleSelection = (index: number) => {
-    setSelectionnes(prev =>
-      prev.includes(index)
-        ? prev.filter(i => i !== index)
-        : [...prev, index]
+    setSelectionnes((prev) =>
+      prev.includes(index) ? prev.filter((i) => i !== index) : [...prev, index],
     );
   };
   const confirmerSuppression = () => {
     const nouvellesDepenses = depenses.filter(
-      (_, i) => !selectionnes.includes(i)
+      (_, i) => !selectionnes.includes(i),
     );
 
     setDepenses(nouvellesDepenses);
     setModeSupprimer(false);
     setSelectionnes([]);
   };
-
 
   //Lorsqu'on va relier avec le backend ici utiliser ce code pour supprimer les dépenses sélectionnées.
   /*
@@ -174,13 +181,20 @@ function Enveloppe() {
         <h1 className="enveloppe_titre">{titre}</h1>
         <div className="enveloppe_budget">
           <span className="enveloppe_budget_label">Budget alloué :</span>
-          <span className="enveloppe_budget_montant">{formatPrix(budgetAlloue)}</span>
+          <span className="enveloppe_budget_montant">
+            {formatPrix(budgetAlloue)}
+          </span>
         </div>
       </div>
 
       <div className="enveloppe_barre_fond">
-        <div className="enveloppe_barre_remplie" style={{ width: `${pourcentage}%` }} />
-        <span className="enveloppe_barre_pourcentage">{Math.round(pourcentage)}%</span>
+        <div
+          className="enveloppe_barre_remplie"
+          style={{ width: `${pourcentage}%` }}
+        />
+        <span className="enveloppe_barre_pourcentage">
+          {Math.round(pourcentage)}%
+        </span>
       </div>
       <div className="enveloppe_depenses_header">
         <h2>Dépenses</h2>
@@ -241,13 +255,16 @@ function Enveloppe() {
 
               {!modeSupprimer && (
                 <td className="cell_actions">
-                  <button className="btn_modifier"
-                    onClick={() => handleEdit(depense, index)}>Modifier</button>
+                  <button
+                    className="btn_modifier"
+                    onClick={() => handleEdit(depense, index)}
+                  >
+                    Modifier
+                  </button>
                 </td>
               )}
             </tr>
           ))}
-
         </tbody>
       </table>
 
@@ -261,7 +278,10 @@ function Enveloppe() {
               placeholder="Titre"
               value={nouvelleDepense.titre}
               onChange={(e) =>
-                setNouvelleDepense({ ...nouvelleDepense, titre: e.target.value })
+                setNouvelleDepense({
+                  ...nouvelleDepense,
+                  titre: e.target.value,
+                })
               }
             />
 
@@ -269,7 +289,10 @@ function Enveloppe() {
               placeholder="Catégorie"
               value={nouvelleDepense.categorie}
               onChange={(e) =>
-                setNouvelleDepense({ ...nouvelleDepense, categorie: e.target.value })
+                setNouvelleDepense({
+                  ...nouvelleDepense,
+                  categorie: e.target.value,
+                })
               }
             />
 
@@ -304,6 +327,9 @@ function Enveloppe() {
           </div>
         </div>
       )}
+      <div>
+        <graphiquePageEnveloppe />
+      </div>
     </div>
   );
 }

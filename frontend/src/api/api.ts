@@ -84,3 +84,36 @@ export async function getObjectif() {
     return response.json();
   }
 }
+
+export async function getDepenses() {
+  if (debug) {
+    const mockDepense1 = {
+      id: 1,
+      titre: "Mock Depense 1",
+      categorie: "Alimentation",
+      prix: 10,
+      date: "2026-03-29",
+    };
+    const mockDepense2 = {
+      id: 2,
+      titre: "Mock Depense 2",
+      categorie: "Alimentation",
+      prix: 20,
+      date: "2026-03-26",
+    };
+    const mockDepense3 = {
+      id: 2,
+      titre: "Mock Depense 3",
+      categorie: "Alimentation",
+      prix: 20,
+      date: "2026-03-26",
+    };
+    return [mockDepense1, mockDepense2, mockDepense3];
+  } else {
+    const response = await fetch(`${API_URL}/depense`);
+    if (!response.ok) {
+      throw new Error("Erreur lors du fetch");
+    }
+    return response.json();
+  }
+}

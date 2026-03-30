@@ -43,3 +43,11 @@ export interface User {
   image: string;
   date_naissance: Date;
 }
+
+export interface Depense {
+  id?: number;
+  titre: string;
+  categorie: string;
+  prix: number;
+  date: string;
+}

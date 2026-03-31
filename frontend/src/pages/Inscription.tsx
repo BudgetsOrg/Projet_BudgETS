@@ -68,16 +68,22 @@ const gererEntreeUtilisateur = (event: React.ChangeEvent<HTMLInputElement>) => {
     [id]: value
   });
 };
-const stockerUtilisateur = (event: React.SubmitEvent<HTMLFormElement>) => {
+const stockerUtilisateur =  async (event: React.SubmitEvent<HTMLFormElement>) => {
 event.preventDefault();
 
 
 // Ici on pourrait mettre les champs qui seront necessaire ou pas.
 if(donneeInscription.nom == "" || donneeInscription.prenom == "" || donneeInscription.email == "" || donneeInscription.dateNaissance == "" || donneeInscription.password == ""){
   // Pour rendre plus interactif mettre un petit message en dessous des champs auxquelle il manque une informations. Pour préciser ce qui est à mettre.
-  if(donneeInscription.nom == ""){
-    
-  }
+ /* if(donneeInscription.nom == "" || donneeInscription.nom.length < 50){
+    (document.getElementById("nom") as HTMLInputElement).placeholder ="Le nom est trop long ou vide.";
+    return;
+  }else if(donneeInscription.prenom == "" || donneeInscription.prenom.length < 50){
+    (document.getElementById("prenom") as HTMLInputElement).placeholder ="Le prénom est trop long ou vide.";
+    return;
+  }else if(donneeInscription){
+    (document.getElementById("nom") as HTMLInputElement).placeholder ="Le prénom est trop long ou vide.";
+  }*/
   alert("Un des champs n'a pas été rempli")
   return;
 }
@@ -85,6 +91,19 @@ if(donneeInscription.nom == "" || donneeInscription.prenom == "" || donneeInscri
 // On appelle le API pour ajouter un Utilisateur à la bd. ET ICI LORSQU'ON METS LE SOLDE On fait REPLACE(",".".");
 alert(`l'utilisateur ${donneeInscription.prenom} ${donneeInscription.nom} été ajouté.`);
 console.log()
+  try {
+     const result = await fetch("http://localhost:3000/auth/inscription", {
+     method : "POST", 
+     headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(donneeInscription.nom)
+    }).then(response => {
+      console.log(response.headers.get('access_token'))
+    })
+  } catch (error) {
+    console.log(error);
+  }
 viderChamps();
 
 // Ensuite on va rediriger vers la page Principale qui montre les différents Objectifs/Enveloppe de l'utilisateur.

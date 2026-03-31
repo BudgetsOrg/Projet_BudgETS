@@ -27,7 +27,14 @@ const donneesInitiales = {
 };
 
 function Enveloppe() {
-  const { titre, budgetAlloue } = donneesInitiales;
+  const [modalEditOuvert, setModalEditOuvert] = useState(false);
+
+  const [editData, setEditData] = useState({
+    titre: donneesInitiales.titre,
+    budgetAlloue: donneesInitiales.budgetAlloue,
+  });
+
+  const budgetAlloue = editData.budgetAlloue;
 
   const [modeSupprimer, setModeSupprimer] = useState(false);
   const [selectionnes, setSelectionnes] = useState<number[]>([]);
@@ -83,7 +90,35 @@ function Enveloppe() {
 
     fermerModal();
   };
+  // Lorsqu'on relie le backend et frontend on pourra utiliser ce code pour modifier le titre et la valeur du budget alloué pour l'enveloppe.
+  /*
+  //Lorsqu'on aura modifier pour utiliser cette version il va falloir changer le onClick du bouton confirmer pour qu'il appelle cette méthode à la place.
+const confirmerEditEnveloppe = async () => {
+  try {
+    const res = await fetch(`http://localhost:8080/api/enveloppes/${enveloppeId}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(editData),
+    });
 
+    if (!res.ok) throw new Error("Erreur update");
+
+    const data = await res.json();
+
+    // met à jour le titre et le budget alloué avec la réponse backend
+    setEditData(data);
+
+    setModalEditOuvert(false);
+
+  } catch (err) {
+    console.error("Erreur :", err);
+  }
+};
+*/
+
+  // Lorsqu'on relie le backend ici on va pouvoir ajouter une dépense avec ce code.
   /*
  const confirmerAjout = async () => {
   if (!nouvelleDepense.titre || !nouvelleDepense.date || nouvelleDepense.prix <= 0) return;
@@ -178,11 +213,20 @@ function Enveloppe() {
   return (
     <div className="enveloppe_container">
       <div className="enveloppe_header">
-        <h1 className="enveloppe_titre">{titre}</h1>
+        <div className="enveloppe_header_gauche">
+          <h1 className="enveloppe_titre">{editData.titre}</h1>
+          <button
+            className="enveloppe_edit"
+            onClick={() => setModalEditOuvert(true)}
+          >
+            <img src="/img/edit.png"></img>
+          </button>
+        </div>
+
         <div className="enveloppe_budget">
           <span className="enveloppe_budget_label">Budget alloué :</span>
           <span className="enveloppe_budget_montant">
-            {formatPrix(budgetAlloue)}
+            {formatPrix(editData.budgetAlloue)}
           </span>
         </div>
       </div>
@@ -205,6 +249,13 @@ function Enveloppe() {
               <button className="btn_ajouter" onClick={ouvrirModal}>
                 Ajouter +
               </button>
+              <div
+                style={{
+                  height: "25px",
+                  backgroundColor: "#D9D9D9",
+                  width: "4px",
+                }}
+              />
 
               <button className="btn_supprimer" onClick={activerModeSupprimer}>
                 Supprimer
@@ -223,52 +274,68 @@ function Enveloppe() {
           )}
         </div>
       </div>
-      <table className="enveloppe_table">
-        <thead>
-          <tr>
-            {modeSupprimer && <th></th>}
-            <th>Titre</th>
-            <th>Catégorie</th>
-            <th>Prix</th>
-            <th>Date</th>
-            {!modeSupprimer && <th>Action</th>}
-          </tr>
-        </thead>
-
-        <tbody>
-          {depenses.map((depense, index) => (
-            <tr key={index}>
-              {modeSupprimer && (
-                <td>
-                  <input
-                    type="checkbox"
-                    checked={selectionnes.includes(index)}
-                    onChange={() => toggleSelection(index)}
-                  />
-                </td>
-              )}
-
-              <td>{depense.titre}</td>
-              <td>{depense.categorie}</td>
-              <td>{formatPrix(depense.prix)}</td>
-              <td>{formatDate(depense.date)}</td>
-
-              {!modeSupprimer && (
-                <td className="cell_actions">
-                  <button
-                    className="btn_modifier"
-                    onClick={() => handleEdit(depense, index)}
-                  >
-                    Modifier
-                  </button>
-                </td>
-              )}
+      <div className="table_wrapper">
+        <table className="enveloppe_table">
+          <thead>
+            <tr>
+              {modeSupprimer && <th></th>}
+              <th>Titre</th>
+              <th>Catégorie</th>
+              <th>Prix</th>
+              <th>Date</th>
+              {!modeSupprimer && <th>Action</th>}
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
 
-      {/* MODAL */}
+          <tbody>
+            {depenses.map((depense, index) => (
+              <>
+                <tr key={index}>
+                  {modeSupprimer && (
+                    <td>
+                      <input
+                        type="checkbox"
+                        checked={selectionnes.includes(index)}
+                        onChange={() => toggleSelection(index)}
+                      />
+                    </td>
+                  )}
+                  <td>{depense.titre}</td>
+                  <td>{depense.categorie}</td>
+                  <td>{formatPrix(depense.prix)}</td>
+                  <td>{formatDate(depense.date)}</td>
+
+                  {!modeSupprimer && (
+                    <td className="cell_actions">
+                      <button
+                        className="btn_modifier"
+                        onClick={() => handleEdit(depense, index)}
+                      >
+                        Modifier
+                      </button>
+                    </td>
+                  )}
+                </tr>
+                <tr>
+                  <td colSpan={modeSupprimer ? 6 : 5}>
+                    <div
+                      style={{
+                        height: "5px",
+                        backgroundColor: "#D9D9D9",
+                        width: "100%",
+                      }}
+                    />
+                  </td>
+                </tr>
+              </>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <div>
+        <graphiquePageEnveloppe />
+      </div>
+      {/* PopUp */}
       {modalOuvert && (
         <div className="modal_overlay" onClick={fermerModal}>
           <div className="modal_contenu" onClick={(e) => e.stopPropagation()}>
@@ -327,9 +394,54 @@ function Enveloppe() {
           </div>
         </div>
       )}
-      <div>
-        <graphiquePageEnveloppe />
-      </div>
+
+      {/* Pop Up edit Titre / Valeur du budget alloué */}
+      {modalEditOuvert && (
+        <div
+          className="modal_overlay"
+          onClick={() => setModalEditOuvert(false)}
+        >
+          <div className="modal_contenu" onClick={(e) => e.stopPropagation()}>
+            <h2>Modifier l'enveloppe</h2>
+
+            <input
+              placeholder="Titre"
+              value={editData.titre}
+              onChange={(e) =>
+                setEditData({ ...editData, titre: e.target.value })
+              }
+            />
+
+            <input
+              type="number"
+              placeholder="Budget"
+              value={editData.budgetAlloue}
+              onChange={(e) =>
+                setEditData({
+                  ...editData,
+                  budgetAlloue: parseFloat(e.target.value),
+                })
+              }
+            />
+
+            <div className="modal_boutons">
+              <button
+                className="btn_ajouter"
+                onClick={() => setModalEditOuvert(false)}
+              >
+                Confirmer
+              </button>
+
+              <button
+                className="btn_supprimer"
+                onClick={() => setModalEditOuvert(false)}
+              >
+                Annuler
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

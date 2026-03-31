@@ -1,9 +1,9 @@
 // Justine
 
 import { getLoggedInUser } from "../api/userApi";
-import { EditProfilePicture } from "../components/Profile/EditProfilePicture";
-import { ProfileHeader } from "../components/Profile/ProfileHeader";
-import { TableInfoProfil } from "../components/Profile/TableInfoProfil";
+import { EditProfilePicture } from "../components/componentsProfile/EditProfilePicture";
+import { ProfileHeader } from "../components/componentsProfile/ProfileHeader";
+import { TableInfoProfil } from "../components/componentsProfile/TableInfoProfil";
 
 // + popup suppression Justine
 export function PageProfile() {

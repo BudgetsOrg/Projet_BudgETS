@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import CheckBox from "../../components/Profile/CheckBox";
+import CheckBox from "../../components/componentsProfile/CheckBox";
 
 export default function SuppressionCompte({
   showPopup,

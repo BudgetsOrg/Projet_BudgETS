@@ -1,14 +1,7 @@
 // Mohamed
 import { useState } from "react"; // npm install
-
-interface Depense {
-  id?: number;
-  titre: string;
-  categorie: string;
-  prix: number;
-  date: string;
-}
-
+import type { Depense } from "../interfaces/interfaces"; // ton interface est rendu dans la page pour ceux-ci
+import graphiquePageEnveloppe from "../components/graphiquePageEnveloppe"; // le graphique de la page enveloppe
 // Plus tard gerer avec le backend.
 const enveloppeId = 1;
 
@@ -16,27 +9,32 @@ const donneesInitiales = {
   titre: "Titre de mon enveloppe",
   budgetAlloue: 150,
   depenses: [
-    { id: 1, titre: "MC Donalds", categorie: "Restaurant", prix: 15.0, date: "2026-10-10" },
-    { id: 2, titre: "Uber", categorie: "Transport", prix: 25.0, date: "2026-10-11" },
+    {
+      id: 1,
+      titre: "MC Donalds",
+      categorie: "Restaurant",
+      prix: 15.0,
+      date: "2026-10-10",
+    },
+    {
+      id: 2,
+      titre: "Uber",
+      categorie: "Transport",
+      prix: 25.0,
+      date: "2026-10-11",
+    },
   ],
 };
 
 function Enveloppe() {
-
-  const [modalEditOuvert, setModalEditOuvert] = useState(false);
-
-  const [editData, setEditData] = useState({
-    titre: donneesInitiales.titre,
-    budgetAlloue: donneesInitiales.budgetAlloue,
-  });
-
-  const budgetAlloue = editData.budgetAlloue;
-
+  const { titre, budgetAlloue } = donneesInitiales;
 
   const [modeSupprimer, setModeSupprimer] = useState(false);
   const [selectionnes, setSelectionnes] = useState<number[]>([]);
 
-  const [depenses, setDepenses] = useState<Depense[]>(donneesInitiales.depenses);
+  const [depenses, setDepenses] = useState<Depense[]>(
+    donneesInitiales.depenses,
+  );
   const [modalOuvert, setModalOuvert] = useState(false);
   const [modeEdition, setModeEdition] = useState(false);
   const [indexEdition, setIndexEdition] = useState<number | null>(null);
@@ -68,49 +66,24 @@ function Enveloppe() {
 
   // Lorsqu'on relie le backend au frontend on utilisera la version en bas.
   const confirmerAjout = () => {
-    if (!nouvelleDepense.titre || !nouvelleDepense.date || nouvelleDepense.prix <= 0) return;
+    if (
+      !nouvelleDepense.titre ||
+      !nouvelleDepense.date ||
+      nouvelleDepense.prix <= 0
+    )
+      return;
 
     if (modeEdition && indexEdition !== null) {
       const copie = [...depenses];
       copie[indexEdition] = nouvelleDepense;
       setDepenses(copie);
-
     } else {
       setDepenses([...depenses, nouvelleDepense]);
     }
 
     fermerModal();
   };
-// Lorsqu'on relie le backend et frontend on pourra utiliser ce code pour modifier le titre et la valeur du budget alloué pour l'enveloppe.
-  /*
-  //Lorsqu'on aura modifier pour utiliser cette version il va falloir changer le onClick du bouton confirmer pour qu'il appelle cette méthode à la place.
-const confirmerEditEnveloppe = async () => {
-  try {
-    const res = await fetch(`http://localhost:8080/api/enveloppes/${enveloppeId}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(editData),
-    });
 
-    if (!res.ok) throw new Error("Erreur update");
-
-    const data = await res.json();
-
-    // met à jour le titre et le budget alloué avec la réponse backend
-    setEditData(data);
-
-    setModalEditOuvert(false);
-
-  } catch (err) {
-    console.error("Erreur :", err);
-  }
-};
-*/
-
-
-// Lorsqu'on relie le backend ici on va pouvoir ajouter une dépense avec ce code.
   /*
  const confirmerAjout = async () => {
   if (!nouvelleDepense.titre || !nouvelleDepense.date || nouvelleDepense.prix <= 0) return;
@@ -164,22 +137,19 @@ const confirmerEditEnveloppe = async () => {
   };
 
   const toggleSelection = (index: number) => {
-    setSelectionnes(prev =>
-      prev.includes(index)
-        ? prev.filter(i => i !== index)
-        : [...prev, index]
+    setSelectionnes((prev) =>
+      prev.includes(index) ? prev.filter((i) => i !== index) : [...prev, index],
     );
   };
   const confirmerSuppression = () => {
     const nouvellesDepenses = depenses.filter(
-      (_, i) => !selectionnes.includes(i)
+      (_, i) => !selectionnes.includes(i),
     );
 
     setDepenses(nouvellesDepenses);
     setModeSupprimer(false);
     setSelectionnes([]);
   };
-
 
   //Lorsqu'on va relier avec le backend ici utiliser ce code pour supprimer les dépenses sélectionnées.
   /*
@@ -208,20 +178,23 @@ const confirmerEditEnveloppe = async () => {
   return (
     <div className="enveloppe_container">
       <div className="enveloppe_header">
-        <div className="enveloppe_header_gauche">
-          <h1 className="enveloppe_titre">{editData.titre}</h1>
-          <button className="enveloppe_edit" onClick={() => setModalEditOuvert(true)}><img src="/img/edit.png"></img></button>
-        </div>
-
+        <h1 className="enveloppe_titre">{titre}</h1>
         <div className="enveloppe_budget">
           <span className="enveloppe_budget_label">Budget alloué :</span>
-          <span className="enveloppe_budget_montant">{formatPrix(editData.budgetAlloue)}</span>
+          <span className="enveloppe_budget_montant">
+            {formatPrix(budgetAlloue)}
+          </span>
         </div>
       </div>
 
       <div className="enveloppe_barre_fond">
-        <div className="enveloppe_barre_remplie" style={{ width: `${pourcentage}%` }} />
-        <span className="enveloppe_barre_pourcentage">{Math.round(pourcentage)}%</span>
+        <div
+          className="enveloppe_barre_remplie"
+          style={{ width: `${pourcentage}%` }}
+        />
+        <span className="enveloppe_barre_pourcentage">
+          {Math.round(pourcentage)}%
+        </span>
       </div>
       <div className="enveloppe_depenses_header">
         <h2>Dépenses</h2>
@@ -232,7 +205,6 @@ const confirmerEditEnveloppe = async () => {
               <button className="btn_ajouter" onClick={ouvrirModal}>
                 Ajouter +
               </button>
-              <div style={{ height: '25px', backgroundColor: '#D9D9D9', width: '4px', }} />
 
               <button className="btn_supprimer" onClick={activerModeSupprimer}>
                 Supprimer
@@ -251,60 +223,52 @@ const confirmerEditEnveloppe = async () => {
           )}
         </div>
       </div>
-      <div className="table_wrapper">
-        <table className="enveloppe_table">
-          <thead>
-            <tr>
-              {modeSupprimer && <th></th>}
-              <th>Titre</th>
-              <th>Catégorie</th>
-              <th>Prix</th>
-              <th>Date</th>
-              {!modeSupprimer && <th>Action</th>}
+      <table className="enveloppe_table">
+        <thead>
+          <tr>
+            {modeSupprimer && <th></th>}
+            <th>Titre</th>
+            <th>Catégorie</th>
+            <th>Prix</th>
+            <th>Date</th>
+            {!modeSupprimer && <th>Action</th>}
+          </tr>
+        </thead>
+
+        <tbody>
+          {depenses.map((depense, index) => (
+            <tr key={index}>
+              {modeSupprimer && (
+                <td>
+                  <input
+                    type="checkbox"
+                    checked={selectionnes.includes(index)}
+                    onChange={() => toggleSelection(index)}
+                  />
+                </td>
+              )}
+
+              <td>{depense.titre}</td>
+              <td>{depense.categorie}</td>
+              <td>{formatPrix(depense.prix)}</td>
+              <td>{formatDate(depense.date)}</td>
+
+              {!modeSupprimer && (
+                <td className="cell_actions">
+                  <button
+                    className="btn_modifier"
+                    onClick={() => handleEdit(depense, index)}
+                  >
+                    Modifier
+                  </button>
+                </td>
+              )}
             </tr>
-          </thead>
+          ))}
+        </tbody>
+      </table>
 
-          <tbody>
-            {depenses.map((depense, index) => (
-              <>
-                <tr key={index}>
-                  {modeSupprimer && (
-                    <td>
-                      <input
-                        type="checkbox"
-                        checked={selectionnes.includes(index)}
-                        onChange={() => toggleSelection(index)}
-                      />
-                    </td>
-                  )}
-                  <td>{depense.titre}</td>
-                  <td>{depense.categorie}</td>
-                  <td>{formatPrix(depense.prix)}</td>
-                  <td>{formatDate(depense.date)}</td>
-
-                  {!modeSupprimer && (
-                    <td className="cell_actions">
-                      <button className="btn_modifier"
-                        onClick={() => handleEdit(depense, index)}>Modifier</button>
-                    </td>
-                  )}
-
-                </tr>
-                <tr>
-                  <td colSpan={modeSupprimer ? 6 : 5}>
-                    <div style={{ height: '5px', backgroundColor: '#D9D9D9', width: '100%', }} />
-                  </td>
-                </tr>
-              </>
-            ))}
-
-
-          </tbody>
-
-        </table>
-      </div>
-
-      {/* PopUp */}
+      {/* MODAL */}
       {modalOuvert && (
         <div className="modal_overlay" onClick={fermerModal}>
           <div className="modal_contenu" onClick={(e) => e.stopPropagation()}>
@@ -314,7 +278,10 @@ const confirmerEditEnveloppe = async () => {
               placeholder="Titre"
               value={nouvelleDepense.titre}
               onChange={(e) =>
-                setNouvelleDepense({ ...nouvelleDepense, titre: e.target.value })
+                setNouvelleDepense({
+                  ...nouvelleDepense,
+                  titre: e.target.value,
+                })
               }
             />
 
@@ -322,7 +289,10 @@ const confirmerEditEnveloppe = async () => {
               placeholder="Catégorie"
               value={nouvelleDepense.categorie}
               onChange={(e) =>
-                setNouvelleDepense({ ...nouvelleDepense, categorie: e.target.value })
+                setNouvelleDepense({
+                  ...nouvelleDepense,
+                  categorie: e.target.value,
+                })
               }
             />
 
@@ -345,7 +315,6 @@ const confirmerEditEnveloppe = async () => {
               }
             />
 
-
             <div className="modal_boutons">
               <button className="btn_ajouter" onClick={confirmerAjout}>
                 {modeEdition ? "Modifier" : "Ajouter"}
@@ -358,52 +327,9 @@ const confirmerEditEnveloppe = async () => {
           </div>
         </div>
       )}
-      
-
-      {/* Pop Up edit Titre / Valeur du budget alloué */}
-      {modalEditOuvert && (
-        <div className="modal_overlay" onClick={() => setModalEditOuvert(false)}>
-          <div className="modal_contenu" onClick={(e) => e.stopPropagation()}>
-            <h2>Modifier l'enveloppe</h2>
-
-            <input
-              placeholder="Titre"
-              value={editData.titre}
-              onChange={(e) =>
-                setEditData({ ...editData, titre: e.target.value })
-              }
-            />
-
-            <input
-              type="number"
-              placeholder="Budget"
-              value={editData.budgetAlloue}
-              onChange={(e) =>
-                setEditData({
-                  ...editData,
-                  budgetAlloue: parseFloat(e.target.value),
-                })
-              }
-            />
-
-            <div className="modal_boutons">
-              <button
-                className="btn_ajouter"
-                onClick={() => setModalEditOuvert(false)}
-              >
-                Confirmer
-              </button>
-
-              <button
-                className="btn_supprimer"
-                onClick={() => setModalEditOuvert(false)}
-              >
-                Annuler
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      <div>
+        <graphiquePageEnveloppe />
+      </div>
     </div>
   );
 }

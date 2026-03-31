@@ -8,6 +8,7 @@ import Inscription from "./pages/Inscription";
 import PagePrincipale from "./pages/PagePrincipale";
 import Connexion from "./pages/Connexion";
 import Enveloppe from "./pages/Enveloppe";
+import { PageProfile } from "./pages/PageProfile";
 
 function AppContent() {
 
@@ -27,6 +28,7 @@ function AppContent() {
         <Route path="/PageInscription" element={<Inscription />} />
         <Route path="/PagePrincipale" element={<PagePrincipale />} />
         <Route path="/PageEnveloppe" element={<Enveloppe />} />
+        <Route path="/Profile" element={<PageProfile />} />
       </Routes>
     </>
   );

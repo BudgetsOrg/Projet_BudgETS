@@ -1,7 +1,7 @@
 // Mohamed
 import { useState } from "react"; // npm install
 import type { Depense } from "../interfaces/interfaces"; // ton interface est rendu dans la page pour ceux-ci
-import graphiquePageEnveloppe from "../components/graphiquePageEnveloppe"; // le graphique de la page enveloppe
+import { GraphiqueEnveloppe } from "../components/graphiqueEnveloppe.tsx"; // le graphique de la page enveloppe
 // Plus tard gerer avec le backend.
 const enveloppeId = 1;
 
@@ -332,9 +332,7 @@ const confirmerEditEnveloppe = async () => {
           </tbody>
         </table>
       </div>
-      <div>
-        <graphiquePageEnveloppe />
-      </div>
+
       {/* PopUp */}
       {modalOuvert && (
         <div className="modal_overlay" onClick={fermerModal}>
@@ -442,6 +440,10 @@ const confirmerEditEnveloppe = async () => {
           </div>
         </div>
       )}
+
+      <div className="p-10">
+        <GraphiqueEnveloppe />
+      </div>
     </div>
   );
 }

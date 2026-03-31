@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToMany, ManyToOne } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany, ManyToOne, ManyToMany, JoinTable } from 'typeorm';
 import { User } from './user.entity';
 import { Economie } from './economie.entity';
 
@@ -21,10 +21,18 @@ export class Objectif {
   @Column({ default: () => 'CURRENT_TIMESTAMP' })
   date_limite: Date;
 
-  //Relation, Attribut de navigation, Si le user est supprimé alors tous ses objectifs sont supprimés aussi (CASCADE)
-  @ManyToOne(() => User, (user) => user.objectifs,{ onDelete: 'CASCADE' })
-  users: User;
+  // //Relation, Attribut de navigation, Si le user est supprimé alors tous ses objectifs sont supprimés aussi (CASCADE)
+  // @ManyToOne(() => User, (user) => user.objectifs,{ onDelete: 'CASCADE' })
+  // users: User;
+  // Changement ici : Plusieurs users peuvent partager un objectif
+  @ManyToMany(() => User, (user) => user.objectifs)
+  @JoinTable({ name: 'user_objectifs' }) // table de liaison
+  users: User[]
 
-  @OneToMany(() => Economie, (economie) => economie.objectif)
+  // @OneToMany(() => Economie, (economie) => economie.objectif)
+  // economies: Economie[];
+  
+  // Les économies restent liées à l'objectif
+  @OneToMany(() => Economie, (economie) => economie.objectif, { cascade: true })
   economies: Economie[];
 }

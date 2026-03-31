@@ -9,4 +9,18 @@ export class ObjectifService {
     @InjectRepository(Objectif)
     private objectifRepository: Repository<Objectif>,
   ) {}
+
+  //Méthode pour :Create objectif 
+  async Create() {
+    
+  }
+
+  //Methode pour :lire tout les objectifs
+
+  //Methode pour :lire un objectif
+
+
+  //Méthode pour :Update la somme de l'objectif 
+
+  //Methode pour :Delete un objectif 
 }

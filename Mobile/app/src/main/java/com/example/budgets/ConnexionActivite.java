@@ -32,8 +32,9 @@ public class ConnexionActivite extends AppCompatActivity {
             Intent intent = new Intent(ConnexionActivite.this,MdpOublieActivite.class);
             startActivity(intent);
         });
-        connexion.setOnClickListener(v->{
-            Intent intent = new Intent(ConnexionActivite.this,PagePrincipaleActivite.class);
+        connexion.setOnClickListener(v -> {
+            // On va vers MainActivity, car c'est elle qui possède la barre de navigation
+            Intent intent = new Intent(ConnexionActivite.this, MainActivity.class);
             startActivity(intent);
         });
 

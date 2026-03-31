@@ -36,7 +36,7 @@ public class ObjectifAdapter extends RecyclerView.Adapter<ObjectifAdapter.MyView
 
         holder.itemView.setOnClickListener(v -> {
             Intent intent = new Intent(v.getContext(), PageObjectif.class);
-            intent.putExtra("objectif", obj);
+            //intent.putExtra("objectif", obj);
             v.getContext().startActivity(intent);
         });
     }

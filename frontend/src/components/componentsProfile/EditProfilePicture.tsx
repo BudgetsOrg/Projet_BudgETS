@@ -1,4 +1,5 @@
 import editLogo from "../../assets/edit-icon.svg";
+//https://www.youtube.com/watch?v=M0CNWMDJOHA
 
 type EditProfilePictureProps = {
   profilePicture: string;

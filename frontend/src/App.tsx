@@ -11,10 +11,6 @@ import Enveloppe from "./pages/Enveloppe";
 
 function AppContent() {
 
-  const checkLogIn = () => {
-
-  }
-
   const location = useLocation();
 
   // Pages où on NE veut pas afficher le header

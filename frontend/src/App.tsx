@@ -11,7 +11,6 @@ import Enveloppe from "./pages/Enveloppe";
 import { PageProfile } from "./pages/PageProfile";
 
 function AppContent() {
-  const checkLogIn = () => {};
 
   const location = useLocation();
 

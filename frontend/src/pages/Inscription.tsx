@@ -5,8 +5,9 @@ import { useState} from "react";
 interface Utilisateur {
   nom: string;
   prenom: string;
-  dateNaissance: string;
+  dateNaissance: "";
   email: string;
+  telephone?:string;
   password: string;
   solde ?: number;
 }
@@ -74,6 +75,9 @@ event.preventDefault();
 // Ici on pourrait mettre les champs qui seront necessaire ou pas.
 if(donneeInscription.nom == "" || donneeInscription.prenom == "" || donneeInscription.email == "" || donneeInscription.dateNaissance == "" || donneeInscription.password == ""){
   // Pour rendre plus interactif mettre un petit message en dessous des champs auxquelle il manque une informations. Pour préciser ce qui est à mettre.
+  if(donneeInscription.nom == ""){
+    
+  }
   alert("Un des champs n'a pas été rempli")
   return;
 }
@@ -83,7 +87,8 @@ alert(`l'utilisateur ${donneeInscription.prenom} ${donneeInscription.nom} été 
 console.log()
 viderChamps();
 
-// Ensuite on va rediriger vers la page Acceuil.
+// Ensuite on va rediriger vers la page Principale qui montre les différents Objectifs/Enveloppe de l'utilisateur.
+window.location.href = "/PageConnexion";
 }
 
   return (

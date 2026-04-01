@@ -2,7 +2,8 @@
 // Page d'inscription pour les nouveaux utilisateurs
 // Dans le cas ou le significateur soit un , alors le transformer en .
 import { useState} from "react";
-interface Utilisateur {
+import type { Utilisateur }  from "../interfaces/interfaces";
+/*interface Utilisateur {
   nom: string;
   prenom: string;
   dateNaissance: "";
@@ -11,11 +12,12 @@ interface Utilisateur {
   password: string;
   solde ?: number;
 }
+  */
 const bdUtilisateurs: Utilisateur[] = [];
 
 
 function Inscription() {
-  const [donneeInscription, setDonneeInscription] = useState<Utilisateur>({nom : "", prenom : "", dateNaissance : "", email : "", password : "",solde:undefined});
+  const [donneeInscription, setDonneeInscription] = useState<Utilisateur>({nom : "", prenom : "",adresse_email : "",  password : "", date_naissance : "",solde_du_mois:0});
 /* const stockerUtilisateur = (e: React.FormEvent) => {
   e.preventDefault(); 
   const nomUtilisateur = (document.getElementsByName("btn_nom")[0] as HTMLInputElement).value
@@ -49,20 +51,20 @@ const viderChamps = () => {
   setDonneeInscription({
     nom: "",
     prenom: "",
-    dateNaissance:"",
-    email:"",
+    adresse_email:"",
     password:"",
-    solde: undefined
+    date_naissance:"",
+    solde_du_mois: 0
   });
 }
 const gererEntreeUtilisateur = (event: React.ChangeEvent<HTMLInputElement>) => {
   const id = event.target.id;
-  let value: string | number = event.target.value;
+  let value: string | number | Date = event.target.value;
 
-  if (id === "btn_solde") {
+  if (id === "solde_du_mois") {
     value = parseFloat(value.replace(",", "."));
+    console.log("Solde converssion de , en .");
   }
-
   setDonneeInscription({
     ...donneeInscription,
     [id]: value
@@ -73,31 +75,33 @@ event.preventDefault();
 
 
 // Ici on pourrait mettre les champs qui seront necessaire ou pas.
-if(donneeInscription.nom == "" || donneeInscription.prenom == "" || donneeInscription.email == "" || donneeInscription.dateNaissance == "" || donneeInscription.password == ""){
+if(donneeInscription.nom == "" || donneeInscription.prenom == "" || donneeInscription.adresse_email == "" || donneeInscription.date_naissance == "" || donneeInscription.password == ""){
   // Pour rendre plus interactif mettre un petit message en dessous des champs auxquelle il manque une informations. Pour préciser ce qui est à mettre.
- /* if(donneeInscription.nom == "" || donneeInscription.nom.length < 50){
+ if(donneeInscription.nom == "" || donneeInscription.nom.length < 50){
     (document.getElementById("nom") as HTMLInputElement).placeholder ="Le nom est trop long ou vide.";
     return;
   }else if(donneeInscription.prenom == "" || donneeInscription.prenom.length < 50){
     (document.getElementById("prenom") as HTMLInputElement).placeholder ="Le prénom est trop long ou vide.";
     return;
   }else if(donneeInscription){
-    (document.getElementById("nom") as HTMLInputElement).placeholder ="Le prénom est trop long ou vide.";
-  }*/
+    (document.getElementById("password") as HTMLInputElement).placeholder ="Le prénom est trop long ou vide.";
+  }
   alert("Un des champs n'a pas été rempli")
   return;
 }
-
 // On appelle le API pour ajouter un Utilisateur à la bd. ET ICI LORSQU'ON METS LE SOLDE On fait REPLACE(",".".");
-alert(`l'utilisateur ${donneeInscription.prenom} ${donneeInscription.nom} été ajouté.`);
-console.log()
+alert(`l'utilisateur ${donneeInscription.prenom} ${donneeInscription.nom} a été ajouté.`);
+const nouvelleUtilisateur = {
+  ...donneeInscription,
+  date_naissance: new Date(donneeInscription.date_naissance)
+}
   try {
      const result = await fetch("http://localhost:3000/auth/inscription", {
      method : "POST", 
      headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(donneeInscription.nom)
+        body: JSON.stringify(nouvelleUtilisateur)
     }).then(response => {
       console.log(response.headers.get('access_token'))
     })
@@ -137,12 +141,12 @@ window.location.href = "/PageConnexion";
           </div>
           <div className="form_horizontal">
             <label className="date">Date de naissance : </label>
-            <input type="date" id="dateNaissance" placeholder="AAAA/MM/JJ" value={donneeInscription.dateNaissance} onChange={gererEntreeUtilisateur}/>
+            <input type="date" id="date_naissance" placeholder="AAAA/MM/JJ" value={donneeInscription.date_naissance} onChange={gererEntreeUtilisateur}/>
           </div>
-          <input type="email" id="email" placeholder="Adresse email" value={donneeInscription.email} onChange={gererEntreeUtilisateur}/>
+          <input type="email" id="adresse_email" placeholder="Adresse email" value={donneeInscription.adresse_email} onChange={gererEntreeUtilisateur}/>
           <input type="password" id="password" placeholder="Mot de passe" value={donneeInscription.password} onChange={gererEntreeUtilisateur}/>
           <label>Quel est votre solde de ce mois :</label>
-          <input type="number" id="solde" placeholder="Solde du mois" value={donneeInscription.solde ?? ""} onChange={gererEntreeUtilisateur}/>
+          <input type="number" id="solde_du_mois" placeholder="Solde du mois" value={donneeInscription.solde_du_mois ?? ""} onChange={gererEntreeUtilisateur}/>
           <div className="image_container">
             <img src="/img/image_inscription_plante_coupe.png" className="image_btn_inscription"/>
             <button className="btn_overlay">S'inscrire</button>

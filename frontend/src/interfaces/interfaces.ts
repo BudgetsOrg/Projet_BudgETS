@@ -34,14 +34,16 @@ export interface Objectif {
   user_id: number;
 }
 
-export interface User {
-  id_user: number;
+export interface Utilisateur {
+  id_user?: number;
   nom: string;
   prenom: string;
   adresse_email: string;
-  telephone: string;
-  image: string;
-  date_naissance: Date;
+  password: string;
+  date_naissance: string;
+  telephone?: string;
+  image?: string;
+  solde_du_mois:number;
 }
 
 export interface Depense {

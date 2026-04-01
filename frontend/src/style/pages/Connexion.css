@@ -1,15 +1,17 @@
+ *{
+    margin: 0;
+    padding: 0;
+  }
+
 .page_connexion {
     background: linear-gradient(to left, rgb(33,113,92), rgb(1,53,40));
     width: 100%;
     min-height: 100vh;
-    margin: 0;
-    position: relative; 
-    overflow-x: hidden; 
+    position: relative;  
     font-family: 'Inter', sans-serif;
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding-top: 10px;
     position: relative;
     z-index: 10; 
 }
@@ -18,11 +20,13 @@
     display: flex;
     width: 100%;
     height: 100vh;
+    justify-content: space-around;
+     overflow: hidden;
 }
 
 /*Partie Gauche (Image)*/
 .container_gauche {
-    width: 50%;
+    width: fit-content;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -37,12 +41,13 @@
 
 /*Partie droite (Form)  */
 .connexion_information {
-    width: 50%;
+    width: fit-content;
     display: flex;
     flex-direction: column;
     justify-content: center; 
-    align-items: flex-start;
+    align-items: center;
     gap: 15px;
+
 }
 
 .connexion_information h1 {
@@ -65,8 +70,9 @@
 .connexion_information label {
     color: rgb(170,221,102);
     font-size: 14px;
-    align-self:center;
+    align-self:flex-end;
     cursor: pointer;
+
 }
 
 .btn_connexion {

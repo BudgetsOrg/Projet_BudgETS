@@ -8,6 +8,10 @@
 
 /* Reset global pour éviter le contour blanc / margin par défaut */
 @layer base {
+  *{
+    margin: 0;
+    padding: 0;
+  }
   html, body {
     margin: 0;
     padding: 0;

@@ -3,14 +3,14 @@
     background: linear-gradient(to left, rgb(33,113,92), rgb(1,53,40));
     width: 100%;
     min-height: 100vh;
-    margin: 0;
+
     position: relative; 
     overflow-x: hidden; 
     font-family: 'Inter', sans-serif;
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding-top: 10px;
+  
     position: relative;
     z-index: 10; 
 }

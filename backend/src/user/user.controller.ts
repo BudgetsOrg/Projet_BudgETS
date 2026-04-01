@@ -10,9 +10,15 @@ export class UserController {
     
     // Gere les requetes HTTP DELETE sur le chemin users/id, parseintpipe convertit le paramètre id de string à number,
     // puis appelle la méthode delete du service pour supprimer le user correspondant à l'id fourni.
-    @Delete(':id')
-    delete(@Param('id', ParseIntPipe) id: number) {
-        return this.userService.delete(id);
+    // @Delete(':id')
+    // delete(@Param('id', ParseIntPipe) id: number) {
+    //     return this.userService.delete(id);
+    // }
+    
+    @Delete('me')
+    @UseGuards(AuthGuard('jwt'))
+    async deleteMyAccount(@Request() req) {
+    return this.userService.delete(req.user.id);
     }
 
     @UseGuards(AuthGuard('jwt')) // C'est ce verrou qui teste ton token

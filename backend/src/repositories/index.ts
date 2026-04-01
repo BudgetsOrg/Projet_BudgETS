@@ -11,3 +11,4 @@
 
 export * from './user.repository';
 export * from './budget.repository';
+export * from './objectif.repository';

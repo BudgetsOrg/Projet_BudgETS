@@ -11,7 +11,6 @@ export class ObjectifRepository{
     constructor(
         @InjectRepository(Objectif)
         private readonly repo: Repository<Objectif>, 
-        private readonly 
       ){}
 
 
@@ -47,9 +46,15 @@ export class ObjectifRepository{
         return await this.repo.save(newObjectif);
     }
 
-    //Read all 
-    async getAll(){
-
+    //Read all : by user dans ce cas
+    async getAll(userId:number):Promise<Objectif[]>{
+        return await this.repo.find({
+            where: {
+                users:{
+                    id_user:userId
+                }
+            }
+        });
     }
 
     //read one

@@ -10,5 +10,6 @@ import { ObjectifRepository } from 'src/repositories';
   imports: [TypeOrmModule.forFeature([Objectif])],
   controllers: [ObjectifController], //servent a definir les routes donc https:// get post ou  put
   providers: [ObjectifService, ObjectifRepository],
+  exports: [ObjectifRepository],
 })
 export class ObjectifModule {}

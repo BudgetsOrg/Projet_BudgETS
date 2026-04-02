@@ -1,9 +1,13 @@
 import { Body, Controller, Post, Req, UseGuards } from '@nestjs/common';
+import { ApiResponse } from '@nestjs/swagger';
 import { ObjectifDto } from './dto/objectif.dto';
 import { AuthGuard } from '@nestjs/passport';
 import { ObjectifRepository } from 'src/repositories';
+import { ApiBearerAuth } from '@nestjs/swagger/dist/decorators/api-bearer.decorator';
 
-
+@ApiBearerAuth() // Indique que les routes de ce contrôleur nécessitent une authentification par token Bearer (JWT) pour Swagger
+@ApiResponse({ status: 401, description: 'Unauthorized' })
+@UseGuards(AuthGuard('jwt')) // protège la route : seul un user connecté peut créer
 @Controller('objectif')
 export class ObjectifController {
 
@@ -13,8 +17,8 @@ export class ObjectifController {
     // getAll{
 
     // }
-
-    @UseGuards(AuthGuard('jwt')) // protège la route : seul un user connecté peut créer
+    @ApiResponse({ status: 200, description: 'Objectif créé avec succès' })
+    @ApiResponse({ status: 400, description: 'Requête invalide pour créer l’objectif' })
     @Post()
     async create(@Body() dto: ObjectifDto, @Req() req: any) {
         // Grace a JwtStrategy, 'req.user' contient l'utilisateur trouvé en DB

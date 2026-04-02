@@ -22,9 +22,15 @@ export class CategorieService {
     }
 
     async findAll(userId: number) {
-        return this.categorieRepository.find({
+        const categorie = await this.categorieRepository.find({
             where: { userId: userId },
         });
+
+        if (!categorie) {
+            throw new NotFoundException('Catégorie non trouvée');
+        }
+
+        return categorie;
     }
 
     async findOne(userId: number, id: number) {

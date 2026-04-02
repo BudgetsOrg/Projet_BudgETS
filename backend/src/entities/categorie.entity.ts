@@ -1,4 +1,4 @@
-import { Column, Entity, JoinColumn, ManyToOne, OneToMany,PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, ManyToOne, OneToMany,PrimaryGeneratedColumn } from 'typeorm';
 import { Depense } from './depense.entity';
 import { User } from './user.entity';
 
@@ -14,7 +14,7 @@ export class Categorie {
   @Column({ default: 0 })
   recurence: number;
 
-  @OneToMany(() => Depense, (depense) => depense.categorie)
+  @OneToMany(() => Depense, (depense) => depense.categorie) 
   depenses: Depense[];
 
   //Relation, Attribut de navigation, Si le user est supprimé alors toutes ses catégories sont supprimées aussi (CASCADE)

@@ -21,30 +21,7 @@ export class EnveloppeService{
 
     //Prend les champs du body + le user id du token en paramètre
     async create(userId: number, createEnveloppeDto: CreateEnveloppeDto) {
-        //Façon TypeORM de fair des requetes à la bd. On demande pour
-        //le budget le plus récent qui appartient au user authentifié et les enveloppes reliées à ce user. 
-        const budget = await this.budgetRepository.findOne({
-            where: { user: { id_user: userId } },
-            relations: ['enveloppes'],
-            order: { date_creation: 'DESC' }
-        });
-
-        if (!budget) {
-            throw new NotFoundException('Aucun budget trouvé pour cet utilisateur'); 
-        }
-
-        //Une boucle qui parcourt les enveloppes du budget pour calculer le montant total
-        // déjà alloué et le montant restant du budget.
-        const totalAllocated = budget.enveloppes.reduce(
-            (sum, env) => sum + Number(env.montant), 0,
-        );
-        const remainder = Number(budget.soldeDuMois) - totalAllocated;
-
-        if (Number(createEnveloppeDto.montant) > remainder) {
-            throw new BadRequestException(
-                `Dépasse le budget. Veuillez réduire le montant de l'enveloppe ou changer le solde du budget ou des enveloppes existantes.`
-            );
-        }
+        const budget = await this.checkBudgetRemainder(userId, createEnveloppeDto.montant);
         //Si tout les verifications sont passées, on crée une nouvelle enveloppe avec les champs précisés.
         const enveloppe = this.enveloppeRepository.create({
             ...createEnveloppeDto, // envoie les champs du body récupérés par le DTO dans la table.
@@ -86,6 +63,9 @@ export class EnveloppeService{
 
     async update(userId: number, updateEnveloppeDto: UpdateEnveloppeDto, id: number) {
         const enveloppe = await this.findOne(userId,id); // Utilise Findone pour get l'eneveloppe en question
+        if (updateEnveloppeDto.montant !== undefined) {
+        await this.checkBudgetRemainder(userId, updateEnveloppeDto.montant, id);
+        }
         // ?? verifie si le champ a changé, si oui, il le change, sinon il garde l'ancien champ.
         enveloppe.titre = updateEnveloppeDto.titre ?? enveloppe.titre;
         enveloppe.montant = updateEnveloppeDto.montant ?? enveloppe.montant;
@@ -98,4 +78,32 @@ export class EnveloppeService{
         await this.enveloppeRepository.remove(enveloppe);
         return { message: 'Enveloppe supprimée avec succès' };
     }
+
+    private async checkBudgetRemainder(userId: number, montant: number, excludeId?: number) {
+    //Façon TypeORM de fair des requetes à la bd. On demande pour
+    //le budget le plus récent qui appartient au user authentifié et les enveloppes reliées à ce user. 
+    const budget = await this.budgetRepository.findOne({
+        where: { user: { id_user: userId } },
+        relations: ['enveloppes'],
+        order: { date_creation: 'DESC' }
+    });
+
+    if (!budget) {
+        throw new NotFoundException('Aucun budget trouvé pour cet utilisateur');
+    }
+
+    const totalAllocated = budget.enveloppes
+        .filter(env => env.id_enveloppe !== excludeId)
+        .reduce((sum, env) => sum + Number(env.montant), 0);
+
+    const remainder = Number(budget.soldeDuMois) - totalAllocated;
+
+    if (Number(montant) > remainder) {
+        throw new BadRequestException(
+            `Dépasse le budget. Veuillez réduire le montant de l'enveloppe ou changer le solde du budget ou des enveloppes existantes.`
+        );
+    }
+
+    return budget;
+}
 }

@@ -1,14 +1,16 @@
 import { IsEmail, IsNotEmpty, IsString } from "class-validator";
+import { ApiProperty } from "@nestjs/swagger/dist/decorators/api-property.decorator";
 
 
 
 
 export class ConnexionDto{
-
+    @ApiProperty({ example: 'john.doe@example.com', description: 'Adresse email de l\'utilisateur' })
     @IsEmail({}, { message: 'Format de courriel invalide' })
     @IsNotEmpty({ message: 'L\'adresse courriel est requise' })
     adresse_email: string;
 
+    @ApiProperty({ example: 'password123', description: 'Mot de passe de l\'utilisateur' })
     @IsString()
     @IsNotEmpty({ message: 'Le mot de passe est requis' })
     password: string;

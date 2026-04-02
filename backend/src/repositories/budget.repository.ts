@@ -19,6 +19,7 @@ export class BudgetRepository{
         }) // .create() prépare l'entité
         return await this.repo.save(newBudget)
     }
+
     // READ (un seul)
     async get(id: number) {
         // Logique findOne

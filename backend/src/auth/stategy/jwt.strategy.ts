@@ -32,7 +32,11 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
       throw new UnauthorizedException('Utilisateur non trouvé');
     }
 
-    // delete user.password;
-    return user;
+    return {
+      id: user.id_user, // Ton controller pourra faire req.user.id
+      email: user.adresse_email,
+      nom: user.nom,
+      prenom: user.prenom
+    };
   }
 }

@@ -7,15 +7,15 @@ import {
 } from '@nestjs/common';
 
 import { User } from '../entities/user.entity';
-import { BudgetRepository, UserRepository } from 'src/repositories/index';
+import { BudgetRepository, UserRepository , ObjectifRepository} from 'src/repositories/index';
 import { InscriptionDto } from 'src/auth/dto';
 
 @Injectable()
 export class UserService {
   constructor(
       private readonly userRepository: UserRepository,
-      private readonly budgetRepository: BudgetRepository
-       
+      private readonly budgetRepository: BudgetRepository,
+      private readonly objectifRepository : ObjectifRepository
   ) {}
 
   //Trouve le user par son id, si il n'existe pas, throw une exception, puis retourne le user trouvé.
@@ -30,7 +30,12 @@ export class UserService {
   //Supprime le user trouvé par son id, puis retourne un message de confirmation.
   async delete(id: number) {
     await this.findOne(id);
+    const objectifs = await this.objectifRepository.getAll(id);
+    for (const obj of objectifs) {
+    await this.objectifRepository.leaveOrDelete(obj.id_objectif, id);
+    }
     await this.userRepository.delete(id);
+    
     return { message: 'User deleted' };
   }
 
@@ -103,6 +108,10 @@ export class UserService {
     // Création
     return newUser;
   }
+
+  async updatePassword(id: number, hash: string) {
+    return await this.userRepository.update(id, { password: hash });
+}
 
   async findByEmail(email: string) {
     return await this.userRepository.findByEmail(email);

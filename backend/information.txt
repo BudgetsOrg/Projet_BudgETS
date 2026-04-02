@@ -16,6 +16,9 @@ npm install -D @types/passport @types/passport-jwt
 //argon
 npm install argon2
 
+//pour resend
+ npm install resend
+
 //pas encore utiliser
 $ npm i bcrypt
 $ npm i -D @types/bcrypt

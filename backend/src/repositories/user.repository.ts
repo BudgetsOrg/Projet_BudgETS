@@ -24,8 +24,8 @@ export class UserRepository{
         image: userData.image 
     });
 
-    // TypeORM a un objet complet a sauvegarder
-    return await this.repo.save(newUser);
+        // TypeORM a un objet complet a sauvegarder
+        return await this.repo.save(newUser);
     }
     // READ (un seul)
     async get(id: number) {

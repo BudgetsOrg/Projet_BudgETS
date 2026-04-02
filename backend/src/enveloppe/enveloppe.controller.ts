@@ -4,8 +4,9 @@ import { UpdateEnveloppeDto } from "./dto/update_enveloppe.dto";
 import { JwtAuthGuard } from "../auth/guard/jwt.guard";
 import { Request } from "@nestjs/common";
 import { CreateEnveloppeDto } from "./dto/create_enveloppe.dto";
+import { AuthGuard } from "@nestjs/passport/dist/auth.guard";
 
-@UseGuards(JwtAuthGuard)
+@UseGuards(AuthGuard('jwt'))
 @Controller('enveloppe')
 export class EnveloppeController{
     

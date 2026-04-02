@@ -18,7 +18,7 @@ export class ObjectifController {
     @Post()
     async create(@Body() dto: ObjectifDto, @Req() req: any) {
         // Grace a JwtStrategy, 'req.user' contient l'utilisateur trouvé en DB
-        const userId = req.user.id_user; 
+        const userId = req.user.id; 
         
         // On appelle ton service avec les données du DTO et l'ID du user
         return this.objectifService.create(dto.montant, dto.titre, userId);

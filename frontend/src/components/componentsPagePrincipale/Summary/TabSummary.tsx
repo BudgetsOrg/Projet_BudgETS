@@ -18,11 +18,10 @@ export function TabSummary() {
 
   if (errorEnveloppe || errorBudget)
     return <div>Erreur: {errorEnveloppe || errorBudget}</div>;
-
   return (
     <div>
       <h3 className="text-xl font-semibold text-gray-800 my-4">
-        Solde pour le mois: {findBudget(budgets)?.solde || 0} $
+        Solde pour le mois: {budgets[0]?.solde || 0} $
       </h3>
       <table className="w-full text-left table-auto min-w-max text-slate-800">
         <tr>

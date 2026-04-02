@@ -9,13 +9,13 @@ import PagePrincipale from "./pages/PagePrincipale";
 import Connexion from "./pages/Connexion";
 import Enveloppe from "./pages/Enveloppe";
 import { PageProfile } from "./pages/PageProfile";
+import Accueuil from "./style/pages/Accueuil";
 
 function AppContent() {
-
   const location = useLocation();
 
   // Pages où on NE veut pas afficher le header
-  const noHeaderRoutes = ["/PageConnexion", "/PageInscription"];
+  const noHeaderRoutes = ["/PageConnexion", "/PageInscription", "/"];
 
   const showHeader = !noHeaderRoutes.includes(location.pathname);
 
@@ -24,6 +24,7 @@ function AppContent() {
       {showHeader && <Header />}
 
       <Routes>
+        <Route path="/" element={<Accueuil />} />
         <Route path="/PageConnexion" element={<Connexion />} />
         <Route path="/PageInscription" element={<Inscription />} />
         <Route path="/PagePrincipale" element={<PagePrincipale />} />

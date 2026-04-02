@@ -1,8 +1,14 @@
 // mes fonctions pour aller chercher les données à l'API
 // par contre, nous sommes en debug pour l'instant donc debug = true et nous avons des données préparées.
 
-const API_URL = "http://localhost:3000";
-const debug = true;
+const API_URL_GLOBAL = "https://projetbudgets-backend.up.railway.app";
+const API_URL_LOCAL = "http://localhost:3000";
+const token =
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImVtYWlsIjoiam9obmRvZUBleGFtcGxlLmNvbSIsImlhdCI6MTc3NTE1MjI1MywiZXhwIjoxNzc1MjM4NjUzfQ.YzE3xvT7r97x26eUGf-vVMVKKshvVTEMTy1JBj9odcY";
+//localStorage.getItem("token");
+const debug = false;
+// choose one
+const local = false;
 
 export async function getEnveloppe() {
   if (debug) {
@@ -20,16 +26,23 @@ export async function getEnveloppe() {
     };
     return [mockEnveloppe1, mockEnveloppe2];
   } else {
-    const token = localStorage.getItem("token");
-    const response = await fetch(`${API_URL}/enveloppe`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    if (!response.ok) {
-      throw new Error("Erreur lors du fetch");
+    if (local) {
+      const response = await fetch(`${API_URL_LOCAL}/enveloppe`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return response.json();
+    } else {
+      const response = await fetch(`${API_URL_GLOBAL}/enveloppe`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return response.json();
     }
-    return response.json();
   }
 }
 
@@ -49,11 +62,23 @@ export async function getBudget() {
     };
     return [mockBudget1, mockBudget2];
   } else {
-    const response = await fetch(`${API_URL}/budget`);
-    if (!response.ok) {
-      throw new Error("Erreur lors du fetch");
+    if (local) {
+      const response = await fetch(`${API_URL_LOCAL}/budget/me`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return response.json();
+    } else {
+      const response = await fetch(`${API_URL_GLOBAL}/budget/me`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return response.json();
     }
-    return response.json();
   }
 }
 

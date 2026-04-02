@@ -1,5 +1,5 @@
 import { PieChart } from "react-minimal-pie-chart";
-import useEnveloppes from "../../../hooks/useEnveloppes";
+import useEnveloppes from "../../../hooks/UseEnveloppes";
 import type { Data } from "../../../interfaces/interfaces";
 
 export function SummaryPieChart() {
@@ -16,13 +16,13 @@ export function SummaryPieChart() {
     color: seedColors(env.id_enveloppe, index),
   }));
 
+  if (dataTab.length === 0) {
+    return <div>No data to display</div>;
+  }
+
   return (
-    <div className="relative h-full">
-      <PieChart
-        data={dataTab}
-        radius={50}
-        className="absolute inset-0 h-full w-full"
-      />
+    <div className="h-64 w-full flex items-center justify-center">
+      <PieChart data={dataTab} radius={100} className="h-full w-full" />
     </div>
   );
 }

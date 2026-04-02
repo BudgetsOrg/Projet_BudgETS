@@ -50,15 +50,16 @@ export function GraphiqueEnveloppe() {
       .map(([date, prix]) => ({ date, prix }))
       .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
 
+    const last7DaysDepenses = sortedDepenses.slice(-7);
     return (
       <Bar
         data={{
-          labels: sortedDepenses.map((depense) => depense.date),
+          labels: last7DaysDepenses.map((depense) => depense.date),
           datasets: [
             {
               label: "Dépenses ($) ",
 
-              data: sortedDepenses.map((depense) => depense.prix),
+              data: last7DaysDepenses.map((depense) => depense.prix),
               backgroundColor: "#96c16e",
               borderColor: "#888",
               borderWidth: 0.5,

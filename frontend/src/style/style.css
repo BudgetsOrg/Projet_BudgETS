@@ -1,4 +1,3 @@
-
 @import "../style/pages/style_tailwind.css";
 
 @import "./pages/Inscription.css";
@@ -8,20 +7,19 @@
 
 /* Reset global pour éviter le contour blanc / margin par défaut */
 @layer base {
-  *{
-    margin: 0;
-    padding: 0;
-  }
-  html, body {
+  html,
+  body {
     margin: 0;
     padding: 0;
     width: 100%;
     min-height: 100%;
     box-sizing: border-box;
-    font-family: 'Inter', sans-serif;
+    font-family: "Inter", sans-serif;
   }
 
-  *, *::before, *::after {
+  *,
+  *::before,
+  *::after {
     box-sizing: inherit;
   }
 }

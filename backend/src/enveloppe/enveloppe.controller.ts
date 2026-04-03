@@ -1,5 +1,5 @@
 import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, UseGuards } from "@nestjs/common";
-import { ApiResponse, ApiParam } from '@nestjs/swagger';
+import { ApiResponse, ApiParam, ApiOperation } from '@nestjs/swagger';
 import { EnveloppeService } from "./enveloppe.service";
 import { UpdateEnveloppeDto } from "./dto/update_enveloppe.dto";
 import { JwtAuthGuard } from "../auth/guard/jwt.guard";
@@ -25,6 +25,7 @@ export class EnveloppeController{
     }
 
     // Récupérer toutes les enveloppes
+    @ApiOperation({ summary: 'Récupérer toutes les enveloppes de l\'utilisateur' })
     @ApiResponse({ status: 200, description: 'Liste des enveloppes récupérée avec succès' })
     @ApiResponse({ status: 404, description: "{ message: 'Aucun budget trouvé pour cet utilisateur' }" })
     @Get()
@@ -41,6 +42,7 @@ export class EnveloppeController{
         return this.enveloppeService.update(request.user.id, updateEnveloppeDto, id);
     }
 
+    @ApiOperation({ summary: 'Récupérer une enveloppe spécifique' })
     @ApiResponse({ status: 200, description: 'Enveloppe récupérée avec succès' })
     @ApiResponse({ status: 404, description: "{ message: 'Enveloppe non trouvée' }" })
     @ApiResponse({ status: 400, description: "{ message: 'Pas la bonne requête pour récupérer/modifié l’enveloppe, ou bien Dépasse le budget' }" })

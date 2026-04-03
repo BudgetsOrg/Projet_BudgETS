@@ -102,7 +102,7 @@ export async function getObjectif() {
     };
     return [mockObjectif1, mockObjectif2];
   } else {
-    const response = await fetch(`${API_URL}/objectif`);
+    const response = await fetch(`${API_URL_GLOBAL}/objectif`);
     if (!response.ok) {
       throw new Error("Erreur lors du fetch");
     }
@@ -135,7 +135,7 @@ export async function getDepenses() {
     };
     return [mockDepense1, mockDepense2, mockDepense3];
   } else {
-    const response = await fetch(`${API_URL}/depense`);
+    const response = await fetch(`${API_URL_GLOBAL}/depense`);
     if (!response.ok) {
       throw new Error("Erreur lors du fetch");
     }

@@ -3,6 +3,8 @@
 // Dans le cas ou le significateur soit un , alors le transformer en .
 import { useState} from "react";
 import type { Utilisateur }  from "../interfaces/interfaces";
+import { postUtilisateur } from "../api/UtilisateurApi";
+import { setToken, getToken } from "../../public/token"
 /*interface Utilisateur {
   nom: string;
   prenom: string;
@@ -17,7 +19,7 @@ const bdUtilisateurs: Utilisateur[] = [];
 
 
 function Inscription() {
-  const [donneeInscription, setDonneeInscription] = useState<Utilisateur>({nom : "", prenom : "",adresse_email : "",  password : "", date_naissance : "",solde_du_mois:0});
+  const [donneeInscription, setDonneeInscription] = useState<Utilisateur>({nom : "", prenom : "",adresse_email : "",  password : "", date_naissance : "",soldeDumois:0});
 /* const stockerUtilisateur = (e: React.FormEvent) => {
   e.preventDefault(); 
   const nomUtilisateur = (document.getElementsByName("btn_nom")[0] as HTMLInputElement).value
@@ -54,15 +56,16 @@ const viderChamps = () => {
     adresse_email:"",
     password:"",
     date_naissance:"",
-    solde_du_mois: 0
+    soldeDumois: 0
   });
 }
 const gererEntreeUtilisateur = (event: React.ChangeEvent<HTMLInputElement>) => {
   const id = event.target.id;
   let value: string | number | Date = event.target.value;
 
-  if (id === "solde_du_mois") {
-    value = parseFloat(value.replace(",", "."));
+  if (id === "soldeDumois") {
+    const parsed = parseFloat(value.replace(",", "."));
+    value = isNaN(parsed) ? 0 : parsed;
     console.log("Solde converssion de , en .");
   }
   setDonneeInscription({
@@ -90,28 +93,34 @@ if(donneeInscription.nom == "" || donneeInscription.prenom == "" || donneeInscri
   return;
 }
 // On appelle le API pour ajouter un Utilisateur à la bd. ET ICI LORSQU'ON METS LE SOLDE On fait REPLACE(",".".");
-alert(`l'utilisateur ${donneeInscription.prenom} ${donneeInscription.nom} a été ajouté.`);
-const nouvelleUtilisateur = {
-  ...donneeInscription,
-  date_naissance: new Date(donneeInscription.date_naissance)
-}
-  try {
-     const result = await fetch("http://localhost:3000/auth/inscription", {
-     method : "POST", 
-     headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(nouvelleUtilisateur)
-    }).then(response => {
-      console.log(response.headers.get('access_token'))
-    })
-  } catch (error) {
-    console.log(error);
-  }
-viderChamps();
+alert(`l'utilisateur ${donneeInscription.prenom} ${donneeInscription.nom} a été ajouté.(message avant fetch)`);
 
-// Ensuite on va rediriger vers la page Principale qui montre les différents Objectifs/Enveloppe de l'utilisateur.
-window.location.href = "/PageConnexion";
+
+try {
+    const reponse = await postUtilisateur(donneeInscription);
+
+    if (!reponse.ok) {
+    const errorData = await reponse.json();
+    const message = Array.isArray(errorData.message) 
+        ? errorData.message.join(', ') 
+        : errorData.message;
+    throw new Error(message || "Erreur lors de l'inscription");
+}
+    const data = await reponse.json();
+    console.log("Utilisateur créé :", data);
+    alert(`Utilisateur crée voila le token : ${data.access_token}`);
+    setToken(data.access_token);
+    
+
+    alert(`L'utilisateur ${donneeInscription.prenom} ${donneeInscription.nom} a été ajouté.(message après fetch)`);
+    
+    viderChamps();
+    window.location.href = "/PageConnexion"
+
+  } catch (error: any) {
+    console.error(error);
+    alert(error.message);
+  }
 }
 
   return (
@@ -146,7 +155,7 @@ window.location.href = "/PageConnexion";
           <input type="email" id="adresse_email" placeholder="Adresse email" value={donneeInscription.adresse_email} onChange={gererEntreeUtilisateur}/>
           <input type="password" id="password" placeholder="Mot de passe" value={donneeInscription.password} onChange={gererEntreeUtilisateur}/>
           <label>Quel est votre solde de ce mois :</label>
-          <input type="number" id="solde_du_mois" placeholder="Solde du mois" value={donneeInscription.solde_du_mois ?? ""} onChange={gererEntreeUtilisateur}/>
+          <input type="number" id="soldeDumois" placeholder="Solde du mois" value={donneeInscription.soldeDumois ?? ""} onChange={gererEntreeUtilisateur}/>
           <div className="image_container">
             <img src="/img/image_inscription_plante_coupe.png" className="image_btn_inscription"/>
             <button className="btn_overlay">S'inscrire</button>

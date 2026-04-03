@@ -1,8 +1,10 @@
 // Mohamed
+import {getToken,setToken} from "../../public/token"
 function Connexion() {
 
     
 const redirigerPageInscription = () => {
+  alert(getToken);
     window.location.href = "/PageInscription";
 }
     return (

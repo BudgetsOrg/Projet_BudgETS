@@ -43,7 +43,7 @@ export interface Utilisateur {
   date_naissance: string;
   telephone?: string;
   image?: string;
-  solde_du_mois:number;
+  soldeDumois:number;
 }
 
 export interface Depense {

@@ -34,7 +34,7 @@ export class EnveloppeController{
     }
 
     @ApiResponse({ status: 200, description: 'Enveloppe mise à jour avec succès' })
-    @ApiResponse({ status: 404, description: "{ message: 'Enveloppe non trouvée' }" })
+    @ApiResponse({ status: 404, description: 'Enveloppe non trouvée'})
     @ApiResponse({ status: 400, description: "{ message: 'Pas la bonne requête pour mettre à jour l’enveloppe / Dépasse le budget' }" })
     @ApiParam({ name: 'id', type: Number, example: 3, description: "L'id de l'enveloppe à mettre à jour" })
     @Patch(':id')
@@ -44,8 +44,8 @@ export class EnveloppeController{
 
     @ApiOperation({ summary: 'Récupérer une enveloppe spécifique' })
     @ApiResponse({ status: 200, description: 'Enveloppe récupérée avec succès' })
-    @ApiResponse({ status: 404, description: "{ message: 'Enveloppe non trouvée' }" })
-    @ApiResponse({ status: 400, description: "{ message: 'Pas la bonne requête pour récupérer/modifié l’enveloppe, ou bien Dépasse le budget' }" })
+    @ApiResponse({ status: 404, description: 'Enveloppe non trouvée' })
+    @ApiResponse({ status: 400, description: 'Pas la bonne requête pour récupérer/modifié l’enveloppe, ou bien Dépasse le budget' })
     @ApiParam({ name: 'id', type: Number, example: 3, description: "L'id de l'enveloppe à récupérer" })
     @Get(':id')
     findOne(@Request() request, @Param('id', ParseIntPipe) id: number) {
@@ -53,8 +53,8 @@ export class EnveloppeController{
     }
 
     @ApiResponse({ status: 200, description: 'Enveloppe supprimée avec succès' })
-    @ApiResponse({ status: 404, description: "{ message: 'Enveloppe non trouvée' }" })
-    @ApiResponse({ status: 400, description: "{ message: 'Pas la bonne requête pour supprimer l’enveloppe' }" })
+    @ApiResponse({ status: 404, description: 'Enveloppe non trouvée' })
+    @ApiResponse({ status: 400, description: 'Pas la bonne requête pour supprimer l’enveloppe' })
     @ApiParam({ name: 'id', type: Number, example: 3, description: "L'id de l'enveloppe à supprimer" })
     @Delete(':id')
     remove(@Request() request, @Param('id', ParseIntPipe) id: number) {

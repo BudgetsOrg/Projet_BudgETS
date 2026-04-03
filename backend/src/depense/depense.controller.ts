@@ -1,5 +1,5 @@
 import { Controller, Get, Post, Patch, Delete, Param, Body, Request, ParseIntPipe, UseGuards } from '@nestjs/common';
-import { ApiResponse, ApiParam } from '@nestjs/swagger';
+import { ApiResponse, ApiParam, ApiOperation } from '@nestjs/swagger';
 import { DepenseService } from './depense.service';
 import { CreateDepenseDto } from './dto/create_depense.dto';
 import { UpdateDepenseDto } from './dto/update_depense.dto';
@@ -23,6 +23,7 @@ export class DepenseController {
     }
 
     //Permet de récupérer toutes les dépenses associées à une enveloppe spécifique pour l'utilisateur connecté
+    @ApiOperation({ summary: 'Récupérer toutes les dépenses d\'une enveloppe' })
     @ApiResponse({ status: 200, description: 'Dépenses récupérées avec succès' })
     @ApiResponse({ status: 404, description: "{ message: 'Enveloppe non trouvée' }" })
     @ApiResponse({ status: 400, description: "{ message: 'Pas la bonne requête pour récupérer les dépenses' }" })
@@ -33,6 +34,7 @@ export class DepenseController {
     }
 
     //Permet de récupérer une dépense spécifique pour l'utilisateur connecté
+    @ApiOperation({ summary: 'Récupérer une dépense spécifique' })
     @ApiResponse({ status: 200, description: 'Dépense récupérée avec succès' })
     @ApiResponse({ status: 404, description: "{ message: 'Dépense non trouvée' }" })
     @ApiResponse({ status: 400, description: "{ message: 'Pas la bonne requête pour récupérer la dépense' }" })

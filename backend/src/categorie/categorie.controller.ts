@@ -1,5 +1,5 @@
 import { Controller, Get, Post, Patch, Delete, Param, Body, Request, ParseIntPipe, UseGuards } from '@nestjs/common';
-import { ApiResponse, ApiParam } from '@nestjs/swagger';
+import { ApiResponse, ApiParam, ApiOperation } from '@nestjs/swagger';
 import { CategorieService } from './categorie.service';
 import { CreateCategorieDto } from './dto/create_categorie.dto';
 import { UpdateCategorieDto } from './dto/update_categorie.dto';
@@ -22,6 +22,7 @@ export class CategorieController {
     }
 
     //Récupère toutes les catégories du user avec l'id du user obtenu du JWT
+    @ApiOperation({ summary: 'Récupérer toutes les catégories' })
     @ApiResponse({ status: 200, description: 'Liste des catégories récupérée avec succès' })
     @ApiResponse({ status: 404, description: "{ message: 'Catégorie non trouvée' }" })
     @Get()
@@ -30,6 +31,7 @@ export class CategorieController {
     }
 
     //Récupère une catégorie spécifique du user avec l'id de la catégorie et l'id du user obtenus du JWT
+    @ApiOperation({ summary: 'Récupérer une catégorie par son ID' })
     @ApiResponse({ status: 200, description: 'Catégorie récupérée avec succès' })
     @ApiResponse({ status: 404, description: "{ message: 'Catégorie non trouvée' }" })
     @ApiResponse({ status: 400, description: "{ message: 'Pas la bonne requête pour récupérer la catégorie' }" })

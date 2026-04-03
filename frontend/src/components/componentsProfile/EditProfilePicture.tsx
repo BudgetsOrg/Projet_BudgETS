@@ -1,4 +1,4 @@
-import editLogo from "../../assets/edit-icon.svg";
+import editLogo from "../../../public/img/edit-icon.svg";
 //https://www.youtube.com/watch?v=M0CNWMDJOHA
 
 type EditProfilePictureProps = {

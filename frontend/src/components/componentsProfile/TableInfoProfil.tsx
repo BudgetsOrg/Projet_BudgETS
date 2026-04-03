@@ -1,4 +1,4 @@
-import type { User } from "../../interfaces/interfaces";
+import type { User } from "../../interfaces";
 import SuppressionCompte from "../../popups/SuppressionPopup/SuppressionCompte";
 import React, { useState } from "react";
 

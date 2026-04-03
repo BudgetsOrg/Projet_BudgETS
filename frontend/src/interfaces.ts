@@ -20,9 +20,14 @@ export interface Data {
 
 // i think this is wrong !
 export interface Budget {
-  id_budget: number;
-  solde: number;
-  date_creation: Date;
+  id_budget?: number;
+  soldeDuMois?: number;
+  solde?: number; // API may return `solde` instead of `soldeDuMois`
+  date_creation: string | Date;
+  user_id?: Utilisateur;
+  objectifs?: Objectif[];
+  enveloppes?: Enveloppe[];
+  categories?: Categorie[];
 }
 
 export interface Objectif {
@@ -43,7 +48,7 @@ export interface Utilisateur {
   date_naissance: string;
   telephone?: string;
   image?: string;
-  soldeDumois:number;
+  soldeDumois: number;
 }
 
 export interface Depense {
@@ -52,4 +57,12 @@ export interface Depense {
   categorie: string;
   prix: number;
   date: string;
+}
+
+export interface Categorie {
+  id_categorie: number;
+  nom_categorie: string;
+  recurence: number;
+  depenses: Depense[];
+  user_id: number;
 }

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import useBudgets from "../../../hooks/UseBudgets";
 import useEnveloppes from "../../../hooks/UseEnveloppes";
-import type { Budget } from "../../../interfaces/interfaces";
+import type { Budget } from "../../../interfaces";
 import NouvelleEnveloppe from "../../../popups/AjoutPopup/NouvelleEnveloppe";
 
 export function TabSummary() {
@@ -12,7 +12,7 @@ export function TabSummary() {
     error: errorEnveloppe,
   } = useEnveloppes();
   const { budgets, loading: loadingBudget, error: errorBudget } = useBudgets();
-  console.log(budgets);
+
   //TODO : Pourrait être plus cute
   if (loadingEnveloppe || loadingBudget) return <div>Chargement...</div>;
 
@@ -21,7 +21,8 @@ export function TabSummary() {
   return (
     <div>
       <h3 className="text-xl font-semibold text-gray-800 my-4">
-        Solde pour le mois: {budgets[0]?.solde || 0} $
+        Solde pour le mois: {budgets[0]?.soldeDuMois ?? budgets[0]?.solde ?? 0}{" "}
+        $
       </h3>
       <table className="w-full text-left table-auto min-w-max text-slate-800">
         <tr>
@@ -58,17 +59,23 @@ export function TabSummary() {
   );
 }
 
-//TODO : Ideally the backend should provide an endpoint to get the current budget
-// For now, we can implement a function to find the current budget based on the date
+/*
 function findBudget(budgets: Budget[]) {
   // Implementation for finding a specific budget
   const today = new Date();
   const currentMonth = today.getMonth() + 1; // getMonth() returns 0-11
   const currentYear = today.getFullYear();
-  console.log(budgets);
-  return budgets.find(
-    (budget) =>
-      budget.date_creation.getMonth() + 1 === currentMonth &&
-      budget.date_creation.getFullYear() === currentYear,
-  );
-}
+
+  return budgets.find((budget) => {
+    const date =
+      budget.date_creation instanceof Date
+        ? budget.date_creation
+        : new Date(budget.date_creation);
+
+    if (Number.isNaN(date.getTime())) return false;
+    return (
+      date.getMonth() + 1 === currentMonth &&
+      date.getFullYear() === currentYear
+    );
+  });
+}*/

@@ -1,7 +1,7 @@
 // mes fonctions pour aller chercher les données à l'API
 // par contre, nous sommes en debug pour l'instant donc debug = true et nous avons des données préparées.
 
-import type { Utilisateur } from "../interfaces/interfaces"
+import type { Utilisateur } from "../interfaces";
 let loggedInUser: Utilisateur | null = null;
 const API_URL_GLOBAL = "https://projetbudgets-backend.up.railway.app";
 const API_URL_LOCAL = "http://localhost:3000";
@@ -46,21 +46,22 @@ export async function getUtilisateur() {
   }
 }
 
-export async function postUtilisateur(nouvelleUtilisateur: Utilisateur): Promise<Response> {
+export async function postUtilisateur(
+  nouvelleUtilisateur: Utilisateur,
+): Promise<Response> {
+  const url = local
+    ? `${API_URL_LOCAL}/auth/inscription`
+    : `${API_URL_GLOBAL}/auth/inscription`;
 
-    const url = local 
-        ? `${API_URL_LOCAL}/auth/inscription`
-        : `${API_URL_GLOBAL}/auth/inscription`;
+  const reponse = await fetch(url, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(nouvelleUtilisateur),
+  });
 
-    const reponse = await fetch(url, {
-        method: "POST",
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(nouvelleUtilisateur),
-    });
-
-    return reponse;
+  return reponse;
 }
 
 export async function login(username: string, password: string) {
@@ -73,8 +74,8 @@ export async function login(username: string, password: string) {
       telephone: "1234567890",
       image: "https://thispersondoesnotexist.com/",
       date_naissance: "1990-01-01",
-      password :"123",
-      soldeDumois: 50
+      password: "123",
+      soldeDumois: 50,
     };
     loggedInUser = mockUser;
     return mockUser;

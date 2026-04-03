@@ -1,4 +1,4 @@
-import type { Enveloppe } from "../../../interfaces/interfaces";
+import type { Enveloppe } from "../../../interfaces";
 
 export function EnveloppeCard(enveloppe: Enveloppe) {
   return (

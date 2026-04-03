@@ -1,6 +1,6 @@
 import { PieChart } from "react-minimal-pie-chart";
 import useEnveloppes from "../../../hooks/UseEnveloppes";
-import type { Data } from "../../../interfaces/interfaces";
+import type { Data } from "../../../interfaces";
 
 export function SummaryPieChart() {
   const { enveloppes, loading, error } = useEnveloppes();

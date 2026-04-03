@@ -18,11 +18,11 @@ export interface Data {
   color: string;
 }
 
+// i think this is wrong !
 export interface Budget {
   id_budget: number;
   solde: number;
   date_creation: Date;
-  user_id: number;
 }
 
 export interface Objectif {
@@ -43,7 +43,7 @@ export interface Utilisateur {
   date_naissance: string;
   telephone?: string;
   image?: string;
-  solde_du_mois:number;
+  solde_du_mois: number;
 }
 
 export interface Depense {

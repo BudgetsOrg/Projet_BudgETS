@@ -12,7 +12,7 @@ export function TabSummary() {
     error: errorEnveloppe,
   } = useEnveloppes();
   const { budgets, loading: loadingBudget, error: errorBudget } = useBudgets();
-
+  console.log(budgets);
   //TODO : Pourrait être plus cute
   if (loadingEnveloppe || loadingBudget) return <div>Chargement...</div>;
 

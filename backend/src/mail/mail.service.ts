@@ -1,37 +1,40 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
-import { Resend } from 'resend';
+import * as nodemailer from 'nodemailer';
 
 @Injectable()
 export class MailService {
-  private resend: Resend;
+  private transporter;
 
   constructor() {
-    // On garde l'initialisation, mais on ne l'utilisera pas en test
-    this.resend = new Resend(process.env.RESEND_API_KEY || 're_fake_key');
+    this.transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: process.env.GMAIL_USER, 
+        pass: process.env.GMAIL_PASS, 
+      },
+    });
   }
 
   async sendResetPasswordEmail(email: string, token: string) {
-    // --- MODE SIMULATION ---
-    // console.log('--- SIMULATION D’ENVOI D’EMAIL ---');
-    // console.log(`Destinataire : ${email}`);
-    // console.log(`Token généré  : ${token}`);
-    // console.log(`Lien de reset : http://localhost:3000/auth/reset-password?token=${token}`);
-    // console.log('---------------------------------');
+    try {
+      const mailOptions = {
+        from: '"Support BudgETS" <' + process.env.GMAIL_USER + '>',
+        to: email, // Ça va marcher pour n'importe qui maintenant !
+        subject: 'Réinitialisation de mot de passe - BudgETS',
+        html: `
+          <h3>Besoin d'un nouveau mot de passe ?</h3>
+          <p>Cliquez sur le lien ci-dessous pour le réinitialiser :</p>
+          <a href="http://localhost:3000/auth/reset-password?token=${token}">Réinitialiser mon mot de passe</a>
+          <p>Si vous n'avez pas demandé ce changement, ignorez ce message.</p>
+        `,
+      };
 
-    // On commente la partie réelle pour ne pas appeler l'API Resend
-    
-    await this.resend.emails.send({
-      from: 'BudgETS <onboarding@resend.dev>',
-      to: email,
-      subject: 'Réinitialisation de mot de passe',
-      html: `<p>Cliquez ici pour changer votre mot de passe :</p>
-            <a href="http://localhost:3000/auth/reset-password?token=${token}"> Réinitialiser </a>`,
-    });
-    
-
-    return { success: true, message: 'Email envoyé avec succès' };
-  } catch (error) {
-      console.error("Erreur lors de l'envoi de l'email:", error);
-      throw new InternalServerErrorException("Impossible d'envoyer l'email de récupération.");
+      const info = await this.transporter.sendMail(mailOptions);
+      console.log('Email envoyé avec succès ! ID:', info.messageId);
+      return { success: true };
+    } catch (error) {
+      console.error("Erreur SMTP :", error);
+      throw new InternalServerErrorException("Erreur lors de l'envoi du courriel.");
     }
+  }
 }

@@ -16,6 +16,12 @@ npm install -D @types/passport @types/passport-jwt
 //argon
 npm install argon2
 
+//Pour Sécurité
+npm install helmet
+
+//Pour Swagger documentation API
+npm install Swagger
+
 //pour resend
  npm install resend
 

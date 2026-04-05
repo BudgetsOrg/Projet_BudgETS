@@ -30,6 +30,9 @@ npm install helmet
 // pour instaler swagger
 npm install swagger
 
+//
+npm i @nestjs/mapped-types
+
 //pour la page d'incriptioon le front end doit sassurer de convertir le , en .
 pour les décimales, car JavaScript (et donc @Type) ne reconnaît pas la 
 virgule comme un séparateur mathématique par défaut.

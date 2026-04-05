@@ -21,6 +21,7 @@ export class BudgetService{
     return this.budgetRepository.save(budget); //sauvegarde l'entité budget dans la base de données et retourne le budget créé au frontend
     }
 
+    //Le budget le plus récent de l'utilisateur
     async findOne(userId: number) {
         const budget = await this.budgetRepository.findOne({
             where: { user: { id_user: userId } }, //comme un JOIN entre budget et user pour trouver le budget associé à l'id du user
@@ -35,6 +36,7 @@ export class BudgetService{
         return budget;
     }
 
+    //Historique
     async findAll(userId: number) {
         //retourne tous les budgets de l'utilisateur avec les enveloppes et les dépenses associées, 
         //triés par date de création décroissante pour retourner le budget le plus récent
@@ -45,6 +47,7 @@ export class BudgetService{
         });
     }      
 
+    //Un budget spécifique
     async findOneById(userId: number, id: number) {
         const budget = await this.budgetRepository.findOne({
             where: { id_budget: id, user: { id_user: userId } },

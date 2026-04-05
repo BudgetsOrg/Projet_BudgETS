@@ -8,14 +8,19 @@ import { ObjectifService } from './objectif.service';
 import { UpdateObjectifDto } from './dto/updateObjectif.dto';
 
 @ApiBearerAuth() // Indique que les routes de ce contrôleur nécessitent une authentification par token Bearer (JWT) pour Swagger
-@ApiResponse({ status: 401, description: 'Unauthorized' })
+@ApiResponse({ status: 401, description: 'Non autorisé' })
 @UseGuards(AuthGuard('jwt')) // protège la route : seul un user connecté peut créer
 @Controller('objectif')
 export class ObjectifController {
 
     constructor( private readonly objectifService: ObjectifService) {};
 
-    //url pour create
+    // Get('all-objectifs')
+    // getAll{
+
+    // }
+    @ApiResponse({ status: 201, description: 'Objectif créé avec succès' })
+    @ApiResponse({ status: 400, description: 'Requête invalide' })
     @Post()
     async create(@Body() dto: ObjectifDto, @Req() req: any) {
         // Grace a JwtStrategy, 'req.user' contient l'utilisateur trouvé en DB

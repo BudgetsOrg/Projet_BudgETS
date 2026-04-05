@@ -21,7 +21,7 @@ export class User {
   @Column({length: 50})
   prenom: string;
 
-  @ApiProperty({ example: 'john.doe@example.com' })
+  @ApiProperty({ example: 'johndoe@example.com' })
   @Column({unique: true})
   adresse_email: string;
 
@@ -30,7 +30,7 @@ export class User {
   @Column({ type: 'varchar',nullable: true, default: null })
   telephone?: string|null;
 
-  @ApiProperty({ example: 'hashedpassword' })
+  @ApiProperty({ example: 'password123' })
   @Column()
   @Exclude()
   password: string;

@@ -9,6 +9,7 @@ import {
 import { User } from '../entities/user.entity';
 import { BudgetRepository, UserRepository , ObjectifRepository} from 'src/repositories/index';
 import { InscriptionDto } from 'src/auth/dto';
+import { UpdateUserDto } from './dto/update_user.dto';
 
 @Injectable()
 export class UserService {
@@ -25,6 +26,16 @@ export class UserService {
       throw new NotFoundException('User not found');
     }
     return user;
+  }
+
+  async update(userId: number, updateUserDto: UpdateUserDto) {
+    const user = await this.userRepository.get(userId);
+
+    if (!user) {
+        throw new NotFoundException('Utilisateur non trouvé');
+    }
+
+    return this.userRepository.update(userId, updateUserDto);
   }
 
   //Supprime le user trouvé par son id, puis retourne un message de confirmation.

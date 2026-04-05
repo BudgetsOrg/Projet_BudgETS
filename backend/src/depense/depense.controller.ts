@@ -25,8 +25,8 @@ export class DepenseController {
     //Permet de récupérer toutes les dépenses associées à une enveloppe spécifique pour l'utilisateur connecté
     @ApiOperation({ summary: 'Récupérer toutes les dépenses d\'une enveloppe' })
     @ApiResponse({ status: 200, description: 'Dépenses récupérées avec succès' })
-    @ApiResponse({ status: 404, description: "{ message: 'Enveloppe non trouvée' }" })
-    @ApiResponse({ status: 400, description: "{ message: 'Pas la bonne requête pour récupérer les dépenses' }" })
+    @ApiResponse({ status: 404, description: 'Enveloppe non trouvée' })
+    @ApiResponse({ status: 400, description: 'Pas la bonne requête pour récupérer les dépenses' })
     @ApiParam({ name: 'enveloppeId', type: Number, example: 3, description: "L'id de l'enveloppe pour laquelle récupérer les dépenses" })
     @Get('enveloppe/:enveloppeId')
     findAllByEnveloppe(@Request() req, @Param('enveloppeId', ParseIntPipe) enveloppeId: number) {
@@ -36,8 +36,8 @@ export class DepenseController {
     //Permet de récupérer une dépense spécifique pour l'utilisateur connecté
     @ApiOperation({ summary: 'Récupérer une dépense spécifique' })
     @ApiResponse({ status: 200, description: 'Dépense récupérée avec succès' })
-    @ApiResponse({ status: 404, description: "{ message: 'Dépense non trouvée' }" })
-    @ApiResponse({ status: 400, description: "{ message: 'Pas la bonne requête pour récupérer la dépense' }" })
+    @ApiResponse({ status: 404, description: 'Dépense non trouvée' })
+    @ApiResponse({ status: 400, description: 'Pas la bonne requête pour récupérer la dépense' })
     @ApiParam({ name: 'id', type: Number, example: 3, description: "L'id de la dépense à récupérer" })
     @Get(':id')
     findOne(@Request() req, @Param('id', ParseIntPipe) id: number) {
@@ -46,8 +46,8 @@ export class DepenseController {
 
     //Permet de mettre à jour une dépense spécifique pour l'utilisateur connecté en utilisant les données fournies par le DTO
     @ApiResponse({ status: 200, description: 'Dépense mise à jour avec succès' })
-    @ApiResponse({ status: 404, description: "{ message: 'Dépense non trouvée' }" })
-    @ApiResponse({ status: 400, description: "{ message: 'Pas la bonne requête pour mettre à jour la dépense' }" })
+    @ApiResponse({ status: 404, description: 'Dépense non trouvée' })
+    @ApiResponse({ status: 400, description: 'Pas la bonne requête pour mettre à jour la dépense' })
     @ApiParam({ name: 'id', type: Number, example: 3, description: "L'id de la dépense à mettre à jour" })
     @Patch(':id')
     update(@Request() req, @Param('id', ParseIntPipe) id: number, @Body() updateDepenseDto: UpdateDepenseDto) {
@@ -56,8 +56,8 @@ export class DepenseController {
 
     //Permet de supprimer une dépense spécifique pour l'utilisateur connecté
     @ApiResponse({ status: 200, description: 'Dépense supprimée avec succès' })
-    @ApiResponse({ status: 404, description: "{ message: 'Dépense non trouvée' }" })
-    @ApiResponse({ status: 400, description: "{ message: 'Pas la bonne requête pour supprimer la dépense' }" })
+    @ApiResponse({ status: 404, description: 'Dépense non trouvée' })
+    @ApiResponse({ status: 400, description: 'Pas la bonne requête pour supprimer la dépense' })
     @ApiParam({ name: 'id', type: Number, example: 3, description: "L'id de la dépense à supprimer" })
     @Delete(':id')
     remove(@Request() req, @Param('id', ParseIntPipe) id: number) {

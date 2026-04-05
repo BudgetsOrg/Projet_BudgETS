@@ -19,18 +19,20 @@ npm install argon2
 //pour Gmail SMTP
 npm install nodemailer
 npm install -D @types/nodemailer
+//Pour Sécurité
+npm install helmet
+
+//Pour Swagger documentation API
+npm install Swagger
+
+//pour resend
+ npm install resend
 
 //pas encore utiliser
 $ npm i bcrypt
 $ npm i -D @types/bcrypt
 
-//
-npm install helmet
 
-// pour instaler swagger
-npm install swagger
-
-//
 npm i @nestjs/mapped-types
 
 //pour la page d'incriptioon le front end doit sassurer de convertir le , en .

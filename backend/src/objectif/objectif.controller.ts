@@ -53,4 +53,18 @@ export class ObjectifController {
     async remove(@Param('id', ParseIntPipe) id: number, @Req() req: any) {
         return this.objectifService.leaveOrDelete(id, req.user.id_user);
     }
+
+    //url pour inviter
+
+    @Post(':id/inviter')
+    async inviteMember(
+        @Param('id') id: number,
+        @Body('email') email: string,
+        @Req() req: any
+    ) {
+        // Optionnel : Vérifier d'abord si req.user.id_user est bien déjà membre de cet objectif 
+        // pour éviter qu'un inconnu n'invite des gens dans ton projet iPhone !
+        const inviterName = `${req.user.prenom} ${req.user.nom}`;
+        return this.objectifService.addMember(id, email, inviterName);
+    }
 }

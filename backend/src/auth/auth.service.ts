@@ -37,7 +37,7 @@ export class AuthService {
       return this.signToken(user.id_user, user.adresse_email);
     } catch (error) {
       if (error.code === 'ER_DUP_ENTRY') {
-        throw new ForbiddenException('Credentiel pris');
+        throw new ForbiddenException('Identifiants déjà utilisés');
       }
       throw error;
     }

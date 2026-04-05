@@ -1,5 +1,5 @@
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany,PrimaryGeneratedColumn } from 'typeorm';
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Depense } from './depense.entity';
 import { User } from './user.entity';
 
@@ -14,7 +14,7 @@ export class Categorie {
   @Column({length: 50, default: 'Catégorie'})
   nom_categorie: string;
 
-  @ApiProperty({ example: 30 })
+  @ApiPropertyOptional({ example: 30 })
   @Column({ default: 0 })
   recurence: number;
 

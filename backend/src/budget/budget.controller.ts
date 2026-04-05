@@ -8,7 +8,7 @@ import { ApiBearerAuth, ApiResponse, ApiParam, ApiOperation } from "@nestjs/swag
 import { Budget } from "src/entities/budget.entity";
 
 @ApiBearerAuth() // Indique que les routes de ce contrôleur nécessitent une authentification par token Bearer (JWT) pour Swagger
-@ApiResponse({ status: 401, description: 'Unauthorized' })
+@ApiResponse({ status: 401, description: 'Non autorisé' })
 @UseGuards(AuthGuard('jwt'))//Valide le JWT du User avant de procéder aux opérations, si pas valide retourne 401 pas trouvé. 
 @Controller('budget')
 export class BudgetController{
@@ -16,7 +16,7 @@ export class BudgetController{
 
     //Prends les donées des champs lors de l'inscription et les envoie au service pour créer un nouveau budget.
     @ApiResponse({ status: 201, description: 'Retourne le budget créé', type: Budget })
-    @ApiResponse({ status: 400, description: 'Requête invalide pour la création du budget' })
+    @ApiResponse({ status: 400, description: 'Requête invalide' })
     @Post()
     create(@Request() req, @Body() createBudgetDto: CreateBudgetDto) {
     return this.budgetService.create(req.user.id, createBudgetDto);
@@ -34,7 +34,7 @@ export class BudgetController{
     //Récupère le budget du user avec l'id du budget obtenu du JWT
     @ApiOperation({ summary: 'Récupérer le budget le plus récent de l\'utilisateur' })
     @ApiResponse({ status: 200, description: 'Budget récupéré avec succès', type: Budget })
-    @ApiResponse({ status: 404, description: "{ message: 'Aucun budget trouvé pour cet utilisateur' }" })
+    @ApiResponse({ status: 404, description: 'Aucun budget trouvé pour cet utilisateur' })
     @Get('me')
     findOne(@Request() req) {
         return this.budgetService.findOne(req.user.id);
@@ -44,6 +44,7 @@ export class BudgetController{
     @ApiOperation({ summary: 'Récupérer un budget spécifique de l\'utilisateur' })
     @ApiParam({ name: 'id', type: Number, description: 'ID du budget' })
     @ApiResponse({ status: 200, description: 'Budget trouvé avec enveloppes, dépenses et catégories' })
+    @ApiResponse({ status: 400, description: 'Requête invalide' })
     @ApiResponse({ status: 404, description: 'Budget non trouvé' })
     @Get(':id')
     findOneById(@Request() req, @Param('id', ParseIntPipe) id: number) {
@@ -52,8 +53,8 @@ export class BudgetController{
 
     //Permet de mettre à jour le budget du user avec l'id du budget et le nouveau solde du budget fournis par le dto
     @ApiResponse({ status: 200, description: 'Budget mis à jour avec succès', type: Budget })
-    @ApiResponse({ status: 404, description: "{ message: 'Budget non trouvé' }" })
-    @ApiResponse({ status: 400, description: "{ message: 'Pas la bonne requête pour mettre à jour le budget' }" })
+    @ApiResponse({ status: 404, description: "Budget non trouvé" })
+    @ApiResponse({ status: 400, description: "Requête invalide" })
     @ApiParam({ name: 'id', type: Number, example: 3, description: "L'id du budget à mettre à jour" })
     @Patch(':id')
     update(@Request() req, @Param('id', ParseIntPipe) id: number, @Body() updateBudgetDto: UpdateBudgetDto) {
@@ -62,8 +63,8 @@ export class BudgetController{
 
     //Permet de supprimer le budget du user avec l'id du budget
     @ApiResponse({ status: 200, description: 'Budget supprimé avec succès', type: Budget })
-    @ApiResponse({ status: 404, description: "{ message: 'Budget non trouvé' }" })
-    @ApiResponse({ status: 400, description: "{ message: 'Pas la bonne requête pour supprimer le budget' }" })
+    @ApiResponse({ status: 404, description: "Budget non trouvé" })
+    @ApiResponse({ status: 400, description: "Requête invalide" })
     @ApiParam({ name: 'id', type: Number, example: 3, description: "L'id du budget à supprimer" })
     @Delete(':id')
     remove(@Request() req, @Param('id', ParseIntPipe) id: number) {

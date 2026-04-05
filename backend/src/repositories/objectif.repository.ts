@@ -10,28 +10,6 @@ export class ObjectifRepository {
     private readonly repo: Repository<Objectif>,
   ) {}
 
-  async leaveOrDelete(objectifId: number, userId: number): Promise<void> {
-    // 1. On récupère l'objectif avec ses utilisateurs
-    const objectif = await this.repo.findOne({
-      where: { id_objectif: objectifId },
-      relations: ['users'],
-    });
-
-    if (!objectif) return;
-
-    // 2. On retire l'utilisateur de la liste
-    objectif.users = objectif.users.filter((user) => user.id_user !== userId);
-
-    // 3. LOGIQUE ANTI-ORPHELIN
-    if (objectif.users.length === 0) {
-      // S'il n'y a plus personne, on supprime l'objectif carrément
-      await this.repo.remove(objectif);
-    } else {
-      // S'il reste du monde (objectif commun), on sauvegarde juste la nouvelle liste
-      await this.repo.save(objectif);
-    }
-  }
-
   //Create
   async create(
     montant: number,
@@ -69,4 +47,39 @@ export class ObjectifRepository {
       relations: ['users'], //pour avoir les membres
     });
   }
+
+  //update
+  async update(userId:number, objectifId:number, data: Partial<Objectif>):Promise<Objectif|null>{
+    const objectif = await this.getOne(userId,objectifId);
+    if(!objectif){
+      return null;
+    }
+    const updatedObjectif = this.repo.merge(objectif, data);
+
+    return await this.repo.save(updatedObjectif);
+  }
+
+  //delete
+  async leaveOrDelete(objectifId: number, userId: number): Promise<void> {
+    //recupere objectif avec ses users
+    const objectif = await this.repo.findOne({
+      where: { id_objectif: objectifId },
+      relations: ['users'],
+    });
+
+    if (!objectif) return;
+
+    // on retire l'utilisateur de la liste
+    objectif.users = objectif.users.filter((user) => user.id_user !== userId);
+
+    // LOGIQUE ANTI-ORPHELIN
+    if (objectif.users.length === 0) {
+      // S'il n'y a plus personne, on supprime l'objectif carrément
+      await this.repo.remove(objectif);
+    } else {
+      // S'il reste du monde (objectif commun), on sauvegarde juste la nouvelle liste
+      await this.repo.save(objectif);
+    }
+  }
+
 }

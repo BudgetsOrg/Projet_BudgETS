@@ -10,15 +10,15 @@ import { ApiBearerAuth } from '@nestjs/swagger/dist/decorators/api-bearer.decora
 
 @ApiBearerAuth() // Indique que les routes de ce contrôleur nécessitent une authentification par token Bearer (JWT) pour Swagger
 @UseGuards(AuthGuard('jwt'))
-@ApiResponse({ status: 401, description: 'Unauthorized' })
+@ApiResponse({ status: 401, description: 'Non autorisé' })
 @Controller('enveloppe')
 export class EnveloppeController{
     
     constructor(private readonly enveloppeService: EnveloppeService) {}
 
-    @ApiResponse({ status: 200, description: 'Enveloppe créée avec succès' })
-    @ApiResponse({ status: 400, description: "{ message: 'Pas la bonne requête pour créer l’enveloppe / Dépasse le budget' }" })
-    @ApiResponse({ status: 404, description: "{ message: 'Budget non trouvé' }" })
+    @ApiResponse({ status: 201, description: 'Enveloppe créée avec succès' })
+    @ApiResponse({ status: 400, description: "Requête invalide / Montant dépasse le budget" })
+    @ApiResponse({ status: 404, description: "Budget non trouvé"})
     @Post()
     create(@Request() request, @Body() createEnveloppeDto: CreateEnveloppeDto) {
         return this.enveloppeService.create(request.user.id, createEnveloppeDto);
@@ -27,15 +27,15 @@ export class EnveloppeController{
     // Récupérer toutes les enveloppes
     @ApiOperation({ summary: 'Récupérer toutes les enveloppes de l\'utilisateur' })
     @ApiResponse({ status: 200, description: 'Liste des enveloppes récupérée avec succès' })
-    @ApiResponse({ status: 404, description: "{ message: 'Aucun budget trouvé pour cet utilisateur' }" })
+    @ApiResponse({ status: 404, description: "Aucun budget trouvé pour cet utilisateur" })
     @Get()
     findAll(@Request() request) {
         return this.enveloppeService.findAll(request.user.id);
     }
 
     @ApiResponse({ status: 200, description: 'Enveloppe mise à jour avec succès' })
-    @ApiResponse({ status: 404, description: "{ message: 'Enveloppe non trouvée' }" })
-    @ApiResponse({ status: 400, description: "{ message: 'Pas la bonne requête pour mettre à jour l’enveloppe / Dépasse le budget' }" })
+    @ApiResponse({ status: 404, description: 'Enveloppe non trouvée'})
+    @ApiResponse({ status: 400, description: "Requête invalide / Montant dépasse le budget" })
     @ApiParam({ name: 'id', type: Number, example: 3, description: "L'id de l'enveloppe à mettre à jour" })
     @Patch(':id')
     update(@Request() request, @Body() updateEnveloppeDto: UpdateEnveloppeDto, @Param('id', ParseIntPipe) id: number) {
@@ -44,8 +44,8 @@ export class EnveloppeController{
 
     @ApiOperation({ summary: 'Récupérer une enveloppe spécifique' })
     @ApiResponse({ status: 200, description: 'Enveloppe récupérée avec succès' })
-    @ApiResponse({ status: 404, description: "{ message: 'Enveloppe non trouvée' }" })
-    @ApiResponse({ status: 400, description: "{ message: 'Pas la bonne requête pour récupérer/modifié l’enveloppe, ou bien Dépasse le budget' }" })
+    @ApiResponse({ status: 404, description: 'Enveloppe non trouvée' })
+    @ApiResponse({ status: 400, description: 'Requête invalide/ Montant dépasse le budget' })
     @ApiParam({ name: 'id', type: Number, example: 3, description: "L'id de l'enveloppe à récupérer" })
     @Get(':id')
     findOne(@Request() request, @Param('id', ParseIntPipe) id: number) {
@@ -53,8 +53,8 @@ export class EnveloppeController{
     }
 
     @ApiResponse({ status: 200, description: 'Enveloppe supprimée avec succès' })
-    @ApiResponse({ status: 404, description: "{ message: 'Enveloppe non trouvée' }" })
-    @ApiResponse({ status: 400, description: "{ message: 'Pas la bonne requête pour supprimer l’enveloppe' }" })
+    @ApiResponse({ status: 404, description: 'Enveloppe non trouvée' })
+    @ApiResponse({ status: 400, description: 'Requête invalide' })
     @ApiParam({ name: 'id', type: Number, example: 3, description: "L'id de l'enveloppe à supprimer" })
     @Delete(':id')
     remove(@Request() request, @Param('id', ParseIntPipe) id: number) {

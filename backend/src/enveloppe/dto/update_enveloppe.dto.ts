@@ -6,13 +6,13 @@ export class UpdateEnveloppeDto {
     @IsOptional()
     @IsString()
     @IsNotEmpty()
-    titre: string;
+    titre?: string;
     
     @ApiPropertyOptional({ example: 1000, description: 'Montant de l\'enveloppe' })
     @IsOptional()
     @IsNumber({maxDecimalPlaces: 2})
     @IsPositive()
-    montant: number;
+    montant?: number;
 
     @ApiPropertyOptional({ example: 'image.jpg', description: 'Image de l\'enveloppe' })
     @IsOptional()

@@ -1,5 +1,5 @@
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Objectif } from './objectif.entity';
 
 @Entity()
@@ -13,7 +13,7 @@ export class Economie {
   @Column('decimal', { precision: 10, scale: 2 , default: 0 })
   montant: number;
 
-  @ApiProperty({ example: '2023-02-01T00:00:00.000Z' })
+  @ApiPropertyOptional({ example: '2023-02-01T00:00:00.000Z' })
   @Column({ default: () => 'CURRENT_TIMESTAMP' })
   date: Date;
 

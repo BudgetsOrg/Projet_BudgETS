@@ -1,5 +1,5 @@
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany, ManyToOne, ManyToMany, JoinTable } from 'typeorm';
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { User } from './user.entity';
 import { Economie } from './economie.entity';
 
@@ -19,12 +19,12 @@ export class Objectif {
   montant: number;
 
   //valeur default de 18 ans vu que notre appli cible les étudiants d'université.
-  @ApiProperty({ example: 'https://example.com/objectif.jpg', nullable: true })
+  @ApiPropertyOptional({ example: 'https://example.com/objectif.jpg', nullable: true })
   @Column({ type: 'varchar', nullable: true, default: null })
   image?: string | null;
 
-  @ApiProperty({ example: '2023-12-31T00:00:00.000Z' })
-  @Column({ default: () => 'CURRENT_TIMESTAMP' })
+  @ApiPropertyOptional({ example: '2023-12-31T00:00:00.000Z' })
+  @Column({ default: () => 'CURRENT_TIMESTAMP + INTERVAL 30 DAY' })
   date_limite: Date;
 
   // //Relation, Attribut de navigation, Si le user est supprimé alors tous ses objectifs sont supprimés aussi (CASCADE)

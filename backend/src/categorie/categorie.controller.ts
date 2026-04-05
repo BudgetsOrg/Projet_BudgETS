@@ -8,14 +8,14 @@ import { ApiBearerAuth } from '@nestjs/swagger/dist/decorators/api-bearer.decora
 
 @ApiBearerAuth() // Indique que les routes de ce contrôleur nécessitent une authentification par token Bearer (JWT) pour Swagger
 @UseGuards(AuthGuard('jwt')) //Valide le JWT du User avant de procéder aux opérations, si pas valide retourne 401 pas trouvé.
-@ApiResponse({ status: 401, description: 'Unauthorized' })
+@ApiResponse({ status: 401, description: 'Non autorisé' })
 @Controller('categorie')
 export class CategorieController {
     constructor(private readonly categorieService: CategorieService) {}
 
     //Prends les donées des champs lors de la création d'une catégorie et les envoie au service pour créer une nouvelle catégorie.
-    @ApiResponse({ status: 200, description: 'Catégorie créée avec succès' })
-    @ApiResponse({ status: 400, description: 'Requête invalide pour créer une catégorie' })
+    @ApiResponse({ status: 201, description: 'Catégorie créée avec succès' })
+    @ApiResponse({ status: 400, description: 'Requête invalide' })
     @Post()
     create(@Request() req, @Body() createCategorieDto: CreateCategorieDto) {
         return this.categorieService.create(req.user.id, createCategorieDto);
@@ -24,7 +24,7 @@ export class CategorieController {
     //Récupère toutes les catégories du user avec l'id du user obtenu du JWT
     @ApiOperation({ summary: 'Récupérer toutes les catégories' })
     @ApiResponse({ status: 200, description: 'Liste des catégories récupérée avec succès' })
-    @ApiResponse({ status: 404, description: "{ message: 'Catégorie non trouvée' }" })
+    @ApiResponse({ status: 404, description: 'Catégorie non trouvée'})
     @Get()
     findAll(@Request() req) {
         return this.categorieService.findAll(req.user.id);
@@ -33,8 +33,8 @@ export class CategorieController {
     //Récupère une catégorie spécifique du user avec l'id de la catégorie et l'id du user obtenus du JWT
     @ApiOperation({ summary: 'Récupérer une catégorie par son ID' })
     @ApiResponse({ status: 200, description: 'Catégorie récupérée avec succès' })
-    @ApiResponse({ status: 404, description: "{ message: 'Catégorie non trouvée' }" })
-    @ApiResponse({ status: 400, description: "{ message: 'Pas la bonne requête pour récupérer la catégorie' }" })
+    @ApiResponse({ status: 404, description: 'Catégorie non trouvée' })
+    @ApiResponse({ status: 400, description: 'Requête invalide' })
     @ApiParam({ name: 'id', type: Number, example: 3, description: "L'id de la catégorie à récupérer" })
     @Get(':id')
     findOne(@Request() req, @Param('id', ParseIntPipe) id: number) {
@@ -43,8 +43,8 @@ export class CategorieController {
 
     //Permet de mettre à jour une catégorie du user avec l'id de la catégorie et les champs fournis par le dto
     @ApiResponse({ status: 200, description: 'Catégorie mise à jour avec succès' })
-    @ApiResponse({ status: 404, description: "{ message: 'Catégorie non trouvée' }" })
-    @ApiResponse({ status: 400, description: "{ message: 'Pas la bonne requête pour mettre à jour la catégorie' }" })
+    @ApiResponse({ status: 404, description: 'Catégorie non trouvée' })
+    @ApiResponse({ status: 400, description: 'Requête invalide' })
     @ApiParam({ name: 'id', type: Number, example: 3, description: "L'id de la catégorie à mettre à jour" })
     @Patch(':id')
     update(@Request() req, @Param('id', ParseIntPipe) id: number, @Body() updateCategorieDto: UpdateCategorieDto) {
@@ -53,8 +53,8 @@ export class CategorieController {
 
     //Permet de supprimer une catégorie du user avec l'id de la catégorie et l'id du user obtenus du JWT
     @ApiResponse({ status: 200, description: 'Catégorie supprimée avec succès' })
-    @ApiResponse({ status: 404, description: "{ message: 'Catégorie non trouvée' }" })
-    @ApiResponse({ status: 400, description: "{ message: 'Pas la bonne requête pour supprimer la catégorie' }" })
+    @ApiResponse({ status: 404, description: 'Catégorie non trouvée' })
+    @ApiResponse({ status: 400, description: 'Requête invalide' })
     @ApiParam({ name: 'id', type: Number, example: 3, description: "L'id de la catégorie à supprimer" })
     @Delete(':id')
     remove(@Request() req, @Param('id', ParseIntPipe) id: number) {

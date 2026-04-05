@@ -6,7 +6,7 @@
  * Read (All)   getAll(filters)    Récupérer une liste (avec pagination/filtres).
  * Update       update(id, data)   Modifier une entrée existante.
  * Delete       delete(id)         Supprimer une entrée.
- * 
+ *              leaveOrDelete()    Pour supprimer ou sortir d'un objectif commun/shared
  */
 
 export * from './user.repository';

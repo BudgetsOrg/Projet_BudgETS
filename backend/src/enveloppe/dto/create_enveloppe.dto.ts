@@ -1,8 +1,8 @@
 import { IsNotEmpty, IsNumber, IsOptional, IsPositive, IsString} from "class-validator";
-import { ApiProperty } from "@nestjs/swagger/dist/decorators/api-property.decorator";
+import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger/dist/decorators/api-property.decorator";
 
 export class CreateEnveloppeDto {
-    @ApiProperty({ example: 'Alimentation', description: 'Titre de l\'enveloppe' })
+    @ApiProperty({ example: 'Nourriture', description: 'Titre de l\'enveloppe' })
     @IsString()
     @IsNotEmpty()
     titre: string;
@@ -12,8 +12,9 @@ export class CreateEnveloppeDto {
     @IsPositive()
     montant: number;
 
-    @ApiProperty({ example: 'image.jpg', description: 'Image de l\'enveloppe' })
+    @ApiPropertyOptional({ example: 'image.jpg', description: 'Image de l\'enveloppe' })
     @IsOptional()
     @IsString()
     image?: string;
+    
 }

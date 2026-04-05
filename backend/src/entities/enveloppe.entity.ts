@@ -9,7 +9,7 @@ export class Enveloppe {
   @PrimaryGeneratedColumn()
   id_enveloppe: number;
 
-  @ApiProperty({ example: 'Enveloppe Alimentaire' })
+  @ApiProperty({ example: 'Enveloppe Nourriture' })
   @Column({length: 100, default: 'Enveloppe'})
   titre: string;
 

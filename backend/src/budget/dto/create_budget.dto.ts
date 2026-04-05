@@ -6,9 +6,4 @@ export class CreateBudgetDto {
     @IsNumber({maxDecimalPlaces: 2})
     @Min(0)
     soldeDuMois: number;
-
-    @ApiPropertyOptional({ example: '2026-04-01', description: 'Date de création du budget' })
-    @IsDateString()
-    @IsOptional()
-    date_creation: Date
 }

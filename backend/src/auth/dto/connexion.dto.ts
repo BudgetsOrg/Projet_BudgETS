@@ -5,7 +5,7 @@ import { ApiProperty } from "@nestjs/swagger/dist/decorators/api-property.decora
 
 
 export class ConnexionDto{
-    @ApiProperty({ example: 'john.doe@example.com', description: 'Adresse email de l\'utilisateur' })
+    @ApiProperty({ example: 'johndoe@example.com', description: 'Adresse email de l\'utilisateur' })
     @IsEmail({}, { message: 'Format de courriel invalide' })
     @IsNotEmpty({ message: 'L\'adresse courriel est requise' })
     adresse_email: string;

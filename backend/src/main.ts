@@ -11,7 +11,7 @@ async function bootstrap() {
   // Ajoute des en-têtes de sécurité pour protéger l'application contre certaines vulnérabilités web courantes
   app.use(helmet());
 
-  // CORS configuration pour autoriser les requêtes depuis le frontend en ligne et en local et bloquer les autres origines.
+  // CORS configuration pour autoriser les requêtes depuis le frontend en ligne et en local et bloquer les autres origines. Voir backend/information.txt pour les détails sur comment tester.
   app.enableCors({
     origin: [
         'http://localhost:5173',
@@ -59,7 +59,7 @@ Utiliser le bouton **Authorize** en haut à droite pour entrer le token.
 ---
 
 ## Structure de l'application
-- **User**      → possède plusieurs **Budgets**
+- **User**→ possède plusieurs **Budgets**
 - **Budget**    → possède plusieurs **Enveloppes**
 - **Enveloppe** → possède plusieurs **Dépenses**
 - **User**      → possède plusieurs **Catégories**
@@ -70,7 +70,28 @@ Utiliser le bouton **Authorize** en haut à droite pour entrer le token.
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api', app, document);
+  SwaggerModule.setup('api', app, document, {
+    customCss: `
+        .response-col_links { display: none !important; }
+        .btn.authorize span { font-size: 0; }
+        .btn.authorize span::after { content: 'Autoriser'; font-size: 14px; }
+        .btn.try-out__btn { font-size: 0; }
+        .btn.try-out__btn::after { content: 'Essayer'; font-size: 14px; }
+        .btn.execute { font-size: 0; }
+        .btn.execute::after { content: 'Exécuter'; font-size: 14px; }
+        .btn.btn-clear { font-size: 0; }
+        .btn.btn-clear::after { content: 'Effacer'; font-size: 14px; }
+        .download-contents { display: none !important; }
+        .copy-to-clipboard { display: none !important; }
+    `,
+    swaggerOptions: {
+      operationsSorter: (a, b) => {
+          const order = ['post', 'get', 'patch', 'delete'];
+          return order.indexOf(a.get('method')) - order.indexOf(b.get('method'));
+      },
+      tagsSorter: 'alpha',
+    },
+  });
 
   // Redirige la route racine du lien backend vers l'interface Swagger. 
   const httpAdapter = app.getHttpAdapter();

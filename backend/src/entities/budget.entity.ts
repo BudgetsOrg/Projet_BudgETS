@@ -1,5 +1,5 @@
-import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
-import { ApiProperty,ApiPropertyOptional } from '@nestjs/swagger';
+import { BeforeInsert, Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { ApiHideProperty, ApiProperty,ApiPropertyOptional } from '@nestjs/swagger';
 import { User } from './user.entity';
 import { Enveloppe } from './enveloppe.entity';
 
@@ -14,7 +14,8 @@ export class Budget {
   @Column('decimal', { precision: 10, scale: 2 , default: 0 })
   soldeDuMois: number;
 
-  @ApiPropertyOptional({ example: '2023-01-01T00:00:00.000Z' })
+  //date de création du budget, avec une valeur par défaut de la date actuelle.
+  @ApiProperty({ example: '2023-04-01T00:00:00.000Z' })
   @Column({ default: () => 'CURRENT_TIMESTAMP' })
   date_creation: Date;
 
@@ -26,4 +27,11 @@ export class Budget {
   @ApiProperty({ type: [Enveloppe] })
   @OneToMany(() => Enveloppe, (enveloppe) => enveloppe.budget)
   enveloppes: Enveloppe[];
+
+  //On set le cham de date_creation à la première date du mois
+  @BeforeInsert()
+  setDateCreation() {
+    const now = new Date();
+    this.date_creation = new Date(now.getFullYear(), now.getMonth(), 1);
+  }
 }

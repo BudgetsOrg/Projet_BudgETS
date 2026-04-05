@@ -4,7 +4,7 @@ $ npm i --save class-validator class-transformer
 bibliothèque officielle de NestJS pour gérer les JSON Web Tokens (JWT).
 npm i --save @nestjs/jwt installer
 
-// POUR LE TOKEN (JWT) - Très important pour ton Guard !
+// POUR LE TOKEN (JWT)
 npm install --save passport-jwt
 npm install --save-dev @types/passport-jwt
 
@@ -16,12 +16,19 @@ npm install -D @types/passport @types/passport-jwt
 //argon
 npm install argon2
 
-//pour resend
- npm install resend
+//pour Gmail SMTP
+npm install nodemailer
+npm install -D @types/nodemailer
 
 //pas encore utiliser
 $ npm i bcrypt
 $ npm i -D @types/bcrypt
+
+//
+npm install helmet
+
+// pour instaler swagger
+npm install swagger
 
 //pour la page d'incriptioon le front end doit sassurer de convertir le , en .
 pour les décimales, car JavaScript (et donc @Type) ne reconnaît pas la 

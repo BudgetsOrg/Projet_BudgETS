@@ -49,16 +49,9 @@ export class BudgetRepository{
     }
 
     // // UPDATE
-    // async update(id: number, data: Partial<User>) {
-    //     // Logique update
-    //     await this.repo.update(id,data);
-    //     return this.get(id); // retourne lobjet deja mis a jour
-    // }
+    
 
     // // DELETE
-    // async delete(id: number) {
-    // const result = await this.repo.delete(id);
-    // return result; 
-    // }
+    
 
 }

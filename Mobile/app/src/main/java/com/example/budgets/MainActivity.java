@@ -1,5 +1,6 @@
 package com.example.budgets;
 
+import android.content.Intent;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment; // Utiliser la version androidx
@@ -34,6 +35,10 @@ public class MainActivity extends AppCompatActivity {
                 // selectedFragment = new EnveloppesFragment();
             } else if (id == R.id.nav_finance) {
                 // selectedFragment = new FinanceFragment();
+                //si on clique sur cet icone on voit la liste d'objectifs
+                Intent intent = new Intent(MainActivity.this, ListeObjectifs.class);
+                startActivity(intent);
+                return true;
             }
 
             // Remplacement du fragment dans le FrameLayout

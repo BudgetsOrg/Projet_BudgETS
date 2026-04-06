@@ -44,13 +44,14 @@ public class PagePrincipaleActivite extends AppCompatActivity {
         diagramme = findViewById(R.id.diagramme);
         pourcentage = findViewById(R.id.pourcentage);
         mettreAJourCercle(0);
-
+        //liste verticale avec enveloppes
         recyclerView = findViewById(R.id.listeEnveloppes);
         listeEnveloppes = new ArrayList<>();
         if(listeEnveloppes.isEmpty()){
+            //quand ya pas d'enveloppe on voit le texte
             message.setVisibility(VISIBLE);
         }
-
+        //liste horizontale enveloppes recentes
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         adapter = new EnveloppeAdapter(listeEnveloppes);
         recyclerView.setAdapter(adapter);
@@ -60,11 +61,11 @@ public class PagePrincipaleActivite extends AppCompatActivity {
         recyclerViewRecent.setAdapter(recenteAdapter);
 
         creerBudjet=findViewById(R.id.creerBudjet);
-
+        //pop up ajouter un budjet
         creerBudjet.setOnClickListener(v -> afficherPopUp());
     }
     public void afficherPopUp(){
-
+        //pop up ajouter
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(PagePrincipaleActivite.this);
         View view = getLayoutInflater().inflate(R.layout.activite_creer_budjet, null);
         alertDialogBuilder.setView(view);
@@ -89,25 +90,16 @@ public class PagePrincipaleActivite extends AppCompatActivity {
             String titre = nom.getText().toString();
             String montant = montantEntre.getText().toString();
 
-
             if (!titre.isEmpty() && !montant.isEmpty()) {
-                Enveloppe enveloppe = new Enveloppe(titre,montant);
-                listeEnveloppes.add(0,enveloppe);
-                EditText soldeEdit = findViewById(R.id.soldeMois);
-                String solde = soldeEdit.getText().toString().replace("$", "");
-                double soldeTotal = Double.parseDouble(solde);
-                if (soldeTotal > 0) {
-                    double montantTot = 0;
-                    for (Enveloppe e : listeEnveloppes) {
-                        montantTot += Double.parseDouble(e.getMontant());
-                    }
-                    int score = (int) ((montantTot * 100) / soldeTotal);
-                    animerCercle(Math.min(score, 100));
-                }
+                //On crée l'objet et on l'ajoute à la liste
+                Enveloppe enveloppe = new Enveloppe(titre, montant);
+                listeEnveloppes.add(0, enveloppe);
+                recalculerCercle();
+
+                // Rafraichir liste
                 adapter.notifyDataSetChanged();
                 recenteAdapter.notifyDataSetChanged();
                 message.setVisibility(GONE);
-
                 Toast.makeText(this, "L'enveloppe " + titre + " a été ajoutée!", Toast.LENGTH_SHORT).show();
                 dialog.dismiss();
             } else {
@@ -123,8 +115,9 @@ public class PagePrincipaleActivite extends AppCompatActivity {
 
         diagramme = findViewById(R.id.diagramme);
         pourcentage = findViewById(R.id.pourcentage);
+        //remplir le cercle de 0 au pourcentage
         ObjectAnimator animation = ObjectAnimator.ofInt(diagramme, "progress", 0, pourcentageCible);
-        animation.setDuration(1000);
+        animation.setDuration(1000);//temps animation
         animation.setInterpolator(new DecelerateInterpolator());
         animation.start();
 
@@ -135,6 +128,8 @@ public class PagePrincipaleActivite extends AppCompatActivity {
         pourcentage.setText(valeur + "%");
     }
     public void recalculerCercle() {
+        //calcule la somme des enveloppes
+        //lance animation
         EditText soldeEdit = findViewById(R.id.soldeMois);
         String solde = soldeEdit.getText().toString().replace("$", "");
 

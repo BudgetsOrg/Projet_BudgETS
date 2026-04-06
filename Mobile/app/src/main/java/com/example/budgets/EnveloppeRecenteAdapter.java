@@ -20,6 +20,7 @@ public class EnveloppeRecenteAdapter extends RecyclerView.Adapter<EnveloppeRecen
     @NonNull
     @Override
     public MyViewHolderRecent onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        // Cherche le fichier enveloppe_recente.xml
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.enveloppe_recente,parent,false);
         return  new MyViewHolderRecent(view);
     }
@@ -32,6 +33,7 @@ public class EnveloppeRecenteAdapter extends RecyclerView.Adapter<EnveloppeRecen
 
         //pour quand on clique sur une enveloppe ca mene a sa page
         holder.itemView.setOnClickListener(v -> {
+            // Envoie le titre et le montant a la page d'une enveloppe
             Intent intent = new Intent(v.getContext(), PageUneEnveloppe.class);
             intent.putExtra("titre", enveloppe.getTitre());
             intent.putExtra("budget", enveloppe.getMontant());

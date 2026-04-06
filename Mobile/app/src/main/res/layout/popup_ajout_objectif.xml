@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="350dp"
+    android:layout_height="wrap_content"
+    app:cardCornerRadius="20dp"
+    app:cardElevation="10dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="25dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#1B4D3E"
+            android:gravity="center"
+            android:padding="10dp"
+            android:text="Nouvel objectif"
+            android:textColor="#FFFFFF"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="Titre de votre objectif :"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/nomObj"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:hint="Ex: Achat voiture"
+            android:inputType="text"
+            android:padding="10dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:text="Montant de l'objectif :"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/montantObj"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:hint="Ex: 1000"
+            android:inputType="numberDecimal"
+            android:padding="10dp" />
+
+        <Button
+            android:id="@+id/btnCreerObj"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="25dp"
+            android:backgroundTint="#8BC34A"
+            android:text="Ajouter"
+            android:textColor="#FFFFFF" />
+
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

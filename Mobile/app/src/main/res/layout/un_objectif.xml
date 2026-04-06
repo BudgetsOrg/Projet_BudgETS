@@ -10,10 +10,11 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="15dp">
+        android:padding="15dp"
+        android:background="@drawable/fond_objectif">
 
         <TextView
-            android:id="@+id/titreObjectif"
+            android:id="@+id/titreObjectifAdp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Titre"
@@ -22,7 +23,7 @@
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/montantObjectif"
+            android:id="@+id/montantObjectifAdp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"

@@ -1,34 +1,39 @@
 package com.example.budgets;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.widget.Button;
-import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 public class PageObjectif extends AppCompatActivity {
     TextView titre;
-    TextView montantObjectif;
-    TextView montant;
+    TextView montantCible;
     TextView pourcentage;
-    double totalAccumule = 0;
-    double cible = 0;
+    ProgressBar barre;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activite_un_objectif);
+
         titre = findViewById(R.id.titreObjectif);
-        montantObjectif = findViewById(R.id.montantObjectif);
-        montant = findViewById(R.id.montant);
-        pourcentage = findViewById(R.id.pourcentage);
+        montantCible = findViewById(R.id.montantObjectif);
+        pourcentage = findViewById(R.id.pourcentageAtteint);
+        barre = findViewById(R.id.barreObjectif);
+        //chercher l'objectif de l'adaptateur
+        Objectif objectif = (Objectif) getIntent().getSerializableExtra("objectif");
 
+        if (objectif != null) {
+            titre.setText(objectif.getTitre());//affiche nom
+            montantCible.setText(objectif.getMontantObjectif() + "$");
+            //calcul % barre
+            double actuel = Double.parseDouble(objectif.getMontant());
+            double cible = Double.parseDouble(objectif.getMontantObjectif());
+            int score = (int) ((actuel * 100) / cible);
 
+            pourcentage.setText(score + "%");
+            barre.setProgress(score);//remplir barre
+        }
     }
-
 }
-
-

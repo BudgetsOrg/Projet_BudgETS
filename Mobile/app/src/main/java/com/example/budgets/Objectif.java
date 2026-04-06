@@ -1,6 +1,8 @@
 package com.example.budgets;
 
-public class Objectif {
+import java.io.Serializable;
+
+public class Objectif implements Serializable {
     String titre;
     String montant;
     String montantObjectif;

@@ -24,7 +24,7 @@ public class PageUneEnveloppe extends AppCompatActivity {
         pourcentage = findViewById(R.id.pourcentageDepense);
         btnAjouter = findViewById(R.id.btnAjouterDepense);
         btnSupprimer = findViewById(R.id.btnSupprimer);
-
+        // Récupère le titre et le budget envoyées par la page précédente
         String titre = getIntent().getStringExtra("titre");
         String budgetChaine = getIntent().getStringExtra("budget").replace("$", "");
 
@@ -33,7 +33,7 @@ public class PageUneEnveloppe extends AppCompatActivity {
         budget.setText(budgetChaine + "$");
 
 
-        mettreAJourPourcentage();
+        mettreAJourPourcentage(); //calcule depenses/budget
             btnAjouter.setOnClickListener(v->{
                 Intent intent = new Intent(PageUneEnveloppe.this,PageAjouterDepense.class);
                 startActivity(intent);

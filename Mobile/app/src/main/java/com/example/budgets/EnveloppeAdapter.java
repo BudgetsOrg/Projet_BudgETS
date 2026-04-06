@@ -25,34 +25,38 @@ public class EnveloppeAdapter extends RecyclerView.Adapter<EnveloppeAdapter.MyVi
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        // Chercher le fichier enveloppe.xml pour créer une ligne de la liste
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.enveloppe,parent,false);
         return  new MyViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-
+        // chercher l'enveloppe qui est à la position dans la liste
         Enveloppe enveloppe = listeEnveloppe.get(position);
+        // Affiche le nom et le montant dans les cases
         holder.textViewNom.setText(enveloppe.getTitre());
         holder.textViewMontant.setText(enveloppe.getMontant() + "$");
+        // Gestion bouton supprimer une enveloppe
         holder.btnSupprimer.setOnClickListener(v -> {
             Context context = v.getContext();
+            //pop up confirmation
             new AlertDialog.Builder(context)
                     .setTitle("Supprimer")
                     .setMessage("Êtes-vous sûr de vouloir supprimer l'enveloppe " + enveloppe.getTitre() + " ?")
                     .setPositiveButton("Oui", (dialog, which) -> {
-                        int pos = holder.getAdapterPosition();
+                        int pos = holder.getAdapterPosition();// Trouve la position actuelle
                         if (pos != RecyclerView.NO_POSITION) {
                             listeEnveloppe.remove(pos);
-                            notifyItemRemoved(pos);
-                            notifyItemRangeChanged(pos, listeEnveloppe.size());
-
+                            notifyItemRemoved(pos);//enleve l'objet de la liste
+                            notifyItemRangeChanged(pos, listeEnveloppe.size());//metre a jour les pos
+                            //recalculer le cercle a la page principale
                             if (context instanceof PagePrincipaleActivite) {
                                 ((PagePrincipaleActivite) context).recalculerCercle();
                             }
                         }
                     })
-                    .setNegativeButton("Non", null)
+                    .setNegativeButton("Non", null)//ferme fenetre
                     .show();
         });
     }
@@ -60,9 +64,10 @@ public class EnveloppeAdapter extends RecyclerView.Adapter<EnveloppeAdapter.MyVi
 
     @Override
     public int getItemCount() {
-        return listeEnveloppe.size();
+        return listeEnveloppe.size();//chercher nombre elements
     }
     public static class MyViewHolder extends RecyclerView.ViewHolder{
+        //elements
         TextView textViewNom;
         TextView textViewMontant;
         Button btnSupprimer;

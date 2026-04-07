@@ -3,7 +3,7 @@ import useBudgets from "../../../hooks/UseBudgets";
 import useEnveloppes from "../../../hooks/UseEnveloppes";
 import type { Budget } from "../../../interfaces";
 import NouvelleEnveloppe from "../../../popups/AjoutPopup/NouvelleEnveloppe";
-
+import edit from "../../../../public/img/edit-icon.svg";
 export function TabSummary() {
   const [showNouveauPopup, setShowNouveauPopup] = useState(false);
   const {
@@ -20,10 +20,15 @@ export function TabSummary() {
     return <div>Erreur: {errorEnveloppe || errorBudget}</div>;
   return (
     <div>
-      <h3 className="text-xl font-semibold text-gray-800 my-4">
-        Solde pour le mois: {budgets[0]?.soldeDuMois ?? budgets[0]?.solde ?? 0}{" "}
-        $
-      </h3>
+      <div className="flex flex-row gap-4">
+        <h3 className="text-xl font-semibold text-gray-800">
+          Solde pour le mois:{" "}
+          {budgets[0]?.soldeDuMois ?? budgets[0]?.solde ?? 0} $
+        </h3>
+        <button className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-1 px-1 rounded-lg">
+          <img className="w-5 h-5" src={edit} alt="Edit" />
+        </button>
+      </div>
       <table className="w-full text-left table-auto min-w-max text-slate-800">
         <tr>
           <th>

@@ -17,27 +17,48 @@ export default function Sous_Section() {
           {/* première case */}
           <div className="bg-[#E6DFD0] rounded-lg p-2 mb-4 ml-6 flex flex-col w-full">
             <div className="flex flex-row">
-              <img src={cashCoins} alt="Cash and coins" />
-              <h3 className="font-bold">Épargnez en enveloppes pour le mois</h3>
-              <p></p>
+              <img className="w-40 h-40" src={cashCoins} alt="Cash and coins" />
+              <div>
+                <h3 className="font-bold">
+                  Épargnez en enveloppes pour le mois
+                </h3>
+                <p className="text-[var(--color-primary)]">
+                  À chaque mois, vous pouvez épargnez vos dépenses dans des
+                  enveloppes afin de savoir combien vous avez dépensé dans
+                  chaque catégorie. Vous pouvez vous fixer des montants maximum
+                  par mois, et ce, pour chaque catégorie d'enveloppes.
+                </p>
+              </div>
             </div>
           </div>
           {/*deuxième case */}
           <div className="bg-[#E6DFD0] rounded-lg p-2 mb-4 ml-20 flex flex-col w-full">
             <div className="flex flex-row">
               <img src={safe} alt="Safe" />
-              <h3 className="font-bold">Atteignez vos objectifs financiers</h3>
+              <div>
+                <h3 className="font-bold">
+                  Atteignez vos objectifs financiers
+                </h3>
+                <p className="text-[var(--color-primary)]">
+                  Vous pouvez vous créer des objectifs à court ou long terme,
+                  seul ou avec des amis, pour vous motiver à les atteindre et
+                  rendre le tout plus atteignable.
+                </p>
+              </div>
             </div>
-            <p></p>
           </div>
           {/*troisième case */}
           <div className="bg-[#E6DFD0] rounded-lg p-2 mb-4 ml-6 flex flex-col w-full">
             <div className="flex flex-row">
               <img src={checklist} alt="Checklist" />
-              <h3 className="font-bold">
-                Suivez vos dépenses et vos objectifs
-              </h3>
-              <p></p>
+              <div>
+                <h3 className="font-bold">Suivez vos dépenses</h3>
+                <p className="text-[var(--color-primary)]">
+                  Chaque dépense peut être catégorisée et suivie pour vous aider
+                  à rester sur la bonne voie. Il est plus facile de voir dans
+                  quoi vous dépensez et alors savoir où couper.
+                </p>
+              </div>
             </div>
           </div>
         </div>

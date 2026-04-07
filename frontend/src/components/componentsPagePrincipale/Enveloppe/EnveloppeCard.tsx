@@ -1,5 +1,5 @@
 import type { Enveloppe } from "../../../interfaces";
-
+import trash from "../../../../public/img/trash.svg";
 export function EnveloppeCard(enveloppe: Enveloppe) {
   return (
     <div
@@ -7,8 +7,11 @@ export function EnveloppeCard(enveloppe: Enveloppe) {
       className="rounded-xl overflow-hidden shadow-md flex flex-col h-64 hover:opacity-90 cursor-pointer shadow-lg transition-shadow duration-300"
     >
       {/*le titre*/}
-      <div className="bg-[var(--color-primary)] p-4 flex-shrink-0">
+      <div className="flex flex-row justify-between bg-[var(--color-primary)] p-4 flex-shrink-0">
         <h2 className="text-lg font-semibold text-white">{enveloppe.titre}</h2>
+        <button className="bg-white hover:bg-[var(--color-delete)] rounded-full">
+          <img src={trash} alt="Supprimer" className="w-10 h-10" />
+        </button>
       </div>
       <div
         className="flex-grow w-full"

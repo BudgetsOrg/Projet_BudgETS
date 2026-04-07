@@ -22,7 +22,7 @@ export function SummaryPieChart() {
 
   return (
     <div className="h-64 w-full flex items-center justify-center">
-      <PieChart data={dataTab} radius={100} className="h-full w-full" />
+      <PieChart data={dataTab} radius={50} className="h-full w-full" />
     </div>
   );
 }

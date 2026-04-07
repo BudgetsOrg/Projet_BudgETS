@@ -4,8 +4,10 @@ import useEnveloppes from "../../../hooks/UseEnveloppes";
 import type { Budget } from "../../../interfaces";
 import NouvelleEnveloppe from "../../../popups/AjoutPopup/NouvelleEnveloppe";
 import edit from "../../../../public/img/edit-icon.svg";
+import SoldeBudgetPrinc from "../../../popups/SoldeBudgetPrinc";
 export function TabSummary() {
   const [showNouveauPopup, setShowNouveauPopup] = useState(false);
+  const [showSoldePopup, setShowSoldePopup] = useState(false);
   const {
     enveloppes,
     loading: loadingEnveloppe,
@@ -25,9 +27,18 @@ export function TabSummary() {
           Solde pour le mois:{" "}
           {budgets[0]?.soldeDuMois ?? budgets[0]?.solde ?? 0} $
         </h3>
-        <button className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-1 px-1 rounded-lg">
+        <button
+          className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-1 px-1 rounded-lg"
+          onClick={() => setShowSoldePopup(true)}
+        >
           <img className="w-5 h-5" src={edit} alt="Edit" />
         </button>
+      </div>
+      <div className="">
+        <SoldeBudgetPrinc
+          showPopup={showSoldePopup}
+          closePopup={() => setShowSoldePopup(false)}
+        ></SoldeBudgetPrinc>
       </div>
       <table className="w-full text-left table-auto min-w-max text-slate-800">
         <tr>

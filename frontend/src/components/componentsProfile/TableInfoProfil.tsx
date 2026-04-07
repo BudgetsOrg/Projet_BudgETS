@@ -1,12 +1,21 @@
-import type { User } from "../../interfaces";
+import type { Utilisateur } from "../../interfaces";
 import SuppressionCompte from "../../popups/SuppressionPopup/SuppressionCompte";
 import React, { useState } from "react";
 
-export function TableInfoProfil(user: User) {
+interface TableInfoProfilProps {
+  user: Utilisateur;
+}
+
+export function TableInfoProfil({ user }: TableInfoProfilProps) {
   const [showSuppressionPopup, setShowSuppressionPopup] = useState(false);
   const [editMode, setEditMode] = useState(false);
   const closeEditMode = () => setEditMode(false);
   const openEditMode = () => setEditMode(true);
+
+  const formattedTelephone = user.telephone
+    ? `${user.telephone.slice(0, 3)}-${user.telephone.slice(3, 6)}-${user.telephone.slice(6, 10)}`
+    : "";
+
   return (
     <div className="w-full p-4 bg-white shadow-md rounded-lg">
       <table className="w-full table-fixed break-words">
@@ -37,11 +46,7 @@ export function TableInfoProfil(user: User) {
               <input
                 id="date_naissance"
                 defaultValue={
-                  String(user.date_naissance.getDate()) +
-                  "/" +
-                  String(user.date_naissance.getMonth() + 1) +
-                  "/" +
-                  String(user.date_naissance.getFullYear())
+                  user.date_naissance
                 }
                 readOnly={!editMode}
               />
@@ -66,13 +71,7 @@ export function TableInfoProfil(user: User) {
             <td>
               <input
                 id="telephone"
-                defaultValue={
-                  user.telephone.substring(0, 3) +
-                  "-" +
-                  user.telephone.substring(3, 6) +
-                  "-" +
-                  user.telephone.substring(6, 10)
-                }
+                defaultValue={formattedTelephone}
                 readOnly={!editMode}
               />
             </td>
@@ -111,10 +110,10 @@ export function TableInfoProfil(user: User) {
         <SuppressionCompte
           showPopup={showSuppressionPopup}
           closePopup={() => setShowSuppressionPopup(false)}
-          onDelete={function (): void {
-            throw new Error("Function not implemented.");
+          onDelete={() => {
+            console.warn("Suppression de compte non implémentée");
           }}
-        ></SuppressionCompte>
+        />
       </div>
     </div>
   );

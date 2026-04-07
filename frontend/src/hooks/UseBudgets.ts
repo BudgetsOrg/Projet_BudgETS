@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getBudget } from "../api/BudgetApi";
+import { getLastBudget } from "../api/BudgetApi";
 import type { Budget } from "../interfaces";
 
 // Utilise la fonction getBudget pour récupérer les budgets de l'utilisateur et gère les états de chargement et d'erreur
@@ -11,7 +11,7 @@ export default function useBudgets() {
   useEffect(() => {
     async function fetchData() {
       try {
-        const data = await getBudget();
+        const data = await getLastBudget();
         setBudgets(data);
       } catch (err: any) {
         setError(err.message);

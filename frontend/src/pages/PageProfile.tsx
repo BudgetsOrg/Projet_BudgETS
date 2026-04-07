@@ -21,7 +21,7 @@ export function PageProfile() {
         </div>
       </div>
       <div className="px-4 sm:px-6 md:px-10 w-full md:w-3/4 lg:w-1/2 mx-auto">
-        <TableInfoProfil {...user} />
+        <TableInfoProfil user={user} />
       </div>
     </div>
   );

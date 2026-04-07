@@ -6,25 +6,24 @@ let loggedInUser: Utilisateur | null = null;
 const API_URL_GLOBAL = "https://projetbudgets-backend.up.railway.app";
 const API_URL_LOCAL = "http://localhost:3000";
 const token = localStorage.getItem("token");
-const debug = false;
+const debug = true;
 // choose one
 const local = false;
 //A modifier pour get un user.
 export async function getUtilisateur() {
   if (debug) {
-    const mockEnveloppe1 = {
-      id_enveloppe: 1,
-      titre: "Mock Enveloppe 2",
-      montant: 1000,
-      image: "https://picsum.photos/200/300",
+    const mockUser: Utilisateur = {
+      id_user: 1,
+      nom: "Doe",
+      prenom: "John",
+      adresse_email: "john.doe@example.com",
+      telephone: "1234567890",
+      image: "https://thispersondoesnotexist.com/",
+      date_naissance: "1990-01-01",
+      password: "123",
+      soldeDumois: 50,
     };
-    const mockEnveloppe2 = {
-      id_enveloppe: 2,
-      titre: "Mock Enveloppe 3",
-      montant: 2000,
-      image: "https://picsum.photos/200/302",
-    };
-    return [mockEnveloppe1, mockEnveloppe2];
+    return mockUser;
   } else {
     if (local) {
       const response = await fetch(`${API_URL_LOCAL}/enveloppe`, {

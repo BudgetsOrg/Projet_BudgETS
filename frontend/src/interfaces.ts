@@ -1,4 +1,3 @@
-// 1. Define an interface to describe the shape of the JSON object
 export interface Enveloppe {
   id_enveloppe: number;
   titre: string;
@@ -6,30 +5,31 @@ export interface Enveloppe {
   image: string;
 }
 
-export interface Obj {
-  id: number;
+// à faire
+export interface Objectif {
+  id_objectif: number;
   name: string;
   image: string;
 }
 
+// pour le pie chart
 export interface Data {
   title: string;
   value: number;
   color: string;
 }
 
-// i think this is wrong !
 export interface Budget {
-  id_budget?: number;
-  soldeDuMois?: number;
-  solde?: number; // API may return `solde` instead of `soldeDuMois`
+  id_budget: number;
+  soldeDuMois: number;
   date_creation: string | Date;
-  user_id?: Utilisateur;
+  user_id: Utilisateur;
   objectifs?: Objectif[];
   enveloppes?: Enveloppe[];
   categories?: Categorie[];
 }
 
+// à faire
 export interface Objectif {
   id_objectif: number;
   titre: string;
@@ -51,18 +51,29 @@ export interface Utilisateur {
   soldeDumois: number;
 }
 
+// vérifier l'id
 export interface Depense {
-  id?: number;
-  titre: string;
-  categorie: string;
-  prix: number;
+  id_depense: number;
+  nom_depense: string;
+  montant: number;
   date: string;
+  id_enveloppe: number;
+  id_categorie: number;
 }
 
+// à faire
 export interface Categorie {
   id_categorie: number;
   nom_categorie: string;
   recurence: number;
   depenses: Depense[];
-  user_id: number;
+  id_user: number;
+}
+
+// vérifier l'id
+export interface Economie {
+  id_economie: number;
+  montant: number;
+  date: string;
+  id_objectif: number;
 }

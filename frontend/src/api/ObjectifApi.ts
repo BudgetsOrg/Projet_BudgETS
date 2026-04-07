@@ -6,7 +6,7 @@ const API_URL_LOCAL = "http://localhost:3000";
 const token =
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImVtYWlsIjoiam9obmRvZUBleGFtcGxlLmNvbSIsImlhdCI6MTc3NTE1MjI1MywiZXhwIjoxNzc1MjM4NjUzfQ.YzE3xvT7r97x26eUGf-vVMVKKshvVTEMTy1JBj9odcY";
 //localStorage.getItem("token");
-const debug = false;
+const debug = true;
 // choose one
 const local = false;
 
@@ -29,11 +29,22 @@ export async function getObjectif() {
       user_id: 1,
     };
     return [mockObjectif1, mockObjectif2];
+  }
+  if (local) {
+    const response = await fetch(`${API_URL_LOCAL}/enveloppe`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.json();
   } else {
-    const response = await fetch(`${API_URL_GLOBAL}/objectif`);
-    if (!response.ok) {
-      throw new Error("Erreur lors du fetch");
-    }
+    const response = await fetch(`${API_URL_GLOBAL}/enveloppe`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
     return response.json();
   }
 }

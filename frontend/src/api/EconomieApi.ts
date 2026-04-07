@@ -1,54 +1,58 @@
-import type { Budget } from "../interfaces";
+import type { Economie } from "../interfaces";
 const API_URL_GLOBAL = "https://projetbudgets-backend.up.railway.app";
-const API_URL_LOCAL = import.meta.env.VITE_API_URL || "http://localhost:3000";
+const API_URL_LOCAL = "http://localhost:3000";
 const token =
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImVtYWlsIjoiam9obmRvZUBleGFtcGxlLmNvbSIsImlhdCI6MTc3NTE1MjI1MywiZXhwIjoxNzc1MjM4NjUzfQ.YzE3xvT7r97x26eUGf-vVMVKKshvVTEMTy1JBj9odcY";
 //localStorage.getItem("token");
-const debug = true;
+const debug = false;
 // choose one
 const local = false;
 
-export async function getLastBudget() {
+export async function getEconomie(id_objectif: number) {
   if (debug) {
-    const mockBudget1 = {
-      id_budget: 1,
-      solde: 5000,
-      soldeDuMois: 5000,
-      date_creation: new Date("2026-04-01"),
-      user_id: 1,
+    const mockEconomie1 = {
+      id: 1,
+      titre: "Mock Economie 1",
+      montant: 100,
+      date: "2026-03-29",
     };
-    const mockBudget2 = {
-      id_budget: 2,
-      solde: 2000,
-      soldeDuMois: 2000,
-      date_creation: new Date("2026-02-01"),
-      user_id: 1,
+    const mockEconomie2 = {
+      id: 2,
+      titre: "Mock Economie 2",
+      montant: 200,
+      date: "2026-03-26",
     };
-    return [mockBudget1, mockBudget2];
+    return [mockEconomie1, mockEconomie2];
   } else {
     if (local) {
-      const response = await fetch(`${API_URL_LOCAL}/budget/me`, {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${token}`,
+      const response = await fetch(
+        `${API_URL_LOCAL}/economie/objectif/${id_objectif}`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         },
-      });
+      );
       return response.json();
     } else {
-      const response = await fetch(`${API_URL_GLOBAL}/budget/me`, {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${token}`,
+      const response = await fetch(
+        `${API_URL_GLOBAL}/economie/objectif/${id_objectif}`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         },
-      });
+      );
       return response.json();
     }
   }
 }
 
-export async function getBudgetById(id_budget: number) {
+export async function getOneEconomie(id_economie: number) {
   if (local) {
-    const response = await fetch(`${API_URL_LOCAL}/budget/${id_budget}`, {
+    const response = await fetch(`${API_URL_LOCAL}/economie/${id_economie}`, {
       method: "GET",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -56,7 +60,7 @@ export async function getBudgetById(id_budget: number) {
     });
     return response.json();
   } else {
-    const response = await fetch(`${API_URL_GLOBAL}/budget/${id_budget}`, {
+    const response = await fetch(`${API_URL_GLOBAL}/economie/${id_economie}`, {
       method: "GET",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -66,37 +70,33 @@ export async function getBudgetById(id_budget: number) {
   }
 }
 
-export async function getBudgetHistorique() {
-  // à faire : ne comprend pas
-}
-
-export async function postBudget(budget: Budget) {
+export async function postEconomie(economie: Economie) {
   if (local) {
-    const response = await fetch(`${API_URL_LOCAL}/budget`, {
+    const response = await fetch(`${API_URL_LOCAL}/economie`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify(budget),
+      body: JSON.stringify(economie),
     });
     return response.json();
   } else {
-    const response = await fetch(`${API_URL_GLOBAL}/budget`, {
+    const response = await fetch(`${API_URL_GLOBAL}/economie`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify(budget),
+      body: JSON.stringify(economie),
     });
     return response.json();
   }
 }
 
-export async function deleteBudget(id_budget: number) {
+export async function deleteEconomie(id_economie: number) {
   if (local) {
-    const response = await fetch(`${API_URL_LOCAL}/budget/${id_budget}`, {
+    const response = await fetch(`${API_URL_LOCAL}/economie/${id_economie}`, {
       method: "DELETE",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -104,7 +104,7 @@ export async function deleteBudget(id_budget: number) {
     });
     return response.json();
   } else {
-    const response = await fetch(`${API_URL_GLOBAL}/budget/${id_budget}`, {
+    const response = await fetch(`${API_URL_GLOBAL}/economie/${id_economie}`, {
       method: "DELETE",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -114,30 +114,30 @@ export async function deleteBudget(id_budget: number) {
   }
 }
 
-export async function updateBudget(budget: Budget) {
+export async function updateEconomie(economie: Economie) {
   if (local) {
     const response = await fetch(
-      `${API_URL_LOCAL}/budget/${budget.id_budget}`,
+      `${API_URL_LOCAL}/economie/${economie.id_economie}`,
       {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({ budget }),
+        body: JSON.stringify({ economie }),
       },
     );
     return response.json();
   } else {
     const response = await fetch(
-      `${API_URL_GLOBAL}/budget/${budget.id_budget}`,
+      `${API_URL_GLOBAL}/economie/${economie.id_economie}`,
       {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({ budget }),
+        body: JSON.stringify({ economie }),
       },
     );
     return response.json();

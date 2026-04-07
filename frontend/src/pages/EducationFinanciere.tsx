@@ -4,7 +4,7 @@ import ellipse17 from "../../public/img/Ellipse17.png";
 import plante from "../../public/img/planteEduc.png";
 export default function EducationFinanciere() {
   return (
-    <div className="mx-20 my-10 space-y-12">
+    <div className="space-y-12 bg-gradient-to-br from-[#FDF7EB] to-white space-x-4 p-8">
       <h1 className="mb-4 text-4xl font-bold tracking-tight text-heading md:text-5xl lg:text-6xl">
         Éducation Financière
       </h1>

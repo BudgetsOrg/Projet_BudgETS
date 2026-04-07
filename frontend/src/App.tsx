@@ -10,6 +10,7 @@ import Connexion from "./pages/Connexion";
 import Enveloppe from "./pages/Enveloppe";
 import { PageProfile } from "./pages/PageProfile";
 import Accueuil from "./pages/Accueuil";
+import EducationFinanciere from "./pages/EducationFinanciere";
 
 function AppContent() {
   const location = useLocation();
@@ -30,6 +31,7 @@ function AppContent() {
         <Route path="/PagePrincipale" element={<PagePrincipale />} />
         <Route path="/PageEnveloppe" element={<Enveloppe />} />
         <Route path="/Profile" element={<PageProfile />} />
+        <Route path="/EducationFinanciere" element={<EducationFinanciere />} />
       </Routes>
     </>
   );

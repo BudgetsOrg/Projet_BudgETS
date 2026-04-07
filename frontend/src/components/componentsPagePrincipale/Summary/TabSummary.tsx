@@ -1,5 +1,5 @@
 import { useState } from "react";
-import useBudgets from "../../../hooks/UseBudgets";
+import { useBudgets } from "../../../hooks/UseBudgets";
 import useEnveloppes from "../../../hooks/UseEnveloppes";
 import type { Budget } from "../../../interfaces";
 import NouvelleEnveloppe from "../../../popups/AjoutPopup/NouvelleEnveloppe";
@@ -24,8 +24,7 @@ export function TabSummary() {
     <div>
       <div className="flex flex-row gap-4">
         <h3 className="text-xl font-semibold text-gray-800">
-          Solde pour le mois:{" "}
-          {budgets[0]?.soldeDuMois ?? budgets[0]?.solde ?? 0} $
+          Solde pour le mois: {budgets[0]?.soldeDuMois ?? 0} $
         </h3>
         <button
           className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-1 px-1 rounded-lg"

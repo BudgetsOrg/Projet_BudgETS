@@ -124,7 +124,7 @@ export async function updateBudget(budget: Budget) {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({ budget }),
+        body: JSON.stringify(budget),
       },
     );
     return response.json();
@@ -137,7 +137,7 @@ export async function updateBudget(budget: Budget) {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({ budget }),
+        body: JSON.stringify(budget),
       },
     );
     return response.json();

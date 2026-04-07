@@ -21,7 +21,8 @@ export function SummaryPieChart() {
   }
 
   return (
-    <div className="h-64 w-full flex items-center justify-center">
+    <div className="h-64 w-full flex flex-col gap-2 items-center justify-center">
+      <h2 className="font-bold"> Répartition des enveloppes </h2>
       <PieChart data={dataTab} radius={50} className="h-full w-full" />
     </div>
   );

@@ -1,3 +1,25 @@
 <resources>
     <string name="app_name">BudgETS</string>
+    <string name="txt_remplissez_informations">Remplissez les informations suivantes :</string>
+    <string name="inscription">Inscription</string>
+    <string name="nom">Nom</string>
+    <string name="prenom">Prénom</string>
+    <string name="date_de_naissance">Date de naissance :</string>
+    <string name="format_date">AAAA/MM/JJ</string>
+    <string name="email">Adresse email</string>
+    <string name="mdp">Mot de passe</string>
+    <string name="question_solde">Quel est votre solde de ce mois :</string>
+    <string name="txt_mdp">Mot de passe</string>
+    <string name="txt_inscription">Inscription</string>
+    <string name="page_profil">Page Profil</string>
+    <string name="info_perso">Vos Informations Personnels</string>
+    <string name="nom_profil">Nom :</string>
+    <string name="prenom_profil">Prénom :</string>
+    <string name="email_profil">Email :</string>
+    <string name="date_profil">Date de naissance :</string>
+    <string name="numero_de_telephone">Numero de telephone :</string>
+    <string name="mot_de_passe">Mot de passe :</string>
+    <string name="mdp_pv">************</string>
+    <string name="modifier_info">modifier information</string>
+    <string name="supprimer">Supprimer mon compte</string>
 </resources>

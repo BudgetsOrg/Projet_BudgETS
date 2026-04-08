@@ -10,7 +10,7 @@ export default function NouvelleEnveloppe({
   if (!showPopup) return null;
 
   return (
-    <div className="fixed top-40 h-90 w-100 left-20 bg-white bg-opacity-2 flex-col items-center justify-center rounded-lg shadow-lg">
+    <div className="fixed top-40 h-100 w-100 left-20 bg-white bg-opacity-2 flex-col items-center justify-center rounded-lg shadow-lg">
       <div className="w-full bg-[var(--color-primary)] px-6 py-4 rounded-lg text-center">
         <h4 className="font-bold text-lg p-4 text-align-center text-white">
           Créer un nouvel objectif
@@ -32,8 +32,15 @@ export default function NouvelleEnveloppe({
           name="montant"
           className="border border-gray-300 rounded-lg p-2 w-full"
         />
+        <label htmlFor="image">Image de l'objectif</label>
+        <input
+          type="text"
+          id="image"
+          name="image"
+          className="border border-gray-300 rounded-lg p-2 w-full"
+        />
 
-        <div className="flex flex-col gap-2 items-center mt-6">
+        <div className="flex flex-row justify-between gap-2 items-center mt-6">
           <button
             className="confirm-button py-2 px-4 rounded-lg"
             onClick={closePopup}

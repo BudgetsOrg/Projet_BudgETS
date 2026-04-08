@@ -1,6 +1,6 @@
 import { PieChart } from "react-minimal-pie-chart";
 import useEnveloppes from "../../../hooks/UseEnveloppes";
-import type { Data } from "../../../interfaces/interfaces";
+import type { Data } from "../../../interfaces";
 
 export function SummaryPieChart() {
   const { enveloppes, loading, error } = useEnveloppes();
@@ -21,8 +21,9 @@ export function SummaryPieChart() {
   }
 
   return (
-    <div className="h-64 w-full flex items-center justify-center">
-      <PieChart data={dataTab} radius={100} className="h-full w-full" />
+    <div className="h-64 w-full flex flex-col gap-2 items-center justify-center">
+      <h2 className="font-bold"> Répartition des enveloppes </h2>
+      <PieChart data={dataTab} radius={50} className="h-full w-full" />
     </div>
   );
 }

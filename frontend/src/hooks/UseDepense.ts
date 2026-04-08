@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { getDepenses } from "../api/api";
-import type { Depense } from "../interfaces/interfaces";
+import { getDepenses } from "../api/DepenseApi";
+import type { Depense } from "../interfaces";
 
 export default function useDepense() {
   const [depenses, setDepenses] = useState<Depense[]>([]);

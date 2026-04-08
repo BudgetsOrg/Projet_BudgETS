@@ -1,6 +1,6 @@
 // Mohamed
 import { useState } from "react"; // npm install
-import type { Depense } from "../interfaces/interfaces"; // ton interface est rendu dans la page pour ceux-ci
+import type { Depense } from "../interfaces.ts"; // ton interface est rendu dans la page pour ceux-ci
 import { GraphiqueEnveloppe } from "../components/graphiqueEnveloppe.tsx"; // le graphique de la page enveloppe
 import { getToken } from "../../public/token.ts";
 // Plus tard gerer avec le backend.

@@ -1,7 +1,7 @@
 //Justine
 import { PieChart } from "react-minimal-pie-chart";
-import type { Obj } from "../interfaces/interfaces.ts";
-import type { Enveloppe } from "../interfaces/interfaces.ts";
+import type { Objectif } from "../interfaces.ts";
+import type { Enveloppe } from "../interfaces.ts";
 import { EnveloppesBudgetaires } from "../components/componentsPagePrincipale/Enveloppe/EnveloppeDisplayer.tsx";
 import { Summary } from "../components/componentsPagePrincipale/Summary/Summary.tsx";
 import { TabSummary } from "../components/componentsPagePrincipale/Summary/TabSummary.tsx";

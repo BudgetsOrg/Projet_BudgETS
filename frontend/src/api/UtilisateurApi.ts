@@ -1,30 +1,29 @@
 // mes fonctions pour aller chercher les données à l'API
 // par contre, nous sommes en debug pour l'instant donc debug = true et nous avons des données préparées.
 
-import type { Utilisateur } from "../interfaces/interfaces"
+import type { Utilisateur } from "../interfaces";
 let loggedInUser: Utilisateur | null = null;
 const API_URL_GLOBAL = "https://projetbudgets-backend.up.railway.app";
 const API_URL_LOCAL = "http://localhost:3000";
 const token = localStorage.getItem("token");
-const debug = false;
+const debug = true;
 // choose one
 const local = false;
 //A modifier pour get un user.
 export async function getUtilisateur() {
   if (debug) {
-    const mockEnveloppe1 = {
-      id_enveloppe: 1,
-      titre: "Mock Enveloppe 2",
-      montant: 1000,
-      image: "https://picsum.photos/200/300",
+    const mockUser: Utilisateur = {
+      id_user: 1,
+      nom: "Doe",
+      prenom: "John",
+      adresse_email: "john.doe@example.com",
+      telephone: "1234567890",
+      image: "https://thispersondoesnotexist.com/",
+      date_naissance: "1990-01-01",
+      password: "123",
+      soldeDumois: 50,
     };
-    const mockEnveloppe2 = {
-      id_enveloppe: 2,
-      titre: "Mock Enveloppe 3",
-      montant: 2000,
-      image: "https://picsum.photos/200/302",
-    };
-    return [mockEnveloppe1, mockEnveloppe2];
+    return mockUser;
   } else {
     if (local) {
       const response = await fetch(`${API_URL_LOCAL}/enveloppe`, {
@@ -46,21 +45,22 @@ export async function getUtilisateur() {
   }
 }
 
-export async function postUtilisateur(nouvelleUtilisateur: Utilisateur): Promise<Response> {
+export async function postUtilisateur(
+  nouvelleUtilisateur: Utilisateur,
+): Promise<Response> {
+  const url = local
+    ? `${API_URL_LOCAL}/auth/inscription`
+    : `${API_URL_GLOBAL}/auth/inscription`;
 
-    const url = local 
-        ? `${API_URL_LOCAL}/auth/inscription`
-        : `${API_URL_GLOBAL}/auth/inscription`;
+  const reponse = await fetch(url, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(nouvelleUtilisateur),
+  });
 
-    const reponse = await fetch(url, {
-        method: "POST",
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(nouvelleUtilisateur),
-    });
-
-    return reponse;
+  return reponse;
 }
 
 export async function postConnexion(adresse_email :string,password : string ): Promise<Response> {
@@ -90,8 +90,8 @@ export async function login(adresse_email: string, password: string) {
       telephone: "1234567890",
       image: "https://thispersondoesnotexist.com/",
       date_naissance: "1990-01-01",
-      password :"123",
-      soldeDumois: 50
+      password: "123",
+      soldeDumois: 50,
     };
     loggedInUser = mockUser;
     return mockUser;

@@ -1,4 +1,4 @@
-import type { Objectif } from "../../../interfaces/interfaces";
+import type { Objectif } from "../../../interfaces";
 export function ObjectifRow(objectif: Objectif) {
   return (
     <div
@@ -14,6 +14,10 @@ export function ObjectifRow(objectif: Objectif) {
       <h3 className="absolute top-3 left-4 text-white text-lg font-bold">
         {objectif.titre}
       </h3>
+      <button className="absolute delete-button bottom-2 rounded-lg right-2 hover:bg-red-600 width-20 h-8">
+        Quitter
+      </button>
+      <p className="absolute right-2 top-2">Partagé avec 3 personnes</p>
     </div>
   );
 }

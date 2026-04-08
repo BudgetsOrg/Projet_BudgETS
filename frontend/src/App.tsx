@@ -9,9 +9,8 @@ import PagePrincipale from "./pages/PagePrincipale";
 import Connexion from "./pages/Connexion";
 import Enveloppe from "./pages/Enveloppe";
 import { PageProfile } from "./pages/PageProfile";
-import PageObjectifs from "./pages/Objectifs"
-import PageMdpOublie from "./pages/PageMotDePasseOublie"
-import Accueuil from "./style/pages/Accueuil";
+import Accueuil from "./pages/Accueuil";
+import EducationFinanciere from "./pages/EducationFinanciere";
 
 function AppContent() {
   const location = useLocation();
@@ -35,6 +34,7 @@ function AppContent() {
         <Route path="/Profile" element={<PageProfile />} />
         <Route path="/PageObjectifs" element={<PageObjectifs/>} />
         <Route path="/PageMdpOublie" element={<PageMdpOublie/>}/>
+        <Route path="/EducationFinanciere" element={<EducationFinanciere />} />
       </Routes>
       {/*</div>*/}
     </>

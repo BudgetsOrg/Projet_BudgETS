@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { postUtilisateur } from "../api/UtilisateurApi";
-import type { Utilisateur } from "../interfaces/interfaces";
+import type { Utilisateur } from "../interfaces";
 
 export default function usePostUtilisateur() {
   const [loading, setLoading] = useState(false);
@@ -22,7 +22,6 @@ export default function usePostUtilisateur() {
       const data = await response.json();
       setSuccess(true);
       return data;
-
     } catch (err: any) {
       setError(err.message);
     } finally {

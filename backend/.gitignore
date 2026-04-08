@@ -6,3 +6,5 @@ node_modules/
 
 # Fichiers de build
 dist/
+
+notesfordocker.txt

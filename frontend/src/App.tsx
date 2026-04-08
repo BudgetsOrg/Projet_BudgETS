@@ -9,13 +9,15 @@ import PagePrincipale from "./pages/PagePrincipale";
 import Connexion from "./pages/Connexion";
 import Enveloppe from "./pages/Enveloppe";
 import { PageProfile } from "./pages/PageProfile";
+import PageObjectifs from "./pages/Objectifs"
+import PageMdpOublie from "./pages/PageMotDePasseOublie"
 import Accueuil from "./style/pages/Accueuil";
 
 function AppContent() {
   const location = useLocation();
 
   // Pages où on NE veut pas afficher le header
-  const noHeaderRoutes = ["/PageConnexion", "/PageInscription", "/"];
+  const noHeaderRoutes = ["/PageConnexion", "/PageInscription","/PageMdpOublie"];
 
   const showHeader = !noHeaderRoutes.includes(location.pathname);
 
@@ -23,6 +25,7 @@ function AppContent() {
     <>
       {showHeader && <Header />}
 
+      {/*<div style={{paddingTop : showHeader ? "68px" : "0"}}>*/}
       <Routes>
         <Route path="/" element={<Accueuil />} />
         <Route path="/PageConnexion" element={<Connexion />} />
@@ -30,7 +33,10 @@ function AppContent() {
         <Route path="/PagePrincipale" element={<PagePrincipale />} />
         <Route path="/PageEnveloppe" element={<Enveloppe />} />
         <Route path="/Profile" element={<PageProfile />} />
+        <Route path="/PageObjectifs" element={<PageObjectifs/>} />
+        <Route path="/PageMdpOublie" element={<PageMdpOublie/>}/>
       </Routes>
+      {/*</div>*/}
     </>
   );
 }

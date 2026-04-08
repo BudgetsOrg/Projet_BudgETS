@@ -1,11 +1,42 @@
 // Mohamed
-import {getToken,setToken} from "../../public/token"
+import { useState} from "react";
+import {getToken,setToken} from "../../public/token";
+import type { Utilisateur }  from "../interfaces/interfaces";
+import { postConnexion } from "../api/UtilisateurApi";
+
 function Connexion() {
+
+const [donneeConnexion, setDonneeConnexion] = useState<Utilisateur>({adresse_email : "",nom:"", prenom : "",  password : "", date_naissance : "",soldeDumois:0});
+  
 
     
 const redirigerPageInscription = () => {
-  alert(getToken);
     window.location.href = "/PageInscription";
+}
+const redirigerPagePrincipale =  async () => {
+  const email = (document.getElementById("btn_email") as HTMLInputElement ).value;
+  const motDePasse = (document.getElementById("btn_password") as HTMLInputElement).value;
+  alert("Email :" + email + "Password : "+ motDePasse);
+  try {
+    const reponse = await postConnexion(email,motDePasse);
+    if(!reponse.ok){
+      const errorData = await reponse.json();
+      const message = Array.isArray(errorData.message)
+      ? errorData.message.join(', ')
+      : errorData.message;
+      throw new Error(message || "Erreur lors de la connexion");
+    }
+    const data = await reponse.json();
+    console.log("Utilisateur connecte");
+    alert("Utilisateur Connect avec le token : "+ data.access_token);
+    setToken(data.access_token);
+  } catch (error) {
+    alert("L'utilisateur avec le mail : "+ email + " n'existe pas");
+  }
+  window.location.href = "/"
+}
+const redirigerMotDePasseOublie = () => {
+  window.location.href = "/PageMdpOublie";
 }
     return (
         <>
@@ -16,10 +47,10 @@ const redirigerPageInscription = () => {
                 </div>
                 <div className="connexion_information">
                     <h1>Connexion</h1>
-                    <input type="email" name="btn_email" placeholder="Adresse email" />
-                    <input type="password" name="btn_password" placeholder="Mot de passe" />
-                    <label>Mot de passe oublié ?</label>
-                    <button className="btn_connexion" type="submit">Connexion</button>
+                    <input type="email" id="btn_email" placeholder="Adresse email" />
+                    <input type="password" id="btn_password" placeholder="Mot de passe" />
+                    <label onClick={redirigerMotDePasseOublie}>Mot de passe oublié ?</label>
+                    <button className="btn_connexion" type="submit" onClick={redirigerPagePrincipale}>Connexion</button>
                     <button className="btn_inscription" type="submit" onClick={redirigerPageInscription}>S'inscrire</button>
 
                     
@@ -28,6 +59,10 @@ const redirigerPageInscription = () => {
                 
                 <div className="triangle triangle-droite"/>
                 <div className="triangle triangle-gauche"/>
+
+                
+                <div className="triangle-animee triangle3"/>
+                <div className="triangle-animee triangle4"/>
 
             </div>
         </div>

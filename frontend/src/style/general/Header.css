@@ -1,3 +1,15 @@
+
+/*Permet de rendre defilant le header.*/
+/*.container_header {
+  background-color: transparent;
+  position:fixed;
+  top:0;
+  width: 100%;
+  z-index:1000;
+}*/
+.container_header {
+  background-color: transparent;
+}
 .container_header ul {
   display: flex;
   list-style-type: none;

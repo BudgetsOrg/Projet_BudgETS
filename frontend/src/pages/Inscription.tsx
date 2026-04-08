@@ -4,7 +4,7 @@
 import { useState} from "react";
 import type { Utilisateur }  from "../interfaces/interfaces";
 import { postUtilisateur } from "../api/UtilisateurApi";
-import { setToken, getToken } from "../../public/token"
+import { setToken, getToken } from "../../public/token";
 /*interface Utilisateur {
   nom: string;
   prenom: string;
@@ -83,11 +83,14 @@ if(donneeInscription.nom == "" || donneeInscription.prenom == "" || donneeInscri
  if(donneeInscription.nom == "" || donneeInscription.nom.length < 50){
     (document.getElementById("nom") as HTMLInputElement).placeholder ="Le nom est trop long ou vide.";
     return;
-  }else if(donneeInscription.prenom == "" || donneeInscription.prenom.length < 50){
+  }
+  if(donneeInscription.prenom == "" || donneeInscription.prenom.length < 50){
     (document.getElementById("prenom") as HTMLInputElement).placeholder ="Le prénom est trop long ou vide.";
     return;
-  }else if(donneeInscription){
+  }
+  if(donneeInscription.adresse_email == "" || donneeInscription.adresse_email){
     (document.getElementById("password") as HTMLInputElement).placeholder ="Le prénom est trop long ou vide.";
+    return;
   }
   alert("Un des champs n'a pas été rempli")
   return;
@@ -109,13 +112,13 @@ try {
     const data = await reponse.json();
     console.log("Utilisateur créé :", data);
     alert(`Utilisateur crée voila le token : ${data.access_token}`);
-    setToken(data.access_token);
+    //setToken(data.access_token);
     
 
     alert(`L'utilisateur ${donneeInscription.prenom} ${donneeInscription.nom} a été ajouté.(message après fetch)`);
     
     viderChamps();
-    window.location.href = "/PageConnexion"
+    window.location.href = "/PageConnexion";
 
   } catch (error: any) {
     console.error(error);

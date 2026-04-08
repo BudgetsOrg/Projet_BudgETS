@@ -2,6 +2,7 @@
 import { useState } from "react"; // npm install
 import type { Depense } from "../interfaces/interfaces"; // ton interface est rendu dans la page pour ceux-ci
 import { GraphiqueEnveloppe } from "../components/graphiqueEnveloppe.tsx"; // le graphique de la page enveloppe
+import { getToken } from "../../public/token.ts";
 // Plus tard gerer avec le backend.
 const enveloppeId = 1;
 
@@ -27,6 +28,7 @@ const donneesInitiales = {
 };
 
 function Enveloppe() {
+  alert("voila le token " + getToken());
   const [modalEditOuvert, setModalEditOuvert] = useState(false);
 
   const [editData, setEditData] = useState({
@@ -71,6 +73,13 @@ function Enveloppe() {
     setNouvelleDepense({ titre: "", categorie: "", prix: 0, date: "" });
   };
 
+    const couleurBarre = (pct: number): string => {
+  // Interpolation jaune (#e6b800) → orange (#e8442a)
+  const r = Math.round(230 + (232 - 230) * (pct / 100));
+  const g = Math.round(184 + (68  - 184) * (pct / 100));
+  const b = Math.round(0   + (42  - 0)   * (pct / 100));
+  return `rgb(${r}, ${g}, ${b})`;
+};
   // Lorsqu'on relie le backend au frontend on utilisera la version en bas.
   const confirmerAjout = () => {
     if (
@@ -234,7 +243,7 @@ const confirmerEditEnveloppe = async () => {
       <div className="enveloppe_barre_fond">
         <div
           className="enveloppe_barre_remplie"
-          style={{ width: `${pourcentage}%` }}
+          style={{ width: `${pourcentage}%` , backgroundColor:couleurBarre(pourcentage)}}
         />
         <span className="enveloppe_barre_pourcentage">
           {Math.round(pourcentage)}%

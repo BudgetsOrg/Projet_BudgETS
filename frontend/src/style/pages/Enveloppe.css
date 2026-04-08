@@ -55,7 +55,6 @@
 }
 
 .enveloppe_barre_remplie {
-  background-color: #e8442a;
   height: 100%;
   border-radius: 999px;
   transition: width 0.4s ease;

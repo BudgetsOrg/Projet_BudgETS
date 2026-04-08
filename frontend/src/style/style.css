@@ -4,6 +4,8 @@
 @import "./pages/Connexion.css";
 @import "./pages/Enveloppe.css";
 @import "./general/Header.css";
+@import "./pages/Objectifs.css";
+@import "./pages/PageMotDePasseOublie.css";
 
 /* Reset global pour éviter le contour blanc / margin par défaut */
 @layer base {

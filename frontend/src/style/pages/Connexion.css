@@ -112,3 +112,17 @@ button:hover {
   background: rgb(4, 25, 20);
   clip-path: polygon(0% 0%, 40% 100%, 0% 100%);
 }
+
+
+.triangle3 {
+    bottom: 50px;
+    left: 50px;
+    animation: float1 8s ease-in-out infinite;
+}
+
+.triangle4 {
+    top: 50px;
+    right: 50px;
+    transform: rotate(180deg);
+    animation: float2 10s ease-in-out infinite;
+}

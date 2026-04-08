@@ -63,7 +63,24 @@ export async function postUtilisateur(nouvelleUtilisateur: Utilisateur): Promise
     return reponse;
 }
 
-export async function login(username: string, password: string) {
+export async function postConnexion(adresse_email :string,password : string ): Promise<Response> {
+
+    const url = local 
+        ? `${API_URL_LOCAL}/auth/connexion`
+        : `${API_URL_GLOBAL}/auth/connexion`;
+
+    const reponse = await fetch(url, {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({adresse_email,password}),
+    });
+
+    return reponse;
+}
+
+export async function login(adresse_email: string, password: string) {
   if (debug) {
     const mockUser: Utilisateur = {
       id_user: 1,
@@ -78,13 +95,13 @@ export async function login(username: string, password: string) {
     };
     loggedInUser = mockUser;
     return mockUser;
-  } else {
-    const response = await fetch(`${API_URL_GLOBAL}/login`, {
+  } else if(local) {
+    const response = await fetch(`${API_URL_GLOBAL}/connexion`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ username, password }),
+      body: JSON.stringify({ adresse_email, password }),
     });
     if (!response.ok) {
       throw new Error("Erreur lors du login");

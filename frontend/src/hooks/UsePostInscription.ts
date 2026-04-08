@@ -7,7 +7,7 @@ export default function usePostUtilisateur() {
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
 
-  const ajouterUtilisateur = async (nouvelleUtilisateur: Utilisateur) => {
+  const connexionUtilisateur = async (nouvelleUtilisateur: Utilisateur) => {
     setLoading(true);
     setError(null);
     setSuccess(false);
@@ -16,7 +16,7 @@ export default function usePostUtilisateur() {
       const response = await postUtilisateur(nouvelleUtilisateur);
 
       if (!response.ok) {
-        throw new Error("Erreur lors de l'inscription");
+        throw new Error("Erreur lors de la connexion");
       }
 
       const data = await response.json();
@@ -30,5 +30,5 @@ export default function usePostUtilisateur() {
     }
   };
 
-  return { ajouterUtilisateur, loading, error, success };
+  return { connexionUtilisateur, loading, error, success };
 }

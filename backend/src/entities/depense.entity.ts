@@ -22,6 +22,10 @@ export class Depense {
   @Column({ default: () => 'CURRENT_TIMESTAMP' })
   date: Date;
 
+  @ApiPropertyOptional({ example: false })
+  @Column({default: false})
+  recurrente: boolean;
+
   //Relation, Attribut de navigation, Si l'enveloppe est supprimée alors toutes les dépenses associées sont supprimées aussi (CASCADE)
   @ApiProperty({ type: () => Enveloppe })
   @ManyToOne(() => Enveloppe, (enveloppe) => enveloppe.depenses,{ onDelete: 'CASCADE' })

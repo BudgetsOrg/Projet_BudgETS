@@ -13,7 +13,9 @@ import { PageProfile } from "./pages/PageProfile";
 import Accueuil from "./pages/Accueuil";
 import PageObjectifs from "./pages/Objectifs";
 import EducationFinanciere from "./pages/EducationFinanciere";
-import PageMotDePasseOublie from "./pages/PageMotDePasseOublie";
+import PageObjectifs from "./pages/Objectifs";
+import PageMdpOublie from "./pages/PageMotDePasseOublie";
+
 function AppContent() {
   const location = useLocation();
 

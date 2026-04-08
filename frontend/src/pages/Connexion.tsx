@@ -32,6 +32,7 @@ const redirigerPagePrincipale =  async () => {
     setToken(data.access_token);
   } catch (error) {
     alert("L'utilisateur avec le mail : "+ email + " n'existe pas");
+    return;
   }
   window.location.href = "/"
 }

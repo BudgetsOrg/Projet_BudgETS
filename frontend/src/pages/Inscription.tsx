@@ -1,8 +1,8 @@
 //Mohamed
 // Page d'inscription pour les nouveaux utilisateurs
 // Dans le cas ou le significateur soit un , alors le transformer en .
-import { useState } from "react";
-import type { Utilisateur } from "../interfaces";
+import { useState} from "react";
+import type { Utilisateur }  from "../interfaces";
 import { postUtilisateur } from "../api/UtilisateurApi";
 import { setToken, getToken } from "../../public/token";
 /*interface Utilisateur {
@@ -17,16 +17,10 @@ import { setToken, getToken } from "../../public/token";
   */
 const bdUtilisateurs: Utilisateur[] = [];
 
+
 function Inscription() {
-  const [donneeInscription, setDonneeInscription] = useState<Utilisateur>({
-    nom: "",
-    prenom: "",
-    adresse_email: "",
-    password: "",
-    date_naissance: "",
-    soldeDumois: 0,
-  });
-  /* const stockerUtilisateur = (e: React.FormEvent) => {
+  const [donneeInscription, setDonneeInscription] = useState<Utilisateur>({nom : "", prenom : "",adresse_email : "",  password : "", date_naissance : "",soldeDumois:0});
+/* const stockerUtilisateur = (e: React.FormEvent) => {
   e.preventDefault(); 
   const nomUtilisateur = (document.getElementsByName("btn_nom")[0] as HTMLInputElement).value
   const prenomUtilisateur = (document.getElementsByName("btn_prenom")[0] as HTMLInputElement).value
@@ -55,112 +49,76 @@ function Inscription() {
 };
 */
 
-  const viderChamps = () => {
-    setDonneeInscription({
-      nom: "",
-      prenom: "",
-      adresse_email: "",
-      password: "",
-      date_naissance: "",
-      soldeDumois: 0,
-    });
-  };
-  const gererEntreeUtilisateur = (
-    event: React.ChangeEvent<HTMLInputElement>,
-  ) => {
-    const id = event.target.id;
-    let value: string | number | Date = event.target.value;
+const viderChamps = () => {
+  setDonneeInscription({
+    nom: "",
+    prenom: "",
+    adresse_email:"",
+    password:"",
+    date_naissance:"",
+    soldeDumois: 0
+  });
+}
+const gererEntreeUtilisateur = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const id = event.target.id;
+  let value: string | number | Date = event.target.value;
 
-    if (id === "soldeDumois") {
-      const parsed = parseFloat(value.replace(",", "."));
-      value = isNaN(parsed) ? 0 : parsed;
-      console.log("Solde converssion de , en .");
-    }
-    setDonneeInscription({
-      ...donneeInscription,
-      [id]: value,
-    });
-  };
-  const stockerUtilisateur = async (
-    event: React.SubmitEvent<HTMLFormElement>,
-  ) => {
-    event.preventDefault();
+  if (id === "soldeDumois") {
+    const parsed = parseFloat(value.replace(",", "."));
+    value = isNaN(parsed) ? 0 : parsed;
+    console.log("Solde converssion de , en .");
+  }
+  setDonneeInscription({
+    ...donneeInscription,
+    [id]: value
+  });
+};
+const stockerUtilisateur =  async (event: React.SubmitEvent<HTMLFormElement>) => {
+event.preventDefault();
 
-    // Ici on pourrait mettre les champs qui seront necessaire ou pas.
-    if (
-      donneeInscription.nom == "" ||
-      donneeInscription.prenom == "" ||
-      donneeInscription.adresse_email == "" ||
-      donneeInscription.date_naissance == "" ||
-      donneeInscription.password == ""
-    ) {
-      // Pour rendre plus interactif mettre un petit message en dessous des champs auxquelle il manque une informations. Pour préciser ce qui est à mettre.
-      if (donneeInscription.nom == "" || donneeInscription.nom.length < 50) {
-        (document.getElementById("nom") as HTMLInputElement).placeholder =
-          "Le nom est trop long ou vide.";
-        return;
-      }
-      if (
-        donneeInscription.prenom == "" ||
-        donneeInscription.prenom.length < 50
-      ) {
-        (document.getElementById("prenom") as HTMLInputElement).placeholder =
-          "Le prénom est trop long ou vide.";
-        return;
-      }
-      if (
-        donneeInscription.adresse_email == "" ||
-        donneeInscription.adresse_email
-      ) {
-        (document.getElementById("password") as HTMLInputElement).placeholder =
-          "Le prénom est trop long ou vide.";
-        return;
-      }
-      alert("Un des champs n'a pas été rempli");
-      return;
-    }
-    // On appelle le API pour ajouter un Utilisateur à la bd. ET ICI LORSQU'ON METS LE SOLDE On fait REPLACE(",".".");
-    alert(
-      `l'utilisateur ${donneeInscription.prenom} ${donneeInscription.nom} a été ajouté.(message avant fetch)`,
-    );
 
     try {
       const reponse = await postUtilisateur(donneeInscription);
 
-      if (!reponse.ok) {
-        const errorData = await reponse.json();
-        const message = Array.isArray(errorData.message)
-          ? errorData.message.join(", ")
-          : errorData.message;
-        throw new Error(message || "Erreur lors de l'inscription");
-      }
-      const data = await reponse.json();
-      console.log("Utilisateur créé :", data);
-      alert(`Utilisateur crée voila le token : ${data.access_token}`);
-      //setToken(data.access_token);
 
-      alert(
-        `L'utilisateur ${donneeInscription.prenom} ${donneeInscription.nom} a été ajouté.(message après fetch)`,
-      );
+try {
+    const reponse = await postUtilisateur(donneeInscription);
 
-      viderChamps();
-      window.location.href = "/PageConnexion";
-    } catch (error: any) {
-      console.error(error);
-      alert(error.message);
-    }
-  };
+    if (!reponse.ok) {
+    const errorData = await reponse.json();
+    const message = Array.isArray(errorData.message) 
+        ? errorData.message.join(', ') 
+        : errorData.message;
+    throw new Error(message || "Erreur lors de l'inscription");
+}
+    const data = await reponse.json();
+    console.log("Utilisateur créé :", data);
+    alert(`Utilisateur crée voila le token : ${data.access_token}`);
+    //setToken(data.access_token);
+    
+
+    alert(`L'utilisateur ${donneeInscription.prenom} ${donneeInscription.nom} a été ajouté.(message après fetch)`);
+    
+    viderChamps();
+    window.location.href = "/PageConnexion";
+
+  } catch (error: any) {
+    console.error(error);
+    alert(error.message);
+  }
+}
 
   return (
     <>
+
       <div className="main_inscription">
         <h1>Inscription</h1>
         <p className="sous-titre">Remplissez les informations suivantes :</p>
 
-        <img
-          src="/img/image_avatar_default.png"
-          id="avatar_default"
-          className="avatar_default"
+        <img 
+          src="/img/image_avatar_default.png" 
+          id="avatar_default" 
+          className="avatar_default" 
         />
 
         {/*}<div className="avatar_options">
@@ -170,70 +128,33 @@ function Inscription() {
           <img src="" className="avatar_option" />
         </div>{*/}
 
-        <form className="form_vertical" onSubmit={stockerUtilisateur}>
+        <form className="form_vertical" onSubmit={stockerUtilisateur} >
           <div className="form_horizontal">
-            <input
-              type="text"
-              id="nom"
-              placeholder="Nom"
-              value={donneeInscription.nom}
-              onChange={gererEntreeUtilisateur}
-            />
-            <input
-              type="text"
-              id="prenom"
-              placeholder="Prénom"
-              value={donneeInscription.prenom}
-              onChange={gererEntreeUtilisateur}
-            />
+            <input type="text" id="nom" placeholder="Nom" value={donneeInscription.nom} onChange={gererEntreeUtilisateur}/>
+            <input type="text" id="prenom" placeholder="Prénom" value={donneeInscription.prenom} onChange={gererEntreeUtilisateur}/>
           </div>
           <div className="form_horizontal">
             <label className="date">Date de naissance : </label>
-            <input
-              type="date"
-              id="date_naissance"
-              placeholder="AAAA/MM/JJ"
-              value={donneeInscription.date_naissance}
-              onChange={gererEntreeUtilisateur}
-            />
+            <input type="date" id="date_naissance" placeholder="AAAA/MM/JJ" value={donneeInscription.date_naissance} onChange={gererEntreeUtilisateur}/>
           </div>
-          <input
-            type="email"
-            id="adresse_email"
-            placeholder="Adresse email"
-            value={donneeInscription.adresse_email}
-            onChange={gererEntreeUtilisateur}
-          />
-          <input
-            type="password"
-            id="password"
-            placeholder="Mot de passe"
-            value={donneeInscription.password}
-            onChange={gererEntreeUtilisateur}
-          />
+          <input type="email" id="adresse_email" placeholder="Adresse email" value={donneeInscription.adresse_email} onChange={gererEntreeUtilisateur}/>
+          <input type="password" id="password" placeholder="Mot de passe" value={donneeInscription.password} onChange={gererEntreeUtilisateur}/>
           <label>Quel est votre solde de ce mois :</label>
-          <input
-            type="number"
-            id="soldeDumois"
-            placeholder="Solde du mois"
-            value={donneeInscription.soldeDumois ?? ""}
-            onChange={gererEntreeUtilisateur}
-          />
+          <input type="number" id="soldeDumois" placeholder="Solde du mois" value={donneeInscription.soldeDumois ?? ""} onChange={gererEntreeUtilisateur}/>
           <div className="image_container">
-            <img
-              src="/img/image_inscription_plante_coupe.png"
-              className="image_btn_inscription"
-            />
+            <img src="/img/image_inscription_plante_coupe.png" className="image_btn_inscription"/>
             <button className="btn_overlay">S'inscrire</button>
           </div>
         </form>
+        
+        <div className="triangle triangle-droite"/>
+        <div className="triangle triangle-gauche"/>
 
-        <div className="triangle triangle-droite" />
-        <div className="triangle triangle-gauche" />
-
-        <div className="triangle-animee triangle1" />
-        <div className="triangle-animee triangle2" />
+        <div className="triangle-animee triangle1"/>
+        <div className="triangle-animee triangle2"/>
       </div>
+
+
     </>
   );
 }

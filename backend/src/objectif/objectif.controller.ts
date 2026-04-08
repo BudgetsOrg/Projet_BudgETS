@@ -1,5 +1,5 @@
 import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, Req, UseGuards } from '@nestjs/common';
-import { ApiResponse } from '@nestjs/swagger';
+import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { ObjectifDto } from './dto/objectif.dto';
 import { AuthGuard } from '@nestjs/passport';
 
@@ -31,19 +31,28 @@ export class ObjectifController {
     }
 
     //url pour lire tout les objectifs
+    @ApiResponse({ status: 200, description: 'Liste des objectifs récupérée avec succès' })
+    @ApiResponse({ status: 404, description: 'Objectifs non trouvés' })
+    @ApiOperation({ summary: 'Récupérer tous les objectifs de l\'utilisateur' })
     @Get()
     async findAll(@Req() req: any) {
         return this.objectifService.findAll(req.user.id_user);
     }
 
     //url pour lire un objectif
+    @ApiResponse({ status: 200, description: 'Objectif récupéré avec succès' })
+    @ApiResponse({ status: 404, description: 'Objectif non trouvé' })
+    @ApiResponse({ status: 400, description: 'Requête invalide' })
+    @ApiOperation({ summary: 'Récupérer un objectif par son ID' })
     @Get(':id')
     async findOne(@Param('id', ParseIntPipe) id: number, @Req() req: any) {
         return this.objectifService.findOne(req.user.id_user, id);
     }
 
     //url pour update un objectif
-
+    @ApiResponse({ status: 200, description: 'Objectif mis à jour avec succès' })
+    @ApiResponse({ status: 404, description: 'Objectif non trouvé' })
+    @ApiResponse({ status: 400, description: 'Requête invalide' })
     @Patch(':id')
     async update(
         @Param('id', ParseIntPipe) id: number, 
@@ -54,8 +63,28 @@ export class ObjectifController {
     }
 
     //url pour supprimer un objectif
+    @ApiResponse({ status: 200, description: 'Objectif supprimé avec succès' })
+    @ApiResponse({ status: 404, description: 'Objectif non trouvé' })
+    @ApiResponse({ status: 400, description: 'Requête invalide' })
     @Delete(':id')
     async remove(@Param('id', ParseIntPipe) id: number, @Req() req: any) {
         return this.objectifService.leaveOrDelete(id, req.user.id_user);
+    }
+
+    //url pour inviter
+    @ApiResponse({ status: 200, description: 'Membre invité avec succès' })
+    @ApiResponse({ status: 404, description: 'Ressource non trouvée' })
+    @ApiResponse({ status: 400, description: 'Requête invalide' })
+    @ApiOperation({ summary: 'Inviter un membre à rejoindre un objectif' })
+    @Post(':id/inviter')
+    async inviteMember(
+        @Param('id') id: number,
+        @Body('email') email: string,
+        @Req() req: any
+    ) {
+        // Optionnel : Vérifier d'abord si req.user.id_user est bien déjà membre de cet objectif 
+        // pour éviter qu'un inconnu n'invite des gens dans ton projet iPhone !
+        const inviterName = `${req.user.prenom} ${req.user.nom}`;
+        return this.objectifService.addMember(id, email, inviterName);
     }
 }

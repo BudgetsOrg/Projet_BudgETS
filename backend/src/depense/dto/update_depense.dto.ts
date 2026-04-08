@@ -1,4 +1,4 @@
-import { IsString, IsNotEmpty, IsNumber, IsOptional, IsPositive, IsDateString } from 'class-validator';
+import { IsString, IsNotEmpty, IsNumber, IsOptional, IsPositive, IsDateString, IsBoolean } from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger/dist/decorators/api-property.decorator";
 
 export class UpdateDepenseDto {
@@ -19,6 +19,11 @@ export class UpdateDepenseDto {
     @IsOptional()
     @IsDateString()
     date?: string;
+
+    @ApiPropertyOptional({ example: false, description: 'Indique si la dépense est récurrente, optionel' })
+    @IsOptional()
+    @IsBoolean()
+    recurrente?: boolean;
 
     @ApiPropertyOptional({ example: 1, description: 'ID de la catégorie associée, optionnel' })
     @IsOptional()

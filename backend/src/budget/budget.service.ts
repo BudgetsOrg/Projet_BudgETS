@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Budget} from "src/entities";
+import { Budget, User } from "src/entities";
 import { Repository } from "typeorm/repository/Repository.js";
 import { UpdateBudgetDto } from "./dto/update_budget.dto";
 import { CreateBudgetDto } from "./dto/create_budget.dto";
@@ -14,19 +14,17 @@ export class BudgetService{
     ) {}
 
     async create(userId: number, createBudgetDto: CreateBudgetDto) {
-    const budget = this.budgetRepository.create({ //cree une entité budget à partir du DTO createBudgetDto et l'id du user
-        ...createBudgetDto,
-        user: { id_user: userId },
-    });
-    return this.budgetRepository.save(budget); //sauvegarde l'entité budget dans la base de données et retourne le budget créé au frontend
-    }
+    const budget = this.budgetRepository.create(createBudgetDto);
+    budget.user = { id_user: userId } as User;  // assigned after, not passed into create()
+    return this.budgetRepository.save(budget);
+}
 
     //Le budget le plus récent de l'utilisateur
     async findOne(userId: number) {
         const budget = await this.budgetRepository.findOne({
             where: { user: { id_user: userId } }, //comme un JOIN entre budget et user pour trouver le budget associé à l'id du user
             relations: ['enveloppes'],
-            order: { date_creation: 'DESC' }, // retourne le budget le plus courant pour l'utilisateur.
+            order: { id_budget: 'DESC' }, // retourne le budget le plus courant pour l'utilisateur.
         });
 
         if (!budget) { //pour une reponse 404
@@ -43,7 +41,7 @@ export class BudgetService{
         return this.budgetRepository.find({
             where: { user: { id_user: userId } },
             relations: ['enveloppes'],
-            order: { date_creation: 'DESC' },
+            order: { id_budget: 'DESC' },
         });
     }      
 

@@ -99,6 +99,7 @@ export class DepenseService {
     depense.nom_depense = updateDepenseDto.nom_depense ?? depense.nom_depense;
     depense.montant = updateDepenseDto.montant ?? depense.montant;
     depense.date = updateDepenseDto.date ? new Date(updateDepenseDto.date) : depense.date;
+    depense.recurrente = updateDepenseDto.recurrente ?? depense.recurrente;
 
     return this.depenseRepository.save(depense);
 }

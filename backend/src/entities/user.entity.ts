@@ -3,6 +3,7 @@ import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Budget } from './budget.entity';
 import { Objectif } from './objectif.entity';
 import { Categorie } from './categorie.entity';
+import { Exclude } from 'class-transformer';
 
 @Entity()
 export class User {
@@ -31,6 +32,7 @@ export class User {
 
   @ApiProperty({ example: 'password123' })
   @Column()
+  @Exclude()
   password: string;
 
   @ApiProperty({ example: '2000-01-01' })

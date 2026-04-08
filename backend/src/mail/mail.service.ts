@@ -37,4 +37,19 @@ export class MailService {
       throw new InternalServerErrorException("Erreur lors de l'envoi du courriel.");
     }
   }
+
+  async sendInvitationEmail(targetEmail: string, inviterName: string, goalTitle: string) {
+  const mailOptions = {
+    from: `"BudgETS" <${process.env.GMAIL_USER}>`,
+    to: targetEmail,
+    subject: `Invitation à l'objectif : ${goalTitle}`,
+    html: `
+      <h3>Salut !</h3>
+      <p><strong>${inviterName}</strong> t'a invité à collaborer sur l'objectif <strong>"${goalTitle}"</strong> dans BudgETS.</p>
+      <p>Connecte-toi à l'application pour commencer à épargner ensemble !</p>
+      <a href="http://localhost:3000">Ouvrir BudgETS</a>
+    `,
+  };
+  return await this.transporter.sendMail(mailOptions);
+  }
 }

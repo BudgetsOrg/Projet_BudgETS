@@ -6,7 +6,7 @@ let loggedInUser: Utilisateur | null = null;
 const API_URL_GLOBAL = "https://projetbudgets-backend.up.railway.app";
 const API_URL_LOCAL = "http://localhost:3000";
 const token = localStorage.getItem("token");
-const debug = true;
+const debug = false;
 // choose one
 const local = false;
 //A modifier pour get un user.
@@ -63,21 +63,23 @@ export async function postUtilisateur(
   return reponse;
 }
 
-export async function postConnexion(adresse_email :string,password : string ): Promise<Response> {
+export async function postConnexion(
+  adresse_email: string,
+  password: string,
+): Promise<Response> {
+  const url = local
+    ? `${API_URL_LOCAL}/auth/connexion`
+    : `${API_URL_GLOBAL}/auth/connexion`;
 
-    const url = local 
-        ? `${API_URL_LOCAL}/auth/connexion`
-        : `${API_URL_GLOBAL}/auth/connexion`;
+  const reponse = await fetch(url, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ adresse_email, password }),
+  });
 
-    const reponse = await fetch(url, {
-        method: "POST",
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({adresse_email,password}),
-    });
-
-    return reponse;
+  return reponse;
 }
 
 export async function login(adresse_email: string, password: string) {
@@ -95,7 +97,7 @@ export async function login(adresse_email: string, password: string) {
     };
     loggedInUser = mockUser;
     return mockUser;
-  } else if(local) {
+  } else if (local) {
     const response = await fetch(`${API_URL_GLOBAL}/connexion`, {
       method: "POST",
       headers: {

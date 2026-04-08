@@ -99,16 +99,22 @@ function Inscription() {
         (document.getElementById("nom") as HTMLInputElement).placeholder =
           "Le nom est trop long ou vide.";
         return;
-      } else if (
+      }
+      if (
         donneeInscription.prenom == "" ||
         donneeInscription.prenom.length < 50
       ) {
         (document.getElementById("prenom") as HTMLInputElement).placeholder =
           "Le prénom est trop long ou vide.";
         return;
-      } else if (donneeInscription) {
+      }
+      if (
+        donneeInscription.adresse_email == "" ||
+        donneeInscription.adresse_email
+      ) {
         (document.getElementById("password") as HTMLInputElement).placeholder =
           "Le prénom est trop long ou vide.";
+        return;
       }
       alert("Un des champs n'a pas été rempli");
       return;
@@ -118,26 +124,8 @@ function Inscription() {
       `l'utilisateur ${donneeInscription.prenom} ${donneeInscription.nom} a été ajouté.(message avant fetch)`,
     );
 
-// Ici on pourrait mettre les champs qui seront necessaire ou pas.
-if(donneeInscription.nom == "" || donneeInscription.prenom == "" || donneeInscription.adresse_email == "" || donneeInscription.date_naissance == "" || donneeInscription.password == ""){
-  // Pour rendre plus interactif mettre un petit message en dessous des champs auxquelle il manque une informations. Pour préciser ce qui est à mettre.
- if(donneeInscription.nom == "" || donneeInscription.nom.length < 50){
-    (document.getElementById("nom") as HTMLInputElement).placeholder ="Le nom est trop long ou vide.";
-    return;
-  }
-  if(donneeInscription.prenom == "" || donneeInscription.prenom.length < 50){
-    (document.getElementById("prenom") as HTMLInputElement).placeholder ="Le prénom est trop long ou vide.";
-    return;
-  }
-  if(donneeInscription.adresse_email == "" || donneeInscription.adresse_email){
-    (document.getElementById("password") as HTMLInputElement).placeholder ="Le prénom est trop long ou vide.";
-    return;
-  }
-  alert("Un des champs n'a pas été rempli")
-  return;
-}
-// On appelle le API pour ajouter un Utilisateur à la bd. ET ICI LORSQU'ON METS LE SOLDE On fait REPLACE(",".".");
-alert(`l'utilisateur ${donneeInscription.prenom} ${donneeInscription.nom} a été ajouté.(message avant fetch)`);
+    try {
+      const reponse = await postUtilisateur(donneeInscription);
 
       if (!reponse.ok) {
         const errorData = await reponse.json();
@@ -149,35 +137,19 @@ alert(`l'utilisateur ${donneeInscription.prenom} ${donneeInscription.nom} a ét�
       const data = await reponse.json();
       console.log("Utilisateur créé :", data);
       alert(`Utilisateur crée voila le token : ${data.access_token}`);
-      setToken(data.access_token);
+      //setToken(data.access_token);
 
       alert(
         `L'utilisateur ${donneeInscription.prenom} ${donneeInscription.nom} a été ajouté.(message après fetch)`,
       );
 
-    if (!reponse.ok) {
-    const errorData = await reponse.json();
-    const message = Array.isArray(errorData.message) 
-        ? errorData.message.join(', ') 
-        : errorData.message;
-    throw new Error(message || "Erreur lors de l'inscription");
-}
-    const data = await reponse.json();
-    console.log("Utilisateur créé :", data);
-    alert(`Utilisateur crée voila le token : ${data.access_token}`);
-    //setToken(data.access_token);
-    
-
-    alert(`L'utilisateur ${donneeInscription.prenom} ${donneeInscription.nom} a été ajouté.(message après fetch)`);
-    
-    viderChamps();
-    window.location.href = "/PageConnexion";
-
-  } catch (error: any) {
-    console.error(error);
-    alert(error.message);
-  }
-}
+      viderChamps();
+      window.location.href = "/PageConnexion";
+    } catch (error: any) {
+      console.error(error);
+      alert(error.message);
+    }
+  };
 
   return (
     <>

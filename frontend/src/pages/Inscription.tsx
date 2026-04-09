@@ -81,9 +81,6 @@ const stockerUtilisateur =  async (event: React.SubmitEvent<HTMLFormElement>) =>
 event.preventDefault();
 
 
-    try {
-      const reponse = await postUtilisateur(donneeInscription);
-
 
 try {
     const reponse = await postUtilisateur(donneeInscription);
@@ -114,7 +111,6 @@ try {
 
   return (
     <>
-
       <div className="main_inscription">
         <h1>Inscription</h1>
         <p className="sous-titre">Remplissez les informations suivantes :</p>

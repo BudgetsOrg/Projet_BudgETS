@@ -3,6 +3,7 @@ import { useState} from "react";
 import {getToken,setToken} from "../../public/token";
 import type { Utilisateur }  from "../interfaces/interfaces";
 import { postConnexion } from "../api/UtilisateurApi";
+import img_retour from "../../public/img/arrow_left_alt.png";
 
 function Connexion() {
 
@@ -39,6 +40,9 @@ const redirigerPagePrincipale =  async () => {
 const redirigerMotDePasseOublie = () => {
   window.location.href = "/PageMdpOublie";
 }
+const retourPageAcceuil = () => {
+  window.location.href = "/";
+}
     return (
         <>
         <div className="page_connexion">
@@ -53,7 +57,10 @@ const redirigerMotDePasseOublie = () => {
                     <label onClick={redirigerMotDePasseOublie}>Mot de passe oublié ?</label>
                     <button className="btn_connexion" type="submit" onClick={redirigerPagePrincipale}>Connexion</button>
                     <button className="btn_inscription" type="submit" onClick={redirigerPageInscription}>S'inscrire</button>
-
+                <div className="container_retour" onClick={retourPageAcceuil}>
+                  <img className="img_retour_overlay" src={img_retour}></img>
+                  <p className="text_overlay">retour en arrière</p>
+                </div>
                     
                 </div>
 

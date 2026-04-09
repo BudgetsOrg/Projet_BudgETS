@@ -69,12 +69,18 @@ function Objectif() {
 
   // Progression de la couleur de la barre de progression de l'objectif.
 
-  const couleurBarre = (pct: number): string => {
-  // Interpolation jaune (#e6b800) → orange (#e8442a)
-  const r = Math.round(230 + (232 - 230) * (pct / 100));
-  const g = Math.round(184 + (68  - 184) * (pct / 100));
-  const b = Math.round(0   + (42  - 0)   * (pct / 100));
-  return `rgb(${r}, ${g}, ${b})`;
+const couleurBarre = (pct: number): string => {
+  if (pct <= 50) {
+    // Rouge → Jaune (0% à 50%)
+    const r = 220;
+    const g = Math.round(0 + (220 - 0) * (pct / 50)); // 0 → 220
+    return `rgb(${r}, ${g}, 0)`;
+  } else {
+    // Jaune → Rouge (50% à 100%)
+    const r = Math.round(220 + (0 - 220) * ((pct - 50) / 50));
+    const g = 220 ; // 220 → 0
+    return `rgb(${r}, ${g}, 0)`;
+  }
 };
 
   //  Formatage 

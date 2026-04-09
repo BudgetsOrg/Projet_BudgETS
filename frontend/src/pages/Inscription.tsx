@@ -5,6 +5,7 @@ import { useState} from "react";
 import type { Utilisateur }  from "../interfaces";
 import { postUtilisateur } from "../api/UtilisateurApi";
 import { setToken, getToken } from "../../public/token";
+import img_retour from "../../public/img/arrow_left_alt.png";
 /*interface Utilisateur {
   nom: string;
   prenom: string;
@@ -48,6 +49,9 @@ function Inscription() {
   console.log("BD :", bdUtilisateurs);
 };
 */
+const retourPageConnexion = () => {
+  window.location.href = "/PageConnexion";
+}
 
 const viderChamps = () => {
   setDonneeInscription({
@@ -159,9 +163,14 @@ try {
           <input type="password" id="password" placeholder="Mot de passe" value={donneeInscription.password} onChange={gererEntreeUtilisateur}/>
           <label>Quel est votre solde de ce mois :</label>
           <input type="number" id="soldeDumois" placeholder="Solde du mois" value={donneeInscription.soldeDumois ?? ""} onChange={gererEntreeUtilisateur}/>
+          
           <div className="image_container">
             <img src="/img/image_inscription_plante_coupe.png" className="image_btn_inscription"/>
-            <button className="btn_overlay">S'inscrire</button>
+            <div className="container_retour_inscription" onClick={retourPageConnexion}>
+              <img className="img_retour_overlay_inscription" src={img_retour}></img>
+              <p className="text_overlay_inscription">retour en arrière</p>
+            </div>
+            <button className="btn_overlay_inscription">S'inscrire</button>
           </div>
         </form>
         

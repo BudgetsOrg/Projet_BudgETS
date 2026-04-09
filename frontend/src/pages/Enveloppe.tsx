@@ -6,7 +6,7 @@ import { getToken } from "../../public/token.ts";
 // Plus tard gerer avec le backend.
 const enveloppeId = 1;
 
-const donneesInitiales = {
+/*const donneesInitiales = {
   titre: "Titre de mon enveloppe",
   budgetAlloue: 150,
   depenses: [
@@ -26,9 +26,11 @@ const donneesInitiales = {
     },
   ],
 };
+*/
 
 function Enveloppe() {
-  alert("voila le token " + getToken());
+  const donneesInitiales = 
+  console.log("voila le token " + getToken());
   const [modalEditOuvert, setModalEditOuvert] = useState(false);
 
   const [editData, setEditData] = useState({

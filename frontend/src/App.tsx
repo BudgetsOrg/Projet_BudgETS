@@ -36,7 +36,7 @@ function AppContent() {
         <Route path="/PagePrincipale" element={<PagePrincipale />} />
         <Route path="/PageEnveloppe" element={<Enveloppe />} />
         <Route path="/Profile" element={<PageProfile />} />
-        <Route path="/PageObjectifs" element={<Objectif />} />
+        <Route path="/PageObjectifs" element={<PageObjectifs />} />
         <Route path="/PageMdpOublie" element={<PageMdpOublie />} />
         <Route path="/EducationFinanciere" element={<EducationFinanciere />} />
         <Route path="/PageCreationNouveauMdp" element = {<PageCreationNouveauMdp />} />

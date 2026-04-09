@@ -24,7 +24,7 @@ export class MailService {
         html: `
           <h3>Besoin d'un nouveau mot de passe ?</h3>
           <p>Cliquez sur le lien ci-dessous pour le réinitialiser :</p>
-          <a href="http://localhost:3000/auth/reset-password?token=${token}">Réinitialiser mon mot de passe</a>
+          <a href="http://localhost:5173/PageCreationNouveauMdp?token=${token}">Réinitialiser mon mot de passe</a>
           <p>Si vous n'avez pas demandé ce changement, ignorez ce message.</p>
         `,
       };

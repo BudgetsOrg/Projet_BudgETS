@@ -72,22 +72,47 @@
     width: 100%;
     display: block;
 }
-.btn_overlay {
+.btn_overlay_inscription {
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%); 
     width: 238px;
     height: 56px;
-    padding: 10px 20px;
     border: none;
-    border-radius: 20px;
+    border-radius: 999px;
     background: rgba(255,255,255,0.49);
     color: white;
     cursor: pointer;
     font-weight: bold;
     font-size: 30px;
     font-family: 'Inter', sans-serif;
+}
+.container_retour_inscription{
+    position: absolute;
+    bottom: 30%;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    white-space: nowrap;
+    margin-top:auto;
+
+}
+.text_overlay_inscription {
+    position: static; /* plus besoin d'absolu, le parent gère */
+    color: white;
+    font-size: 15px;
+    margin: 0;
+    padding: 0;
+}
+.img_retour_overlay_inscription{
+    position: static;
+    height: 100%;
+    width: auto;
 }
 
 /* Tailles Spécifiques */

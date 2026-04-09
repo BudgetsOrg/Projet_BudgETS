@@ -12,18 +12,15 @@ import Enveloppe from "./pages/Enveloppe";
 import { PageProfile } from "./pages/PageProfile";
 import Accueuil from "./pages/Accueuil";
 import EducationFinanciere from "./pages/EducationFinanciere";
-import PageObjectifs from "./pages/Objectifs";
 import PageMdpOublie from "./pages/PageMotDePasseOublie";
+import PageCreationNouveauMdp from "./pages/PageCreationNouveauMdp"
+
 
 function AppContent() {
   const location = useLocation();
 
   // Pages où on NE veut pas afficher le header
-  const noHeaderRoutes = [
-    "/PageConnexion",
-    "/PageInscription",
-    "/PageMdpOublie",
-  ];
+  const noHeaderRoutes = ["/PageConnexion", "/PageInscription","/PageMdpOublie","/PageCreationNouveauMdp"];
 
   const showHeader = !noHeaderRoutes.includes(location.pathname);
 
@@ -40,8 +37,9 @@ function AppContent() {
         <Route path="/PageEnveloppe" element={<Enveloppe />} />
         <Route path="/Profile" element={<PageProfile />} />
         <Route path="/PageObjectifs" element={<PageObjectifs />} />
-        <Route path="/PageMdpOublie" element={<PageMotDePasseOublie />} />
+        <Route path="/PageMdpOublie" element={<PageMdpOublie />} />
         <Route path="/EducationFinanciere" element={<EducationFinanciere />} />
+        <Route path="/PageCreationNouveauMdp" element = {<PageCreationNouveauMdp />} />
       </Routes>
       {/*</div>*/}
     </>

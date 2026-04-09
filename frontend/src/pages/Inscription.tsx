@@ -5,6 +5,7 @@ import { useState } from "react";
 import type { Utilisateur } from "../interfaces";
 import { postUtilisateur } from "../api/UtilisateurApi";
 import { setToken, getToken } from "../../public/token";
+import img_retour from "../../public/img/arrow_left_alt.png";
 /*interface Utilisateur {
   nom: string;
   prenom: string;
@@ -54,6 +55,9 @@ function Inscription() {
   console.log("BD :", bdUtilisateurs);
 };
 */
+  const retourPageConnexion = () => {
+    window.location.href = "/PageConnexion";
+  };
 
   const viderChamps = () => {
     setDonneeInscription({
@@ -85,44 +89,6 @@ function Inscription() {
     event: React.SubmitEvent<HTMLFormElement>,
   ) => {
     event.preventDefault();
-
-    // Ici on pourrait mettre les champs qui seront necessaire ou pas.
-    if (
-      donneeInscription.nom == "" ||
-      donneeInscription.prenom == "" ||
-      donneeInscription.adresse_email == "" ||
-      donneeInscription.date_naissance == "" ||
-      donneeInscription.password == ""
-    ) {
-      // Pour rendre plus interactif mettre un petit message en dessous des champs auxquelle il manque une informations. Pour préciser ce qui est à mettre.
-      if (donneeInscription.nom == "" || donneeInscription.nom.length < 50) {
-        (document.getElementById("nom") as HTMLInputElement).placeholder =
-          "Le nom est trop long ou vide.";
-        return;
-      }
-      if (
-        donneeInscription.prenom == "" ||
-        donneeInscription.prenom.length < 50
-      ) {
-        (document.getElementById("prenom") as HTMLInputElement).placeholder =
-          "Le prénom est trop long ou vide.";
-        return;
-      }
-      if (
-        donneeInscription.adresse_email == "" ||
-        donneeInscription.adresse_email
-      ) {
-        (document.getElementById("password") as HTMLInputElement).placeholder =
-          "Le prénom est trop long ou vide.";
-        return;
-      }
-      alert("Un des champs n'a pas été rempli");
-      return;
-    }
-    // On appelle le API pour ajouter un Utilisateur à la bd. ET ICI LORSQU'ON METS LE SOLDE On fait REPLACE(",".".");
-    alert(
-      `l'utilisateur ${donneeInscription.prenom} ${donneeInscription.nom} a été ajouté.(message avant fetch)`,
-    );
 
     try {
       const reponse = await postUtilisateur(donneeInscription);
@@ -219,12 +185,23 @@ function Inscription() {
             value={donneeInscription.soldeDumois ?? ""}
             onChange={gererEntreeUtilisateur}
           />
+
           <div className="image_container">
             <img
               src="/img/image_inscription_plante_coupe.png"
               className="image_btn_inscription"
             />
-            <button className="btn_overlay">S'inscrire</button>
+            <div
+              className="container_retour_inscription"
+              onClick={retourPageConnexion}
+            >
+              <img
+                className="img_retour_overlay_inscription"
+                src={img_retour}
+              ></img>
+              <p className="text_overlay_inscription">retour en arrière</p>
+            </div>
+            <button className="btn_overlay_inscription">S'inscrire</button>
           </div>
         </form>
 

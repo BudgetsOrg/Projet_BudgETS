@@ -124,3 +124,19 @@ export function getLoggedInUser() {
   }
   return loggedInUser;
 }
+export async function postForgotPassword(adresse_email : string){
+    const url = local 
+        ? `${API_URL_LOCAL}/auth/forgot-password`
+        : `${API_URL_GLOBAL}/auth/forgot-password`;
+
+    const reponse = await fetch(url, {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({adresse_email}),
+    });
+
+    return reponse;
+
+}

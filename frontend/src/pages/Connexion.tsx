@@ -3,6 +3,7 @@ import { useState } from "react";
 import { getToken, setToken } from "../../public/token";
 import type { Utilisateur } from "../interfaces";
 import { postConnexion } from "../api/UtilisateurApi";
+import img_retour from "../../public/img/arrow_left_alt.png";
 
 function Connexion() {
   const [donneeConnexion, setDonneeConnexion] = useState<Utilisateur>({
@@ -46,6 +47,9 @@ function Connexion() {
   const redirigerMotDePasseOublie = () => {
     window.location.href = "/PageMdpOublie";
   };
+  const retourPageAcceuil = () => {
+    window.location.href = "/";
+  };
   return (
     <>
       <div className="page_connexion">
@@ -81,6 +85,10 @@ function Connexion() {
             >
               S'inscrire
             </button>
+            <div className="container_retour" onClick={retourPageAcceuil}>
+              <img className="img_retour_overlay" src={img_retour}></img>
+              <p className="text_overlay">retour en arrière</p>
+            </div>
           </div>
 
           <div className="triangle triangle-droite" />

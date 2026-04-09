@@ -4,7 +4,8 @@ import type { Budget } from "../interfaces";
 
 // Utilise la fonction getBudget pour récupérer les budgets de l'utilisateur et gère les états de chargement et d'erreur
 export function useBudgets() {
-  const [budgets, setBudgets] = useState<Budget[]>([]);
+  // un seul budget donc pas une liste
+  const [budget, setBudget] = useState<Budget>(null as any);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -12,7 +13,7 @@ export function useBudgets() {
     async function fetchData() {
       try {
         const data = await getLastBudget();
-        setBudgets(data);
+        setBudget(data);
       } catch (err: any) {
         setError(err.message);
       } finally {
@@ -22,7 +23,7 @@ export function useBudgets() {
     fetchData();
   }, []);
 
-  return { budgets, loading, error };
+  return { budget, loading, error };
 }
 
 export async function postBudgets(budget: Budget) {

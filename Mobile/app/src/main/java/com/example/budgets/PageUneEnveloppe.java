@@ -1,11 +1,15 @@
 package com.example.budgets;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import org.json.JSONArray;
 
 public class PageUneEnveloppe extends AppCompatActivity {
     TextView titre, budget, pourcentage;
@@ -44,7 +48,34 @@ public class PageUneEnveloppe extends AppCompatActivity {
                 Intent intent = new Intent(PageUneEnveloppe.this,PageSupprimerDepense.class);
                 startActivity(intent);
             });
+        new Thread(() -> {
+            try {
+                SharedPreferences prefs = getSharedPreferences("auth", MODE_PRIVATE);
+                String token = prefs.getString("token", "");
 
+                String response = ApiHelper.get("/enveloppe", token);
+                JSONArray enveloppes = new JSONArray(response);
+
+                runOnUiThread(() -> {
+                    // afficher les données
+                });
+
+            } catch (Exception e) {
+                Log.e("API", "Failed: " + e.getMessage());
+            }
+        }).start();
+        new Thread(() -> {
+            try {
+                SharedPreferences prefs = getSharedPreferences("auth", MODE_PRIVATE);
+                String token = prefs.getString("token", "");
+
+                String body = "{\"titre\":\"Groceries\",\"montant\":400.00}";
+                String response = ApiHelper.post("/enveloppe", body, token);
+
+            } catch (Exception e) {
+                Log.e("API", "Failed: " + e.getMessage());
+            }
+        }).start();
     }
 
     private void mettreAJourPourcentage() {

@@ -1,8 +1,9 @@
 // Mohamed
-import { useState } from "react"; // npm install
-import type { Depense } from "../interfaces/interfaces"; // ton interface est rendu dans la page pour ceux-ci
+import { useState, useEffect } from "react"; // npm install
+import type { Depense } from "../interfaces"; // ton interface est rendu dans la page pour ceux-ci
 import { GraphiqueEnveloppe } from "../components/graphiqueEnveloppe.tsx"; // le graphique de la page enveloppe
 import { getToken } from "../../public/token.ts";
+import { getDepenses } from "../api/DepenseApi.ts";
 // Plus tard gerer avec le backend.
 const enveloppeId = 1;
 
@@ -29,35 +30,51 @@ const enveloppeId = 1;
 */
 
 function Enveloppe() {
-  const donneesInitiales = 
+  const id_enveloppe = 5; // A mettre l'id recu par la page Principale.
+
   console.log("voila le token " + getToken());
+  const [editDataSauvegarde, setEditDataSauvegarde] = useState({ titre: "", budgetAlloue: 0 });
+  const [editData, setEditData] = useState({ titre: "", budgetAlloue: 0 });
+  const [depenses, setDepenses] = useState<Depense[]>([]);
   const [modalEditOuvert, setModalEditOuvert] = useState(false);
-
-  const [editData, setEditData] = useState({
-    titre: donneesInitiales.titre,
-    budgetAlloue: donneesInitiales.budgetAlloue,
-  });
-
-  const budgetAlloue = editData.budgetAlloue;
-
   const [modeSupprimer, setModeSupprimer] = useState(false);
   const [selectionnes, setSelectionnes] = useState<number[]>([]);
-
-  const [depenses, setDepenses] = useState<Depense[]>(
-    donneesInitiales.depenses,
-  );
   const [modalOuvert, setModalOuvert] = useState(false);
   const [modeEdition, setModeEdition] = useState(false);
   const [indexEdition, setIndexEdition] = useState<number | null>(null);
-
   const [nouvelleDepense, setNouvelleDepense] = useState<Depense>({
-    titre: "",
-    categorie: "",
-    prix: 0,
+    id_depense: 0,
+    nom_depense: "",
+    montant: 0,
     date: "",
+    id_enveloppe: id_enveloppe,
+    id_categorie: 0,
   });
 
-  const totalDepenses = depenses.reduce((acc, d) => acc + d.prix, 0);
+  useEffect(() => {
+    const recupererDepenses = async () => {
+      try {
+        const data: Depense[] = await getDepenses(id_enveloppe);
+
+
+        if (!Array.isArray(data)) {
+          console.error("Réponse inattendue :", data);
+          alert("Erreur : impossible de charger les dépenses");
+          return;
+        }
+
+        console.log("Dépenses reçues :", data);
+        setDepenses(data);
+      } catch (error: any) {
+        console.error(error);
+        alert(error.message);
+      }
+    };
+    recupererDepenses();
+  }, []);
+
+  const budgetAlloue = editData.budgetAlloue;
+  const totalDepenses = depenses.reduce((acc, d) => acc + d.montant, 0);
   const pourcentage = Math.min((totalDepenses / budgetAlloue) * 100, 100);
 
   const formatPrix = (prix: number) => prix.toFixed(2).replace(".", ",") + "$";
@@ -72,23 +89,27 @@ function Enveloppe() {
     setModalOuvert(false);
     setModeEdition(false);
     setIndexEdition(null);
-    setNouvelleDepense({ titre: "", categorie: "", prix: 0, date: "" });
+    setNouvelleDepense({
+      id_depense: 0,
+      nom_depense: "",
+      montant: 0,
+      date: "",
+      id_enveloppe: id_enveloppe,
+      id_categorie: 0,
+    });
   };
 
-    const couleurBarre = (pct: number): string => {
-  // Interpolation jaune (#e6b800) → orange (#e8442a)
-  const r = Math.round(230 + (232 - 230) * (pct / 100));
-  const g = Math.round(184 + (68  - 184) * (pct / 100));
-  const b = Math.round(0   + (42  - 0)   * (pct / 100));
-  return `rgb(${r}, ${g}, ${b})`;
-};
+  const couleurBarre = (pct: number): string => {
+    // Interpolation jaune (#e6b800) → orange (#e8442a)
+    const r = Math.round(230 + (232 - 230) * (pct / 100));
+    const g = Math.round(184 + (68 - 184) * (pct / 100));
+    const b = Math.round(0 + (42 - 0) * (pct / 100));
+    return `rgb(${r}, ${g}, ${b})`;
+  };
   // Lorsqu'on relie le backend au frontend on utilisera la version en bas.
   const confirmerAjout = () => {
     if (
-      !nouvelleDepense.titre ||
-      !nouvelleDepense.date ||
-      nouvelleDepense.prix <= 0
-    )
+      !nouvelleDepense.nom_depense || !nouvelleDepense.date || nouvelleDepense.montant <= 0)
       return;
 
     if (modeEdition && indexEdition !== null) {
@@ -101,69 +122,6 @@ function Enveloppe() {
 
     fermerModal();
   };
-  // Lorsqu'on relie le backend et frontend on pourra utiliser ce code pour modifier le titre et la valeur du budget alloué pour l'enveloppe.
-  /*
-  //Lorsqu'on aura modifier pour utiliser cette version il va falloir changer le onClick du bouton confirmer pour qu'il appelle cette méthode à la place.
-const confirmerEditEnveloppe = async () => {
-  try {
-    const res = await fetch(`http://localhost:8080/api/enveloppes/${enveloppeId}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(editData),
-    });
-
-    if (!res.ok) throw new Error("Erreur update");
-
-    const data = await res.json();
-
-    // met à jour le titre et le budget alloué avec la réponse backend
-    setEditData(data);
-
-    setModalEditOuvert(false);
-
-  } catch (err) {
-    console.error("Erreur :", err);
-  }
-};
-*/
-
-  // Lorsqu'on relie le backend ici on va pouvoir ajouter une dépense avec ce code.
-  /*
- const confirmerAjout = async () => {
-  if (!nouvelleDepense.titre || !nouvelleDepense.date || nouvelleDepense.prix <= 0) return;
-
-  try {
-    if (modeEdition && indexEdition !== null && nouvelleDepense.id) {
-      // Modification d'une dépense existante
-      await fetch(`http://localhost:8080/api/enveloppes/${enveloppeId}/depenses/${nouvelleDepense.id}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(nouvelleDepense),
-      });
-
-      const copie = [...depenses];
-      copie[indexEdition] = nouvelleDepense;
-      setDepenses(copie);
-    } else {
-      // Création d'une nouvelle dépense (le backend génère l'id)
-      const res = await fetch(`http://localhost:8080/api/enveloppes/${enveloppeId}/depenses`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(nouvelleDepense),
-      });
-
-      const data: Depense = await res.json(); // data contient maintenant l'id généré par le backend
-      setDepenses([...depenses, data]);
-    }
-
-    fermerModal();
-  } catch (err) {
-    console.error("Erreur :", err);
-  }
-};
-  */
 
   const handleEdit = (depense: Depense, index: number) => {
     setNouvelleDepense(depense);
@@ -228,7 +186,8 @@ const confirmerEditEnveloppe = async () => {
           <h1 className="enveloppe_titre">{editData.titre}</h1>
           <button
             className="enveloppe_edit"
-            onClick={() => setModalEditOuvert(true)}
+            onClick={() => {setEditDataSauvegarde({... editData});
+              setModalEditOuvert(true)}}
           >
             <img src="/img/edit.png"></img>
           </button>
@@ -245,7 +204,7 @@ const confirmerEditEnveloppe = async () => {
       <div className="enveloppe_barre_fond">
         <div
           className="enveloppe_barre_remplie"
-          style={{ width: `${pourcentage}%` , backgroundColor:couleurBarre(pourcentage)}}
+          style={{ width: `${pourcentage}%`, backgroundColor: couleurBarre(pourcentage) }}
         />
         <span className="enveloppe_barre_pourcentage">
           {Math.round(pourcentage)}%
@@ -290,9 +249,8 @@ const confirmerEditEnveloppe = async () => {
           <thead>
             <tr>
               {modeSupprimer && <th></th>}
-              <th>Titre</th>
-              <th>Catégorie</th>
-              <th>Prix</th>
+              <th>Nom</th>
+              <th>Montant</th>
               <th>Date</th>
               {!modeSupprimer && <th>Action</th>}
             </tr>
@@ -311,10 +269,9 @@ const confirmerEditEnveloppe = async () => {
                       />
                     </td>
                   )}
-                  <td>{depense.titre}</td>
-                  <td>{depense.categorie}</td>
-                  <td>{formatPrix(depense.prix)}</td>
-                  <td>{formatDate(depense.date)}</td>
+                  <td>{depense.nom_depense}</td>
+                  <td>{formatPrix(depense.montant)}</td>
+                  <td>{formatDate(depense.date ?? "")}</td>
 
                   {!modeSupprimer && (
                     <td className="cell_actions">
@@ -351,34 +308,23 @@ const confirmerEditEnveloppe = async () => {
             <h2>{modeEdition ? "Modifier" : "Ajouter"} une dépense</h2>
 
             <input
-              placeholder="Titre"
-              value={nouvelleDepense.titre}
+              placeholder="Nom de la dépense"
+              value={nouvelleDepense.nom_depense}
               onChange={(e) =>
                 setNouvelleDepense({
                   ...nouvelleDepense,
-                  titre: e.target.value,
+                  nom_depense: e.target.value,
                 })
               }
             />
-
             <input
-              placeholder="Catégorie"
-              value={nouvelleDepense.categorie}
-              onChange={(e) =>
-                setNouvelleDepense({
-                  ...nouvelleDepense,
-                  categorie: e.target.value,
-                })
-              }
-            />
-
-            <input
+              placeholder="Montant"
               type="number"
-              value={nouvelleDepense.prix || ""}
+              value={nouvelleDepense.montant || ""}
               onChange={(e) =>
                 setNouvelleDepense({
                   ...nouvelleDepense,
-                  prix: parseFloat(e.target.value),
+                  montant: parseFloat(e.target.value),
                 })
               }
             />
@@ -443,7 +389,10 @@ const confirmerEditEnveloppe = async () => {
 
               <button
                 className="btn_supprimer"
-                onClick={() => setModalEditOuvert(false)}
+                onClick={() => {
+                  setEditData({ ... editDataSauvegarde }); 
+                  setModalEditOuvert(false);
+                }}
               >
                 Annuler
               </button>

@@ -1,8 +1,8 @@
+import { getToken } from "../../public/token";
 import type { Depense } from "../interfaces";
 const API_URL_GLOBAL = "https://projetbudgets-backend.up.railway.app";
 const API_URL_LOCAL = "http://localhost:3000";
-const token =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImVtYWlsIjoiam9obmRvZUBleGFtcGxlLmNvbSIsImlhdCI6MTc3NTE1MjI1MywiZXhwIjoxNzc1MjM4NjUzfQ.YzE3xvT7r97x26eUGf-vVMVKKshvVTEMTy1JBj9odcY";
+const token = getToken ?? "";
 //localStorage.getItem("token");
 const debug = true;
 // choose one
@@ -11,26 +11,29 @@ const local = false;
 export async function getDepenses(id_enveloppe: number) {
   if (debug) {
     const mockDepense1 = {
-      id: 1,
-      titre: "Mock Depense 1",
-      categorie: "Alimentation",
-      prix: 10,
-      date: "2026-03-29",
-    };
-    const mockDepense2 = {
-      id: 2,
-      titre: "Mock Depense 2",
-      categorie: "Alimentation",
-      prix: 20,
-      date: "2026-03-26",
-    };
-    const mockDepense3 = {
-      id: 2,
-      titre: "Mock Depense 3",
-      categorie: "Alimentation",
-      prix: 20,
-      date: "2026-03-26",
-    };
+  id_depense: 1,
+  nom_depense: "Mock Depense 1",
+  montant: 10,        // ← montant au lieu de prix
+  date: "2026-03-29",
+  id_enveloppe: id_enveloppe,
+  id_categorie: 1,
+};
+const mockDepense2 = {
+  id_depense: 2,
+  nom_depense: "Mock Depense 2",
+  montant: 20,        // ← montant au lieu de prix
+  date: "2026-03-26",
+  id_enveloppe: id_enveloppe,
+  id_categorie: 1,
+};
+const mockDepense3 = {
+  id_depense: 3,
+  nom_depense: "Mock Depense 3",
+  montant: 20,        // ← montant au lieu de prix
+  date: "2026-03-26",
+  id_enveloppe: id_enveloppe,
+  id_categorie: 1,
+};
     return [mockDepense1, mockDepense2, mockDepense3];
   } else {
     if (local) {

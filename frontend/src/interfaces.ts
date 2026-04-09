@@ -56,7 +56,7 @@ export interface Depense {
   id_depense: number;
   nom_depense: string;
   montant: number;
-  date: string;
+  date?: string;
   id_enveloppe: number;
   id_categorie: number;
 }

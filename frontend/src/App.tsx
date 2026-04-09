@@ -11,7 +11,6 @@ import Connexion from "./pages/Connexion";
 import Enveloppe from "./pages/Enveloppe";
 import { PageProfile } from "./pages/PageProfile";
 import Accueuil from "./pages/Accueuil";
-import PageObjectifs from "./pages/Objectifs";
 import EducationFinanciere from "./pages/EducationFinanciere";
 import PageObjectifs from "./pages/Objectifs";
 import PageMdpOublie from "./pages/PageMotDePasseOublie";

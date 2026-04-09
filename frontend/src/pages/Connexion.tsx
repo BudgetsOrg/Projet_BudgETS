@@ -3,7 +3,7 @@ import { useState } from "react";
 import { getToken, setToken } from "../../public/token";
 import type { Utilisateur } from "../interfaces";
 import { postConnexion } from "../api/UtilisateurApi";
-import img_retour from "../../public/img/arrow_left_alt.png";
+import img_retour from "../img/arrow_left_alt.png";
 
 function Connexion() {
   const [donneeConnexion, setDonneeConnexion] = useState<Utilisateur>({

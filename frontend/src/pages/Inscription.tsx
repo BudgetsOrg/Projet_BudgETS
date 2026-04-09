@@ -5,7 +5,7 @@ import { useState } from "react";
 import type { Utilisateur } from "../interfaces";
 import { postUtilisateur } from "../api/UtilisateurApi";
 import { setToken, getToken } from "../../public/token";
-import img_retour from "../../public/img/arrow_left_alt.png";
+import img_retour from "../img/arrow_left_alt.png";
 /*interface Utilisateur {
   nom: string;
   prenom: string;

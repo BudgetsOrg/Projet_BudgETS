@@ -1,4 +1,3 @@
-import React from "react";
 import { BrowserRouter, Route, Routes, useLocation } from "react-router-dom";
 import "./style/style.css";
 
@@ -13,8 +12,8 @@ import { PageProfile } from "./pages/PageProfile";
 import Accueuil from "./pages/Accueuil";
 import EducationFinanciere from "./pages/EducationFinanciere";
 import PageMdpOublie from "./pages/PageMotDePasseOublie";
-import PageCreationNouveauMdp from "./pages/PageCreationNouveauMdp"
-
+import PageCreationNouveauMdp from "./pages/PageCreationNouveauMdp";
+import Objectif from "./pages/Objectifs";
 
 function AppContent() {
   const location = useLocation();
@@ -36,7 +35,7 @@ function AppContent() {
         <Route path="/PagePrincipale" element={<PagePrincipale />} />
         <Route path="/PageEnveloppe" element={<Enveloppe />} />
         <Route path="/Profile" element={<PageProfile />} />
-        <Route path="/PageObjectifs" element={<PageObjectifs />} />
+        <Route path="/PageObjectifs" element={<Objectif />} />
         <Route path="/PageMdpOublie" element={<PageMdpOublie />} />
         <Route path="/EducationFinanciere" element={<EducationFinanciere />} />
         <Route path="/PageCreationNouveauMdp" element = {<PageCreationNouveauMdp />} />

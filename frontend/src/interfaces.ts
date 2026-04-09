@@ -1,15 +1,8 @@
 export interface Enveloppe {
-  id_enveloppe?: number;
+  id_enveloppe: number;
   titre: string;
   montant: number;
   image?: string;
-}
-
-// à faire
-export interface Objectif {
-  id_objectif: number;
-  name: string;
-  image: string;
 }
 
 // pour le pie chart

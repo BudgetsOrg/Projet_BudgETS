@@ -1,18 +1,38 @@
+import { useEffect, useState } from "react";
+import { getEnveloppe } from "../../../api/EnveloppeApi";
 import { PieChart } from "react-minimal-pie-chart";
-import useEnveloppes from "../../../hooks/UseEnveloppes";
 import type { Data } from "../../../interfaces";
+import type { Enveloppe } from "../../../interfaces";
 
-export function SummaryPieChart() {
-  const { enveloppes, loading, error } = useEnveloppes();
+interface PieChartProps {
+  refreshKey: number;
+}
+export function SummaryPieChart({ refreshKey }: PieChartProps) {
+  const [enveloppes, setEnveloppes] = useState<Enveloppe[]>([]);
+  const [loading, setLoading] = useState(true); // Handle loading locally
 
-  //Could be changed to a spinner or a cuter message
-  if (loading) return <div>Chargement...</div>;
+  useEffect(() => {
+    loadEnveloppes();
+  }, [refreshKey]);
 
-  if (error) return <div>Erreur: {error}</div>;
-  enveloppes.sort((a, b) => b.montant - a.montant);
-  const dataTab: Data[] = enveloppes.map((env, index) => ({
+  // the hook is not used.
+  const loadEnveloppes = async () => {
+    try {
+      const latestEnveloppes = await getEnveloppe();
+      setEnveloppes(latestEnveloppes);
+    } catch (error) {
+      console.error("Erreur de chargement des enveloppes :", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+  if (loading) return <div>Chargement du graphique...</div>;
+  const sortedEnveloppes = [...enveloppes].sort(
+    (a, b) => b.montant - a.montant,
+  );
+  const dataTab: Data[] = sortedEnveloppes.map((env, index) => ({
     title: env.titre,
-    value: env.montant,
+    value: Number(env.montant),
     color: seedColors(env.id_enveloppe, index),
   }));
 

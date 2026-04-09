@@ -1,41 +1,39 @@
-import { useEffect, useState } from "react";
-import { getEnveloppe } from "../../../api/EnveloppeApi";
+import { useEffect } from "react";
+import { useState } from "react";
 import useEnveloppes from "../../../hooks/UseEnveloppes";
-import type { Enveloppe } from "../../../interfaces";
 import { EnveloppeCard } from "./EnveloppeCard";
+import { getEnveloppe } from "../../../api/EnveloppeApi";
+import type { Enveloppe } from "../../../interfaces";
 
-export function EnveloppesBudgetaires() {
-  const {
-    enveloppes: enveloppesFromHook,
-    loading,
-    error,
-  } = useEnveloppes();
+interface displayerProps {
+  onEnveloppesChanged: () => void;
+  refreshKey: number;
+}
+
+export function EnveloppesBudgetaires({
+  onEnveloppesChanged,
+  refreshKey,
+}: displayerProps) {
   const [enveloppes, setEnveloppes] = useState<Enveloppe[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    if (enveloppesFromHook) {
-      setEnveloppes(enveloppesFromHook);
-    }
-  }, [enveloppesFromHook]);
-
+  // when called, fetches enveloppes and sets them
   const loadEnveloppes = async () => {
     try {
+      setLoading(true);
       const latestEnveloppes = await getEnveloppe();
       setEnveloppes(latestEnveloppes);
     } catch (error) {
-      console.error("Erreur de chargement des enveloppes :", error);
+      console.error("Erreur de chargement:", error);
+    } finally {
+      setLoading(false);
     }
   };
-
-  // Expose loadEnveloppes globally for other components to call
   useEffect(() => {
-    (window as any).refreshEnveloppeDisplayer = loadEnveloppes;
-  }, []);
-
+    loadEnveloppes();
+  }, [refreshKey]);
   //Could be changed to a spinner or a cuter message
   if (loading) return <div>Chargement...</div>;
-
-  if (error) return <div>Erreur: {error}</div>;
 
   if (enveloppes.length === 0)
     return <div>Vous n'avez présentement aucune enveloppe budgétaires. </div>;
@@ -47,7 +45,7 @@ export function EnveloppesBudgetaires() {
       <div className="flex gap-4 pb-4">
         {enveloppes.map((env) => (
           <div key={env.id_enveloppe} className="flex-shrink-0 w-64">
-            <EnveloppeCard {...env} onSaved={loadEnveloppes} />
+            <EnveloppeCard {...env} onSaved={onEnveloppesChanged} />
           </div>
         ))}
       </div>

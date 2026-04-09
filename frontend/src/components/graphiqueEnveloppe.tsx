@@ -42,7 +42,7 @@ export function GraphiqueEnveloppe() {
       const dateObj = new Date(year, month - 1, day);
       const date = dateObj.toLocaleDateString("fr-CA"); // Format: YYYY-MM-DD
       const daySpending = firstMap.get(date) || 0;
-      firstMap.set(date, daySpending + depense.prix);
+      firstMap.set(date, daySpending + depense.montant);
     });
 
     // un map trié par la date, clé= date et valeur = prix total de la journée

@@ -1,7 +1,7 @@
-import planteAccueil from "../../../public/img/planteAccueil.png";
-import cashCoins from "../../../public/img/Cash_and_coins.png";
-import checklist from "../../../public/img/check_list_with_credit_card_and_coins.png";
-import safe from "../../../public/img/safe_green.png";
+import planteAccueil from "../../img/planteAccueil.png";
+import cashCoins from "../../img/Cash_and_coins.png";
+import checklist from "../../img/check_list_with_credit_card_and_coins.png";
+import safe from "../../img/safe_green.png";
 export default function Sous_Section() {
   return (
     // container de la section

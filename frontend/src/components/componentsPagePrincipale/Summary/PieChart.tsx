@@ -17,7 +17,7 @@ export function SummaryPieChart() {
   }));
 
   if (dataTab.length === 0) {
-    return <div>No data to display</div>;
+    return <div>Aucun graphique</div>;
   }
 
   return (

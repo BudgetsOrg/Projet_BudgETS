@@ -1,8 +1,8 @@
 export interface Enveloppe {
-  id_enveloppe: number;
+  id_enveloppe?: number;
   titre: string;
   montant: number;
-  image: string;
+  image?: string;
 }
 
 // à faire
@@ -20,10 +20,10 @@ export interface Data {
 }
 
 export interface Budget {
-  id_budget: number;
+  id_budget?: number;
   soldeDuMois: number;
   date_creation: string | Date;
-  user_id: Utilisateur;
+  user_id?: Utilisateur;
   objectifs?: Objectif[];
   enveloppes?: Enveloppe[];
   categories?: Categorie[];

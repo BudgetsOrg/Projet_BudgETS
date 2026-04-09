@@ -1,10 +1,11 @@
+import type { NumberBoxTypes } from "devextreme-react/cjs/number-box";
+import { getToken } from "../../public/token";
 import type { Budget } from "../interfaces";
 const API_URL_GLOBAL = "https://projetbudgets-backend.up.railway.app";
 const API_URL_LOCAL = import.meta.env.VITE_API_URL || "http://localhost:3000";
 const token =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImVtYWlsIjoiam9obmRvZUBleGFtcGxlLmNvbSIsImlhdCI6MTc3NTE1MjI1MywiZXhwIjoxNzc1MjM4NjUzfQ.YzE3xvT7r97x26eUGf-vVMVKKshvVTEMTy1JBj9odcY";
-//localStorage.getItem("token");
-const debug = true;
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjI3LCJlbWFpbCI6ImJhY2tpbnRpbWVAZ21haWwuY29tIiwiaWF0IjoxNzc1NzQ4ODIyLCJleHAiOjE3NzU4MzUyMjJ9.BDgxex1NxpmvVNdybe9wO4v8SpHXjlBFuvknYVqoiIE";
+const debug = false;
 // choose one
 const local = false;
 
@@ -41,6 +42,7 @@ export async function getLastBudget() {
           Authorization: `Bearer ${token}`,
         },
       });
+      console.log("Response from API:", response);
       return response.json();
     }
   }
@@ -114,32 +116,26 @@ export async function deleteBudget(id_budget: number) {
   }
 }
 
-export async function updateBudget(budget: Budget) {
+export async function updateBudget(solde: number, id_budget: number) {
   if (local) {
-    const response = await fetch(
-      `${API_URL_LOCAL}/budget/${budget.id_budget}`,
-      {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(budget),
+    const response = await fetch(`${API_URL_LOCAL}/budget/${id_budget}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
-    );
+      body: JSON.stringify({ soldeDuMois: solde }),
+    });
     return response.json();
   } else {
-    const response = await fetch(
-      `${API_URL_GLOBAL}/budget/${budget.id_budget}`,
-      {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(budget),
+    const response = await fetch(`${API_URL_GLOBAL}/budget/${id_budget}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
-    );
+      body: JSON.stringify({ soldeDuMois: solde }),
+    });
     return response.json();
   }
 }

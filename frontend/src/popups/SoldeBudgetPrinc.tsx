@@ -1,11 +1,14 @@
-import React, { useState } from "react";
-
+import React from "react";
+import type { Budget } from "../interfaces";
+import { getLastBudget, updateBudget } from "../api/BudgetApi";
 export default function SoldeBudget({
   showPopup,
   closePopup,
+  onSaved,
 }: {
   showPopup: boolean;
   closePopup: () => void;
+  onSaved: () => void;
 }) {
   if (!showPopup) return null;
 
@@ -19,7 +22,7 @@ export default function SoldeBudget({
       <div className="p-4">
         <label htmlFor="montant"></label>
         <input
-          type="text"
+          type="number"
           id="montant"
           name="montant"
           className="border border-gray-300 rounded-lg p-2 w-full"
@@ -34,14 +37,26 @@ export default function SoldeBudget({
           </button>
           <button
             className="confirm-button py-2 px-4 rounded-lg"
-            onClick={closePopup}
-            // on click call post function of budget
-            // also add the function to change the solde
+            onClick={() => handleEdit(closePopup, onSaved)}
           >
-            Ajouter
+            Modifier
           </button>
         </div>
       </div>
     </div>
   );
+}
+
+async function handleEdit(closePopup: () => void, onSaved: () => void) {
+  const nouveauSolde = (document.getElementById("montant") as HTMLInputElement)
+    .valueAsNumber;
+  const monBudget = await getLastBudget();
+  const id_budget = monBudget.id_budget;
+  try {
+    await updateBudget(nouveauSolde, id_budget);
+    closePopup();
+    onSaved();
+  } catch (error) {
+    console.log("Error updating budget:", error);
+  }
 }

@@ -1,10 +1,10 @@
+import { getToken } from "../../public/token";
 import type { Enveloppe } from "../interfaces";
 const API_URL_GLOBAL = "https://projetbudgets-backend.up.railway.app";
 const API_URL_LOCAL = "http://localhost:3000";
 const token =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImVtYWlsIjoiam9obmRvZUBleGFtcGxlLmNvbSIsImlhdCI6MTc3NTE1MjI1MywiZXhwIjoxNzc1MjM4NjUzfQ.YzE3xvT7r97x26eUGf-vVMVKKshvVTEMTy1JBj9odcY";
-//localStorage.getItem("token");
-const debug = true;
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjI3LCJlbWFpbCI6ImJhY2tpbnRpbWVAZ21haWwuY29tIiwiaWF0IjoxNzc1NzQ4ODIyLCJleHAiOjE3NzU4MzUyMjJ9.BDgxex1NxpmvVNdybe9wO4v8SpHXjlBFuvknYVqoiIE";
+const debug = false;
 // choose one
 const local = false;
 
@@ -75,7 +75,7 @@ export async function postEnveloppe(enveloppe: Enveloppe) {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify({ enveloppe }),
+      body: JSON.stringify(enveloppe),
     });
     return response.json();
   } else {
@@ -85,7 +85,7 @@ export async function postEnveloppe(enveloppe: Enveloppe) {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify({ enveloppe }),
+      body: JSON.stringify(enveloppe),
     });
     return response.json();
   }

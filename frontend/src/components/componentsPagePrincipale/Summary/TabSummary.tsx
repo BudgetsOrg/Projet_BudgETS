@@ -5,9 +5,18 @@ import { useBudgets } from "../../../hooks/UseBudgets";
 import useEnveloppes from "../../../hooks/UseEnveloppes";
 import type { Budget, Enveloppe } from "../../../interfaces";
 import NouvelleEnveloppe from "../../../popups/AjoutPopup/NouvelleEnveloppe";
-import edit from "../../../../public/img/edit-icon.svg";
+import edit from "../../../img/edit-icon.svg";
 import SoldeBudgetPrinc from "../../../popups/SoldeBudgetPrinc";
-export function TabSummary() {
+
+interface TabSummaryProps {
+  refreshKey: number;
+  onEnveloppesChanged: () => void;
+}
+
+export function TabSummary({
+  refreshKey,
+  onEnveloppesChanged,
+}: TabSummaryProps) {
   const [showNouveauPopup, setShowNouveauPopup] = useState(false);
   const [showSoldePopup, setShowSoldePopup] = useState(false);
   const {
@@ -15,11 +24,19 @@ export function TabSummary() {
     loading: loadingEnveloppe,
     error: errorEnveloppe,
   } = useEnveloppes();
-  
-  const { budget: budgetFromHook, loading: loadingBudget, error: errorBudget } = useBudgets();
+
+  useEffect(() => {
+    loadEnveloppes();
+    loadBudget();
+  }, [refreshKey]);
+  const {
+    budget: budgetFromHook,
+    loading: loadingBudget,
+    error: errorBudget,
+  } = useBudgets();
   const [budget, setBudget] = useState<Budget | null>(null);
   const [enveloppes, setEnveloppes] = useState<Enveloppe[]>([]);
-  
+
   useEffect(() => {
     if (budgetFromHook) {
       setBudget(budgetFromHook);
@@ -114,30 +131,13 @@ export function TabSummary() {
         <NouvelleEnveloppe
           showPopup={showNouveauPopup}
           closePopup={() => setShowNouveauPopup(false)}
-          onSaved={loadEnveloppes}
+          // tell everyone about changes
+          onSaved={async () => {
+            await loadEnveloppes(); // Update local table
+            onEnveloppesChanged(); // Tell PagePrincipale to refresh everything else
+          }}
         ></NouvelleEnveloppe>
       </div>
     </div>
   );
 }
-
-/*
-function findBudget(budgets: Budget[]) {
-  // Implementation for finding a specific budget
-  const today = new Date();
-  const currentMonth = today.getMonth() + 1; // getMonth() returns 0-11
-  const currentYear = today.getFullYear();
-
-  return budgets.find((budget) => {
-    const date =
-      budget.date_creation instanceof Date
-        ? budget.date_creation
-        : new Date(budget.date_creation);
-
-    if (Number.isNaN(date.getTime())) return false;
-    return (
-      date.getMonth() + 1 === currentMonth &&
-      date.getFullYear() === currentYear
-    );
-  });
-}*/

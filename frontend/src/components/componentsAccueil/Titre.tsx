@@ -1,4 +1,4 @@
-import Vector_1 from "../../../public/img/Vector_1.png";
+import Vector_1 from "../../img/Vector_1.png";
 export default function Titre() {
   return (
     <div className="flex flex-col items-center justify-center pt-30 pb-10">

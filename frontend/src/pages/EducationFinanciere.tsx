@@ -1,7 +1,7 @@
 import SectionEducation from "../components/SectionEducation.tsx";
-import ellipse16 from "../../public/img/Ellipse16.png";
-import ellipse17 from "../../public/img/Ellipse17.png";
-import plante from "../../public/img/planteEduc.png";
+import ellipse16 from "../img/Ellipse16.png";
+import ellipse17 from "../img/Ellipse17.png";
+import plante from "../img/planteEduc.png";
 export default function EducationFinanciere() {
   return (
     <div className="space-y-12 bg-gradient-to-br from-[#FDF7EB] to-white space-x-4 p-8">

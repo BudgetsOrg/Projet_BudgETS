@@ -1,8 +1,24 @@
 import type { Enveloppe } from "../../../interfaces";
-import trash from "../../../../public/img/trash.svg";
+import trash from "../../../img/trash.svg";
 import { deleteEnveloppe } from "../../../api/EnveloppeApi";
-export function EnveloppeCard(props: Enveloppe & { onSaved: () => void }) {
-  const { id_enveloppe, titre, image, onSaved } = props;
+interface EnveloppeCardProps extends Enveloppe {
+  onSaved: () => void;
+}
+
+export function EnveloppeCard({
+  id_enveloppe,
+  titre,
+  image,
+  onSaved,
+}: EnveloppeCardProps) {
+  const handleDelete = async () => {
+    try {
+      await deleteEnveloppe(id_enveloppe);
+      onSaved();
+    } catch (error) {
+      console.log("Error deleting enveloppe:", error);
+    }
+  };
   return (
     <div
       id={String(id_enveloppe)}
@@ -13,7 +29,10 @@ export function EnveloppeCard(props: Enveloppe & { onSaved: () => void }) {
         <h2 className="text-lg font-semibold text-white">{titre}</h2>
         <button
           className="bg-white hover:bg-[var(--color-delete)] rounded-full"
-          onClick={() => handleDelete(id_enveloppe, onSaved)}
+          onClick={(e) => {
+            e.stopPropagation(); // Prevents clicking the card when clicking the trash
+            handleDelete();
+          }}
         >
           <img src={trash} alt="Supprimer" className="w-10 h-10" />
         </button>
@@ -29,20 +48,4 @@ export function EnveloppeCard(props: Enveloppe & { onSaved: () => void }) {
       ></div>
     </div>
   );
-}
-
-async function handleDelete(id_enveloppe: number, onSaved: () => void) {
-  try {
-    await deleteEnveloppe(id_enveloppe);
-    onSaved();
-    // Refresh all displays
-    if ((window as any).refreshTabSummary) {
-      (window as any).refreshTabSummary();
-    }
-    if ((window as any).refreshEnveloppeDisplayer) {
-      (window as any).refreshEnveloppeDisplayer();
-    }
-  } catch (error) {
-    console.log("Error deleting enveloppe:", error);
-  }
 }

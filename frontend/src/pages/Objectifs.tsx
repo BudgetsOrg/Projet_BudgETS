@@ -2,7 +2,7 @@
 // Affiche le détail d'un objectif d'épargne avec image de couverture et invitation par email
 
 import { useState, useRef } from "react";
-import imgEdit from "../../public/img/edit.png";
+import imgEdit from "../img/edit.png";
 import { BackgroundColor } from "devextreme-react/cjs/chart";
 
 interface Economie {

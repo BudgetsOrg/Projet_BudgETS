@@ -1,5 +1,6 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import * as nodemailer from 'nodemailer';
+import SMTPTransport from 'nodemailer/lib/smtp-transport';
 
 @Injectable()
 export class MailService {
@@ -7,12 +8,15 @@ export class MailService {
 
   constructor() {
     this.transporter = nodemailer.createTransport({
-      service: 'gmail',
-      auth: {
-        user: process.env.GMAIL_USER, 
-        pass: process.env.GMAIL_PASS, 
-      },
-    });
+  host: 'smtp.gmail.com',
+  port: 587,
+  secure: false,
+  family: 4,
+  auth: {
+    user: process.env.GMAIL_USER,
+    pass: process.env.GMAIL_PASS,
+  },
+} as SMTPTransport.Options);
   }
 
   async sendResetPasswordEmail(email: string, token: string) {

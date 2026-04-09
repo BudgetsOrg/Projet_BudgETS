@@ -140,3 +140,19 @@ export async function postForgotPassword(adresse_email : string){
     return reponse;
 
 }
+export async function postResetPassword(token : string,password : string){
+const url = local 
+        ? `${API_URL_LOCAL}/auth/reset-password`
+        : `${API_URL_GLOBAL}/auth/reset-password`;
+
+    const reponse = await fetch(url, {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({token, password }),
+    });
+
+    return reponse;
+
+}

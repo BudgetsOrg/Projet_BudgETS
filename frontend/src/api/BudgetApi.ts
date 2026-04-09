@@ -3,8 +3,7 @@ import { getToken } from "../../public/token";
 import type { Budget } from "../interfaces";
 const API_URL_GLOBAL = "https://projetbudgets-backend.up.railway.app";
 const API_URL_LOCAL = import.meta.env.VITE_API_URL || "http://localhost:3000";
-const token =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjI3LCJlbWFpbCI6ImJhY2tpbnRpbWVAZ21haWwuY29tIiwiaWF0IjoxNzc1NzQ4ODIyLCJleHAiOjE3NzU4MzUyMjJ9.BDgxex1NxpmvVNdybe9wO4v8SpHXjlBFuvknYVqoiIE";
+const token = getToken() ?? "";
 const debug = false;
 // choose one
 const local = false;

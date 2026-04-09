@@ -1,10 +1,11 @@
 // mes fonctions pour aller chercher les données à l'API
 // par contre, nous sommes en debug pour l'instant donc debug = true et nous avons des données préparées.
 
+import { getToken } from "../../public/token";
+
 const API_URL_GLOBAL = "https://projetbudgets-backend.up.railway.app";
 const API_URL_LOCAL = "http://localhost:3000";
-const token =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImVtYWlsIjoiam9obmRvZUBleGFtcGxlLmNvbSIsImlhdCI6MTc3NTE1MjI1MywiZXhwIjoxNzc1MjM4NjUzfQ.YzE3xvT7r97x26eUGf-vVMVKKshvVTEMTy1JBj9odcY";
+const token = getToken() ?? ""
 //localStorage.getItem("token");
 const debug = true;
 // choose one

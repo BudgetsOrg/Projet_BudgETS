@@ -1,11 +1,12 @@
 // mes fonctions pour aller chercher les données à l'API
 // par contre, nous sommes en debug pour l'instant donc debug = true et nous avons des données préparées.
 
+import { getToken } from "../../public/token";
 import type { Utilisateur } from "../interfaces";
 let loggedInUser: Utilisateur | null = null;
 const API_URL_GLOBAL = "https://projetbudgets-backend.up.railway.app";
 const API_URL_LOCAL = "http://localhost:3000";
-const token = localStorage.getItem("token");
+const token = getToken() ?? "";
 const debug = false;
 // choose one
 const local = false;
@@ -26,7 +27,7 @@ export async function getUtilisateur() {
     return mockUser;
   } else {
     if (local) {
-      const response = await fetch(`${API_URL_LOCAL}/enveloppe`, {
+      const response = await fetch(`${API_URL_LOCAL}/users/me`, {
         method: "GET",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -34,7 +35,7 @@ export async function getUtilisateur() {
       });
       return response.json();
     } else {
-      const response = await fetch(`${API_URL_GLOBAL}/enveloppe`, {
+      const response = await fetch(`${API_URL_GLOBAL}/users/me`, {
         method: "GET",
         headers: {
           Authorization: `Bearer ${token}`,

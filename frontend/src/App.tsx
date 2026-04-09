@@ -13,6 +13,7 @@ import { PageProfile } from "./pages/PageProfile";
 import Accueuil from "./pages/Accueuil";
 import EducationFinanciere from "./pages/EducationFinanciere";
 import PageMdpOublie from "./pages/PageMotDePasseOublie";
+import PageObjectifs from "./pages/Objectifs";
 import PageCreationNouveauMdp from "./pages/PageCreationNouveauMdp"
 
 

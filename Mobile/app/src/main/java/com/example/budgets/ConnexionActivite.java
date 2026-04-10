@@ -27,39 +27,39 @@ public class ConnexionActivite extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activite_connexion);
 
-        // 🔗 Lier les éléments UI
+        // Lier les éléments UI
         inscription = findViewById(R.id.inscription);
         mdpOublie = findViewById(R.id.mdpOublie);
         connexion = findViewById(R.id.connexion);
 
-        emailInput = findViewById(R.id.emailLogin);      // ⚠️ vérifie les IDs dans ton XML
+        emailInput = findViewById(R.id.emailLogin);      // vérifie les IDs dans ton XML
         passwordInput = findViewById(R.id.mdpConnexion);
 
-        // 🔁 Navigation vers inscription
+        // Navigation vers inscription
         inscription.setOnClickListener(v -> {
             Intent intent = new Intent(ConnexionActivite.this, InscriptionActivite.class);
             startActivity(intent);
         });
 
-        // 🔁 Navigation mot de passe oublié
+        //  Navigation mot de passe oublié
         mdpOublie.setOnClickListener(v -> {
             Intent intent = new Intent(ConnexionActivite.this, MdpOublieActivite.class);
             startActivity(intent);
         });
 
-        // 🔐 Bouton connexion
+        // Bouton connexion
         connexion.setOnClickListener(v -> {
 
             String email = emailInput.getText().toString().trim();
             String password = passwordInput.getText().toString().trim();
 
-            // ✅ Validation simple
+            //Validation simple
             if (email.isEmpty() || password.isEmpty()) {
                 Toast.makeText(this, "Remplis tous les champs", Toast.LENGTH_SHORT).show();
                 return;
             }
 
-            // 🔄 Appel API en background
+            // Appel API en background
             new Thread(() -> {
                 try {
                     String body = "{\"adresse_email\":\"" + email + "\",\"password\":\"" + password + "\"}";
@@ -72,14 +72,14 @@ public class ConnexionActivite extends AppCompatActivity {
                     if (json.has("access_token")) {
                         String token = json.getString("access_token");
 
-                        // 💾 Sauvegarde du token
+                        // Sauvegarde du token
                         SharedPreferences prefs = getSharedPreferences("auth", MODE_PRIVATE);
                         prefs.edit().putString("token", token).apply();
 
                         runOnUiThread(() -> {
                             Toast.makeText(this, "Connexion réussie", Toast.LENGTH_SHORT).show();
 
-                            // ✅ Navigation SEULEMENT en cas de succès
+                            // Navigation SEULEMENT en cas de succès
                             Intent intent = new Intent(ConnexionActivite.this, MainActivity.class);
                             startActivity(intent);
                             finish(); // empêche de revenir en arrière

@@ -57,14 +57,12 @@ public class InscriptionActivite extends AppCompatActivity {
                 try {
                     JSONObject jsonBody = new JSONObject();
 
-                    // On utilise EXACTEMENT les clés demandées par ton API
                     jsonBody.put("nom", nom);
                     jsonBody.put("prenom", prenom);
                     jsonBody.put("adresse_email", email);
                     jsonBody.put("password", motDePasse);
                     jsonBody.put("date_naissance", dateNaissance);
 
-                    // Correction de la clé ici : "soldeDumois" au lieu de "solde"
                     try {
                         double soldeValeur = Double.parseDouble(soldeStr);
                         jsonBody.put("soldeDumois", soldeValeur);
@@ -73,11 +71,8 @@ public class InscriptionActivite extends AppCompatActivity {
                         return;
                     }
 
-                    // Ajout des champs optionnels pour éviter les erreurs de validation
                     jsonBody.put("telephone", ""); // Vide si non saisi
                     jsonBody.put("image", "");     // Vide si non saisi
-
-                    // Affichage du JSON dans le log pour que tu puisses vérifier le format
                     Log.d("API_PAYLOAD", jsonBody.toString());
 
                     String response = ApiHelper.post("/auth/inscription", jsonBody.toString(), null);

@@ -45,9 +45,7 @@ export function TableInfoProfil({ user }: TableInfoProfilProps) {
             <td>
               <input
                 id="date_naissance"
-                defaultValue={
-                  user.date_naissance
-                }
+                defaultValue={user.date_naissance}
                 readOnly={!editMode}
               />
             </td>
@@ -118,3 +116,7 @@ export function TableInfoProfil({ user }: TableInfoProfilProps) {
     </div>
   );
 }
+
+async function handleChangeProfil() {}
+
+async function handleDeleteAccount() {}

@@ -1,6 +1,7 @@
 // Mohamed
 
 import { getToken, viderLocalStorage } from "../../public/token";
+import logo from "../img/image_inscription_plante.png";
 
 
 function Header() {
@@ -36,7 +37,7 @@ const redirigerPageAcceuil = () => {
           <ul>
             <li className="sous_sujet">
               <img
-                src="/img/image_inscription_plante.png"
+                src={logo}
                 className="image_header"
                 onClick={redirigerPageAcceuil}
               />

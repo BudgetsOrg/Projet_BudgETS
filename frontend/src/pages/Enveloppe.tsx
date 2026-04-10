@@ -4,6 +4,7 @@ import type { Depense } from "../interfaces"; // ton interface est rendu dans la
 import { GraphiqueEnveloppe } from "../components/graphiqueEnveloppe.tsx"; // le graphique de la page enveloppe
 import { getToken } from "../../public/token.ts";
 import { getDepenses } from "../api/DepenseApi.ts";
+import img_edit from "../img/edit.png";
 // Plus tard gerer avec le backend.
 const enveloppeId = 1;
 
@@ -189,7 +190,7 @@ function Enveloppe() {
             onClick={() => {setEditDataSauvegarde({... editData});
               setModalEditOuvert(true)}}
           >
-            <img src="/img/edit.png"></img>
+            <img src={img_edit}></img>
           </button>
         </div>
 

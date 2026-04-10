@@ -2,39 +2,37 @@ import { getToken } from "../../public/token";
 import type { Depense } from "../interfaces";
 const API_URL_GLOBAL = "https://projetbudgets-backend.up.railway.app";
 const API_URL_LOCAL = "http://localhost:3000";
-//localStorage.getItem("token");
-const debug = true;
-// choose one
+const debug = false;
 const local = false;
 
 export async function getDepenses(id_enveloppe: number) {
-const token = getToken() ?? "";
+  const token = getToken() ?? "";
 
   if (debug) {
     const mockDepense1 = {
-  id_depense: 1,
-  nom_depense: "Mock Depense 1",
-  montant: 10,        // ← montant au lieu de prix
-  date: "2026-03-29",
-  id_enveloppe: id_enveloppe,
-  id_categorie: 1,
-};
-const mockDepense2 = {
-  id_depense: 2,
-  nom_depense: "Mock Depense 2",
-  montant: 20,        // ← montant au lieu de prix
-  date: "2026-03-26",
-  id_enveloppe: id_enveloppe,
-  id_categorie: 1,
-};
-const mockDepense3 = {
-  id_depense: 3,
-  nom_depense: "Mock Depense 3",
-  montant: 20,        // ← montant au lieu de prix
-  date: "2026-03-26",
-  id_enveloppe: id_enveloppe,
-  id_categorie: 1,
-};
+      id_depense: 1,
+      nom_depense: "Mock Depense 1",
+      montant: 10, // ← montant au lieu de prix
+      date: "2026-03-29",
+      id_enveloppe: id_enveloppe,
+      id_categorie: 1,
+    };
+    const mockDepense2 = {
+      id_depense: 2,
+      nom_depense: "Mock Depense 2",
+      montant: 20, // ← montant au lieu de prix
+      date: "2026-03-26",
+      id_enveloppe: id_enveloppe,
+      id_categorie: 1,
+    };
+    const mockDepense3 = {
+      id_depense: 3,
+      nom_depense: "Mock Depense 3",
+      montant: 20, // ← montant au lieu de prix
+      date: "2026-03-26",
+      id_enveloppe: id_enveloppe,
+      id_categorie: 1,
+    };
     return [mockDepense1, mockDepense2, mockDepense3];
   } else {
     if (local) {
@@ -64,7 +62,7 @@ const mockDepense3 = {
 }
 
 export async function getOneDepense(id_depense: number) {
-const token = getToken() ?? "";
+  const token = getToken() ?? "";
 
   if (local) {
     const response = await fetch(`${API_URL_LOCAL}/depense/${id_depense}`, {
@@ -86,7 +84,7 @@ const token = getToken() ?? "";
 }
 
 export async function postDepense(depense: Depense) {
-const token = getToken() ?? "";
+  const token = getToken() ?? "";
 
   if (local) {
     const response = await fetch(`${API_URL_LOCAL}/depense`, {
@@ -112,7 +110,7 @@ const token = getToken() ?? "";
 }
 
 export async function deleteDepense(id_depense: number) {
-const token = getToken() ?? "";
+  const token = getToken() ?? "";
 
   if (local) {
     const response = await fetch(`${API_URL_LOCAL}/depense/${id_depense}`, {
@@ -134,7 +132,7 @@ const token = getToken() ?? "";
 }
 
 export async function updateDepense(depense: Depense) {
-const token = getToken() ?? "";
+  const token = getToken() ?? "";
 
   if (local) {
     const response = await fetch(

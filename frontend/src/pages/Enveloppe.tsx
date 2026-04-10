@@ -1,12 +1,11 @@
 // Mohamed
 import { useState, useEffect } from "react"; // npm install
 import type { Depense } from "../interfaces"; // ton interface est rendu dans la page pour ceux-ci
-import { GraphiqueEnveloppe } from "../components/graphiqueEnveloppe.tsx"; // le graphique de la page enveloppe
+import { GraphiqueEnveloppe } from "../components/graphiques/graphiqueEnveloppe.tsx"; // le graphique de la page enveloppe
 import { getToken } from "../../public/token.ts";
 import { getDepenses } from "../api/DepenseApi.ts";
 import img_edit from "../img/edit.png";
-// Plus tard gerer avec le backend.
-const enveloppeId = 1;
+import { useLocation } from "react-router-dom";
 
 /*const donneesInitiales = {
   titre: "Titre de mon enveloppe",
@@ -31,10 +30,14 @@ const enveloppeId = 1;
 */
 
 function Enveloppe() {
-  const id_enveloppe = 5; // A mettre l'id recu par la page Principale.
+  const location = useLocation();
+  const id_enveloppe = location.state?.id_enveloppe;
 
   console.log("voila le token " + getToken());
-  const [editDataSauvegarde, setEditDataSauvegarde] = useState({ titre: "", budgetAlloue: 0 });
+  const [editDataSauvegarde, setEditDataSauvegarde] = useState({
+    titre: "",
+    budgetAlloue: 0,
+  });
   const [editData, setEditData] = useState({ titre: "", budgetAlloue: 0 });
   const [depenses, setDepenses] = useState<Depense[]>([]);
   const [modalEditOuvert, setModalEditOuvert] = useState(false);
@@ -56,7 +59,6 @@ function Enveloppe() {
     const recupererDepenses = async () => {
       try {
         const data: Depense[] = await getDepenses(id_enveloppe);
-
 
         if (!Array.isArray(data)) {
           console.error("Réponse inattendue :", data);
@@ -110,7 +112,10 @@ function Enveloppe() {
   // Lorsqu'on relie le backend au frontend on utilisera la version en bas.
   const confirmerAjout = () => {
     if (
-      !nouvelleDepense.nom_depense || !nouvelleDepense.date || nouvelleDepense.montant <= 0)
+      !nouvelleDepense.nom_depense ||
+      !nouvelleDepense.date ||
+      nouvelleDepense.montant <= 0
+    )
       return;
 
     if (modeEdition && indexEdition !== null) {
@@ -187,8 +192,10 @@ function Enveloppe() {
           <h1 className="enveloppe_titre">{editData.titre}</h1>
           <button
             className="enveloppe_edit"
-            onClick={() => {setEditDataSauvegarde({... editData});
-              setModalEditOuvert(true)}}
+            onClick={() => {
+              setEditDataSauvegarde({ ...editData });
+              setModalEditOuvert(true);
+            }}
           >
             <img src={img_edit}></img>
           </button>
@@ -205,7 +212,10 @@ function Enveloppe() {
       <div className="enveloppe_barre_fond">
         <div
           className="enveloppe_barre_remplie"
-          style={{ width: `${pourcentage}%`, backgroundColor: couleurBarre(pourcentage) }}
+          style={{
+            width: `${pourcentage}%`,
+            backgroundColor: couleurBarre(pourcentage),
+          }}
         />
         <span className="enveloppe_barre_pourcentage">
           {Math.round(pourcentage)}%
@@ -391,7 +401,7 @@ function Enveloppe() {
               <button
                 className="btn_supprimer"
                 onClick={() => {
-                  setEditData({ ... editDataSauvegarde }); 
+                  setEditData({ ...editDataSauvegarde });
                   setModalEditOuvert(false);
                 }}
               >

@@ -2,13 +2,14 @@ import { getToken } from "../../public/token";
 import type { Depense } from "../interfaces";
 const API_URL_GLOBAL = "https://projetbudgets-backend.up.railway.app";
 const API_URL_LOCAL = "http://localhost:3000";
-const token = getToken() ?? "";
 //localStorage.getItem("token");
 const debug = true;
 // choose one
 const local = false;
 
 export async function getDepenses(id_enveloppe: number) {
+const token = getToken() ?? "";
+
   if (debug) {
     const mockDepense1 = {
   id_depense: 1,
@@ -63,6 +64,8 @@ const mockDepense3 = {
 }
 
 export async function getOneDepense(id_depense: number) {
+const token = getToken() ?? "";
+
   if (local) {
     const response = await fetch(`${API_URL_LOCAL}/depense/${id_depense}`, {
       method: "GET",
@@ -83,6 +86,8 @@ export async function getOneDepense(id_depense: number) {
 }
 
 export async function postDepense(depense: Depense) {
+const token = getToken() ?? "";
+
   if (local) {
     const response = await fetch(`${API_URL_LOCAL}/depense`, {
       method: "POST",
@@ -107,6 +112,8 @@ export async function postDepense(depense: Depense) {
 }
 
 export async function deleteDepense(id_depense: number) {
+const token = getToken() ?? "";
+
   if (local) {
     const response = await fetch(`${API_URL_LOCAL}/depense/${id_depense}`, {
       method: "DELETE",
@@ -127,6 +134,8 @@ export async function deleteDepense(id_depense: number) {
 }
 
 export async function updateDepense(depense: Depense) {
+const token = getToken() ?? "";
+
   if (local) {
     const response = await fetch(
       `${API_URL_LOCAL}/depense/${depense.id_depense}`,

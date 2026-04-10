@@ -2,12 +2,13 @@ import { getToken } from "../../public/token";
 import type { Enveloppe } from "../interfaces";
 const API_URL_GLOBAL = "https://projetbudgets-backend.up.railway.app";
 const API_URL_LOCAL = "http://localhost:3000";
-const token = getToken() ?? "";
 const debug = false;
 // choose one
 const local = false;
 
 export async function getEnveloppe() {
+const token = getToken() ?? "";
+
   if (debug) {
     const mockEnveloppe1 = {
       id_enveloppe: 1,
@@ -44,6 +45,8 @@ export async function getEnveloppe() {
 }
 
 export async function getEnveloppeById(id_enveloppe: number) {
+const token = getToken() ?? "";
+
   if (local) {
     const response = await fetch(`${API_URL_LOCAL}/enveloppe/${id_enveloppe}`, {
       method: "GET",
@@ -67,6 +70,8 @@ export async function getEnveloppeById(id_enveloppe: number) {
 }
 
 export async function postEnveloppe(enveloppe: Enveloppe) {
+const token = getToken() ?? "";
+
   if (local) {
     const response = await fetch(`${API_URL_LOCAL}/enveloppe`, {
       method: "POST",
@@ -91,6 +96,8 @@ export async function postEnveloppe(enveloppe: Enveloppe) {
 }
 
 export async function deleteEnveloppe(id_enveloppe: number) {
+const token = getToken() ?? "";
+
   if (local) {
     const response = await fetch(`${API_URL_LOCAL}/enveloppe/${id_enveloppe}`, {
       method: "DELETE",
@@ -114,6 +121,8 @@ export async function deleteEnveloppe(id_enveloppe: number) {
 }
 
 export async function updateEnveloppe(enveloppe: Enveloppe) {
+const token = getToken() ?? "";
+
   if (local) {
     const response = await fetch(
       `${API_URL_LOCAL}/enveloppe/${enveloppe.id_enveloppe}`,

@@ -1,6 +1,6 @@
 // Mohamed
 
-import { getToken } from "../../public/token";
+import { getToken, viderLocalStorage } from "../../public/token";
 
 
 function Header() {
@@ -24,7 +24,7 @@ const redirigerPageAcceuil = () => {
 /**
  * Pour l'instant on rediriger vers la page principale mais a changer plus tard pour rediriger vers la page d'acceuil.
  */
-    window.location.href = "/PagePrincipale";
+    window.location.href = "/";
 }
 
   return (
@@ -61,7 +61,9 @@ const redirigerPageAcceuil = () => {
               <li className="sous_sujet">
                 <button
                   onClick={() => {
+                    redirigerPageAcceuil();
                     localStorage.removeItem("token");
+                    viderLocalStorage();
                     window.location.reload();
                   }}
                 >

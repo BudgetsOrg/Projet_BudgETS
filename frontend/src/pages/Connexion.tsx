@@ -4,6 +4,7 @@ import { getToken, setToken } from "../../public/token";
 import type { Utilisateur } from "../interfaces";
 import { postConnexion } from "../api/UtilisateurApi";
 import img_retour from "../img/arrow_left_alt.png";
+import img_plante from "../img/image_inscription_plante.png";
 
 function Connexion() {
   const [donneeConnexion, setDonneeConnexion] = useState<Utilisateur>({
@@ -56,7 +57,7 @@ function Connexion() {
         <div className="connexion_container">
           <div className="container_gauche">
             <img
-              src="/img/image_inscription_plante.png"
+              src={img_plante}
               className="image_connexion"
             />
           </div>

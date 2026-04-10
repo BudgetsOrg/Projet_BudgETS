@@ -5,13 +5,14 @@ import { getToken } from "../../public/token";
 
 const API_URL_GLOBAL = "https://projetbudgets-backend.up.railway.app";
 const API_URL_LOCAL = "http://localhost:3000";
-const token = getToken() ?? ""
 //localStorage.getItem("token");
 const debug = true;
 // choose one
 const local = false;
 
 export async function getObjectif() {
+const token = getToken() ?? ""
+
   if (debug) {
     const mockObjectif1 = {
       id_objectif: 1,

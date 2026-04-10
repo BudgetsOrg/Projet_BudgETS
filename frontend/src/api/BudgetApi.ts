@@ -3,12 +3,13 @@ import { getToken } from "../../public/token";
 import type { Budget } from "../interfaces";
 const API_URL_GLOBAL = "https://projetbudgets-backend.up.railway.app";
 const API_URL_LOCAL = import.meta.env.VITE_API_URL || "http://localhost:3000";
-const token = getToken() ?? "";
 const debug = false;
 // choose one
 const local = false;
 
 export async function getLastBudget() {
+const token = getToken() ?? "";
+
   if (debug) {
     const mockBudget1 = {
       id_budget: 1,
@@ -48,6 +49,8 @@ export async function getLastBudget() {
 }
 
 export async function getBudgetById(id_budget: number) {
+const token = getToken() ?? "";
+
   if (local) {
     const response = await fetch(`${API_URL_LOCAL}/budget/${id_budget}`, {
       method: "GET",
@@ -72,6 +75,8 @@ export async function getBudgetHistorique() {
 }
 
 export async function postBudget(budget: Budget) {
+const token = getToken() ?? "";
+
   if (local) {
     const response = await fetch(`${API_URL_LOCAL}/budget`, {
       method: "POST",
@@ -96,6 +101,8 @@ export async function postBudget(budget: Budget) {
 }
 
 export async function deleteBudget(id_budget: number) {
+const token = getToken() ?? "";
+
   if (local) {
     const response = await fetch(`${API_URL_LOCAL}/budget/${id_budget}`, {
       method: "DELETE",
@@ -116,6 +123,8 @@ export async function deleteBudget(id_budget: number) {
 }
 
 export async function updateBudget(solde: number, id_budget: number) {
+const token = getToken() ?? "";
+
   if (local) {
     const response = await fetch(`${API_URL_LOCAL}/budget/${id_budget}`, {
       method: "PATCH",

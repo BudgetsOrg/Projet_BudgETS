@@ -2,13 +2,14 @@ import { getToken } from "../../public/token";
 import type { Economie } from "../interfaces";
 const API_URL_GLOBAL = "https://projetbudgets-backend.up.railway.app";
 const API_URL_LOCAL = "http://localhost:3000";
-const token = getToken() ?? "";
 //localStorage.getItem("token");
 const debug = true;
 // choose one
 const local = false;
 
 export async function getEconomie(id_objectif: number) {
+const token = getToken() ?? "";
+
   if (debug) {
     const mockEconomie1 = {
       id: 1,
@@ -51,6 +52,8 @@ export async function getEconomie(id_objectif: number) {
 }
 
 export async function getOneEconomie(id_economie: number) {
+const token = getToken() ?? "";
+
   if (local) {
     const response = await fetch(`${API_URL_LOCAL}/economie/${id_economie}`, {
       method: "GET",
@@ -71,6 +74,8 @@ export async function getOneEconomie(id_economie: number) {
 }
 
 export async function postEconomie(economie: Economie) {
+const token = getToken() ?? "";
+
   if (local) {
     const response = await fetch(`${API_URL_LOCAL}/economie`, {
       method: "POST",
@@ -95,6 +100,8 @@ export async function postEconomie(economie: Economie) {
 }
 
 export async function deleteEconomie(id_economie: number) {
+const token = getToken() ?? "";
+
   if (local) {
     const response = await fetch(`${API_URL_LOCAL}/economie/${id_economie}`, {
       method: "DELETE",
@@ -115,6 +122,8 @@ export async function deleteEconomie(id_economie: number) {
 }
 
 export async function updateEconomie(economie: Economie) {
+const token = getToken() ?? "";
+
   if (local) {
     const response = await fetch(
       `${API_URL_LOCAL}/economie/${economie.id_economie}`,

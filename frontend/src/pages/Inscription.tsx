@@ -6,6 +6,8 @@ import type { Utilisateur } from "../interfaces";
 import { postUtilisateur } from "../api/UtilisateurApi";
 import { setToken, getToken } from "../../public/token";
 import img_retour from "../img/arrow_left_alt.png";
+import img_plante from "../img/image_inscription_plante_coupe.png";
+import img_avatar_default from "../img/image_avatar_default.png";
 /*interface Utilisateur {
   nom: string;
   prenom: string;
@@ -124,7 +126,7 @@ function Inscription() {
         <p className="sous-titre">Remplissez les informations suivantes :</p>
 
         <img
-          src="/img/image_avatar_default.png"
+          src={img_avatar_default}
           id="avatar_default"
           className="avatar_default"
         />
@@ -188,7 +190,7 @@ function Inscription() {
 
           <div className="image_container">
             <img
-              src="/img/image_inscription_plante_coupe.png"
+              src={img_plante}
               className="image_btn_inscription"
             />
             <div

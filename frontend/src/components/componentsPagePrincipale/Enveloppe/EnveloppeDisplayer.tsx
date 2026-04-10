@@ -25,6 +25,7 @@ export function EnveloppesBudgetaires({
       setEnveloppes(latestEnveloppes);
     } catch (error) {
       console.error("Erreur de chargement:", error);
+      setEnveloppes([]);
     } finally {
       setLoading(false);
     }

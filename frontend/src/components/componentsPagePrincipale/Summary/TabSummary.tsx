@@ -109,12 +109,14 @@ export function TabSummary({
               </span>
             </th>
           </tr>
-          {enveloppes.map((env) => (
-            <tr key={env.id_enveloppe}>
-              <td className="p-4">{env.titre}</td>
-              <td className="p-4">{env.montant} $</td>
-            </tr>
-          ))}
+          {enveloppes
+            .sort((a, b) => b.montant - a.montant)
+            .map((env) => (
+              <tr key={env.id_enveloppe}>
+                <td className="p-4">{env.titre}</td>
+                <td className="p-4">{env.montant} $</td>
+              </tr>
+            ))}
           <tr>
             <td className="p-4 " colSpan={2}>
               <button

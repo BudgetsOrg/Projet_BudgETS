@@ -33,7 +33,7 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
     }
 
     return {
-      id_user: user.id_user, // Ton controller pourra faire req.user.id
+      id: user.id_user,// Ton controller pourra faire req.user.id
       email: user.adresse_email,
       nom: user.nom,
       prenom: user.prenom

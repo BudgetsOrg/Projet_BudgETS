@@ -13,4 +13,17 @@ export class UpdateUserDto {
   @IsString()
   @IsNotEmpty()
   prenom?: string;
+
+  @ApiPropertyOptional({ example: '5144504500', description: 'Numéro de téléphone de l\'utilisateur' })
+  @IsOptional()
+  @IsString()
+  telephone?: string;
+
+  @ApiPropertyOptional({ example: '2000-01-01', description: 'Date de naissance de l\'utilisateur' })
+  @IsOptional()
+  date_naissance?: Date;
+
+  @ApiPropertyOptional({example: 'image.jpg', description: 'URL de l\'image de profil de l\'utilisateur'})
+  @IsOptional()
+  image_url?: string;
 }

@@ -8,7 +8,6 @@ const API_URL_GLOBAL = "https://projetbudgets-backend.up.railway.app";
 const API_URL_LOCAL = "http://localhost:3000";
 const token = getToken() ?? "";
 const debug = false;
-// choose one
 const local = false;
 //A modifier pour get un user.
 export async function getUtilisateur() {
@@ -64,6 +63,59 @@ export async function postUtilisateur(
   return reponse;
 }
 
+export async function updateUtilisateur(
+  nom: string,
+  prenom: string,
+  telephone: string,
+  date_naissance: string,
+) {
+  const token = getToken() ?? "";
+
+  if (local) {
+    const response = await fetch(`${API_URL_LOCAL}/users/me`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ nom, prenom, telephone, date_naissance }),
+    });
+    return response.json();
+  } else {
+    const response = await fetch(`${API_URL_GLOBAL}/users/me`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ nom, prenom, telephone, date_naissance }),
+    });
+    return response.json();
+  }
+}
+
+export async function deleteUtilisateur() {
+  const token = getToken() ?? "";
+
+  if (local) {
+    const response = await fetch(`${API_URL_LOCAL}/users/me`, {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.json();
+  } else {
+    const response = await fetch(`${API_URL_GLOBAL}/users/me`, {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.json();
+  }
+}
+
 export async function postConnexion(
   adresse_email: string,
   password: string,
@@ -114,6 +166,7 @@ export async function login(adresse_email: string, password: string) {
     return user;
   }
 }
+/*
 //TODO : Change with the actual login information, used as a placeholder for the profile page;
 export function getLoggedInUser() {
   if (debug) {
@@ -125,35 +178,34 @@ export function getLoggedInUser() {
   }
   return loggedInUser;
 }
-export async function postForgotPassword(adresse_email : string){
-    const url = local 
-        ? `${API_URL_LOCAL}/auth/forgot-password`
-        : `${API_URL_GLOBAL}/auth/forgot-password`;
+*/
+export async function postForgotPassword(adresse_email: string) {
+  const url = local
+    ? `${API_URL_LOCAL}/auth/forgot-password`
+    : `${API_URL_GLOBAL}/auth/forgot-password`;
 
-    const reponse = await fetch(url, {
-        method: "POST",
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({adresse_email}),
-    });
+  const reponse = await fetch(url, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ adresse_email }),
+  });
 
-    return reponse;
-
+  return reponse;
 }
-export async function postResetPassword(token : string,password : string){
-const url = local 
-        ? `${API_URL_LOCAL}/auth/reset-password`
-        : `${API_URL_GLOBAL}/auth/reset-password`;
+export async function postResetPassword(token: string, password: string) {
+  const url = local
+    ? `${API_URL_LOCAL}/auth/reset-password`
+    : `${API_URL_GLOBAL}/auth/reset-password`;
 
-    const reponse = await fetch(url, {
-        method: "POST",
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({token, password }),
-    });
+  const reponse = await fetch(url, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ token, password }),
+  });
 
-    return reponse;
-
+  return reponse;
 }

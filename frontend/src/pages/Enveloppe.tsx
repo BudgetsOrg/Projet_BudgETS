@@ -30,6 +30,7 @@ import { useLocation } from "react-router-dom";
 */
 
 function Enveloppe() {
+  // pour récupérer le id de l'enveloppe à partir de la page précédente
   const location = useLocation();
   const id_enveloppe = location.state?.id_enveloppe;
 

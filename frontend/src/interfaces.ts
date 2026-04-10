@@ -37,11 +37,11 @@ export interface Utilisateur {
   nom: string;
   prenom: string;
   adresse_email: string;
-  password: string;
+  password?: string;
   date_naissance: string;
   telephone?: string;
   image?: string;
-  soldeDumois: number;
+  soldeDumois?: number;
 }
 
 // vérifier l'id

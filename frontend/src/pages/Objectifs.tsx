@@ -4,6 +4,7 @@
 import { useState, useRef } from "react";
 import imgEdit from "../img/edit.png";
 import { BackgroundColor } from "devextreme-react/cjs/chart";
+import GraphiqueObjectif from "../components/graphiques/graphiqueObjectif";
 
 interface Economie {
   id: number;
@@ -23,73 +24,91 @@ const donneesObjectif: DonneesObjectif = {
   montantACumuler: 11150,
   imageUrl: null,
   economies: [
-    { id: 1, montant: 15.00,  date: "2026-10-19" },
-    { id: 2, montant: 205.00, date: "2026-10-13" },
-    { id: 3, montant: 15.00,  date: "2026-10-10" },
-    { id: 4, montant: 115.00, date: "2026-10-02" },
+    { id: 1, montant: 15.0, date: "2026-10-19" },
+    { id: 2, montant: 205.0, date: "2026-10-13" },
+    { id: 3, montant: 15.0, date: "2026-10-10" },
+    { id: 4, montant: 115.0, date: "2026-10-02" },
   ],
 };
 
 type TypePopup = "invitation" | "ajouter" | "edition" | null;
 
 function Objectif() {
+  // État principal
+  const [titre, setTitre] = useState<string>(donneesObjectif.titre);
+  const [montantACumuler, setMontantACumuler] = useState<number>(
+    donneesObjectif.montantACumuler,
+  );
+  const [imageUrl, setImageUrl] = useState<string | null>(
+    donneesObjectif.imageUrl,
+  );
+  const [economies, setEconomies] = useState<Economie[]>(
+    donneesObjectif.economies,
+  );
 
-  // État principal 
-  const [titre, setTitre]                     = useState<string>(donneesObjectif.titre);
-  const [montantACumuler, setMontantACumuler] = useState<number>(donneesObjectif.montantACumuler);
-  const [imageUrl, setImageUrl]               = useState<string | null>(donneesObjectif.imageUrl);
-  const [economies, setEconomies]             = useState<Economie[]>(donneesObjectif.economies);
+  //  Mode supprimer (même pattern qu'Enveloppe)
+  const [modeSupprimer, setModeSupprimer] = useState<boolean>(false);
+  const [selectionnes, setSelectionnes] = useState<number[]>([]);
 
-  //  Mode supprimer (même pattern qu'Enveloppe) 
-  const [modeSupprimer, setModeSupprimer]     = useState<boolean>(false);
-  const [selectionnes, setSelectionnes]       = useState<number[]>([]);
+  // Popups
+  const [popupOuvert, setPopupOuvert] = useState<TypePopup>(null);
 
-  // Popups 
-  const [popupOuvert, setPopupOuvert]         = useState<TypePopup>(null);
+  //  Popup Invitation
+  const [email, setEmail] = useState<string>("");
+  const [emailEnvoye, setEmailEnvoye] = useState<boolean>(false);
 
-  //  Popup Invitation 
-  const [email, setEmail]                     = useState<string>("");
-  const [emailEnvoye, setEmailEnvoye]         = useState<boolean>(false);
+  // Popup Ajouter
+  const [nouveauMontant, setNouveauMontant] = useState<string>("");
+  const [nouvelleDate, setNouvelleDate] = useState<string>("");
 
-  // Popup Ajouter 
-  const [nouveauMontant, setNouveauMontant]   = useState<string>("");
-  const [nouvelleDate, setNouvelleDate]       = useState<string>("");
+  // Popup Édition
+  const [editTitre, setEditTitre] = useState<string>(titre);
+  const [editMontant, setEditMontant] = useState<string>(
+    String(montantACumuler),
+  );
+  const [editImageUrl, setEditImageUrl] = useState<string | null>(imageUrl);
+  const editImageRef = useRef<HTMLInputElement>(null);
+  const inputImageRef = useRef<HTMLInputElement>(null);
 
-  // Popup Édition 
-  const [editTitre, setEditTitre]             = useState<string>(titre);
-  const [editMontant, setEditMontant]         = useState<string>(String(montantACumuler));
-  const [editImageUrl, setEditImageUrl]       = useState<string | null>(imageUrl);
-  const editImageRef                          = useRef<HTMLInputElement>(null);
-  const inputImageRef                         = useRef<HTMLInputElement>(null);
-
-  //  Calculs 
-  const totalEconomies: number = economies.reduce((acc, e) => acc + e.montant, 0);
-  const pourcentage: number    = Math.min((totalEconomies / montantACumuler) * 100, 100);
-  const prochainId: number     = economies.length > 0 ? Math.max(...economies.map(e => e.id)) + 1 : 1;
+  //  Calculs
+  const totalEconomies: number = economies.reduce(
+    (acc, e) => acc + e.montant,
+    0,
+  );
+  const pourcentage: number = Math.min(
+    (totalEconomies / montantACumuler) * 100,
+    100,
+  );
+  const prochainId: number =
+    economies.length > 0 ? Math.max(...economies.map((e) => e.id)) + 1 : 1;
 
   // Progression de la couleur de la barre de progression de l'objectif.
 
-const couleurBarre = (pct: number): string => {
-  if (pct <= 50) {
-    // Rouge → Jaune (0% à 50%)
-    const r = 220;
-    const g = Math.round(0 + (220 - 0) * (pct / 50)); // 0 → 220
-    return `rgb(${r}, ${g}, 0)`;
-  } else {
-    // Jaune → Rouge (50% à 100%)
-    const r = Math.round(220 + (0 - 220) * ((pct - 50) / 50));
-    const g = 220 ; // 220 → 0
-    return `rgb(${r}, ${g}, 0)`;
-  }
-};
+  const couleurBarre = (pct: number): string => {
+    if (pct <= 50) {
+      // Rouge → Jaune (0% à 50%)
+      const r = 220;
+      const g = Math.round(0 + (220 - 0) * (pct / 50)); // 0 → 220
+      return `rgb(${r}, ${g}, 0)`;
+    } else {
+      // Jaune → Rouge (50% à 100%)
+      const r = Math.round(220 + (0 - 220) * ((pct - 50) / 50));
+      const g = 220; // 220 → 0
+      return `rgb(${r}, ${g}, 0)`;
+    }
+  };
 
-  //  Formatage 
+  //  Formatage
   const formatPrix = (montant: number): string =>
     montant.toFixed(2).replace(".", ",") + "$";
 
   const formatMontantCourt = (montant: number): string => {
     if (montant >= 1000) {
-      return Math.floor(montant).toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ") + "$";
+      return (
+        Math.floor(montant)
+          .toString()
+          .replace(/\B(?=(\d{3})+(?!\d))/g, " ") + "$"
+      );
     }
     return montant.toFixed(2).replace(".", ",") + "$";
   };
@@ -145,7 +164,7 @@ const couleurBarre = (pct: number): string => {
       date: nouvelleDate,
     };
 
-    setEconomies(prev => [nouvelleEconomie, ...prev]);
+    setEconomies((prev) => [nouvelleEconomie, ...prev]);
     setPopupOuvert(null);
   };
 
@@ -161,13 +180,13 @@ const couleurBarre = (pct: number): string => {
   };
 
   const toggleSelection = (index: number): void => {
-    setSelectionnes(prev =>
-      prev.includes(index) ? prev.filter(i => i !== index) : [...prev, index]
+    setSelectionnes((prev) =>
+      prev.includes(index) ? prev.filter((i) => i !== index) : [...prev, index],
     );
   };
 
   const confirmerSuppression = (): void => {
-    setEconomies(prev => prev.filter((_, i) => !selectionnes.includes(i)));
+    setEconomies((prev) => prev.filter((_, i) => !selectionnes.includes(i)));
     setModeSupprimer(false);
     setSelectionnes([]);
   };
@@ -180,7 +199,9 @@ const couleurBarre = (pct: number): string => {
     setPopupOuvert("edition");
   };
 
-  const handleEditImageChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
+  const handleEditImageChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+  ): void => {
     const file = e.target.files?.[0];
     if (file) {
       const reader = new FileReader();
@@ -190,7 +211,9 @@ const couleurBarre = (pct: number): string => {
   };
 
   const handleSauvegarderEdition = (): void => {
-    const montantNum = parseFloat(editMontant.replace(",", ".").replace(" ", ""));
+    const montantNum = parseFloat(
+      editMontant.replace(",", ".").replace(" ", ""),
+    );
     if (!editTitre.trim() || isNaN(montantNum) || montantNum <= 0) return;
 
     setTitre(editTitre.trim());
@@ -201,11 +224,17 @@ const couleurBarre = (pct: number): string => {
 
   return (
     <div className="objectif_container">
-
       {/* Bannière image */}
-      <div className="objectif_banniere" onClick={() => inputImageRef.current?.click()}>
+      <div
+        className="objectif_banniere"
+        onClick={() => inputImageRef.current?.click()}
+      >
         {imageUrl ? (
-          <img src={imageUrl} alt="Couverture" className="objectif_banniere_img" />
+          <img
+            src={imageUrl}
+            alt="Couverture"
+            className="objectif_banniere_img"
+          />
         ) : (
           <div className="objectif_banniere_placeholder">
             <span>Cliquez pour ajouter une image</span>
@@ -220,31 +249,47 @@ const couleurBarre = (pct: number): string => {
         />
         <button
           className="btn_invite"
-          onClick={(e) => { e.stopPropagation(); setPopupOuvert("invitation"); }}
+          onClick={(e) => {
+            e.stopPropagation();
+            setPopupOuvert("invitation");
+          }}
         >
           Invité +
         </button>
       </div>
 
       {/* Bouton édition flottant */}
-      <button className="btn_edit" onClick={ouvrirEdition}><img className="img_edit" src={imgEdit}  /></button>
+      <button className="btn_edit" onClick={ouvrirEdition}>
+        <img className="img_edit" src={imgEdit} />
+      </button>
 
       {/* Corps */}
       <div className="objectif_corps">
-
         {/* En-tête */}
         <div className="objectif_header">
           <h1 className="objectif_titre">{titre}</h1>
           <div className="objectif_montant_bloc">
-            <span className="objectif_montant_label">Montant a accumuler :</span>
-            <span className="objectif_montant_valeur">{formatMontantCourt(montantACumuler)}</span>
+            <span className="objectif_montant_label">
+              Montant a accumuler :
+            </span>
+            <span className="objectif_montant_valeur">
+              {formatMontantCourt(montantACumuler)}
+            </span>
           </div>
         </div>
 
         {/* Barre de progression */}
         <div className="objectif_barre_fond">
-          <div className="objectif_barre_remplie" style={{ width: `${pourcentage}%`, backgroundColor : couleurBarre(pourcentage) }} />
-          <span className="objectif_barre_pourcentage">{Math.round(pourcentage)}%</span>
+          <div
+            className="objectif_barre_remplie"
+            style={{
+              width: `${pourcentage}%`,
+              backgroundColor: couleurBarre(pourcentage),
+            }}
+          />
+          <span className="objectif_barre_pourcentage">
+            {Math.round(pourcentage)}%
+          </span>
         </div>
 
         {/* Section économies */}
@@ -252,22 +297,36 @@ const couleurBarre = (pct: number): string => {
           <div className="objectif_economies_header">
             <div className="objectif_economies_gauche">
               <span className="objectif_economies_label">Economie :</span>
-              <span className="objectif_economies_total">{formatMontantCourt(totalEconomies)}</span>
+              <span className="objectif_economies_total">
+                {formatMontantCourt(totalEconomies)}
+              </span>
             </div>
 
             <div className="objectif_economies_actions">
               {!modeSupprimer ? (
                 <>
-                  <button className="btn_ajouter" onClick={ouvrirAjouter}>Ajouter +</button>
+                  <button className="btn_ajouter" onClick={ouvrirAjouter}>
+                    Ajouter +
+                  </button>
                   <div className="separateur_vertical" />
-                  <button className="btn_supprimer" onClick={activerModeSupprimer}>Supprimer</button>
+                  <button
+                    className="btn_supprimer"
+                    onClick={activerModeSupprimer}
+                  >
+                    Supprimer
+                  </button>
                 </>
               ) : (
                 <>
-                  <button className="btn_ajouter" onClick={confirmerSuppression}>
+                  <button
+                    className="btn_ajouter"
+                    onClick={confirmerSuppression}
+                  >
                     Confirmer ({selectionnes.length})
                   </button>
-                  <button className="btn_supprimer" onClick={annulerSupprimer}>Annuler</button>
+                  <button className="btn_supprimer" onClick={annulerSupprimer}>
+                    Annuler
+                  </button>
                 </>
               )}
             </div>
@@ -286,7 +345,9 @@ const couleurBarre = (pct: number): string => {
               {economies.map((eco: Economie, index: number) => (
                 <tr
                   key={eco.id}
-                  className={selectionnes.includes(index) ? "ligne_selectionnee" : ""}
+                  className={
+                    selectionnes.includes(index) ? "ligne_selectionnee" : ""
+                  }
                   onClick={() => modeSupprimer && toggleSelection(index)}
                 >
                   {modeSupprimer && (
@@ -303,17 +364,18 @@ const couleurBarre = (pct: number): string => {
                   <td>{formatDate(eco.date)}</td>
                 </tr>
               ))}
-              {Array.from({ length: Math.max(0, 5 - economies.length) }).map((_, i: number) => (
-                <tr key={`vide-${i}`} className="ligne_vide">
-                  {modeSupprimer && <td></td>}
-                  <td></td>
-                  <td></td>
-                </tr>
-              ))}
+              {Array.from({ length: Math.max(0, 5 - economies.length) }).map(
+                (_, i: number) => (
+                  <tr key={`vide-${i}`} className="ligne_vide">
+                    {modeSupprimer && <td></td>}
+                    <td></td>
+                    <td></td>
+                  </tr>
+                ),
+              )}
             </tbody>
           </table>
         </div>
-
       </div>
 
       {/* POPUP INVITATION  */}
@@ -321,7 +383,9 @@ const couleurBarre = (pct: number): string => {
         <div className="popup_overlay" onClick={fermerInvitation}>
           <div className="popup_contenu" onClick={(e) => e.stopPropagation()}>
             <h3 className="popup_titre">Inviter un ami</h3>
-            <p className="popup_description">Entrez l'adresse email de la personne à inviter.</p>
+            <p className="popup_description">
+              Entrez l'adresse email de la personne à inviter.
+            </p>
             <input
               type="email"
               className="popup_input"
@@ -335,8 +399,18 @@ const couleurBarre = (pct: number): string => {
               <div className="popup_succes">✓ Invitation envoyée !</div>
             ) : (
               <div className="popup_boutons">
-                <button className="popup_btn_annuler" onClick={fermerInvitation}>Annuler</button>
-                <button className="popup_btn_envoyer" onClick={handleEnvoyerInvitation}>Envoyer</button>
+                <button
+                  className="popup_btn_annuler"
+                  onClick={fermerInvitation}
+                >
+                  Annuler
+                </button>
+                <button
+                  className="popup_btn_envoyer"
+                  onClick={handleEnvoyerInvitation}
+                >
+                  Envoyer
+                </button>
               </div>
             )}
           </div>
@@ -348,7 +422,9 @@ const couleurBarre = (pct: number): string => {
         <div className="popup_overlay" onClick={() => setPopupOuvert(null)}>
           <div className="popup_contenu" onClick={(e) => e.stopPropagation()}>
             <h3 className="popup_titre">Ajouter une économie</h3>
-            <p className="popup_description">Entrez le montant et la date de votre économie.</p>
+            <p className="popup_description">
+              Entrez le montant et la date de votre économie.
+            </p>
 
             <label className="popup_label">Montant ($)</label>
             <input
@@ -371,8 +447,18 @@ const couleurBarre = (pct: number): string => {
             />
 
             <div className="popup_boutons">
-              <button className="popup_btn_annuler" onClick={() => setPopupOuvert(null)}>Annuler</button>
-              <button className="popup_btn_envoyer" onClick={handleAjouterEconomie}>Ajouter</button>
+              <button
+                className="popup_btn_annuler"
+                onClick={() => setPopupOuvert(null)}
+              >
+                Annuler
+              </button>
+              <button
+                className="popup_btn_envoyer"
+                onClick={handleAjouterEconomie}
+              >
+                Ajouter
+              </button>
             </div>
           </div>
         </div>
@@ -411,9 +497,15 @@ const couleurBarre = (pct: number): string => {
               onClick={() => editImageRef.current?.click()}
             >
               {editImageUrl ? (
-                <img src={editImageUrl} alt="Aperçu" className="popup_image_preview_img" />
+                <img
+                  src={editImageUrl}
+                  alt="Aperçu"
+                  className="popup_image_preview_img"
+                />
               ) : (
-                <span className="popup_image_placeholder">Cliquez pour choisir une image</span>
+                <span className="popup_image_placeholder">
+                  Cliquez pour choisir une image
+                </span>
               )}
             </div>
             <input
@@ -425,13 +517,22 @@ const couleurBarre = (pct: number): string => {
             />
 
             <div className="popup_boutons">
-              <button className="popup_btn_annuler" onClick={() => setPopupOuvert(null)}>Annuler</button>
-              <button className="popup_btn_envoyer" onClick={handleSauvegarderEdition}>Sauvegarder</button>
+              <button
+                className="popup_btn_annuler"
+                onClick={() => setPopupOuvert(null)}
+              >
+                Annuler
+              </button>
+              <button
+                className="popup_btn_envoyer"
+                onClick={handleSauvegarderEdition}
+              >
+                Sauvegarder
+              </button>
             </div>
           </div>
         </div>
       )}
-
     </div>
   );
 }

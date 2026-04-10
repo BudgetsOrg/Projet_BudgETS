@@ -12,6 +12,7 @@ export function EnveloppeCard({
   image,
   onSaved,
 }: EnveloppeCardProps) {
+  // cliquer sur env permet d'aller à la page, state donne le id à l'enveloppe
   const navigate = useNavigate();
 
   const handleClick = () => {

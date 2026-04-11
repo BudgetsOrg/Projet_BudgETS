@@ -35,7 +35,7 @@ function DropDownProfile({ utilisateurCourant }: { utilisateurCourant: Utilisate
                         backgroundColor: "#7FA75A",
                         flexShrink: 0
                     }} />
-                    Profile
+                    Profil
                 </li>
                 <li className="option_deconnexion"
                     onClick={() => {

@@ -2,6 +2,7 @@ import { BrowserRouter, Route, Routes, useLocation } from "react-router-dom";
 import "./style/style.css";
 
 import Header from "./components/componentsHeader/Header";
+import Footer from "./components/Footer";
 import Inscription from "./pages/Inscription";
 import PagePrincipale from "./pages/PagePrincipale";
 import Connexion from "./pages/Connexion";
@@ -46,6 +47,7 @@ function AppContent() {
           element={<PageCreationNouveauMdp />}
         />
       </Routes>
+      {showHeader && <Footer />}
       {/*</div>*/}
     </>
   );

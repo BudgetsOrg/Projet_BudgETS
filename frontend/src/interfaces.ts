@@ -38,7 +38,7 @@ export interface Utilisateur {
   prenom: string;
   email: string;
   password?: string;
-  date_naissance: string;
+  date_naissance?: string;
   telephone?: string;
   image?: string;
   soldeDumois?: number;

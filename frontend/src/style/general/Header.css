@@ -15,6 +15,7 @@
   list-style-type: none;
   margin: 0;
   padding: 0;
+  padding-top: 5px;
   overflow: visible;
   justify-content: space-between;
 }
@@ -24,10 +25,10 @@
   text-align: center;
   padding: 14px 16px;
   text-decoration: none;
-    text-shadow:
-    0 0 5px rgba(255,255,255,0.8),
-    0 0 10px rgba(255,255,255,0.6),
-    0 0 20px rgba(255,255,255,0.4);
+
+}
+.container_header .sous_sujet :hover {
+  color: #7FA75A;
 }
 .container_header .image_header {
   width: 40px;

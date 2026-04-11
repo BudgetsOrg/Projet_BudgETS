@@ -15,7 +15,7 @@ function DropDownProfile({ utilisateurCourant }: { utilisateurCourant: Utilisate
     return (
         <div className="flex flex-col dropDownProfile">
             <ul className="flex flex-col gap-4">
-                <li
+                <li className="option_profile"
                     onClick={redirigerPageProfile}
                     style={{
                         cursor: "pointer",
@@ -27,7 +27,8 @@ function DropDownProfile({ utilisateurCourant }: { utilisateurCourant: Utilisate
                         gap: "10px"
                     }}
                 >
-                    <div style={{
+                    <div
+                     style={{
                         width: "12px",
                         height: "12px",
                         borderRadius: "50%",
@@ -36,7 +37,7 @@ function DropDownProfile({ utilisateurCourant }: { utilisateurCourant: Utilisate
                     }} />
                     Profile
                 </li>
-                <li
+                <li className="option_deconnexion"
                     onClick={() => {
                         viderLocalStorage();
                         window.location.href = "/";

@@ -1,0 +1,67 @@
+import { useState, useEffect } from "react";
+import type { Utilisateur } from "../../interfaces";
+import { viderLocalStorage } from "../../../public/token";
+
+function DropDownProfile({ utilisateurCourant }: { utilisateurCourant: Utilisateur | null }) {
+    const redirigerPageAcceuil = () => {
+        /**
+         * Pour l'instant on rediriger vers la page principale mais a changer plus tard pour rediriger vers la page d'acceuil.
+         */
+        window.location.href = "/";
+    }
+    const redirigerPageProfile = () => {
+        window.location.href = "/Profile";
+    }
+    return (
+        <div className="flex flex-col dropDownProfile">
+            <ul className="flex flex-col gap-4">
+                <li
+                    onClick={redirigerPageProfile}
+                    style={{
+                        cursor: "pointer",
+                        border: "1px solid #7FA75A",
+                        borderRadius: "999px",
+                        padding: "8px 16px",
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "10px"
+                    }}
+                >
+                    <div style={{
+                        width: "12px",
+                        height: "12px",
+                        borderRadius: "50%",
+                        backgroundColor: "#7FA75A",
+                        flexShrink: 0
+                    }} />
+                    Profile
+                </li>
+                <li
+                    onClick={() => {
+                        viderLocalStorage();
+                        window.location.href = "/";
+                    }}
+                    style={{
+                        cursor: "pointer",
+                        border: "1px solid red",
+                        borderRadius: "999px",
+                        padding: "8px 16px",
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "10px"
+                    }}
+                >
+                    <div style={{
+                        width: "12px",
+                        height: "12px",
+                        borderRadius: "50%",
+                        backgroundColor: "red",
+                        flexShrink: 0
+                    }} />
+                    Déconnexion
+                </li>
+            </ul>
+        </div>
+    )
+}
+export default DropDownProfile;

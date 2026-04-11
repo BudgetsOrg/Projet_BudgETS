@@ -1,7 +1,7 @@
 import { BrowserRouter, Route, Routes, useLocation } from "react-router-dom";
 import "./style/style.css";
 
-import Header from "./components/Header";
+import Header from "./components/componentsHeader/Header";
 import Inscription from "./pages/Inscription";
 import PagePrincipale from "./pages/PagePrincipale";
 import Connexion from "./pages/Connexion";

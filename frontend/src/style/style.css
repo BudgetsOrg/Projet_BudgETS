@@ -6,6 +6,7 @@
 @import "./general/Header.css";
 @import "./pages/Objectifs.css";
 @import "./pages/PageMotDePasseOublie.css";
+@import "./pages/DropDownProfile.css";
 
 /* Reset global pour éviter le contour blanc / margin par défaut */
 @layer base {

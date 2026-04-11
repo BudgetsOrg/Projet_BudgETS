@@ -6,17 +6,18 @@ import type { Utilisateur } from "../interfaces";
 let loggedInUser: Utilisateur | null = null;
 const API_URL_GLOBAL = "https://projetbudgets-backend.up.railway.app";
 const API_URL_LOCAL = "http://localhost:3000";
-const token = getToken() ?? "";
 const debug = false;
 const local = false;
 //A modifier pour get un user.
 export async function getUtilisateur() {
+const token = getToken() ?? "";
+
   if (debug) {
     const mockUser: Utilisateur = {
       id_user: 1,
       nom: "Doe",
       prenom: "John",
-      adresse_email: "john.doe@example.com",
+      email: "john.doe@example.com",
       telephone: "1234567890",
       image: "https://thispersondoesnotexist.com/",
       date_naissance: "1990-01-01",
@@ -48,6 +49,8 @@ export async function getUtilisateur() {
 export async function postUtilisateur(
   nouvelleUtilisateur: Utilisateur,
 ): Promise<Response> {
+const token = getToken() ?? "";
+
   const url = local
     ? `${API_URL_LOCAL}/auth/inscription`
     : `${API_URL_GLOBAL}/auth/inscription`;
@@ -69,6 +72,7 @@ export async function updateUtilisateur(
   telephone: string,
   date_naissance: string,
 ) {
+  
   const token = getToken() ?? "";
 
   if (local) {
@@ -120,6 +124,7 @@ export async function postConnexion(
   adresse_email: string,
   password: string,
 ): Promise<Response> {
+
   const url = local
     ? `${API_URL_LOCAL}/auth/connexion`
     : `${API_URL_GLOBAL}/auth/connexion`;
@@ -136,12 +141,14 @@ export async function postConnexion(
 }
 
 export async function login(adresse_email: string, password: string) {
+const token = getToken() ?? "";
+
   if (debug) {
     const mockUser: Utilisateur = {
       id_user: 1,
       nom: "Doe",
       prenom: "John",
-      adresse_email: "john.doe@example.com",
+      email: "john.doe@example.com",
       telephone: "1234567890",
       image: "https://thispersondoesnotexist.com/",
       date_naissance: "1990-01-01",
@@ -180,6 +187,8 @@ export function getLoggedInUser() {
 }
 */
 export async function postForgotPassword(adresse_email: string) {
+const token = getToken() ?? "";
+
   const url = local
     ? `${API_URL_LOCAL}/auth/forgot-password`
     : `${API_URL_GLOBAL}/auth/forgot-password`;

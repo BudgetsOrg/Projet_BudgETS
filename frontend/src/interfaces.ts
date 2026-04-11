@@ -36,7 +36,7 @@ export interface Utilisateur {
   id_user?: number;
   nom: string;
   prenom: string;
-  adresse_email: string;
+  email: string;
   password?: string;
   date_naissance: string;
   telephone?: string;

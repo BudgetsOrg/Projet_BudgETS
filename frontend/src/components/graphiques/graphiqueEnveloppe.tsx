@@ -22,8 +22,34 @@ ChartJS.register(
 );
 
 export function GraphiqueEnveloppe({id_enveloppe}:{id_enveloppe : number}) {
-  // I NEED TO GET ID_ENVELOPPE
   const { depenses, loading, error } = useDepense(id_enveloppe);
+
+  const parseDate = (dateString: string): Date | null => {
+    if (!dateString) {
+      return null;
+    }
+
+    const safeDateString = dateString.split("T")[0].trim();
+
+    let day: number;
+    let month: number;
+    let year: number;
+
+    if (safeDateString.includes("/")) {
+      [day, month, year] = safeDateString.split("/").map(Number);
+    } else if (safeDateString.includes("-")) {
+      [year, month, day] = safeDateString.split("-").map(Number);
+    } else {
+      return null;
+    }
+
+    if (!day || !month || !year) {
+      return null;
+    }
+
+    const parsedDate = new Date(year, month - 1, day);
+    return Number.isNaN(parsedDate.getTime()) ? null : parsedDate;
+  };
 
   //Could be changed to a spinner or a cuter message
   if (loading) return <div>Chargement...</div>;
@@ -37,9 +63,13 @@ export function GraphiqueEnveloppe({id_enveloppe}:{id_enveloppe : number}) {
 
     // parcourir les dépenses et remplir le map avec la date et le prix total de la journée
     depenses.forEach((depense) => {
-      // la date est en string au départ, convertir celle-ci en objet Date pour pouvoir la formater ensuite
-      const [year, month, day] = depense.date.split("-").map(Number);
-      const dateObj = new Date(year, month - 1, day);
+      // la date est au format JJ/MM/AAAA, convertir celle-ci en objet Date pour pouvoir la formater ensuite
+      const dateObj = parseDate(depense.date);
+
+      if (!dateObj) {
+        return;
+      }
+
       const date = dateObj.toLocaleDateString("fr-CA"); // Format: YYYY-MM-DD
       const daySpending = firstMap.get(date) || 0;
       firstMap.set(date, daySpending + depense.montant);
@@ -48,9 +78,15 @@ export function GraphiqueEnveloppe({id_enveloppe}:{id_enveloppe : number}) {
     // un map trié par la date, clé= date et valeur = prix total de la journée
     const sortedDepenses = Array.from(firstMap.entries())
       .map(([date, prix]) => ({ date, prix }))
-      .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+      .sort((a, b) => a.date.localeCompare(b.date));
 
     const last7DaysDepenses = sortedDepenses.slice(-7);
+    if (last7DaysDepenses.length === 0) {
+      return <div>Aucun graphique à afficher</div>;
+    }
+
+    const maxPrix = Math.max(...last7DaysDepenses.map((depense) => depense.prix));
+
     return (
       <Bar
         data={{
@@ -82,8 +118,7 @@ export function GraphiqueEnveloppe({id_enveloppe}:{id_enveloppe : number}) {
               },
               beginAtZero: true,
               min: 0,
-              max:
-                Math.max(...sortedDepenses.map((depense) => depense.prix)) + 10,
+              max: maxPrix + 10,
             },
             x: {
               title: {

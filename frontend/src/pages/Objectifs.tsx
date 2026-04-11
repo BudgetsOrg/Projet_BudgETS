@@ -1,6 +1,6 @@
 // Composant Objectif
 // Affiche le détail d'un objectif d'épargne avec image de couverture et invitation par email
-
+import { useLocation } from "react-router-dom";
 import { useState, useRef } from "react";
 import imgEdit from "../img/edit.png";
 import { BackgroundColor } from "devextreme-react/cjs/chart";
@@ -34,6 +34,12 @@ const donneesObjectif: DonneesObjectif = {
 type TypePopup = "invitation" | "ajouter" | "edition" | null;
 
 function Objectif() {
+
+  const location = useLocation();
+  const idObjectif = location.state?.id_objectif;
+  // je l'ai mis car il était dans enveloppes, mais c'est à ta guise
+  //const titre = location.state?.titre ?? titre; // Récupère l'ID de l'objectif depuis l'URL
+  // const montantACumuler = location.state?.montantACumuler ?? montantACumuler; // Récupère le montant à accumuler depuis l'URL
   // État principal
   const [titre, setTitre] = useState<string>(donneesObjectif.titre);
   const [montantACumuler, setMontantACumuler] = useState<number>(

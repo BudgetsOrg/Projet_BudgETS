@@ -1,9 +1,15 @@
 import type { Objectif } from "../../../interfaces";
+import { useNavigate } from "react-router-dom";
 export function ObjectifRow(objectif: Objectif) {
+  const navigate = useNavigate();
+  const handleClick = () => {
+    navigate(`/PageObjectif/${objectif.id_objectif}`, { state: { id_objectif: objectif.id_objectif, titre: objectif.titre } });
+  };
   return (
     <div
       className="relative w-full h-32 rounded-xl overflow-hidden shadow-lg hover:opacity-90 cursor-pointer"
       id={String(objectif.id_objectif)}
+      onClick={handleClick}
     >
       <img
         className="w-full h-full object-cover rounded-xl"

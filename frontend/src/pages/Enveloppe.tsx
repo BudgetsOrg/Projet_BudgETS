@@ -8,27 +8,6 @@ import img_edit from "../img/edit.png";
 import { useLocation } from "react-router-dom";
 import { getEnveloppeById,updateEnveloppe } from "../api/EnveloppeApi.ts";
 
-/*const donneesInitiales = {
-  titre: "Titre de mon enveloppe",
-  budgetAlloue: 150,
-  depenses: [
-    {
-      id: 1,
-      titre: "MC Donalds",
-      categorie: "Restaurant",
-      prix: 15.0,
-      date: "2026-10-10",
-    },
-    {
-      id: 2,
-      titre: "Uber",
-      categorie: "Transport",
-      prix: 25.0,
-      date: "2026-10-11",
-    },
-  ],
-};
-*/
 
 function Enveloppe() {
   // pour récupérer le id de l'enveloppe à partir de la page précédente

@@ -21,9 +21,9 @@ ChartJS.register(
   Legend,
 );
 
-export function GraphiqueEnveloppe() {
+export function GraphiqueEnveloppe({id_enveloppe}:{id_enveloppe : number}) {
   // I NEED TO GET ID_ENVELOPPE
-  const { depenses, loading, error } = useDepense();
+  const { depenses, loading, error } = useDepense(id_enveloppe);
 
   //Could be changed to a spinner or a cuter message
   if (loading) return <div>Chargement...</div>;

@@ -50,8 +50,9 @@ export interface Depense {
   nom_depense: string;
   montant: number;
   date: string;
-  id_enveloppe: number;
-  id_categorie: number;
+  recurente:boolean;
+  enveloppeId: number;
+  categorieId: number;
 }
 
 // à faire

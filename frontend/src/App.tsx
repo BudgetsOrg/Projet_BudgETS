@@ -36,7 +36,7 @@ function AppContent() {
         <Route path="/PageConnexion" element={<Connexion />} />
         <Route path="/PageInscription" element={<Inscription />} />
         <Route path="/PagePrincipale" element={<PagePrincipale />} />
-        <Route path="/PageEnveloppe" element={<Enveloppe />} />
+        <Route path="/PageEnveloppe/:id" element={<Enveloppe />} />
         <Route path="/Profile" element={<PageProfile />} />
         <Route path="/PageObjectifs" element={<PageObjectifs />} />
         <Route path="/PageMdpOublie" element={<PageMdpOublie />} />

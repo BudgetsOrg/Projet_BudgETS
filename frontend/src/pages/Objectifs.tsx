@@ -91,7 +91,7 @@ function Objectif() {
       const g = Math.round(0 + (220 - 0) * (pct / 50)); // 0 → 220
       return `rgb(${r}, ${g}, 0)`;
     } else {
-      // Jaune → Rouge (50% à 100%)
+      // Jaune → Vert (50% à 100%)
       const r = Math.round(220 + (0 - 220) * ((pct - 50) / 50));
       const g = 220; // 220 → 0
       return `rgb(${r}, ${g}, 0)`;

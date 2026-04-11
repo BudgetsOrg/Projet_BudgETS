@@ -9,6 +9,7 @@ interface EnveloppeCardProps extends Enveloppe {
 export function EnveloppeCard({
   id_enveloppe,
   titre,
+  montant,
   image,
   onSaved,
 }: EnveloppeCardProps) {
@@ -16,7 +17,7 @@ export function EnveloppeCard({
   const navigate = useNavigate();
 
   const handleClick = () => {
-    navigate(`/enveloppe/${id_enveloppe}`, { state: { id_enveloppe } });
+    navigate(`/PageEnveloppe/${id_enveloppe}`, { state: { id_enveloppe, titre, montant } });
   };
 
   const handleDelete = async () => {

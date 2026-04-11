@@ -127,12 +127,12 @@ const token = getToken() ?? "";
     const response = await fetch(
       `${API_URL_LOCAL}/enveloppe/${enveloppe.id_enveloppe}`,
       {
-        method: "PUT",
+        method: "PATCH",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({ enveloppe }),
+        body: JSON.stringify(enveloppe ),
       },
     );
     return response.json();
@@ -140,12 +140,12 @@ const token = getToken() ?? "";
     const response = await fetch(
       `${API_URL_GLOBAL}/enveloppe/${enveloppe.id_enveloppe}`,
       {
-        method: "PUT",
+        method: "PATCH",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({ enveloppe }),
+        body: JSON.stringify( enveloppe ),
       },
     );
     return response.json();

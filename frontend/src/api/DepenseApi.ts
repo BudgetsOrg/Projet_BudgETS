@@ -138,12 +138,15 @@ export async function updateDepense(depense: Depense) {
     const response = await fetch(
       `${API_URL_LOCAL}/depense/${depense.id_depense}`,
       {
-        method: "PUT",
+        method: "PATCH",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({ depense }),
+        body: JSON.stringify(({
+  ...depense,
+  date: depense.date?.split("T")[0], 
+}) ),
       },
     );
     return response.json();
@@ -151,12 +154,12 @@ export async function updateDepense(depense: Depense) {
     const response = await fetch(
       `${API_URL_GLOBAL}/depense/${depense.id_depense}`,
       {
-        method: "PUT",
+        method: "PATCH",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({ depense }),
+        body: JSON.stringify( depense ),
       },
     );
     return response.json();

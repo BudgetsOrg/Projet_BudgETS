@@ -3,9 +3,10 @@ import { useState, useEffect } from "react"; // npm install
 import type { Depense } from "../interfaces"; // ton interface est rendu dans la page pour ceux-ci
 import { GraphiqueEnveloppe } from "../components/graphiques/graphiqueEnveloppe.tsx"; // le graphique de la page enveloppe
 import { getToken } from "../../public/token.ts";
-import { getDepenses } from "../api/DepenseApi.ts";
+import { getDepenses, postDepense, deleteDepense, updateDepense } from "../api/DepenseApi.ts";
 import img_edit from "../img/edit.png";
 import { useLocation } from "react-router-dom";
+import { getEnveloppeById,updateEnveloppe } from "../api/EnveloppeApi.ts";
 
 /*const donneesInitiales = {
   titre: "Titre de mon enveloppe",
@@ -33,13 +34,14 @@ function Enveloppe() {
   // pour récupérer le id de l'enveloppe à partir de la page précédente
   const location = useLocation();
   const id_enveloppe = location.state?.id_enveloppe;
+  const titre = location.state?.titre ?? "";
+  const montantEnveloppe = Number(location.state?.montant) || 0;
 
-  console.log("voila le token " + getToken());
   const [editDataSauvegarde, setEditDataSauvegarde] = useState({
     titre: "",
     budgetAlloue: 0,
   });
-  const [editData, setEditData] = useState({ titre: "", budgetAlloue: 0 });
+  const [editData, setEditData] = useState({ titre: titre, budgetAlloue: montantEnveloppe });
   const [depenses, setDepenses] = useState<Depense[]>([]);
   const [modalEditOuvert, setModalEditOuvert] = useState(false);
   const [modeSupprimer, setModeSupprimer] = useState(false);
@@ -52,9 +54,37 @@ function Enveloppe() {
     nom_depense: "",
     montant: 0,
     date: "",
-    id_enveloppe: id_enveloppe,
-    id_categorie: 0,
+    recurente: false,
+    enveloppeId: id_enveloppe,
+    categorieId: 0,
   });
+
+  const modifierInformationEnveloppe = async () => {
+    try {
+      await updateEnveloppe({
+        id_enveloppe: id_enveloppe,
+        titre: editData.titre,
+        montant: editData.budgetAlloue
+      })
+      setModalEditOuvert(false);
+    } catch (error: any) {
+      console.log("La modification de l'enveloppe à causée une erreur :", error.message);
+    }
+  }
+  useEffect(() => {
+  const recupererEnveloppe = async () => {
+    try {
+      const data = await getEnveloppeById(id_enveloppe);
+      setEditData({
+        titre: data.titre,
+        budgetAlloue: Number(data.montant) || 0,
+      });
+    } catch (error: any) {
+      console.error(error);
+    }
+  };
+  if (id_enveloppe) recupererEnveloppe();
+}, []);
 
   useEffect(() => {
     const recupererDepenses = async () => {
@@ -62,13 +92,18 @@ function Enveloppe() {
         const data: Depense[] = await getDepenses(id_enveloppe);
 
         if (!Array.isArray(data)) {
+
           console.error("Réponse inattendue :", data);
           alert("Erreur : impossible de charger les dépenses");
           return;
         }
+        const dataConverti = data.map((d: any) => ({
+          ...d,
+          montant: parseFloat(d.montant) || 0,
+        }));
 
         console.log("Dépenses reçues :", data);
-        setDepenses(data);
+        setDepenses(dataConverti);
       } catch (error: any) {
         console.error(error);
         alert(error.message);
@@ -78,12 +113,19 @@ function Enveloppe() {
   }, []);
 
   const budgetAlloue = editData.budgetAlloue;
-  const totalDepenses = depenses.reduce((acc, d) => acc + d.montant, 0);
-  const pourcentage = Math.min((totalDepenses / budgetAlloue) * 100, 100);
+  const totalDepenses = depenses.reduce((acc, d) => acc + (d.montant || 0), 0);
+  const pourcentage = budgetAlloue > 0 ? Math.min((totalDepenses / budgetAlloue) * 100, 100) : 0;
 
-  const formatPrix = (prix: number) => prix.toFixed(2).replace(".", ",") + "$";
+
+  const formatPrix = (prix: number | undefined) => {
+    if (prix === undefined || prix === null || isNaN(prix)) return "0,00$";
+    return Number(prix).toFixed(2).replace(".", ",") + "$";
+  };
   const formatDate = (date: string) => {
-    const [annee, mois, jour] = date.split("-");
+    if (!date) return "";
+    // Prend seulement la partie date avant le T
+    const dateSeulement = date.split("T")[0];
+    const [annee, mois, jour] = dateSeulement.split("-");
     return `${jour}/${mois}/${annee}`;
   };
 
@@ -98,8 +140,9 @@ function Enveloppe() {
       nom_depense: "",
       montant: 0,
       date: "",
-      id_enveloppe: id_enveloppe,
-      id_categorie: 0,
+      recurente: false,
+      enveloppeId: id_enveloppe,
+      categorieId: 0,
     });
   };
 
@@ -111,7 +154,7 @@ function Enveloppe() {
     return `rgb(${r}, ${g}, ${b})`;
   };
   // Lorsqu'on relie le backend au frontend on utilisera la version en bas.
-  const confirmerAjout = () => {
+  const confirmerAjout = async () => {
     if (
       !nouvelleDepense.nom_depense ||
       !nouvelleDepense.date ||
@@ -120,11 +163,38 @@ function Enveloppe() {
       return;
 
     if (modeEdition && indexEdition !== null) {
-      const copie = [...depenses];
-      copie[indexEdition] = nouvelleDepense;
-      setDepenses(copie);
+
+      try {
+        console.log("Dépense à modifier :", nouvelleDepense);
+        await updateDepense(nouvelleDepense)
+        const data = await getDepenses(id_enveloppe);
+        if (Array.isArray(data)) {
+          const dataConverti = data.map((d: any) => ({
+            ...d,
+            montant: parseFloat(d.montant) || 0,
+          }));
+          setDepenses(dataConverti);
+        }
+      } catch (error: any) {
+        console.log("Erreur dans la modification d'une dépense : ", error);
+        return;
+      }
     } else {
-      setDepenses([...depenses, nouvelleDepense]);
+      try {
+        await postDepense(nouvelleDepense);
+        const data = await getDepenses(id_enveloppe);
+        if (Array.isArray(data)) {
+          const dataConverti = data.map((d: any) => ({
+            ...d,
+            montant: parseFloat(d.montant) || 0,
+          }));
+          setDepenses(dataConverti);
+        }
+      } catch (error: any) {
+        console.log(error);
+        alert("Erreur lors de l'ajout de la depense : " + error.message);
+        return;
+      }
     }
 
     fermerModal();
@@ -152,12 +222,27 @@ function Enveloppe() {
       prev.includes(index) ? prev.filter((i) => i !== index) : [...prev, index],
     );
   };
-  const confirmerSuppression = () => {
-    const nouvellesDepenses = depenses.filter(
-      (_, i) => !selectionnes.includes(i),
-    );
+  const confirmerSuppression = async () => {
+    try {
+      for (const index of selectionnes) {
+        const depense = depenses[index];
+        if (depense.id_depense) {
+          await deleteDepense(depense.id_depense);
+        }
+      }
+      const data = await getDepenses(id_enveloppe);
+      if (Array.isArray(data)) {
+        const dataConverti = data.map((d: any) => ({
+          ...d,
+          montant: parseFloat(d.montant) || 0,
+        }));
+        setDepenses(dataConverti);
+      }
+    } catch (error: any) {
+      console.error(error);
+      alert("Erreur lors de la suppression : " + error.message);
+    }
 
-    setDepenses(nouvellesDepenses);
     setModeSupprimer(false);
     setSelectionnes([]);
   };
@@ -336,14 +421,14 @@ function Enveloppe() {
               onChange={(e) =>
                 setNouvelleDepense({
                   ...nouvelleDepense,
-                  montant: parseFloat(e.target.value),
+                  montant: parseFloat(e.target.value) || 0,
                 })
               }
             />
 
             <input
               type="date"
-              value={nouvelleDepense.date}
+              value={nouvelleDepense.date?.split("T")[0] ?? ""}
               onChange={(e) =>
                 setNouvelleDepense({ ...nouvelleDepense, date: e.target.value })
               }
@@ -386,7 +471,7 @@ function Enveloppe() {
               onChange={(e) =>
                 setEditData({
                   ...editData,
-                  budgetAlloue: parseFloat(e.target.value),
+                  budgetAlloue: parseFloat(e.target.value) || 0,
                 })
               }
             />
@@ -394,7 +479,7 @@ function Enveloppe() {
             <div className="modal_boutons">
               <button
                 className="btn_ajouter"
-                onClick={() => setModalEditOuvert(false)}
+                onClick={modifierInformationEnveloppe}
               >
                 Confirmer
               </button>
@@ -414,7 +499,7 @@ function Enveloppe() {
       )}
 
       <div className="p-10">
-        <GraphiqueEnveloppe />
+        <GraphiqueEnveloppe id_enveloppe={id_enveloppe} />
       </div>
     </div>
   );

@@ -3,11 +3,17 @@ import { useState, useEffect } from "react"; // npm install
 import type { Depense } from "../interfaces"; // ton interface est rendu dans la page pour ceux-ci
 import { GraphiqueEnveloppe } from "../components/graphiques/graphiqueEnveloppe.tsx"; // le graphique de la page enveloppe
 import { getToken } from "../../public/token.ts";
-import { getDepenses, postDepense, deleteDepense, updateDepense } from "../api/DepenseApi.ts";
+import {
+  getDepenses,
+  postDepense,
+  deleteDepense,
+  updateDepense,
+} from "../api/DepenseApi.ts";
 import img_edit from "../img/edit.png";
+import addPhotoIcon from "../img/add_photo_alternate_outlined.svg";
 import { useLocation } from "react-router-dom";
-import { getEnveloppeById,updateEnveloppe } from "../api/EnveloppeApi.ts";
-
+import { getEnveloppeById, updateEnveloppe } from "../api/EnveloppeApi.ts";
+import { useCloudinaryImage } from "../hooks/useCloudinaryImage";
 
 function Enveloppe() {
   // pour récupérer le id de l'enveloppe à partir de la page précédente
@@ -15,12 +21,18 @@ function Enveloppe() {
   const id_enveloppe = location.state?.id_enveloppe;
   const titre = location.state?.titre ?? "";
   const montantEnveloppe = Number(location.state?.montant) || 0;
+  const imageInitiale = location.state?.image ?? "";
 
   const [editDataSauvegarde, setEditDataSauvegarde] = useState({
     titre: "",
     budgetAlloue: 0,
+    image: "",
   });
-  const [editData, setEditData] = useState({ titre: titre, budgetAlloue: montantEnveloppe });
+  const [editData, setEditData] = useState({
+    titre: titre,
+    budgetAlloue: montantEnveloppe,
+    image: imageInitiale,
+  });
   const [depenses, setDepenses] = useState<Depense[]>([]);
   const [modalEditOuvert, setModalEditOuvert] = useState(false);
   const [modeSupprimer, setModeSupprimer] = useState(false);
@@ -38,32 +50,58 @@ function Enveloppe() {
     categorieId: 0,
   });
 
+  const {
+    previewUrl: previewImageEnveloppe,
+    file: fichierImageEnveloppe,
+    uploading: uploadImageEnveloppeEnCours,
+    error: erreurUploadImageEnveloppe,
+    onFileChange: onFileChangeImageEnveloppe,
+    upload: uploadImageEnveloppe,
+    reset: resetImageEnveloppe,
+  } = useCloudinaryImage({ initialUrl: imageInitiale, folder: "enveloppes" });
+
   const modifierInformationEnveloppe = async () => {
     try {
+      let image = editData.image;
+
+      if (fichierImageEnveloppe) {
+        const uploadedUrl = await uploadImageEnveloppe();
+        if (uploadedUrl) {
+          image = uploadedUrl;
+        }
+      }
+
       await updateEnveloppe({
         id_enveloppe: id_enveloppe,
         titre: editData.titre,
-        montant: editData.budgetAlloue
-      })
+        montant: editData.budgetAlloue,
+        image,
+      });
+      setEditData((prev) => ({ ...prev, image }));
       setModalEditOuvert(false);
     } catch (error: any) {
-      console.log("La modification de l'enveloppe à causée une erreur :", error.message);
-    }
-  }
-  useEffect(() => {
-  const recupererEnveloppe = async () => {
-    try {
-      const data = await getEnveloppeById(id_enveloppe);
-      setEditData({
-        titre: data.titre,
-        budgetAlloue: Number(data.montant) || 0,
-      });
-    } catch (error: any) {
-      console.error(error);
+      console.log(
+        "La modification de l'enveloppe à causée une erreur :",
+        error.message,
+      );
     }
   };
-  if (id_enveloppe) recupererEnveloppe();
-}, []);
+  useEffect(() => {
+    const recupererEnveloppe = async () => {
+      try {
+        const data = await getEnveloppeById(id_enveloppe);
+        setEditData({
+          titre: data.titre,
+          budgetAlloue: Number(data.montant) || 0,
+          image: data.image || "",
+        });
+        resetImageEnveloppe(data.image || "");
+      } catch (error: any) {
+        console.error(error);
+      }
+    };
+    if (id_enveloppe) recupererEnveloppe();
+  }, []);
 
   useEffect(() => {
     const recupererDepenses = async () => {
@@ -71,7 +109,6 @@ function Enveloppe() {
         const data: Depense[] = await getDepenses(id_enveloppe);
 
         if (!Array.isArray(data)) {
-
           console.error("Réponse inattendue :", data);
           alert("Erreur : impossible de charger les dépenses");
           return;
@@ -93,8 +130,8 @@ function Enveloppe() {
 
   const budgetAlloue = editData.budgetAlloue;
   const totalDepenses = depenses.reduce((acc, d) => acc + (d.montant || 0), 0);
-  const pourcentage = budgetAlloue > 0 ? Math.min((totalDepenses / budgetAlloue) * 100, 100) : 0;
-
+  const pourcentage =
+    budgetAlloue > 0 ? Math.min((totalDepenses / budgetAlloue) * 100, 100) : 0;
 
   const formatPrix = (prix: number | undefined) => {
     if (prix === undefined || prix === null || isNaN(prix)) return "0,00$";
@@ -142,10 +179,9 @@ function Enveloppe() {
       return;
 
     if (modeEdition && indexEdition !== null) {
-
       try {
         console.log("Dépense à modifier :", nouvelleDepense);
-        await updateDepense(nouvelleDepense)
+        await updateDepense(nouvelleDepense);
         const data = await getDepenses(id_enveloppe);
         if (Array.isArray(data)) {
           const dataConverti = data.map((d: any) => ({
@@ -259,6 +295,7 @@ function Enveloppe() {
             className="enveloppe_edit"
             onClick={() => {
               setEditDataSauvegarde({ ...editData });
+              resetImageEnveloppe(editData.image || "");
               setModalEditOuvert(true);
             }}
           >
@@ -455,12 +492,56 @@ function Enveloppe() {
               }
             />
 
+            <div className="flex flex-col gap-2 mt-4">
+              <span>Image de l'enveloppe</span>
+              <div
+                className="w-32 h-20 rounded-lg bg-cover bg-center border border-dashed border-gray-400 cursor-pointer flex items-center justify-center bg-gray-50"
+                style={
+                  previewImageEnveloppe || editData.image
+                    ? {
+                        backgroundImage: `url(${previewImageEnveloppe || editData.image || ""})`,
+                        borderStyle: "solid",
+                      }
+                    : undefined
+                }
+                onClick={() => {
+                  const input = document.getElementById(
+                    "enveloppe-image-input",
+                  );
+                  input?.click();
+                }}
+              >
+                {!previewImageEnveloppe && !editData.image && (
+                  <img
+                    src={addPhotoIcon}
+                    alt="Ajouter une image"
+                    className="w-10 h-10 opacity-70"
+                  />
+                )}
+              </div>
+              <input
+                id="enveloppe-image-input"
+                type="file"
+                accept="image/*"
+                className="hidden"
+                onChange={onFileChangeImageEnveloppe}
+              />
+              {erreurUploadImageEnveloppe && (
+                <span className="text-red-500 text-sm">
+                  {erreurUploadImageEnveloppe}
+                </span>
+              )}
+            </div>
+
             <div className="modal_boutons">
               <button
                 className="btn_ajouter"
                 onClick={modifierInformationEnveloppe}
+                disabled={uploadImageEnveloppeEnCours}
               >
-                Confirmer
+                {uploadImageEnveloppeEnCours
+                  ? "Enregistrement..."
+                  : "Confirmer"}
               </button>
 
               <button

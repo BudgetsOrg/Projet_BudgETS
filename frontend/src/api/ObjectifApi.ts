@@ -2,19 +2,20 @@
 // par contre, nous sommes en debug pour l'instant donc debug = true et nous avons des données préparées.
 
 import { getToken } from "../../public/token";
+import type { Objectif } from "../interfaces";
 
 const API_URL_GLOBAL = "https://projetbudgets-backend.up.railway.app";
 const API_URL_LOCAL = "http://localhost:3000";
 //localStorage.getItem("token");
-const debug = true;
+const debug = false;
 // choose one
 const local = false;
 
 export async function getObjectif() {
-const token = getToken() ?? ""
+  const token = getToken() ?? "";
 
   if (debug) {
-    const mockObjectif1 = {
+    const mockObjectif1: Objectif = {
       id_objectif: 1,
       titre: "Mock Objectif 2",
       montant: 1000,
@@ -22,7 +23,7 @@ const token = getToken() ?? ""
       date_limite: new Date("2026-12-31"),
       user_id: 1,
     };
-    const mockObjectif2 = {
+    const mockObjectif2: Objectif = {
       id_objectif: 2,
       titre: "Mock Objectif 3",
       montant: 2000,
@@ -32,21 +33,37 @@ const token = getToken() ?? ""
     };
     return [mockObjectif1, mockObjectif2];
   }
-  if (local) {
-    const response = await fetch(`${API_URL_LOCAL}/enveloppe`, {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    return response.json();
-  } else {
-    const response = await fetch(`${API_URL_GLOBAL}/enveloppe`, {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    return response.json();
+
+  const baseUrl = local ? API_URL_LOCAL : API_URL_GLOBAL;
+  const response = await fetch(`${baseUrl}/objectif`, {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return response.json();
+}
+
+export async function updateObjectif(objectif: Objectif) {
+  const token = getToken() ?? "";
+
+  const baseUrl = local ? API_URL_LOCAL : API_URL_GLOBAL;
+
+  const response = await fetch(`${baseUrl}/objectif/${objectif.id_objectif}`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(objectif),
+  });
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(
+      `Erreur mise a jour objectif (${response.status}): ${errorText}`,
+    );
   }
+
+  return response.json();
 }

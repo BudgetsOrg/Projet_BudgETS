@@ -5,6 +5,7 @@ import { useState, useRef } from "react";
 import imgEdit from "../img/edit.png";
 import { BackgroundColor } from "devextreme-react/cjs/chart";
 import GraphiqueObjectif from "../components/graphiques/graphiqueObjectif";
+import { useCloudinaryImage } from "../hooks/useCloudinaryImage";
 
 interface Economie {
   id: number;
@@ -34,7 +35,6 @@ const donneesObjectif: DonneesObjectif = {
 type TypePopup = "invitation" | "ajouter" | "edition" | null;
 
 function Objectif() {
-
   const location = useLocation();
   const idObjectif = location.state?.id_objectif;
   // je l'ai mis car il était dans enveloppes, mais c'est à ta guise
@@ -75,6 +75,16 @@ function Objectif() {
   const [editImageUrl, setEditImageUrl] = useState<string | null>(imageUrl);
   const editImageRef = useRef<HTMLInputElement>(null);
   const inputImageRef = useRef<HTMLInputElement>(null);
+
+  const {
+    previewUrl: editImagePreview,
+    file: editImageFile,
+    uploading: uploadingObjectifImage,
+    error: uploadObjectifError,
+    onFileChange: onEditImageFileChange,
+    upload: uploadObjectifImage,
+    reset: resetObjectifImage,
+  } = useCloudinaryImage({ initialUrl: imageUrl, folder: "objectifs" });
 
   //  Calculs
   const totalEconomies: number = economies.reduce(
@@ -202,29 +212,41 @@ function Objectif() {
     setEditTitre(titre);
     setEditMontant(String(montantACumuler));
     setEditImageUrl(imageUrl);
+    resetObjectifImage(imageUrl);
     setPopupOuvert("edition");
   };
 
-  const handleEditImageChange = (
-    e: React.ChangeEvent<HTMLInputElement>,
-  ): void => {
-    const file = e.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = () => setEditImageUrl(reader.result as string);
-      reader.readAsDataURL(file);
-    }
-  };
-
-  const handleSauvegarderEdition = (): void => {
+  const handleSauvegarderEdition = async (): Promise<void> => {
     const montantNum = parseFloat(
       editMontant.replace(",", ".").replace(" ", ""),
     );
     if (!editTitre.trim() || isNaN(montantNum) || montantNum <= 0) return;
 
+    let nouvelleImageUrl = imageUrl;
+
+    try {
+      if (editImageFile) {
+        const uploadedUrl = await uploadObjectifImage();
+        if (uploadedUrl) {
+          nouvelleImageUrl = uploadedUrl;
+        }
+      } else if (editImageUrl) {
+        nouvelleImageUrl = editImageUrl;
+      }
+    } catch (err) {
+      console.error(
+        "Erreur lors du téléchargement de l'image de l'objectif",
+        err,
+      );
+      alert(
+        "Une erreur est survenue lors du téléchargement de l'image. Veuillez réessayer.",
+      );
+      return;
+    }
+
     setTitre(editTitre.trim());
     setMontantACumuler(montantNum);
-    setImageUrl(editImageUrl);
+    setImageUrl(nouvelleImageUrl);
     setPopupOuvert(null);
   };
 
@@ -502,9 +524,9 @@ function Objectif() {
               className="popup_image_preview"
               onClick={() => editImageRef.current?.click()}
             >
-              {editImageUrl ? (
+              {editImagePreview || editImageUrl ? (
                 <img
-                  src={editImageUrl}
+                  src={editImagePreview || editImageUrl || undefined}
                   alt="Aperçu"
                   className="popup_image_preview_img"
                 />
@@ -519,8 +541,12 @@ function Objectif() {
               type="file"
               accept="image/*"
               className="objectif_input_image"
-              onChange={handleEditImageChange}
+              onChange={onEditImageFileChange}
             />
+
+            {uploadObjectifError && (
+              <p className="text-red-500 text-sm mt-2">{uploadObjectifError}</p>
+            )}
 
             <div className="popup_boutons">
               <button
@@ -532,8 +558,9 @@ function Objectif() {
               <button
                 className="popup_btn_envoyer"
                 onClick={handleSauvegarderEdition}
+                disabled={uploadingObjectifImage}
               >
-                Sauvegarder
+                {uploadingObjectifImage ? "Sauvegarde..." : "Sauvegarder"}
               </button>
             </div>
           </div>

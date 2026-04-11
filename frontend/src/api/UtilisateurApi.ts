@@ -10,7 +10,7 @@ const debug = false;
 const local = false;
 //A modifier pour get un user.
 export async function getUtilisateur() {
-const token = getToken() ?? "";
+  const token = getToken() ?? "";
 
   if (debug) {
     const mockUser: Utilisateur = {
@@ -29,6 +29,7 @@ const token = getToken() ?? "";
     if (local) {
       const response = await fetch(`${API_URL_LOCAL}/users/me`, {
         method: "GET",
+        // retiré cashe no store :
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -37,11 +38,14 @@ const token = getToken() ?? "";
     } else {
       const response = await fetch(`${API_URL_GLOBAL}/users/me`, {
         method: "GET",
+        // retiré cashe no store :
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
-      return response.json();
+      const data = await response.json();
+      console.log("Données de l'utilisateur :", data);
+      return data;
     }
   }
 }
@@ -49,7 +53,7 @@ const token = getToken() ?? "";
 export async function postUtilisateur(
   nouvelleUtilisateur: Utilisateur,
 ): Promise<Response> {
-const token = getToken() ?? "";
+  const token = getToken() ?? "";
 
   const url = local
     ? `${API_URL_LOCAL}/auth/inscription`
@@ -72,30 +76,55 @@ export async function updateUtilisateur(
   telephone: string,
   date_naissance: string,
 ) {
-  
   const token = getToken() ?? "";
 
-  if (local) {
-    const response = await fetch(`${API_URL_LOCAL}/users/me`, {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({ nom, prenom, telephone, date_naissance }),
-    });
-    return response.json();
-  } else {
-    const response = await fetch(`${API_URL_GLOBAL}/users/me`, {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({ nom, prenom, telephone, date_naissance }),
-    });
-    return response.json();
+  const url = local
+    ? `${API_URL_LOCAL}/users/me`
+    : `${API_URL_GLOBAL}/users/me`;
+
+  const response = await fetch(url, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({ nom, prenom, date_naissance, telephone }),
+  });
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(
+      `Erreur mise a jour profil (${response.status}): ${errorText}`,
+    );
   }
+
+  return response.json();
+}
+
+export async function updateUtilisateurImage(image: string) {
+  const token = getToken() ?? "";
+
+  const url = local
+    ? `${API_URL_LOCAL}/users/me`
+    : `${API_URL_GLOBAL}/users/me`;
+
+  const response = await fetch(url, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({ image }),
+  });
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(
+      `Erreur mise a jour de l'image de profil (${response.status}): ${errorText}`,
+    );
+  }
+
+  return response.json();
 }
 
 export async function deleteUtilisateur() {
@@ -124,7 +153,6 @@ export async function postConnexion(
   adresse_email: string,
   password: string,
 ): Promise<Response> {
-
   const url = local
     ? `${API_URL_LOCAL}/auth/connexion`
     : `${API_URL_GLOBAL}/auth/connexion`;
@@ -141,7 +169,7 @@ export async function postConnexion(
 }
 
 export async function login(adresse_email: string, password: string) {
-const token = getToken() ?? "";
+  const token = getToken() ?? "";
 
   if (debug) {
     const mockUser: Utilisateur = {
@@ -187,7 +215,7 @@ export function getLoggedInUser() {
 }
 */
 export async function postForgotPassword(adresse_email: string) {
-const token = getToken() ?? "";
+  const token = getToken() ?? "";
 
   const url = local
     ? `${API_URL_LOCAL}/auth/forgot-password`

@@ -35,6 +35,8 @@
         <activity android:name=".PageSupprimerDepense" />
         <activity android:name=".ListeObjectifs" />
         <activity android:name=".PageObjectif" />
+        <activity android:name=".CreerObjectifCommunActivite" />
+        <activity android:name=".ProfilActivite" />
 
     </application>
 </manifest>

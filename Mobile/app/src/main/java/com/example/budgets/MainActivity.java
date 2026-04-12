@@ -1,9 +1,8 @@
 package com.example.budgets;
 
-import android.content.Intent;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment; // Utiliser la version androidx
+import androidx.fragment.app.Fragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity extends AppCompatActivity {
@@ -13,41 +12,46 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
+        // Liaison avec le XML (Assurez-vous que l'ID dans activity_main.xml est bien bottom_navigation)
+        BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation); // L'ID du premier XML
 
-        // Charger l'accueil par défaut au premier lancement
+        // 1. Charger l'accueil par défaut au premier lancement
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.fragment_container, new AccueilFragment())
                     .commit();
         }
 
+        // 2. Gestion de la navigation entre les fragments
         bottomNav.setOnItemSelectedListener(item -> {
             Fragment selectedFragment = null;
             int id = item.getItemId();
 
-            // Navigation selon l'icône cliquée
-            if (id == R.id.nav_accueil) {
+            if (id == R.id.navigation_accueil) {
                 selectedFragment = new AccueilFragment();
-            } else if (id == R.id.nav_amis) {
-                selectedFragment = new GestionAmisFragment();
-            } else if (id == R.id.nav_enveloppes) {
-                // selectedFragment = new EnveloppesFragment();
-            } else if (id == R.id.nav_finance) {
-                // selectedFragment = new FinanceFragment();
-                //si on clique sur cet icone on voit la liste d'objectifs
-                Intent intent = new Intent(MainActivity.this, ListeObjectifs.class);
-                startActivity(intent);
-                return true;
+            }
+            else if (id == R.id.navigation_objectifs) {
+                // On charge le fragment de liste d'objectifs
+                selectedFragment = new ObjectifsFragment();
+            }
+            else if (id == R.id.navigation_enveloppes) {
+                // Remplacer par votre fragment d'enveloppes quand il sera prêt
+                selectedFragment = new EnveloppesFragment();
+            }
+            else if (id == R.id.navigation_profil) {
+                // On charge le fragment de profil (plus besoin de ProfilActivite)
+                selectedFragment = new ProfilFragment();
             }
 
-            // Remplacement du fragment dans le FrameLayout
+            // Exécution du remplacement de fragment
             if (selectedFragment != null) {
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.fragment_container, selectedFragment)
                         .commit();
+                return true;
             }
-            return true;
+
+            return false;
         });
     }
 }

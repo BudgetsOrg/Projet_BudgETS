@@ -80,6 +80,19 @@
                 android:backgroundTint="#8BC34A"
                 android:text="Ajouter +" />
 
+            <Button
+                android:id="@+id/btnSupprimerObjectif"
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:layout_marginTop="40dp"
+                android:layout_marginBottom="20dp"
+                android:backgroundTint="#FF5252"
+                android:text="Quitter cet objectif commun"
+                android:textAllCaps="false"
+                android:textColor="#FFFFFF"
+                android:textSize="16sp"
+                android:visibility="gone" />
+
 
         </LinearLayout>
 

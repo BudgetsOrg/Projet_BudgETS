@@ -1,12 +1,14 @@
 package com.example.budgets;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
@@ -31,9 +33,16 @@ public class ObjectifAdapter extends RecyclerView.Adapter<ObjectifAdapter.MyView
             holder.montant.setText(objectif.getMontant() + " / " + objectif.getMontantObjectif() + "$");
             //quand on clique -> page de l'objectif
             holder.itemView.setOnClickListener(v -> {
-                Intent intent = new Intent(v.getContext(), PageObjectif.class);
-                intent.putExtra("objectif", objectif);//mettre l'objectif
-                v.getContext().startActivity(intent);
+                PageObjectifFragment detailFrag = new PageObjectifFragment();
+                Bundle args = new Bundle();
+                args.putSerializable("objectif", currentObj);
+                detailFrag.setArguments(args);
+
+                AppCompatActivity activity = (AppCompatActivity) v.getContext();
+                activity.getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_container, detailFrag)
+                        .addToBackStack(null) // Permet de revenir à la liste avec le bouton retour
+                        .commit();
             });
         }
 

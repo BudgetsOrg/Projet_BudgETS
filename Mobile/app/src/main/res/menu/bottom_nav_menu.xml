@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/nav_accueil"
+        android:id="@+id/navigation_accueil"
         android:icon="@android:drawable/ic_menu_today"
         android:title="Accueil" />
     <item
-        android:id="@+id/nav_enveloppes"
+        android:id="@+id/navigation_objectifs"
+        android:icon="@android:drawable/ic_menu_directions"
+        android:title="Objectifs" />
+    <item
+        android:id="@+id/navigation_enveloppes"
         android:icon="@android:drawable/ic_menu_manage"
         android:title="Enveloppes" />
     <item
-        android:id="@+id/nav_amis"
+        android:id="@+id/navigation_profil"
         android:icon="@android:drawable/ic_menu_myplaces"
-        android:title="Amis" />
-    <item
-        android:id="@+id/nav_finance"
-        android:icon="@android:drawable/ic_menu_gallery"
-        android:title="Finance" />
+        android:title="Profil" />
 </menu>

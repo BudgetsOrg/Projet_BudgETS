@@ -1,43 +1,57 @@
 import type { Utilisateur } from "../../interfaces";
 import SuppressionCompte from "../../popups/SuppressionPopup/SuppressionCompte";
-import React, { useState } from "react";
+import { useState } from "react";
 import { deleteUtilisateur, updateUtilisateur } from "../../api/UtilisateurApi";
 
 interface TableInfoProfilProps {
   user: Utilisateur;
+  changementUtilisateur: (field: keyof Utilisateur, value: string) => void;
+  onRefresh: () => Promise<void>;
 }
 
-export function TableInfoProfil({ user }: TableInfoProfilProps) {
-  const [showSuppressionPopup, setShowSuppressionPopup] = useState(false);
+export function TableInfoProfil({
+  user,
+  changementUtilisateur,
+  onRefresh,
+}: TableInfoProfilProps) {
   const [editMode, setEditMode] = useState(false);
-  const closeEditMode = () => setEditMode(false);
-  const openEditMode = () => setEditMode(true);
+  const [showSuppressionPopup, setShowSuppressionPopup] = useState(false);
 
-  const formattedTelephone = user.telephone
-    ? `${user.telephone.slice(0, 3)}-${user.telephone.slice(3, 6)}-${user.telephone.slice(6, 10)}`
-    : "";
+  const formatDateForInput = (date: string | undefined | null) => {
+    if (!date) return "";
+
+    if (typeof date === "string" && /^\d{4}-\d{2}-\d{2}$/.test(date)) {
+      return date;
+    }
+
+    const parsedDate = new Date(date);
+    if (!Number.isNaN(parsedDate.getTime())) {
+      return parsedDate.toISOString().split("T")[0];
+    }
+    return "";
+  };
 
   const handleChangeProfil = async () => {
     try {
-      const nom = (document.getElementById("nom") as HTMLInputElement).value;
-      const prenom = (document.getElementById("prenom") as HTMLInputElement)
-        .value;
-      const telephone = (
-        document.getElementById("telephone") as HTMLInputElement
-      ).value;
-      const date_naissance = (
-        document.getElementById("date_naissance") as HTMLInputElement
-      ).value;
-      console.log("Données à envoyer:", {
-        nom,
-        prenom,
-        telephone,
-        date_naissance,
-      });
-      await updateUtilisateur(nom, prenom, telephone, date_naissance);
-      closeEditMode();
+      const telephonePropre = user.telephone
+        ? user.telephone.replace(/\D/g, "")
+        : "";
+      //appeler l'api
+      // on veut aucune valeur null
+      await updateUtilisateur(
+        user.nom || "",
+        user.prenom || "",
+        telephonePropre,
+        user.date_naissance || "",
+      );
+
+      await onRefresh(); // Refresh the user data after update
+      setEditMode(false);
     } catch (error) {
-      console.log("Erreur changer utilisateur:", error);
+      console.error("Erreur changer utilisateur:", error);
+      alert(
+        "Une erreur est survenue lors de la mise à jour du profil. Veuillez réessayer.",
+      );
     }
   };
 
@@ -45,7 +59,10 @@ export function TableInfoProfil({ user }: TableInfoProfilProps) {
     try {
       await deleteUtilisateur();
     } catch (error) {
-      console.log("Erreur suppression utilisateur:", error);
+      console.error("Erreur suppression utilisateur:", error);
+      alert(
+        "Une erreur est survenue lors de la suppression du compte. Veuillez réessayer.",
+      );
     }
   };
 
@@ -58,7 +75,15 @@ export function TableInfoProfil({ user }: TableInfoProfilProps) {
               <label htmlFor="nom">Nom:</label>
             </td>
             <td>
-              <input id="nom" defaultValue={user.nom} readOnly={!editMode} />
+              <input
+                id="nom"
+                value={user.nom}
+                onChange={(e) => changementUtilisateur("nom", e.target.value)}
+                readOnly={!editMode}
+                className={
+                  !editMode ? "border-none outline-none" : "border rounded px-1"
+                }
+              />
             </td>
             <td className="font-semibold p-4">
               <label htmlFor="prenom">Prenom:</label>
@@ -66,8 +91,14 @@ export function TableInfoProfil({ user }: TableInfoProfilProps) {
             <td>
               <input
                 id="prenom"
-                defaultValue={user.prenom}
+                value={user.prenom}
+                onChange={(e) =>
+                  changementUtilisateur("prenom", e.target.value)
+                }
                 readOnly={!editMode}
+                className={
+                  !editMode ? "border-none outline-none" : "border rounded px-1"
+                }
               />
             </td>
           </tr>
@@ -77,9 +108,16 @@ export function TableInfoProfil({ user }: TableInfoProfilProps) {
             </td>
             <td>
               <input
+                type="date"
                 id="date_naissance"
-                defaultValue={user.date_naissance}
+                value={formatDateForInput(user.date_naissance)}
+                onChange={(e) =>
+                  changementUtilisateur("date_naissance", e.target.value)
+                }
                 readOnly={!editMode}
+                className={
+                  !editMode ? "border-none outline-none" : "border rounded px-1"
+                }
               />
             </td>
           </tr>
@@ -96,33 +134,42 @@ export function TableInfoProfil({ user }: TableInfoProfilProps) {
             <td>
               <input
                 id="telephone"
-                defaultValue={formattedTelephone}
+                value={user.telephone || ""}
+                onChange={(e) =>
+                  changementUtilisateur("telephone", e.target.value)
+                }
                 readOnly={!editMode}
+                className={
+                  !editMode ? "border-none outline-none" : "border rounded px-1"
+                }
               />
             </td>
           </tr>
         </tbody>
       </table>
+
       {!editMode && (
         <div className="flex items-center justify-center p-4">
           <button
-            onClick={openEditMode}
+            onClick={() => setEditMode(true)}
             className="confirm-button py-2 px-4 rounded-lg"
           >
             Modifier information
           </button>
         </div>
       )}
+
       {editMode && (
         <div className="flex items-center justify-center p-4">
           <button
             onClick={handleChangeProfil}
             className="delete-button py-2 px-4 rounded-lg"
           >
-            Arrêter le mode modification
+            Enregistrer les modifications
           </button>
         </div>
       )}
+
       <div className="flex items-center justify-center p-4">
         <button
           className="delete-button py-2 px-4 rounded-lg"
@@ -131,13 +178,12 @@ export function TableInfoProfil({ user }: TableInfoProfilProps) {
           Supprimer mon compte
         </button>
       </div>
+
       <div className="">
         <SuppressionCompte
           showPopup={showSuppressionPopup}
           closePopup={() => setShowSuppressionPopup(false)}
-          onDelete={() => {
-            console.warn("Suppression de compte non implémentée");
-          }}
+          onDelete={handleDeleteAccount}
         />
       </div>
     </div>

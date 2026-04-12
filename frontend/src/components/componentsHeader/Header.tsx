@@ -6,13 +6,13 @@ import logo from "../../img/image_inscription_plante.png";
 import DropDownProfile from "./DropDownProfile";
 import type { Utilisateur } from "../../interfaces";
 
-
 function Header() {
   const token = getToken();
   const estConnecte = token !== "";
   const [openProfile, setOpenProfile] = useState(false);
 
-  const [utilisateurCourant, setUtilisateurCourant] = useState<Utilisateur | null>(null);
+  const [utilisateurCourant, setUtilisateurCourant] =
+    useState<Utilisateur | null>(null);
   useEffect(() => {
     const recupererUtilisateurCourant = async () => {
       try {
@@ -27,15 +27,14 @@ function Header() {
 
   const redirigerPageConnexion = () => {
     window.location.href = "/PageConnexion";
-  }
+  };
   const redirigerPageAcceuil = () => {
     window.location.href = "/";
-  }
+  };
 
   return (
     <div className="container_header">
       <ul className="sous-sujet">
-
         {/* LEFT */}
         <li className="left">
           <ul>
@@ -50,49 +49,74 @@ function Header() {
               <a href="/EducationFinanciere">Page Éducation Financière</a>
             </li>
             <li className="sous_sujet">
+              <a href="/CategoriesDeDepense">Catégories de dépense</a>
+            </li>
+            <li className="sous_sujet">
               <a href="/PageObjectifs">PageObjectifs</a>
             </li>
             {estConnecte ? (
               <li className="sous_sujet">
                 <a href="/PagePrincipale">PagePrincipale</a>
               </li>
-
-            ) : (null)}
+            ) : null}
           </ul>
         </li>
 
         {/* Droite Affichage Profil ou Btn Connexion */}
         <li className="right">
           {estConnecte ? (
-            <div style={{ position: "relative" }}
+            <div
+              style={{ position: "relative" }}
               onMouseEnter={() => setOpenProfile(true)}
-              onMouseLeave={() => setOpenProfile(false)}>
+              onMouseLeave={() => setOpenProfile(false)}
+            >
               <span
-                style={{ cursor: "pointer", display: "flex", alignItems: "center", gap: "8px", color: "white", padding: "8px" }}
-              >
-                <div style={{ display: "flex", flexDirection: "column" }}>
-                  <span>{utilisateurCourant?.prenom} {utilisateurCourant?.nom}</span>
-                  <span style={{ fontSize: "12px", color: "lightgray" }}>{utilisateurCourant?.email}</span> {/* ← ici */}
-                </div>
-                <div style={{
-                  width: "35px",
-                  height: "35px",
-                  borderRadius: "50%",
-                  backgroundColor: "#2d7a4f",
-                  flexShrink: 0,
-                  overflow: "hidden",
+                style={{
+                  cursor: "pointer",
                   display: "flex",
                   alignItems: "center",
-                  justifyContent: "center"
-                }}>
+                  gap: "8px",
+                  color: "white",
+                  padding: "8px",
+                }}
+              >
+                <div style={{ display: "flex", flexDirection: "column" }}>
+                  <span>
+                    {utilisateurCourant?.prenom} {utilisateurCourant?.nom}
+                  </span>
+                  <span style={{ fontSize: "12px", color: "lightgray" }}>
+                    {utilisateurCourant?.email}
+                  </span>{" "}
+                  {/* ← ici */}
+                </div>
+                <div
+                  style={{
+                    width: "35px",
+                    height: "35px",
+                    borderRadius: "50%",
+                    backgroundColor: "#2d7a4f",
+                    flexShrink: 0,
+                    overflow: "hidden",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
                   {utilisateurCourant?.image ? (
                     <img
                       src={utilisateurCourant.image}
-                      style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                      style={{
+                        width: "100%",
+                        height: "100%",
+                        objectFit: "cover",
+                      }}
                     />
                   ) : null}
                 </div>
-              </span>              {openProfile && <DropDownProfile utilisateurCourant={utilisateurCourant} />}
+              </span>{" "}
+              {openProfile && (
+                <DropDownProfile utilisateurCourant={utilisateurCourant} />
+              )}
             </div>
           ) : (
             <ul>
@@ -107,7 +131,6 @@ function Header() {
             </ul>
           )}
         </li>
-
       </ul>
     </div>
   );

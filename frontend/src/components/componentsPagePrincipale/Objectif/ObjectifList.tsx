@@ -12,8 +12,6 @@ export default function ObjectifList() {
 
   if (error) return <div>Erreur: {error}</div>;
 
-  if (objectifs.length === 0)
-    return <div>Vous n'avez présentement aucun objectif. </div>;
   return (
     <div>
       <div className="flex flex-row gap-4">
@@ -26,11 +24,17 @@ export default function ObjectifList() {
         </button>
       </div>
       <div className="space-y-4">
-        {objectifs.map((objectif) => (
-          <div key={objectif.id_objectif} className="objectifs">
-            <ObjectifRow {...objectif} />
-          </div>
-        ))}
+        {objectifs.length === 0 ? (
+          <p className="text-gray-500 text-center">
+            Aucun objectif trouvé. Ajoutez-en un !
+          </p>
+        ) : (
+          objectifs.map((objectif) => (
+            <div key={objectif.id_objectif} className="objectifs">
+              <ObjectifRow {...objectif} />
+            </div>
+          ))
+        )}
       </div>
       <div className="absolute ">
         <NouvelObjectif

@@ -8,7 +8,7 @@ const debug = false;
 const local = false;
 
 export async function getLastBudget() {
-const token = getToken() ?? "";
+  const token = getToken() ?? "";
 
   if (debug) {
     const mockBudget1 = {
@@ -49,7 +49,7 @@ const token = getToken() ?? "";
 }
 
 export async function getBudgetById(id_budget: number) {
-const token = getToken() ?? "";
+  const token = getToken() ?? "";
 
   if (local) {
     const response = await fetch(`${API_URL_LOCAL}/budget/${id_budget}`, {
@@ -71,11 +71,29 @@ const token = getToken() ?? "";
 }
 
 export async function getBudgetHistorique() {
-  // à faire : ne comprend pas
+  const token = getToken() ?? "";
+
+  if (local) {
+    const response = await fetch(`${API_URL_LOCAL}/budget/historique`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.json();
+  } else {
+    const response = await fetch(`${API_URL_GLOBAL}/budget/historique`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.json();
+  }
 }
 
 export async function postBudget(budget: Budget) {
-const token = getToken() ?? "";
+  const token = getToken() ?? "";
 
   if (local) {
     const response = await fetch(`${API_URL_LOCAL}/budget`, {
@@ -101,7 +119,7 @@ const token = getToken() ?? "";
 }
 
 export async function deleteBudget(id_budget: number) {
-const token = getToken() ?? "";
+  const token = getToken() ?? "";
 
   if (local) {
     const response = await fetch(`${API_URL_LOCAL}/budget/${id_budget}`, {
@@ -123,7 +141,7 @@ const token = getToken() ?? "";
 }
 
 export async function updateBudget(solde: number, id_budget: number) {
-const token = getToken() ?? "";
+  const token = getToken() ?? "";
 
   if (local) {
     const response = await fetch(`${API_URL_LOCAL}/budget/${id_budget}`, {

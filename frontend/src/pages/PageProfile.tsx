@@ -5,18 +5,22 @@ import { TableInfoProfil } from "../components/componentsProfile/TableInfoProfil
 import type { Utilisateur } from "../interfaces";
 import { useEffect, useState } from "react";
 
-export function PageProfile() {
+export default function PageProfile() {
   const [utilisateur, setUtilisateur] = useState<Utilisateur | null>(null);
   const [loading, setLoading] = useState(true);
 
   const loadUser = async () => {
     try {
-      setLoading(true);
       const monUtilisateur = await getUtilisateur();
-      setUtilisateur(monUtilisateur);
+      console.log("Utilisateur chargé :", monUtilisateur);
+      const utilisateurSansVide = {
+        ...monUtilisateur,
+        telephone: monUtilisateur.telephone || "",
+        date_naissance: monUtilisateur.date_naissance || "",
+      };
+      setUtilisateur(utilisateurSansVide);
     } catch (error) {
       console.error("Erreur de chargement de l'utilisateur :", error);
-      setUtilisateur(null);
     } finally {
       setLoading(false);
     }
@@ -24,10 +28,15 @@ export function PageProfile() {
 
   useEffect(() => {
     loadUser();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const handleLocalChange = (field: keyof Utilisateur, value: string) => {
+    if (!utilisateur) return;
+    setUtilisateur({ ...utilisateur, [field]: value ?? "" });
+  };
+
   if (loading) return <div>Chargement...</div>;
+
   if (!utilisateur) return <div>Impossible de charger le profil</div>;
 
   return (
@@ -39,14 +48,17 @@ export function PageProfile() {
             profilePicture={
               utilisateur.image || "../public/img/image_avatar_default.png"
             }
+            onImageUpdated={loadUser}
           />
         </div>
       </div>
       <div className="px-4 sm:px-6 md:px-10 w-full md:w-3/4 lg:w-1/2 mx-auto">
-        <TableInfoProfil user={utilisateur} />
+        <TableInfoProfil
+          user={utilisateur}
+          changementUtilisateur={handleLocalChange}
+          onRefresh={loadUser}
+        />
       </div>
     </div>
   );
 }
-
-export default PageProfile;

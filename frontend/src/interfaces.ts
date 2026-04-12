@@ -24,19 +24,19 @@ export interface Budget {
 
 // à faire
 export interface Objectif {
-  id_objectif: number;
+  id_objectif?: number;
   titre: string;
-  montant: number;
-  date_limite: Date;
+  montant?: number;
+  date_limite: string;
   image: string;
-  user_id: number;
+  user_id?: number;
 }
 
 export interface Utilisateur {
   id_user?: number;
   nom: string;
   prenom: string;
-  email: string;
+  adresse_email: string;
   password?: string;
   date_naissance?: string;
   telephone?: string;
@@ -50,7 +50,7 @@ export interface Depense {
   nom_depense: string;
   montant: number;
   date: string;
-  recurente:boolean;
+  recurente: boolean;
   enveloppeId: number;
   categorieId: number;
 }

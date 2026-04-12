@@ -13,7 +13,7 @@ import EducationFinanciere from "./pages/EducationFinanciere";
 import PageMdpOublie from "./pages/PageMotDePasseOublie";
 import PageObjectifs from "./pages/Objectifs";
 import PageCreationNouveauMdp from "./pages/PageCreationNouveauMdp";
-
+import CategoriesDeDepense from "./pages/CategoriesDeDepense";
 function AppContent() {
   const location = useLocation();
 
@@ -39,6 +39,7 @@ function AppContent() {
         <Route path="/PagePrincipale" element={<PagePrincipale />} />
         <Route path="/PageEnveloppe/:id" element={<Enveloppe />} />
         <Route path="/Profile" element={<PageProfile />} />
+        <Route path="/CategoriesDeDepense" element={<CategoriesDeDepense />} />
         <Route path="/PageObjectifs" element={<PageObjectifs />} />
         <Route path="/PageMdpOublie" element={<PageMdpOublie />} />
         <Route path="/EducationFinanciere" element={<EducationFinanciere />} />

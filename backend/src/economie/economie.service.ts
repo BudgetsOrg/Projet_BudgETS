@@ -38,8 +38,9 @@ export class EconomieService {
             ...rest,
             objectif: objectif,
         });
+        const saved = await this.economieRepository.save(economie);
         await this.recalculerMontantEpargne(createEconomieDto.objectifId);
-        return this.economieRepository.save(economie);
+        return saved;
     }
 
     async findAllByObjectif(userId: number, objectifId: number) {

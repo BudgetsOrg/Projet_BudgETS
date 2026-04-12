@@ -227,6 +227,7 @@
 .objectif_table {
     width: 100%;
     border-collapse: collapse;
+
 }
 
 .objectif_table thead tr {
@@ -374,6 +375,14 @@
     font-weight: 600;
     cursor: pointer;
     transition: background-color 0.2s;
+}
+
+.popup_erreur {
+    text-align: center;
+    color: #e8442a;
+    font-size: 0.95rem;
+    font-weight: 600;
+    padding: 8px 0;
 }
 
 .popup_btn_envoyer:hover {

@@ -3,7 +3,7 @@
 import { useLocation } from "react-router-dom";
 import { useState, useRef, useEffect } from "react";
 import imgEdit from "../img/edit.png";
-import { updateObjectif,getObjectif,inviteUtilisateurObjectif } from "../api/ObjectifApi";
+import { updateObjectif, getObjectif, inviteUtilisateurObjectif } from "../api/ObjectifApi";
 import { postEconomie, updateEconomie, deleteEconomie, getEconomie } from "../api/EconomieApi";
 import { BackgroundColor } from "devextreme-react/cjs/chart";
 import GraphiqueObjectif from "../components/graphiques/graphiqueObjectif";
@@ -32,15 +32,15 @@ function Objectif() {
   const [editEconomieMontant, setEditEconomieMontant] = useState<string>("");
   const [editEconomieDate, setEditEconomieDate] = useState<string>("");
 
-  //  Mode supprimer (même pattern qu'Enveloppe)
+  //  Mode supprimer 
   const [modeSupprimer, setModeSupprimer] = useState<boolean>(false);
   const [selectionnes, setSelectionnes] = useState<number[]>([]);
-
   // Popups
   const [popupOuvert, setPopupOuvert] = useState<TypePopup>(null);
 
   //  Popup Invitation
   const [email, setEmail] = useState<string>("");
+  const [messageErreur, setMessageErreur] = useState("");
   const [emailEnvoye, setEmailEnvoye] = useState<boolean>(false);
 
   // Popup Ajouter
@@ -75,23 +75,30 @@ function Objectif() {
     (totalEconomies / montantACumuler) * 100,
     100,
   );
-  const prochainId: number =
-    economies.length > 0 ? Math.max(...economies.map((e) => e.id)) + 1 : 1;
-
   // Progression de la couleur de la barre de progression de l'objectif.
 
   const couleurBarre = (pct: number): string => {
-    if (pct <= 50) {
-      // Rouge à Jaune (0% à 50%)
-      const r = 220;
-      const g = Math.round(0 + (220 - 0) * (pct / 50)); 
-      return `rgb(${r}, ${g}, 0)`;
-    } else {
-      // Jaune à Vert (50% à 100%)
-      const r = Math.round(220 + (0 - 220) * ((pct - 50) / 50));
-      const g = 220; // 220 → 0
-      return `rgb(${r}, ${g}, 0)`;
+    const p = Math.min(Math.max(pct, 0), 100);
+
+    // 0% → 50% (rouge vers jaune)
+    if (p <= 50) {
+      const ratio = p / 50;
+
+      const r = Math.round(255 + (223 - 255) * ratio);
+      const g = Math.round(0 + (197 - 0) * ratio);
+      const b = Math.round(0 + (55 - 0) * ratio);
+
+      return `rgb(${r}, ${g}, ${b})`;
     }
+
+    // 50% → 100% (jaune vers vert)
+    const ratio = (p - 50) / 50;
+
+    const r = Math.round(223 + (127 - 223) * ratio);
+    const g = Math.round(197 + (167 - 197) * ratio);
+    const b = Math.round(55 + (90 - 55) * ratio);
+
+    return `rgb(${r}, ${g}, ${b})`;
   };
 
   const formatPrix = (montant: number): string =>
@@ -125,19 +132,32 @@ function Objectif() {
   // POPUP INVITATION
   const handleEnvoyerInvitation = async (): Promise<void> => {
     if (email.trim()) {
-      console.log("Invitation envoyée à :", email);
+      console.log("Invitation envoyée à () :", email);
+
       try {
-        await inviteUtilisateurObjectif(idObjectif,email);
-      } catch (error : any) {
-        console.log("Erreur dans l'ajout d'un utilisateur dans l'objectif : ",error);
-        
-      }
-      setEmailEnvoye(true);
-      setTimeout(() => {
+        await inviteUtilisateurObjectif(idObjectif, email);
+
+        setEmailEnvoye(true);
+        setMessageErreur("");
+
+        setTimeout(() => {
+          setEmailEnvoye(false);
+          setEmail("");
+          setPopupOuvert(null);
+        }, 2000);
+
+      } catch (error: any) {
+        console.log("Erreur dans l'ajout d'un utilisateur dans l'objectif : ", error);
+        const status = error?.response?.status || error?.status;
+        if (status == 404) {
+          setMessageErreur("Il n'existe aucun Utilisateur relié à ce mail.")
+        } else {
+          setMessageErreur("Erreur lors de l'envoi de l'invitation.");
+        }
+
         setEmailEnvoye(false);
-        setEmail("");
-        setPopupOuvert(null);
-      }, 2000);
+      }
+
     }
   };
 
@@ -165,6 +185,7 @@ function Objectif() {
       });
       await recupererEconomies();
     } catch (error: any) {
+      console.log
       alert("Erreur lors de l'ajout : " + error.message);
       return;
     }
@@ -182,9 +203,11 @@ function Objectif() {
     setSelectionnes([]);
   };
 
-  const toggleSelection = (index: number): void => {
+  const toggleSelection = (id: number): void => {
     setSelectionnes((prev) =>
-      prev.includes(index) ? prev.filter((i) => i !== index) : [...prev, index],
+      prev.includes(id)
+        ? prev.filter((i) => i !== id)
+        : [...prev, id]
     );
   };
 
@@ -211,22 +234,22 @@ function Objectif() {
     setPopupOuvert("edition");
   };
   useEffect(() => {
-  const recupererObjectif = async () => {
-    try {
-      const data = await getObjectif();
-      if (!Array.isArray(data)) return;
-      const objectif = data.find((o: any) => o.id_objectif === idObjectif);
-      if (objectif) {
-        setTitre(objectif.titre);
-        setMontantACumuler(Number(objectif.montant) || 0);
-        setImageUrl(objectif.image ?? null);
+    const recupererObjectif = async () => {
+      try {
+        const data = await getObjectif();
+        if (!Array.isArray(data)) return;
+        const objectif = data.find((o: any) => o.id_objectif === idObjectif);
+        if (objectif) {
+          setTitre(objectif.titre);
+          setMontantACumuler(Number(objectif.montant) || 0);
+          setImageUrl(objectif.image ?? null);
+        }
+      } catch (error: any) {
+        console.error("Erreur chargement objectif :", error);
       }
-    } catch (error: any) {
-      console.error("Erreur chargement objectif :", error);
-    }
-  };
-  if (idObjectif) recupererObjectif();
-}, []);
+    };
+    if (idObjectif) recupererObjectif();
+  }, []);
 
   const handleSauvegarderEdition = async (): Promise<void> => {
     const montantNum = parseFloat(editMontant.replace(",", ".").replace(" ", ""));
@@ -437,7 +460,7 @@ function Objectif() {
                   onClick={() => modeSupprimer && toggleSelection(index)}
                 >
                   {modeSupprimer && (
-                    
+
                     <td className="col_checkbox">
                       <input
                         type="checkbox"
@@ -464,21 +487,19 @@ function Objectif() {
                         Modifier
                       </button>
                     </td>
-                    
+
                   )}
                 </tr>
               ))}
-              
+
               {Array.from({ length: Math.max(0, 5 - economies.length) }).map(
                 (_, i: number) => (
                   <tr key={`vide-${i}`} className="ligne_vide">
-                    {modeSupprimer && <td></td>}
+                    {modeSupprimer && <td className="col_checkbox"></td>}
                     <td></td>
                     <td></td>
-                    <td></td>
+                    {!modeSupprimer && <td></td>}
                   </tr>
-                  
-
                 ),
               )}
 
@@ -492,10 +513,13 @@ function Objectif() {
       {popupOuvert === "invitation" && (
         <div className="popup_overlay" onClick={fermerInvitation}>
           <div className="popup_contenu" onClick={(e) => e.stopPropagation()}>
+
             <h3 className="popup_titre">Inviter un ami</h3>
+
             <p className="popup_description">
               Entrez l'adresse email de la personne à inviter.
             </p>
+
             <input
               type="email"
               className="popup_input"
@@ -505,24 +529,25 @@ function Objectif() {
               onKeyDown={(e) => e.key === "Enter" && handleEnvoyerInvitation()}
               autoFocus
             />
-            {emailEnvoye ? (
-              <div className="popup_succes">✓ Invitation envoyée !</div>
-            ) : (
-              <div className="popup_boutons">
-                <button
-                  className="popup_btn_annuler"
-                  onClick={fermerInvitation}
-                >
-                  Annuler
-                </button>
-                <button
-                  className="popup_btn_envoyer"
-                  onClick={handleEnvoyerInvitation}
-                >
-                  Envoyer
-                </button>
-              </div>
+
+            {emailEnvoye && (
+              <div className="popup_succes"> Invitation envoyée !</div>
             )}
+
+            {messageErreur && (
+              <div className="popup_erreur">{messageErreur}</div>
+            )}
+
+            <div className="popup_boutons">
+              <button className="popup_btn_annuler" onClick={fermerInvitation}>
+                Annuler
+              </button>
+
+              <button className="popup_btn_envoyer" onClick={handleEnvoyerInvitation}>
+                Envoyer
+              </button>
+            </div>
+
           </div>
         </div>
       )}

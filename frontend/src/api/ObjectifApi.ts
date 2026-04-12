@@ -124,15 +124,17 @@ export async function inviteUtilisateurObjectif (id_objectif:number , email : st
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
     },
-    body: JSON.stringify({email}),
+    body: JSON.stringify({email : email.trim() }),
   });
 
+  const data = await response.text(); 
+
   if (!response.ok) {
-    const errorText = await response.text();
-    throw new Error(
-      `Erreur création objectif (${response.status}): ${errorText}`,
-    );
+    throw {
+      status: response.status,
+      message: data,
+    };
   }
 
-  return response.json();
+  return JSON.parse(data);
 }

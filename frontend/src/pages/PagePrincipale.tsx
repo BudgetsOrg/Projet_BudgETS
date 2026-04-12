@@ -7,8 +7,6 @@ import { getToken } from "../../public/token.ts";
 
 export function PagePrincipale() {
   const [enveloppesRefresh, setEnveloppesRefresh] = useState(0);
-  console.log("Voila le token : ", getToken());
-
   const handleEnveloppesChanged = () => {
     setEnveloppesRefresh((prev) => prev + 1);
   };

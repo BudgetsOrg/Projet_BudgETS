@@ -33,7 +33,10 @@ public class ObjectifAdapter extends RecyclerView.Adapter<ObjectifAdapter.MyView
         holder.text.setText(objectif.getTitre());
 
         holder.montant.setText(
-                objectif.getMontant() + "$ / " + objectif.getMontantObjectif() + "$"
+                String.format("%.2f$ / %.2f$",
+                        objectif.getMontant(),
+                        objectif.getMontantObjectif()
+                )
         );
 
         holder.itemView.setOnClickListener(v -> {

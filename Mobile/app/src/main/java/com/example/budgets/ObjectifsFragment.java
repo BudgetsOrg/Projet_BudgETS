@@ -82,9 +82,10 @@ public class ObjectifsFragment extends Fragment {
                 for (int i = 0; i < array.length(); i++) {
                     JSONObject obj = array.getJSONObject(i);
                     boolean commun = obj.has("participants") || obj.optBoolean("is_commun");
-                    double epargne = obj.optDouble("montant_epargne", 0);
-                    double cible   = obj.optDouble("montant_cible", obj.optDouble("montant", 0));
-                    temp.add(new Objectif(
+                    double epargne = parseDoubleSafe(obj, "montant_epargne");
+                    double cible   = obj.has("montant")
+                            ? parseDoubleSafe(obj, "montant")
+                            : parseDoubleSafe(obj, "montant");temp.add(new Objectif(
                             obj.getInt("id"),
                             obj.getString("titre"),
                             epargne, cible, commun
@@ -164,6 +165,20 @@ public class ObjectifsFragment extends Fragment {
 
         dialog.show();
     }
+    private double parseDoubleSafe(JSONObject obj, String key) {
+        try {
+            Object value = obj.get(key);
+
+            if (value instanceof Number) {
+                return ((Number) value).doubleValue();
+            } else if (value instanceof String) {
+                return Double.parseDouble((String) value);
+            }
+        } catch (Exception e) {
+            Log.e("PARSE_ERROR", "Erreur parsing " + key);
+        }
+        return 0;
+    }
 
     // ─── Appel API création objectif ────────────────────────────────────────────
     private void creerObjectifPersoBackend(String titre, double montant, AlertDialog dialog) {
@@ -181,7 +196,7 @@ public class ObjectifsFragment extends Fragment {
 
                 JSONObject body = new JSONObject();
                 body.put("titre", titre);
-                body.put("montant_cible", montantDecimal);
+                body.put("montant", montantDecimal);
 
                 Log.d(TAG, "Corps JSON envoyé : " + body.toString());
 
@@ -211,7 +226,7 @@ public class ObjectifsFragment extends Fragment {
                         json.optInt("id", 0),
                         json.optString("titre", titre),
                         0,
-                        json.optDouble("montant_cible", montant),
+                        json.optDouble("montant", montant),
                         false
                 );
 

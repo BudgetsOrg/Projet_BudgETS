@@ -236,7 +236,7 @@ public class PageObjectifFragment extends Fragment {
                 if (res != null) {
                     JSONObject o = new JSONObject(res);
 
-                    double montant = o.optDouble("montant_epargne", 0);
+                    double montant = parseDoubleSafe(o, "montant_epargne");
                     objectifActuel.setMontant(montant);
 
                     if (isAdded()) {
@@ -250,7 +250,20 @@ public class PageObjectifFragment extends Fragment {
             }
         }).start();
     }
+    private double parseDoubleSafe(JSONObject obj, String key) {
+        try {
+            Object value = obj.get(key);
 
+            if (value instanceof Number) {
+                return ((Number) value).doubleValue();
+            } else if (value instanceof String) {
+                return Double.parseDouble((String) value);
+            }
+        } catch (Exception e) {
+            Log.e("PARSE_ERROR", "Erreur parsing " + key);
+        }
+        return 0;
+    }
     private void supprimerEconomie(int pos) {
         new Thread(() -> {
             try {

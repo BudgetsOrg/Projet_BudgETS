@@ -31,13 +31,10 @@ export class ObjectifRepository {
   //Read all : by user dans ce cas
   async getAll(userId: number): Promise<Objectif[]> {
     return await this.repo.find({
-      where: {
-        users: {
-          id_user: userId,
-        },
-      },
+        where: { users: { id_user: userId } },
+        relations: ['economies'],
     });
-  }
+}
 
   //read one
   async getOne(userId: number, objectifId: number): Promise<Objectif | null> {
@@ -48,7 +45,7 @@ export class ObjectifRepository {
           id_user: userId,
         },
       },
-      relations: ['users'], //pour avoir les membres
+      relations: ['users', 'economies'], //pour avoir les membres
     });
   }
 

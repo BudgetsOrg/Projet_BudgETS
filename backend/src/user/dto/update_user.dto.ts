@@ -1,5 +1,5 @@
 import { ApiPropertyOptional } from "@nestjs/swagger/dist/decorators/api-property.decorator";
-import { IsString, IsNotEmpty, IsOptional } from "class-validator";
+import { IsString, IsNotEmpty, IsOptional, IsDateString } from "class-validator";
 
 export class UpdateUserDto {
   @ApiPropertyOptional({ example: 'Doe', description: 'Nom de famille de l\'utilisateur' })
@@ -21,6 +21,7 @@ export class UpdateUserDto {
 
   @ApiPropertyOptional({ example: '2000-01-01', description: 'Date de naissance de l\'utilisateur' })
   @IsOptional()
+  @IsDateString()
   date_naissance?: Date;
 
   @ApiPropertyOptional({example: 'image.jpg', description: 'URL de l\'image de profil de l\'utilisateur'})

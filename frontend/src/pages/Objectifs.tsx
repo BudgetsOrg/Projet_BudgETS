@@ -15,21 +15,12 @@ interface Economie {
   date: string;
 }
 
-interface DonneesObjectif {
-  titre: string;
-  montantACumuler: number;
-  imageUrl: string | null;
-  economies: Economie[];
-}
 
 type TypePopup = "invitation" | "ajouter" | "edition" | "editionEconomie" | null;
 
 function Objectif() {
   const location = useLocation();
   const idObjectif = location.state?.id_objectif;
-  // je l'ai mis car il était dans enveloppes, mais c'est à ta guise
-  //const titre = location.state?.titre ?? titre; // Récupère l'ID de l'objectif depuis l'URL
-  // const montantACumuler = location.state?.montantACumuler ?? montantACumuler; // Récupère le montant à accumuler depuis l'URL
   // État principal
   const [titre, setTitre] = useState<string>(location.state?.titre ?? "");
   const [montantACumuler, setMontantACumuler] = useState<number>(Number(location.state?.montantAccumule) || 0);
@@ -93,7 +84,7 @@ function Objectif() {
     if (pct <= 50) {
       // Rouge à Jaune (0% à 50%)
       const r = 220;
-      const g = Math.round(0 + (220 - 0) * (pct / 50)); // 0 → 220
+      const g = Math.round(0 + (220 - 0) * (pct / 50)); 
       return `rgb(${r}, ${g}, 0)`;
     } else {
       // Jaune à Vert (50% à 100%)
@@ -103,7 +94,6 @@ function Objectif() {
     }
   };
 
-  //  Formatage
   const formatPrix = (montant: number): string =>
     montant.toFixed(2).replace(".", ",") + "$";
 
@@ -123,7 +113,6 @@ function Objectif() {
     return `${jour}/${mois}/${annee}`;
   };
 
-  // IMAGE BANNIÈRE
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const file = e.target.files?.[0];
     if (file) {

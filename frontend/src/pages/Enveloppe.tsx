@@ -559,7 +559,7 @@ function Enveloppe() {
       )}
 
       <div className="p-10">
-        <GraphiqueEnveloppe id_enveloppe={id_enveloppe} />
+        <GraphiqueEnveloppe depenses={depenses} />
       </div>
     </div>
   );

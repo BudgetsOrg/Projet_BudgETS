@@ -3,7 +3,7 @@ import { useObjectif } from "../../../hooks/useObjectifs";
 import { ObjectifRow } from "./ObjectifRow";
 import NouvelObjectif from "../../../popups/AjoutPopup/NouvelObjectif";
 
-export function ObjectifList() {
+export default function ObjectifList() {
   const [showPopup, setShowPopup] = useState(false);
   const { objectifs, loading, error } = useObjectif();
 

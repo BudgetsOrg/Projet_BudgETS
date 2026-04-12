@@ -1,4 +1,4 @@
-import useDepense from "../../hooks/UseDepense";
+import type { Depense } from "../../interfaces";
 // must install following librairy for chart
 // source is this library
 import { Bar } from "react-chartjs-2";
@@ -21,8 +21,7 @@ ChartJS.register(
   Legend,
 );
 
-export function GraphiqueEnveloppe({id_enveloppe}:{id_enveloppe : number}) {
-  const { depenses, loading, error } = useDepense(id_enveloppe);
+export function GraphiqueEnveloppe({ depenses }: { depenses: Depense[] }) {
 
   const parseDate = (dateString: string): Date | null => {
     if (!dateString) {
@@ -51,12 +50,8 @@ export function GraphiqueEnveloppe({id_enveloppe}:{id_enveloppe : number}) {
     return Number.isNaN(parsedDate.getTime()) ? null : parsedDate;
   };
 
-  //Could be changed to a spinner or a cuter message
-  if (loading) return <div>Chargement...</div>;
-
-  if (error) return <div>Erreur: {error}</div>;
-
-  if (depenses.length === 0) return <div>Aucun graphique à afficher</div>;
+  if (!depenses || depenses.length === 0)
+    return <div>Aucun graphique à afficher</div>;
   else {
     // un map initial clé-valeur pour les données de dépenses
     const firstMap = new Map<string, number>();

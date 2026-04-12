@@ -566,6 +566,12 @@ function Objectif() {
           </div>
         </div>
       )}
+      <div className="p-10">
+        <GraphiqueObjectif
+          economies={economies}
+          date_limite={montantACumuler}
+        />
+      </div>
     </div>
   );
 }

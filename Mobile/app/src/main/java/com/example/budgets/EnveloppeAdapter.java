@@ -1,6 +1,9 @@
 package com.example.budgets;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,9 +20,9 @@ import org.intellij.lang.annotations.Language;
 import java.util.ArrayList;
 
 public class EnveloppeAdapter extends RecyclerView.Adapter<EnveloppeAdapter.MyViewHolder> {
-    ArrayList<Enveloppe> listeEnveloppe;
+    ArrayList<Enveloppe> listeEnveloppes;
     public EnveloppeAdapter(ArrayList<Enveloppe> listeEnveloppes) {
-        this.listeEnveloppe = listeEnveloppes;
+        this.listeEnveloppes = listeEnveloppes;
     }
 
     @NonNull
@@ -33,7 +36,7 @@ public class EnveloppeAdapter extends RecyclerView.Adapter<EnveloppeAdapter.MyVi
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
         // chercher l'enveloppe qui est à la position dans la liste
-        Enveloppe enveloppe = listeEnveloppe.get(position);
+        Enveloppe enveloppe = listeEnveloppes.get(position);
         // Affiche le nom et le montant dans les cases
         holder.textViewNom.setText(enveloppe.getTitre());
         holder.textViewMontant.setText(enveloppe.getMontant() + "$");
@@ -45,16 +48,33 @@ public class EnveloppeAdapter extends RecyclerView.Adapter<EnveloppeAdapter.MyVi
                     .setTitle("Supprimer")
                     .setMessage("Êtes-vous sûr de vouloir supprimer l'enveloppe " + enveloppe.getTitre() + " ?")
                     .setPositiveButton("Oui", (dialog, which) -> {
-                        int pos = holder.getAdapterPosition();// Trouve la position actuelle
-                        if (pos != RecyclerView.NO_POSITION) {
-                            listeEnveloppe.remove(pos);
-                            notifyItemRemoved(pos);//enleve l'objet de la liste
-                            notifyItemRangeChanged(pos, listeEnveloppe.size());//metre a jour les pos
-                            //recalculer le cercle a la page principale
-                            if (context instanceof PagePrincipaleActivite) {
-                                ((PagePrincipaleActivite) context).recalculerCercle();
+                        new Thread(() -> {
+                            try {
+                                SharedPreferences prefs = context.getSharedPreferences("auth", Context.MODE_PRIVATE);
+                                String token = prefs.getString("token", "");
+
+                                // On utilise l'ID unique de l'enveloppe
+                                ApiHelper.delete("/enveloppe/" + enveloppe.getId(), token);
+
+                                ((Activity) context).runOnUiThread(() -> {
+                                    listeEnveloppes.remove(position);
+                                    notifyItemRemoved(position);
+                                    notifyItemRangeChanged(position, listeEnveloppes.size());
+
+                                    // Mise à jour du cercle sur la page principale
+                                    if (context instanceof PagePrincipaleActivite) {
+                                        ((PagePrincipaleActivite) context).recalculerCercle();
+                                    }
+
+                                    Toast.makeText(context, "Supprimé du serveur", Toast.LENGTH_SHORT).show();
+                                });
+                            } catch (Exception e) {
+                                Log.e("API_DELETE", e.getMessage());
+                                ((Activity) context).runOnUiThread(() ->
+                                        Toast.makeText(context, "Erreur lors de la suppression", Toast.LENGTH_SHORT).show());
                             }
-                        }
+                        }).start();
+
                     })
                     .setNegativeButton("Non", null)//ferme fenetre
                     .show();
@@ -64,7 +84,7 @@ public class EnveloppeAdapter extends RecyclerView.Adapter<EnveloppeAdapter.MyVi
 
     @Override
     public int getItemCount() {
-        return listeEnveloppe.size();//chercher nombre elements
+        return listeEnveloppes.size();//chercher nombre elements
     }
     public static class MyViewHolder extends RecyclerView.ViewHolder{
         //elements

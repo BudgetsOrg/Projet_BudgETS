@@ -1,9 +1,12 @@
 package com.example.budgets;
 
 import android.animation.ObjectAnimator;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +23,10 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment; // Version androidx
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -60,15 +67,61 @@ public class AccueilFragment extends Fragment {
         recenteAdapter = new EnveloppeRecenteAdapter(listeEnveloppes);
         recyclerViewRecent.setAdapter(recenteAdapter);
 
-        if(listeEnveloppes.isEmpty()) message.setVisibility(View.VISIBLE);
+        // Charger les données depuis le serveur
+        chargerDonneesServeur();
 
         creerBudjet.setOnClickListener(v -> afficherPopUp());
 
         return view;
     }
 
+    private void chargerDonneesServeur() {
+        new Thread(() -> {
+            try {
+                SharedPreferences prefs = getActivity().getSharedPreferences("auth", Context.MODE_PRIVATE);
+                String token = prefs.getString("token", "");
+
+                // Récupérer le budget et ses enveloppes
+                String response = ApiHelper.get("/budget/me", token);
+                JSONObject budgetObj = new JSONObject(response);
+                JSONArray array = budgetObj.getJSONArray("enveloppes");
+
+                listeEnveloppes.clear();
+                double montantTot = 0;
+
+                for (int i = 0; i < array.length(); i++) {
+                    JSONObject obj = array.getJSONObject(i);
+                    // Utilisation de id_enveloppe selon Swagger p.4
+                    Enveloppe env = new Enveloppe(
+                            obj.getInt("id_enveloppe"),
+                    obj.getString("titre"),
+                    String.valueOf(obj.get("montant"))
+                    );
+                    listeEnveloppes.add(env);
+                    montantTot += obj.getDouble("montant");
+                }
+
+                double soldeTotal = budgetObj.optDouble("soldeDuMois", 0);
+                final double finalMontantTot = montantTot;
+
+                getActivity().runOnUiThread(() -> {
+                    adapter.notifyDataSetChanged();
+                    recenteAdapter.notifyDataSetChanged();
+                    if (!listeEnveloppes.isEmpty()) message.setVisibility(View.GONE);
+
+                    if (soldeTotal > 0) {
+                        int score = (int) ((finalMontantTot * 100) / soldeTotal);
+                        animerCercle(Math.min(score, 100));
+                    }
+                });
+
+            } catch (Exception e) {
+                Log.e("API", "Erreur chargement: " + e.getMessage());
+            }
+        }).start();
+    }
+
     public void afficherPopUp() {
-        // Utiliser getContext() au lieu de l'Activity
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         View popupView = getLayoutInflater().inflate(R.layout.activite_creer_budjet, null);
         builder.setView(popupView);
@@ -88,27 +141,38 @@ public class AccueilFragment extends Fragment {
             String montantStr = montantEntre.getText().toString();
 
             if (!titre.isEmpty() && !montantStr.isEmpty()) {
-                Enveloppe enveloppe = new Enveloppe(titre, montantStr);
-                listeEnveloppes.add(0, enveloppe);
+                new Thread(() -> {
+                    try {
+                        SharedPreferences prefs = getActivity().getSharedPreferences("auth", Context.MODE_PRIVATE);
+                        String token = prefs.getString("token", "");
 
-                // On récupère le solde depuis la vue du fragment
-                EditText soldeEdit = getView().findViewById(R.id.soldeMois);
-                String soldeStr = soldeEdit.getText().toString().replace("$", "");
+                        JSONObject body = new JSONObject();
+                        body.put("titre", titre);
+                        body.put("montant", Double.parseDouble(montantStr));
 
-                double soldeTotal = Double.parseDouble(soldeStr);
-                if (soldeTotal > 0) {
-                    double montantTot = 0;
-                    for (Enveloppe e : listeEnveloppes) {
-                        montantTot += Double.parseDouble(e.getMontant());
+                        // POST vers enveloppe
+                        String res = ApiHelper.post("/enveloppe", body.toString(), token);
+                        JSONObject newObj = new JSONObject(res);
+
+                        getActivity().runOnUiThread(() -> {
+                            Enveloppe enveloppe = null;
+                            try {
+                                enveloppe = new Enveloppe(newObj.getInt("id_enveloppe"), titre, montantStr);
+                            } catch (JSONException e) {
+                                throw new RuntimeException(e);
+                            }
+                            listeEnveloppes.add(0, enveloppe);
+
+                            recalculerCercle();
+                            adapter.notifyDataSetChanged();
+                            recenteAdapter.notifyDataSetChanged();
+                            message.setVisibility(View.GONE);
+                            dialog.dismiss();
+                        });
+                    } catch (Exception e) {
+                        Log.e("API", "Erreur creation: " + e.getMessage());
                     }
-                    int score = (int) ((montantTot * 100) / soldeTotal);
-                    animerCercle(Math.min(score, 100));
-                }
-
-                adapter.notifyDataSetChanged();
-                recenteAdapter.notifyDataSetChanged();
-                message.setVisibility(View.GONE);
-                dialog.dismiss();
+                }).start();
             } else {
                 Toast.makeText(getContext(), "Remplissez tous les champs", Toast.LENGTH_SHORT).show();
             }
@@ -116,6 +180,24 @@ public class AccueilFragment extends Fragment {
 
         btnAnnuler.setOnClickListener(v -> dialog.dismiss());
         dialog.show();
+    }
+
+    public void recalculerCercle() {
+        // On récupère le solde depuis la vue du fragment
+        EditText soldeEdit = getView().findViewById(R.id.soldeMois);
+        String soldeStr = soldeEdit.getText().toString().replace("$", "");
+
+        if (!soldeStr.isEmpty()) {
+            double soldeTotal = Double.parseDouble(soldeStr);
+            if (soldeTotal > 0) {
+                double montantTot = 0;
+                for (Enveloppe e : listeEnveloppes) {
+                    montantTot += Double.parseDouble(e.getMontant());
+                }
+                int score = (int) ((montantTot * 100) / soldeTotal);
+                animerCercle(Math.min(score, 100));
+            }
+        }
     }
 
     public void animerCercle(int pourcentageCible) {

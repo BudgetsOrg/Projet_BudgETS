@@ -80,17 +80,11 @@
                 android:backgroundTint="#8BC34A"
                 android:text="Ajouter +" />
 
-            <Button
-                android:id="@+id/btnSupprimer"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:backgroundTint="#F44336"
-                android:text="Supprimer" />
+
         </LinearLayout>
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerArgent"
+            android:id="@+id/recyclerEconomies"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp" />

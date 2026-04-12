@@ -5,9 +5,11 @@ import static android.view.View.VISIBLE;
 
 import android.animation.ObjectAnimator;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
@@ -21,6 +23,9 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -63,52 +68,100 @@ public class PagePrincipaleActivite extends AppCompatActivity {
         creerBudjet=findViewById(R.id.creerBudjet);
         //pop up ajouter un budjet
         creerBudjet.setOnClickListener(v -> afficherPopUp());
+        chargerDonneesServeur();
     }
-    public void afficherPopUp(){
-        //pop up ajouter
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(PagePrincipaleActivite.this);
+    private void chargerDonneesServeur() {
+        new Thread(() -> {
+            try {
+                SharedPreferences prefs = getSharedPreferences("auth", MODE_PRIVATE);
+                String token = prefs.getString("token", "");
+
+                // Récupérer les enveloppes
+                String response = ApiHelper.get("/enveloppe", token);
+                JSONArray array = new JSONArray(response);
+
+                listeEnveloppes.clear();
+                for (int i = 0; i < array.length(); i++) {
+                    JSONObject obj = array.getJSONObject(i);
+                    listeEnveloppes.add(new Enveloppe(
+                            obj.getInt("id_enveloppe"),
+                            obj.getString("titre"),
+                            obj.getString("montant")
+                    ));
+                }
+
+                runOnUiThread(() -> {
+                    adapter.notifyDataSetChanged();
+                    recalculerCercle();
+                });
+            } catch (Exception e) { Log.e("API", e.getMessage()); }
+        }).start();
+    }
+    public void afficherPopUp() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        // On vérifie qu'on utilise le bon layout XML (celui de la CardView)
         View view = getLayoutInflater().inflate(R.layout.activite_creer_budjet, null);
-        alertDialogBuilder.setView(view);
-        AlertDialog.Builder alterDialog = new AlertDialog.Builder(this);
-        alterDialog.setView(view);
-        AlertDialog dialog = alterDialog.create();
+        builder.setView(view);
+        AlertDialog dialog = builder.create();
 
         if (dialog.getWindow() != null) {
             dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         }
-        EditText nom;
-        EditText montantEntre;
-        Button creer;
-        Button annuler;
-        creer=view.findViewById(R.id.enveloppeCree);
-        nom=view.findViewById(R.id.nom);
-        montantEntre=view.findViewById(R.id.montant);
-        annuler=view.findViewById(R.id.annuler);
 
+        EditText nom = view.findViewById(R.id.nom);
+        EditText montantEntre = view.findViewById(R.id.montant);
+        Button creer = view.findViewById(R.id.enveloppeCree);
+        Button annuler = view.findViewById(R.id.annuler);
 
         creer.setOnClickListener(v -> {
-            String titre = nom.getText().toString();
-            String montant = montantEntre.getText().toString();
+            String t = nom.getText().toString().trim();
+            String m = montantEntre.getText().toString().trim();
 
-            if (!titre.isEmpty() && !montant.isEmpty()) {
-                //On crée l'objet et on l'ajoute à la liste
-                Enveloppe enveloppe = new Enveloppe(titre, montant);
-                listeEnveloppes.add(0, enveloppe);
-                recalculerCercle();
+            if (!t.isEmpty() && !m.isEmpty()) {
+                new Thread(() -> {
+                    try {
+                        SharedPreferences prefs = getSharedPreferences("auth", MODE_PRIVATE);
+                        String token = prefs.getString("token", "");
 
-                // Rafraichir liste
-                adapter.notifyDataSetChanged();
-                recenteAdapter.notifyDataSetChanged();
-                message.setVisibility(GONE);
-                Toast.makeText(this, "L'enveloppe " + titre + " a été ajoutée!", Toast.LENGTH_SHORT).show();
-                dialog.dismiss();
+                        JSONObject body = new JSONObject();
+                        body.put("titre", t);
+                        body.put("montant", Double.parseDouble(m));
+
+                        String res = ApiHelper.post("/enveloppe", body.toString(), token);
+
+                        // SÉCURITÉ : On vérifie si la réponse est bien du JSON
+                        if (res != null && !res.isEmpty()) {
+                            try {
+                                JSONObject newEnv = new JSONObject(res);
+                                int idGenere = newEnv.optInt("id_enveloppe", 0);
+
+                                runOnUiThread(() -> {
+                                    listeEnveloppes.add(0, new Enveloppe(idGenere, t, m));
+                                    adapter.notifyDataSetChanged();
+                                    recenteAdapter.notifyDataSetChanged(); // N'oublie pas l'autre adapter !
+                                    recalculerCercle();
+                                    message.setVisibility(View.GONE);
+                                    dialog.dismiss();
+                                    Toast.makeText(this, "Enveloppe ajoutée !", Toast.LENGTH_SHORT).show();
+                                });
+                            } catch (Exception jsonError) {
+                                // Si le serveur n'a pas renvoyé de JSON, on recharge tout simplement
+                                runOnUiThread(() -> {
+                                    chargerDonneesServeur();
+                                    dialog.dismiss();
+                                });
+                            }
+                        }
+                    } catch (Exception e) {
+                        runOnUiThread(() -> Toast.makeText(this, "Erreur lors de l'envoi", Toast.LENGTH_SHORT).show());
+                    }
+                }).start();
             } else {
-                Toast.makeText(this, "Remplissez tous les champs", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Veuillez remplir tous les champs", Toast.LENGTH_SHORT).show();
             }
         });
 
         annuler.setOnClickListener(v -> dialog.dismiss());
-
         dialog.show();
     }
     public void animerCercle(int pourcentageCible) {
@@ -134,6 +187,7 @@ public class PagePrincipaleActivite extends AppCompatActivity {
         String solde = soldeEdit.getText().toString().replace("$", "");
 
         if (!solde.isEmpty()) {
+            try {
             double soldeTotal = Double.parseDouble(solde);
             double montantTot = 0;
 
@@ -148,7 +202,10 @@ public class PagePrincipaleActivite extends AppCompatActivity {
             if (listeEnveloppes.isEmpty()) {
                 message.setVisibility(View.VISIBLE);
             }
-        }
+
+        } catch (NumberFormatException e) {
+            Log.e("Erreur", "Le solde n'est pas un nombre valide");
+        }}
     }
 
 }

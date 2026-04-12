@@ -1,27 +1,25 @@
 package com.example.budgets;
 
-public class Enveloppe {
-    String titre;
-    String montant;
 
-    public Enveloppe(String titre, String montant) {
+import java.io.Serializable;
+
+public class Enveloppe implements Serializable {
+    private int id;
+    private String titre;
+    private String montant;
+
+    public Enveloppe(int id, String titre, String montant) {
+        this.id = id;
         this.titre = titre;
         this.montant = montant;
     }
 
-    public String getTitre() {
-        return titre;
-    }
+    // Getters
+    public int getId() { return id; }
+    public String getTitre() { return titre; }
+    public String getMontant() { return montant; }
 
-    public String getMontant() {
-        return montant;
-    }
-
-    public void setTitre(String titre) {
-        this.titre = titre;
-    }
-
-    public void setMontant(String montant) {
-        this.montant = montant;
-    }
+    // Setters
+    public void setTitre(String titre) { this.titre = titre; }
+    public void setMontant(String montant) { this.montant = montant; }
 }

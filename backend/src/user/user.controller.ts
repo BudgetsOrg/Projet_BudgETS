@@ -41,7 +41,7 @@ export class UserController {
     @ApiResponse({ status: 200, description: 'Profil récupéré avec succès' })
     @Get('me')
     getProfile(@Request() req) {
-        return req.user; // Retourne les infos de l'utilisateur extraites du token
+       return this.userService.findOne(req.user.id);
     }
 
 }

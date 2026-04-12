@@ -24,7 +24,7 @@ export class ObjectifController {
     @Post()
     async create(@Body() dto: ObjectifDto, @Req() req: any) {
         // Grace a JwtStrategy, 'req.user' contient l'utilisateur trouvé en DB
-        const userId = req.user.id_user; 
+        const userId = req.user.id; 
         
         // On appelle ton service avec les données du DTO et l'ID du user
         return this.objectifService.create(dto,userId);
@@ -36,7 +36,7 @@ export class ObjectifController {
     @ApiOperation({ summary: 'Récupérer tous les objectifs de l\'utilisateur' })
     @Get()
     async findAll(@Req() req: any) {
-        return this.objectifService.findAll(req.user.id_user);
+        return this.objectifService.findAll(req.user.id);
     }
 
     //url pour lire un objectif
@@ -46,7 +46,7 @@ export class ObjectifController {
     @ApiOperation({ summary: 'Récupérer un objectif par son ID' })
     @Get(':id')
     async findOne(@Param('id', ParseIntPipe) id: number, @Req() req: any) {
-        return this.objectifService.findOne(req.user.id_user, id);
+        return this.objectifService.findOne(req.user.id, id);
     }
 
     //url pour update un objectif
@@ -59,7 +59,7 @@ export class ObjectifController {
         @Body() dto: UpdateObjectifDto, 
         @Req() req: any
     ) {
-        return this.objectifService.update(req.user.id_user, id, dto);
+        return this.objectifService.update(req.user.id, id, dto);
     }
 
     //url pour supprimer un objectif
@@ -68,7 +68,7 @@ export class ObjectifController {
     @ApiResponse({ status: 400, description: 'Requête invalide' })
     @Delete(':id')
     async remove(@Param('id', ParseIntPipe) id: number, @Req() req: any) {
-        return this.objectifService.leaveOrDelete(id, req.user.id_user);
+        return this.objectifService.leaveOrDelete(id, req.user.id);
     }
 
     //url pour inviter

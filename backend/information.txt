@@ -32,9 +32,6 @@ npm install helmet
 //Pour Swagger documentation API
 npm install Swagger
 
-//pour resend
- npm install resend
-
 //pas encore utiliser
 $ npm i bcrypt
 $ npm i -D @types/bcrypt

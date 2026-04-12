@@ -27,6 +27,10 @@ export class Objectif {
   @Column({ default: () => 'CURRENT_TIMESTAMP + INTERVAL 30 DAY' })
   date_limite: Date;
 
+  @ApiPropertyOptional({ example: 0 })
+  @Column('decimal', { precision: 10, scale: 2, default: 0 })
+  montant_epargne: number;
+
   // //Relation, Attribut de navigation, Si le user est supprimé alors tous ses objectifs sont supprimés aussi (CASCADE)
   // @ManyToOne(() => User, (user) => user.objectifs,{ onDelete: 'CASCADE' })
   // users: User;

@@ -38,7 +38,7 @@ export class EconomieService {
             ...rest,
             objectif: objectif,
         });
-
+        await this.recalculerMontantEpargne(createEconomieDto.objectifId);
         return this.economieRepository.save(economie);
     }
 
@@ -85,13 +85,28 @@ export class EconomieService {
         if (updateEconomieDto.date) {
             economie.date = new Date(updateEconomieDto.date);
         }
-
         return this.economieRepository.save(economie);
     }
 
     async remove(userId: number, id: number) {
         const economie = await this.findOne(userId, id);
+        const objectifId = economie.objectif.id_objectif;
         await this.economieRepository.remove(economie);
+        await this.recalculerMontantEpargne(objectifId);
         return { message: 'Économie supprimée avec succès' };
+    }
+
+    private async recalculerMontantEpargne(objectifId: number) {
+    const objectif = await this.objectifRepository.findOne({
+        where: { id_objectif: objectifId },
+        relations: ['economies'],
+    });
+    if (!objectif) {
+        throw new NotFoundException('Objectif non trouvé');
+    }
+    objectif.montant_epargne = objectif.economies.reduce(
+        (sum, eco) => sum + Number(eco.montant), 0
+    );
+    await this.objectifRepository.save(objectif);
     }
 }

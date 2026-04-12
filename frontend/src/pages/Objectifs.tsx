@@ -185,8 +185,7 @@ function Objectif() {
       });
       await recupererEconomies();
     } catch (error: any) {
-      console.log
-      alert("Erreur lors de l'ajout : " + error.message);
+      console.log(error.message)
       return;
     }
     setPopupOuvert(null);
@@ -292,14 +291,6 @@ function Objectif() {
     if (!economieEnEdition) return;
     const montantNum = parseFloat(editEconomieMontant.replace(",", "."));
     if (isNaN(montantNum) || montantNum <= 0 || !editEconomieDate) return;
-
-    console.log("Données envoyées :", {
-      id_economie: economieEnEdition.id,
-      montant: montantNum,
-      date: editEconomieDate,
-      objectifId: idObjectif,
-    });
-
     try {
       await updateEconomie({
         id_economie: economieEnEdition.id,
@@ -309,7 +300,7 @@ function Objectif() {
       });
       await recupererEconomies();
     } catch (error: any) {
-      alert("Erreur lors de la modification : " + error.message);
+      console.log("Erreur lors de la modfication de l'économie : ",error);
       return;
     }
     setPopupOuvert(null);

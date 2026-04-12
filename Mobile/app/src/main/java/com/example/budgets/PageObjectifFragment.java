@@ -117,13 +117,15 @@ public class PageObjectifFragment extends Fragment {
             titre.setText(obj.getTitre());
             montantCible.setText(obj.getMontantObjectif() + "$");
 
-            double actuel = Double.parseDouble(obj.getMontant() == null || obj.getMontant().isEmpty() ? "0" : obj.getMontant());
-            double cible = Double.parseDouble(obj.getMontantObjectif() == null || obj.getMontantObjectif().isEmpty() ? "0" : obj.getMontantObjectif());
+            double actuel = objectifActuel.getMontant();
+            double cible = objectifActuel.getMontantObjectif();
 
-            int progress = (cible > 0) ? (int) ((actuel / cible) * 100) : 0;
+            int progress = (cible > 0) ? (int)((actuel / cible) * 100) : 0;
+
             barre.setProgress(Math.min(progress, 100));
-            pourcentage.setText(progress + "% (" + actuel + "$)");
 
+            pourcentage.setText(progress + "% (" + actuel + "$)");
+            montantCible.setText(cible + "$");
             // Logique de couleur
             if (progress >= 80) barre.setProgressTintList(ColorStateList.valueOf(Color.RED));
             else if (progress >= 50) barre.setProgressTintList(ColorStateList.valueOf(Color.rgb(255, 165, 0)));
@@ -207,20 +209,28 @@ public class PageObjectifFragment extends Fragment {
         new Thread(() -> {
             try {
                 SharedPreferences prefs = getActivity().getSharedPreferences("auth", Context.MODE_PRIVATE);
-                String res = ApiHelper.get("/objectif/" + objectifActuel.getId(), prefs.getString("token", ""));
+
+                String res = ApiHelper.get(
+                        "/objectif/" + objectifActuel.getId(),
+                        prefs.getString("token", "")
+                );
+
                 if (res != null) {
                     JSONObject o = new JSONObject(res);
-                    objectifActuel.setMontant(o.optString("montant_epargne", "0"));
+
+                    double montant = o.optDouble("montant_epargne", 0); // ✅ FIX
+                    objectifActuel.setMontant(montant);
+
                     if (isAdded()) {
                         getActivity().runOnUiThread(() -> rafraichirVue(objectifActuel));
                     }
                 }
+
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }).start();
     }
-
     private void supprimerEconomie(int pos) {
         new Thread(() -> {
             try {

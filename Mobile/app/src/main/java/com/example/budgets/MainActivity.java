@@ -22,36 +22,31 @@ public class MainActivity extends AppCompatActivity {
                     .commit();
         }
 
+
         // 2. Gestion de la navigation entre les fragments
         bottomNav.setOnItemSelectedListener(item -> {
-            Fragment selectedFragment = null;
+            Fragment selectedFragment;
+
             int id = item.getItemId();
 
             if (id == R.id.navigation_accueil) {
                 selectedFragment = new AccueilFragment();
-            }
-            else if (id == R.id.navigation_objectifs) {
-                // On charge le fragment de liste d'objectifs
+            } else if (id == R.id.navigation_objectifs) {
                 selectedFragment = new ObjectifsFragment();
-            }
-            else if (id == R.id.navigation_enveloppes) {
-                // Remplacer par votre fragment d'enveloppes quand il sera prêt
+            } else if (id == R.id.navigation_enveloppes) {
                 selectedFragment = new EnveloppesFragment();
-            }
-            else if (id == R.id.navigation_profil) {
-                // On charge le fragment de profil (plus besoin de ProfilActivite)
+            } else if (id == R.id.navigation_profil) {
                 selectedFragment = new ProfilFragment();
+            } else {
+                return false;
             }
 
-            // Exécution du remplacement de fragment
-            if (selectedFragment != null) {
-                getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.fragment_container, selectedFragment)
-                        .commit();
-                return true;
-            }
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragment_container, selectedFragment)
+                    .commit();
 
-            return false;
+            return true;
         });
     }
 }

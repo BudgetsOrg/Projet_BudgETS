@@ -79,7 +79,7 @@ public class PageUneEnveloppe extends AppCompatActivity {
     }
 
     private void mettreAJourPourcentage() {
-        int calcul = (int) ((depensesTotale * 100) / budgetTotal);
+        int calcul = (budgetTotal > 0) ? (int)((depensesTotale * 100) / budgetTotal) : 0;
         pourcentage.setText(calcul + "%");
     }
 }

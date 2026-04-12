@@ -2,74 +2,68 @@ package com.example.budgets;
 
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
+
 import java.util.ArrayList;
 
-public class ObjectifsFragment extends Fragment {
+public class EnveloppesFragment extends Fragment {
+
     private RecyclerView recycler;
-    private ObjectifAdapter adapter;
-    private ArrayList<Objectif> liste = new ArrayList<>();
+    private EnveloppeAdapter adapter;
+    private ArrayList<Enveloppe> liste = new ArrayList<>();
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.activite_liste_objectifs, container, false);
 
-        recycler = v.findViewById(R.id.recyclerObjectifs);
+        View v = inflater.inflate(R.layout.fragment_enveloppes, container, false);
+
+        recycler = v.findViewById(R.id.recyclerEnveloppes);
         recycler.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        // L'adapter doit être configuré pour ouvrir le Fragment de détail
-        adapter = new ObjectifAdapter(liste);
+        adapter = new EnveloppeAdapter(liste);
         recycler.setAdapter(adapter);
 
-        v.findViewById(R.id.btnAjouterObjectif).setOnClickListener(view -> ouvrirPopupPerso());
-        v.findViewById(R.id.btnCreerObjectifCommun).setOnClickListener(view -> {
-            startActivity(new Intent(getActivity(), CreerObjectifCommunActivite.class));
-        });
+        v.findViewById(R.id.btnAjouterEnveloppe).setOnClickListener(view -> ouvrirPopup());
 
-        chargerObjectifs();
+        chargerEnveloppes();
+
         return v;
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        chargerObjectifs();
-    }
-    private void chargerObjectifs() {
+    private void chargerEnveloppes() {
         new Thread(() -> {
             try {
                 SharedPreferences prefs = getActivity().getSharedPreferences("auth", Context.MODE_PRIVATE);
-                String res = ApiHelper.get("/objectif", prefs.getString("token", ""));
+                String token = prefs.getString("token", "");
+
+                String res = ApiHelper.get("/enveloppe", token);
                 if (res == null) return;
 
                 JSONArray array = new JSONArray(res);
-                ArrayList<Objectif> temp = new ArrayList<>();
+                ArrayList<Enveloppe> temp = new ArrayList<>();
+
                 for (int i = 0; i < array.length(); i++) {
                     JSONObject obj = array.getJSONObject(i);
-                    boolean commun = obj.has("participants") || obj.optBoolean("is_commun");
-                    temp.add(new Objectif(
+
+                    temp.add(new Enveloppe(
                             obj.getInt("id"),
                             obj.getString("titre"),
-                            obj.optDouble("montant_epargne", 0),
-                            obj.getDouble("montant"),
-                            commun
+                            obj.getDouble("montant")
                     ));
                 }
 
@@ -80,48 +74,50 @@ public class ObjectifsFragment extends Fragment {
                         adapter.notifyDataSetChanged();
                     });
                 }
-            } catch (Exception e) { e.printStackTrace(); }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }).start();
     }
 
-    private void ouvrirPopupPerso() {
+    private void ouvrirPopup() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        View v = getLayoutInflater().inflate(R.layout.popup_ajout_objectif, null);
+        View v = getLayoutInflater().inflate(R.layout.popup_enveloppe, null);
         builder.setView(v);
 
         AlertDialog dialog = builder.create();
 
-        EditText titre = v.findViewById(R.id.nomObj);
-        EditText montant = v.findViewById(R.id.montantObj);
-        Button btn = v.findViewById(R.id.btnCreerObj);
+        EditText titre = v.findViewById(R.id.nomEnv);
+        EditText montant = v.findViewById(R.id.montantEnv);
 
-        btn.setOnClickListener(view -> {
-            String t = titre.getText().toString().trim();
-            String m = montant.getText().toString().trim();
+        v.findViewById(R.id.btnAjouterEnv).setOnClickListener(view -> {
+            String t = titre.getText().toString();
+            String m = montant.getText().toString();
 
             if (!t.isEmpty() && !m.isEmpty()) {
-                creerObjectifPersoBackend(t, Double.parseDouble(m));
+                creerEnveloppeBackend(t, Double.parseDouble(m));
                 dialog.dismiss();
-            } else {
-                Toast.makeText(getContext(), "Remplis tous les champs", Toast.LENGTH_SHORT).show();
             }
         });
 
-        dialog.show();
+      ;
+        dialog.show(); //
     }
-    private void creerObjectifPersoBackend(String titre, double montant) {
+
+    private void creerEnveloppeBackend(String titre, double montant) {
         new Thread(() -> {
             try {
                 JSONObject body = new JSONObject();
                 body.put("titre", titre);
-                body.put("montant_cible", montant);
+                body.put("montant", montant);
 
                 SharedPreferences prefs = getActivity().getSharedPreferences("auth", Context.MODE_PRIVATE);
 
-                ApiHelper.post("/objectif", body.toString(), prefs.getString("token", ""));
+                ApiHelper.post("/enveloppe", body.toString(), prefs.getString("token", ""));
 
                 if (isAdded()) {
-                    getActivity().runOnUiThread(() -> chargerObjectifs());
+                    getActivity().runOnUiThread(() -> chargerEnveloppes());
                 }
 
             } catch (Exception e) {

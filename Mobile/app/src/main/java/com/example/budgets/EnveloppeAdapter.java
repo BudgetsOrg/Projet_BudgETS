@@ -15,88 +15,101 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
-import org.intellij.lang.annotations.Language;
-
-import java.util.ArrayList;
+import java.util.List;
 
 public class EnveloppeAdapter extends RecyclerView.Adapter<EnveloppeAdapter.MyViewHolder> {
-    ArrayList<Enveloppe> listeEnveloppes;
-    public EnveloppeAdapter(ArrayList<Enveloppe> listeEnveloppes) {
+
+    List<Enveloppe> listeEnveloppes;
+    OnEnveloppeChangeListener listener;
+
+    // 🔥 INTERFACE
+    public interface OnEnveloppeChangeListener {
+        void onEnveloppeSupprimee();
+    }
+
+    public EnveloppeAdapter(List<Enveloppe> listeEnveloppes) {
         this.listeEnveloppes = listeEnveloppes;
+        this.listener = listener;
     }
 
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        // Chercher le fichier enveloppe.xml pour créer une ligne de la liste
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.enveloppe,parent,false);
-        return  new MyViewHolder(view);
+        View view = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.enveloppe, parent, false);
+        return new MyViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(MyViewHolder holder, int position) {
-        // chercher l'enveloppe qui est à la position dans la liste
+    public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
+
         Enveloppe enveloppe = listeEnveloppes.get(position);
-        // Affiche le nom et le montant dans les cases
+
         holder.textViewNom.setText(enveloppe.getTitre());
         holder.textViewMontant.setText(enveloppe.getMontant() + "$");
-        // Gestion bouton supprimer une enveloppe
+
         holder.btnSupprimer.setOnClickListener(v -> {
+
             Context context = v.getContext();
-            //pop up confirmation
+
             new AlertDialog.Builder(context)
                     .setTitle("Supprimer")
-                    .setMessage("Êtes-vous sûr de vouloir supprimer l'enveloppe " + enveloppe.getTitre() + " ?")
+                    .setMessage("Supprimer " + enveloppe.getTitre() + " ?")
                     .setPositiveButton("Oui", (dialog, which) -> {
+
                         new Thread(() -> {
                             try {
                                 SharedPreferences prefs = context.getSharedPreferences("auth", Context.MODE_PRIVATE);
                                 String token = prefs.getString("token", "");
 
-                                // On utilise l'ID unique de l'enveloppe
                                 ApiHelper.delete("/enveloppe/" + enveloppe.getId(), token);
 
                                 ((Activity) context).runOnUiThread(() -> {
-                                    listeEnveloppes.remove(position);
-                                    notifyItemRemoved(position);
-                                    notifyItemRangeChanged(position, listeEnveloppes.size());
 
-                                    // Mise à jour du cercle sur la page principale
-                                    if (context instanceof PagePrincipaleActivite) {
-                                        ((PagePrincipaleActivite) context).recalculerCercle();
+                                    int pos = holder.getAdapterPosition();
+
+                                    if (pos != RecyclerView.NO_POSITION) {
+                                        listeEnveloppes.remove(pos);
+                                        notifyItemRemoved(pos);
                                     }
 
-                                    Toast.makeText(context, "Supprimé du serveur", Toast.LENGTH_SHORT).show();
+                                    // 🔥 callback
+                                    if (listener != null) {
+                                        listener.onEnveloppeSupprimee();
+                                    }
+
+                                    Toast.makeText(context, "Supprimé", Toast.LENGTH_SHORT).show();
                                 });
+
                             } catch (Exception e) {
                                 Log.e("API_DELETE", e.getMessage());
+
                                 ((Activity) context).runOnUiThread(() ->
-                                        Toast.makeText(context, "Erreur lors de la suppression", Toast.LENGTH_SHORT).show());
+                                        Toast.makeText(context, "Erreur", Toast.LENGTH_SHORT).show()
+                                );
                             }
                         }).start();
 
                     })
-                    .setNegativeButton("Non", null)//ferme fenetre
+                    .setNegativeButton("Non", null)
                     .show();
         });
     }
 
-
     @Override
     public int getItemCount() {
-        return listeEnveloppes.size();//chercher nombre elements
+        return listeEnveloppes.size();
     }
-    public static class MyViewHolder extends RecyclerView.ViewHolder{
-        //elements
-        TextView textViewNom;
-        TextView textViewMontant;
+
+    public static class MyViewHolder extends RecyclerView.ViewHolder {
+        TextView textViewNom, textViewMontant;
         Button btnSupprimer;
 
-        public MyViewHolder(View itemView){
+        public MyViewHolder(View itemView) {
             super(itemView);
             textViewNom = itemView.findViewById(R.id.nomEnveloppe);
-            btnSupprimer = itemView.findViewById(R.id.btnSupprimer);
             textViewMontant = itemView.findViewById(R.id.montantEnveloppe);
+            btnSupprimer = itemView.findViewById(R.id.btnSupprimer);
         }
     }
 }

@@ -29,6 +29,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class AccueilFragment extends Fragment {
 
@@ -36,7 +37,7 @@ public class AccueilFragment extends Fragment {
     Button creerBudjet;
     ProgressBar diagramme;
     RecyclerView recyclerView, recyclerViewRecent;
-    ArrayList<Enveloppe> listeEnveloppes;
+    List<Enveloppe> listeEnveloppes;
     EnveloppeAdapter adapter;
     EnveloppeRecenteAdapter recenteAdapter;
 
@@ -64,7 +65,7 @@ public class AccueilFragment extends Fragment {
         recyclerView.setAdapter(adapter);
 
         recyclerViewRecent.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
-        recenteAdapter = new EnveloppeRecenteAdapter(listeEnveloppes);
+        recenteAdapter = new EnveloppeRecenteAdapter((ArrayList<Enveloppe>) listeEnveloppes);
         recyclerViewRecent.setAdapter(recenteAdapter);
 
         // Charger les données depuis le serveur
@@ -91,14 +92,16 @@ public class AccueilFragment extends Fragment {
 
                 for (int i = 0; i < array.length(); i++) {
                     JSONObject obj = array.getJSONObject(i);
-                    // Utilisation de id_enveloppe selon Swagger p.4
+
                     Enveloppe env = new Enveloppe(
                             obj.getInt("id_enveloppe"),
-                    obj.getString("titre"),
-                    String.valueOf(obj.get("montant"))
+                            obj.getString("titre"),
+                            obj.getDouble("montant") // ✅ FIX
                     );
+
                     listeEnveloppes.add(env);
-                    montantTot += obj.getDouble("montant");
+
+                    montantTot += obj.getDouble("montant"); // OK
                 }
 
                 double soldeTotal = budgetObj.optDouble("soldeDuMois", 0);
@@ -137,63 +140,92 @@ public class AccueilFragment extends Fragment {
         Button btnAnnuler = popupView.findViewById(R.id.annuler);
 
         btnCreer.setOnClickListener(v -> {
-            String titre = nom.getText().toString();
-            String montantStr = montantEntre.getText().toString();
+            String titre = nom.getText().toString().trim();
+            String montantStr = montantEntre.getText().toString().trim();
 
             if (!titre.isEmpty() && !montantStr.isEmpty()) {
+
                 new Thread(() -> {
                     try {
+                        double montant = Double.parseDouble(montantStr);
+
+                        // 🔥 1. Construire JSON pour API
+                        JSONObject body = new JSONObject();
+                        body.put("titre", titre);
+                        body.put("montant", montant);
+
                         SharedPreferences prefs = getActivity().getSharedPreferences("auth", Context.MODE_PRIVATE);
                         String token = prefs.getString("token", "");
 
-                        JSONObject body = new JSONObject();
-                        body.put("titre", titre);
-                        body.put("montant", Double.parseDouble(montantStr));
+                        // 🔥 2. Appel API
+                        String response = ApiHelper.post("/enveloppe", body.toString(), token);
 
-                        // POST vers enveloppe
-                        String res = ApiHelper.post("/enveloppe", body.toString(), token);
-                        JSONObject newObj = new JSONObject(res);
+                        if (response != null) {
+                            JSONObject newObj = new JSONObject(response);
 
-                        getActivity().runOnUiThread(() -> {
-                            Enveloppe enveloppe = null;
-                            try {
-                                enveloppe = new Enveloppe(newObj.getInt("id_enveloppe"), titre, montantStr);
-                            } catch (JSONException e) {
-                                throw new RuntimeException(e);
-                            }
-                            listeEnveloppes.add(0, enveloppe);
+                            // 🔥 3. Retour UI
+                            getActivity().runOnUiThread(() -> {
+                                try {
+                                    Enveloppe enveloppe = new Enveloppe(
+                                            newObj.optInt("id", 0), // ✅ FIX ID
+                                            newObj.optString("titre", titre),
+                                            newObj.optDouble("montant", montant)
+                                    );
 
-                            recalculerCercle();
-                            adapter.notifyDataSetChanged();
-                            recenteAdapter.notifyDataSetChanged();
-                            message.setVisibility(View.GONE);
-                            dialog.dismiss();
-                        });
+                                    listeEnveloppes.add(0, enveloppe);
+
+                                    recalculerCercle();
+
+                                    adapter.notifyItemInserted(0);
+                                    recenteAdapter.notifyItemInserted(0);
+
+                                    message.setVisibility(View.GONE);
+                                    dialog.dismiss();
+
+                                    Toast.makeText(getContext(), "Enveloppe ajoutée", Toast.LENGTH_SHORT).show();
+
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                            });
+                        }
+
                     } catch (Exception e) {
-                        Log.e("API", "Erreur creation: " + e.getMessage());
+                        e.printStackTrace();
+                        getActivity().runOnUiThread(() ->
+                                Toast.makeText(getContext(), "Erreur", Toast.LENGTH_SHORT).show()
+                        );
                     }
                 }).start();
+
             } else {
                 Toast.makeText(getContext(), "Remplissez tous les champs", Toast.LENGTH_SHORT).show();
             }
         });
 
         btnAnnuler.setOnClickListener(v -> dialog.dismiss());
+
         dialog.show();
     }
 
     public void recalculerCercle() {
-        // On récupère le solde depuis la vue du fragment
+        if (getView() == null) return;
+
         EditText soldeEdit = getView().findViewById(R.id.soldeMois);
+        if (soldeEdit == null) return;
+
         String soldeStr = soldeEdit.getText().toString().replace("$", "");
 
         if (!soldeStr.isEmpty()) {
             double soldeTotal = Double.parseDouble(soldeStr);
+
             if (soldeTotal > 0) {
                 double montantTot = 0;
+
                 for (Enveloppe e : listeEnveloppes) {
-                    montantTot += Double.parseDouble(e.getMontant());
+                    montantTot += e.getMontant();
                 }
+
                 int score = (int) ((montantTot * 100) / soldeTotal);
                 animerCercle(Math.min(score, 100));
             }

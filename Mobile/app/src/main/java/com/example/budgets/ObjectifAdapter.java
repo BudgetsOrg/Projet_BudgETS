@@ -26,25 +26,33 @@ public class ObjectifAdapter extends RecyclerView.Adapter<ObjectifAdapter.MyView
             return new MyViewHolder(v);
         }
 
-        @Override
-        public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-            Objectif objectif = liste.get(position);//chercher les infos de l'element a cette pos
-            holder.text.setText(objectif.getTitre());//affiche nom
-            holder.montant.setText(objectif.getMontant() + " / " + objectif.getMontantObjectif() + "$");
-            //quand on clique -> page de l'objectif
-            holder.itemView.setOnClickListener(v -> {
-                PageObjectifFragment detailFrag = new PageObjectifFragment();
-                Bundle args = new Bundle();
-                args.putSerializable("objectif", currentObj);
-                detailFrag.setArguments(args);
+    @Override
+    public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
+        Objectif objectif = liste.get(position);
 
-                AppCompatActivity activity = (AppCompatActivity) v.getContext();
-                activity.getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.fragment_container, detailFrag)
-                        .addToBackStack(null) // Permet de revenir à la liste avec le bouton retour
-                        .commit();
-            });
+        holder.text.setText(objectif.getTitre());
+
+        holder.montant.setText(
+                objectif.getMontant() + "$ / " + objectif.getMontantObjectif() + "$"
+        );
+
+        holder.itemView.setOnClickListener(v -> {
+            PageObjectifFragment detailFrag = new PageObjectifFragment();
+
+            Bundle args = new Bundle();
+            args.putSerializable("objectif", objectif); // ✅ FIX IMPORTANT
+            detailFrag.setArguments(args);
+
+            AppCompatActivity activity = (AppCompatActivity) v.getContext();
+            activity.getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_container, detailFrag)
+                    .addToBackStack(null)
+                    .commit();
+        });
+        if (objectif.isCommun()) {
+            holder.itemView.setAlpha(0.85f); // léger effet visuel
         }
+    }
 
         @Override
         public int getItemCount() { return liste.size(); }

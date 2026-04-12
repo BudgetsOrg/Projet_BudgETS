@@ -32,6 +32,7 @@ public class CreerObjectifCommunActivite extends AppCompatActivity {
                 rafraichirListe();
                 etEmail.setText("");
             }
+
         });
 
         btnCreer.setOnClickListener(v -> envoyerAuBackend());

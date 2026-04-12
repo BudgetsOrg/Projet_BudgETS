@@ -29,7 +29,7 @@ export interface Objectif {
   montant?: number;
   date_limite: string;
   image: string;
-  user_id?: number;
+  userId?: number;
 }
 
 export interface Utilisateur {
@@ -69,5 +69,5 @@ export interface Economie {
   id_economie: number;
   montant: number;
   date: string;
-  id_objectif: number;
+  objectifId: number;
 }

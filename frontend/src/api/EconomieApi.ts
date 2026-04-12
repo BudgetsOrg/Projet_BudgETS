@@ -3,7 +3,7 @@ import type { Economie } from "../interfaces";
 const API_URL_GLOBAL = "https://projetbudgets-backend.up.railway.app";
 const API_URL_LOCAL = "http://localhost:3000";
 //localStorage.getItem("token");
-const debug = true;
+const debug = false;
 // choose one
 const local = false;
 
@@ -128,12 +128,12 @@ const token = getToken() ?? "";
     const response = await fetch(
       `${API_URL_LOCAL}/economie/${economie.id_economie}`,
       {
-        method: "PUT",
+        method: "PATCH",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({ economie }),
+        body: JSON.stringify(economie ),
       },
     );
     return response.json();
@@ -141,12 +141,12 @@ const token = getToken() ?? "";
     const response = await fetch(
       `${API_URL_GLOBAL}/economie/${economie.id_economie}`,
       {
-        method: "PUT",
+        method: "PATCH",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({ economie }),
+        body: JSON.stringify(economie ),
       },
     );
     return response.json();

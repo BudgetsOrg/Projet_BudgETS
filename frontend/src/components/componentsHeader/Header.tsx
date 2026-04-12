@@ -45,20 +45,21 @@ function Header() {
                 onClick={redirigerPageAcceuil}
               />
             </li>
+            {estConnecte ? (
+              <li className="sous_sujet">
+                <a href="/PagePrincipale">Page Principale</a>
+              </li>
+
+            ) : null}
+            {estConnecte ? <li className="sous_sujet">
+              <a href="/CategoriesDeDepense">Catégories de dépense</a>
+            </li> : null}
             <li className="sous_sujet">
               <a href="/EducationFinanciere">Page Éducation Financière</a>
             </li>
-            <li className="sous_sujet">
-              <a href="/CategoriesDeDepense">Catégories de dépense</a>
-            </li>
-            <li className="sous_sujet">
-              <a href="/PageObjectifs">PageObjectifs</a>
-            </li>
-            {estConnecte ? (
-              <li className="sous_sujet">
-                <a href="/PagePrincipale">PagePrincipale</a>
-              </li>
-            ) : null}
+
+
+
           </ul>
         </li>
 
@@ -85,7 +86,7 @@ function Header() {
                     {utilisateurCourant?.prenom} {utilisateurCourant?.nom}
                   </span>
                   <span style={{ fontSize: "12px", color: "lightgray" }}>
-                    {utilisateurCourant?.email}
+                    {utilisateurCourant?.adresse_email}
                   </span>{" "}
                   {/* ← ici */}
                 </div>

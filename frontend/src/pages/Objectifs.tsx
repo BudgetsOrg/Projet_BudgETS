@@ -1,8 +1,10 @@
 // Composant Objectif
 // Affiche le détail d'un objectif d'épargne avec image de couverture et invitation par email
 import { useLocation } from "react-router-dom";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import imgEdit from "../img/edit.png";
+import { updateObjectif } from "../api/ObjectifApi";
+import { postEconomie, updateEconomie, deleteEconomie, getEconomie } from "../api/EconomieApi";
 import { BackgroundColor } from "devextreme-react/cjs/chart";
 import GraphiqueObjectif from "../components/graphiques/graphiqueObjectif";
 import { useCloudinaryImage } from "../hooks/useCloudinaryImage";
@@ -20,19 +22,7 @@ interface DonneesObjectif {
   economies: Economie[];
 }
 
-const donneesObjectif: DonneesObjectif = {
-  titre: "Titre de mon Objectif",
-  montantACumuler: 11150,
-  imageUrl: null,
-  economies: [
-    { id: 1, montant: 15.0, date: "2026-10-19" },
-    { id: 2, montant: 205.0, date: "2026-10-13" },
-    { id: 3, montant: 15.0, date: "2026-10-10" },
-    { id: 4, montant: 115.0, date: "2026-10-02" },
-  ],
-};
-
-type TypePopup = "invitation" | "ajouter" | "edition" | null;
+type TypePopup = "invitation" | "ajouter" | "edition" | "editionEconomie" | null;
 
 function Objectif() {
   const location = useLocation();
@@ -41,16 +31,15 @@ function Objectif() {
   //const titre = location.state?.titre ?? titre; // Récupère l'ID de l'objectif depuis l'URL
   // const montantACumuler = location.state?.montantACumuler ?? montantACumuler; // Récupère le montant à accumuler depuis l'URL
   // État principal
-  const [titre, setTitre] = useState<string>(donneesObjectif.titre);
-  const [montantACumuler, setMontantACumuler] = useState<number>(
-    donneesObjectif.montantACumuler,
-  );
-  const [imageUrl, setImageUrl] = useState<string | null>(
-    donneesObjectif.imageUrl,
-  );
-  const [economies, setEconomies] = useState<Economie[]>(
-    donneesObjectif.economies,
-  );
+  const [titre, setTitre] = useState<string>(location.state?.titre ?? "");
+  const [montantACumuler, setMontantACumuler] = useState<number>(Number(location.state?.montantAccumule) || 0);
+  const [imageUrl, setImageUrl] = useState<string | null>(location.state?.imageUrl ?? null);
+  const [economies, setEconomies] = useState<Economie[]>([]);
+
+  //Pop up modifier l'economie.
+  const [economieEnEdition, setEconomieEnEdition] = useState<Economie | null>(null);
+  const [editEconomieMontant, setEditEconomieMontant] = useState<string>("");
+  const [editEconomieDate, setEditEconomieDate] = useState<string>("");
 
   //  Mode supprimer (même pattern qu'Enveloppe)
   const [modeSupprimer, setModeSupprimer] = useState<boolean>(false);
@@ -102,12 +91,12 @@ function Objectif() {
 
   const couleurBarre = (pct: number): string => {
     if (pct <= 50) {
-      // Rouge → Jaune (0% à 50%)
+      // Rouge à Jaune (0% à 50%)
       const r = 220;
       const g = Math.round(0 + (220 - 0) * (pct / 50)); // 0 → 220
       return `rgb(${r}, ${g}, 0)`;
     } else {
-      // Jaune → Vert (50% à 100%)
+      // Jaune à Vert (50% à 100%)
       const r = Math.round(220 + (0 - 220) * ((pct - 50) / 50));
       const g = 220; // 220 → 0
       return `rgb(${r}, ${g}, 0)`;
@@ -163,28 +152,31 @@ function Objectif() {
     setPopupOuvert(null);
   };
 
-  // POPUP AJOUTER UNE ÉCONOMIE
   const ouvrirAjouter = (): void => {
     setNouveauMontant("");
     setNouvelleDate(new Date().toISOString().split("T")[0]);
     setPopupOuvert("ajouter");
   };
 
-  const handleAjouterEconomie = (): void => {
+  const handleAjouterEconomie = async (): Promise<void> => {
     const montantNum = parseFloat(nouveauMontant.replace(",", "."));
     if (isNaN(montantNum) || montantNum <= 0 || !nouvelleDate) return;
-
-    const nouvelleEconomie: Economie = {
-      id: prochainId,
-      montant: montantNum,
-      date: nouvelleDate,
-    };
-
-    setEconomies((prev) => [nouvelleEconomie, ...prev]);
+    try {
+      await postEconomie({
+        id_economie: 0,
+        montant: montantNum,
+        date: nouvelleDate,
+        objectifId: idObjectif,
+      });
+      await recupererEconomies();
+    } catch (error: any) {
+      alert("Erreur lors de l'ajout : " + error.message);
+      return;
+    }
     setPopupOuvert(null);
   };
 
-  // MODE SUPPRIMER (même pattern qu'Enveloppe)
+  // MODE SUPPRIMER 
   const activerModeSupprimer = (): void => {
     setModeSupprimer(true);
     setSelectionnes([]);
@@ -201,8 +193,16 @@ function Objectif() {
     );
   };
 
-  const confirmerSuppression = (): void => {
-    setEconomies((prev) => prev.filter((_, i) => !selectionnes.includes(i)));
+  const confirmerSuppression = async (): Promise<void> => {
+    try {
+      for (const index of selectionnes) {
+        const eco = economies[index];
+        if (eco.id) await deleteEconomie(eco.id);
+      }
+      await recupererEconomies();
+    } catch (error: any) {
+      alert("Erreur lors de la suppression : " + error.message);
+    }
     setModeSupprimer(false);
     setSelectionnes([]);
   };
@@ -217,9 +217,7 @@ function Objectif() {
   };
 
   const handleSauvegarderEdition = async (): Promise<void> => {
-    const montantNum = parseFloat(
-      editMontant.replace(",", ".").replace(" ", ""),
-    );
+    const montantNum = parseFloat(editMontant.replace(",", ".").replace(" ", ""));
     if (!editTitre.trim() || isNaN(montantNum) || montantNum <= 0) return;
 
     let nouvelleImageUrl = imageUrl;
@@ -230,29 +228,80 @@ function Objectif() {
         if (uploadedUrl) {
           nouvelleImageUrl = uploadedUrl;
         }
-      } else if (editImageUrl) {
-        nouvelleImageUrl = editImageUrl;
       }
     } catch (err) {
-      console.error(
-        "Erreur lors du téléchargement de l'image de l'objectif",
-        err,
-      );
-      alert(
-        "Une erreur est survenue lors du téléchargement de l'image. Veuillez réessayer.",
-      );
+      console.error("Erreur upload image :", err);
+      alert("Erreur lors du téléchargement de l'image.");
       return;
     }
 
-    setTitre(editTitre.trim());
-    setMontantACumuler(montantNum);
-    setImageUrl(nouvelleImageUrl);
+    try {
+      await updateObjectif({
+        id_objectif: idObjectif,
+        titre: editTitre.trim(),
+        montant: montantNum,
+        image: nouvelleImageUrl ?? "",
+        date_limite: "",
+        userId: 0,
+      });
+      setTitre(editTitre.trim());
+      setMontantACumuler(montantNum);
+      setImageUrl(nouvelleImageUrl);
+    } catch (error: any) {
+      console.error("Erreur modification objectif :", error);
+      alert("Erreur lors de la modification : " + error.message);
+      return;
+    }
     setPopupOuvert(null);
   };
 
+  const handleModifierEconomie = async (): Promise<void> => {
+    if (!economieEnEdition) return;
+    const montantNum = parseFloat(editEconomieMontant.replace(",", "."));
+    if (isNaN(montantNum) || montantNum <= 0 || !editEconomieDate) return;
+
+    console.log("Données envoyées :", {
+      id_economie: economieEnEdition.id,
+      montant: montantNum,
+      date: editEconomieDate,
+      objectifId: idObjectif,
+    });
+
+    try {
+      await updateEconomie({
+        id_economie: economieEnEdition.id,
+        montant: montantNum,
+        date: editEconomieDate,
+        objectifId: idObjectif,
+      });
+      await recupererEconomies();
+    } catch (error: any) {
+      alert("Erreur lors de la modification : " + error.message);
+      return;
+    }
+    setPopupOuvert(null);
+    setEconomieEnEdition(null);
+  };
+  const recupererEconomies = async () => {
+    try {
+      const data = await getEconomie(idObjectif);
+      if (!Array.isArray(data)) return;
+      setEconomies(data.map((e: any) => ({
+        id: e.id_economie ?? e.id,
+        montant: parseFloat(e.montant) || 0,
+        date: e.date?.split("T")[0] ?? e.date,
+      })));
+    } catch (error: any) {
+      console.error("Erreur chargement économies :", error);
+    }
+  };
+
+  useEffect(() => {
+    if (idObjectif) recupererEconomies();
+  }, []);
+
   return (
     <div className="objectif_container">
-      {/* Bannière image */}
       <div
         className="objectif_banniere"
         onClick={() => inputImageRef.current?.click()}
@@ -286,7 +335,6 @@ function Objectif() {
         </button>
       </div>
 
-      {/* Bouton édition flottant */}
       <button className="btn_edit" onClick={ouvrirEdition}>
         <img className="img_edit" src={imgEdit} />
       </button>
@@ -367,6 +415,7 @@ function Objectif() {
                 {modeSupprimer && <th className="col_checkbox"></th>}
                 <th>Montant</th>
                 <th>Date</th>
+                {!modeSupprimer && <th>Action</th>}
               </tr>
             </thead>
             <tbody>
@@ -379,6 +428,7 @@ function Objectif() {
                   onClick={() => modeSupprimer && toggleSelection(index)}
                 >
                   {modeSupprimer && (
+                    
                     <td className="col_checkbox">
                       <input
                         type="checkbox"
@@ -390,17 +440,40 @@ function Objectif() {
                   )}
                   <td>{formatPrix(eco.montant)}</td>
                   <td>{formatDate(eco.date)}</td>
+                  {!modeSupprimer && (
+                    <td>
+                      <button
+                        className="btn_modifier"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setEconomieEnEdition(eco);
+                          setEditEconomieMontant(String(eco.montant));
+                          setEditEconomieDate(eco.date);
+                          setPopupOuvert("editionEconomie");
+                        }}
+                      >
+                        Modifier
+                      </button>
+                    </td>
+                    
+                  )}
                 </tr>
               ))}
+              
               {Array.from({ length: Math.max(0, 5 - economies.length) }).map(
                 (_, i: number) => (
                   <tr key={`vide-${i}`} className="ligne_vide">
                     {modeSupprimer && <td></td>}
                     <td></td>
                     <td></td>
+                    <td></td>
                   </tr>
+                  
+
                 ),
               )}
+
+
             </tbody>
           </table>
         </div>
@@ -566,9 +639,38 @@ function Objectif() {
           </div>
         </div>
       )}
+
+      {popupOuvert === "editionEconomie" && (
+        <div className="popup_overlay" onClick={() => setPopupOuvert(null)}>
+          <div className="popup_contenu" onClick={(e) => e.stopPropagation()}>
+            <h3 className="popup_titre">Modifier une économie</h3>
+            <label className="popup_label">Montant ($)</label>
+            <input
+              type="number"
+              className="popup_input"
+              min="0"
+              step="0.01"
+              value={editEconomieMontant}
+              onChange={(e) => setEditEconomieMontant(e.target.value)}
+              autoFocus
+            />
+            <label className="popup_label">Date</label>
+            <input
+              type="date"
+              className="popup_input"
+              value={editEconomieDate}
+              onChange={(e) => setEditEconomieDate(e.target.value)}
+            />
+            <div className="popup_boutons">
+              <button className="popup_btn_annuler" onClick={() => setPopupOuvert(null)}>Annuler</button>
+              <button className="popup_btn_envoyer" onClick={handleModifierEconomie}>Modifier</button>
+            </div>
+          </div>
+        </div>
+      )}
       <div className="p-10">
         <GraphiqueObjectif
-          economies={economies}
+          economies={economies as any}
           date_limite={montantACumuler}
         />
       </div>

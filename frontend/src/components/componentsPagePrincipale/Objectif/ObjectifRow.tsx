@@ -4,12 +4,13 @@ import { deleteObjectif } from "../../../api/ObjectifApi";
 export function ObjectifRow(objectif: Objectif) {
   const navigate = useNavigate();
   const handleClick = () => {
-    navigate(`/PageObjectif/${objectif.id_objectif}`, {
-      state: { id_objectif: objectif.id_objectif, titre: objectif.titre },
+    navigate(`/PageObjectifs/${objectif.id_objectif}`, {
+      state: { id_objectif: objectif.id_objectif, titre: objectif.titre, montantAccumule : objectif.montant,imageUrl: objectif.image },
     });
   };
 
   const handleDelete = async () => {
+    if(!objectif.id_objectif) return;
     try {
       await deleteObjectif(objectif.id_objectif);
     } catch (error) {

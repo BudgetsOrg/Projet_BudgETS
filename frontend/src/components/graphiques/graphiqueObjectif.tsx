@@ -51,8 +51,8 @@ function economiesParMois(economies: Economie[]) {
 }
 
 export function GraphiqueObjectif(
-  { economies }: { economies: Economie[] },
-  { date_limite }: { date_limite: number },
+
+  { economies,date_limite }: { economies: Economie[],date_limite: number },
 ) {
   const options = useMemo(
     () => ({

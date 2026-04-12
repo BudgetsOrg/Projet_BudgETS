@@ -17,7 +17,7 @@ export async function getUtilisateur() {
       id_user: 1,
       nom: "Doe",
       prenom: "John",
-      email: "john.doe@example.com",
+      adresse_email: "john.doe@example.com",
       telephone: "1234567890",
       image: "https://thispersondoesnotexist.com/",
       date_naissance: "1990-01-01",
@@ -44,7 +44,6 @@ export async function getUtilisateur() {
         },
       });
       const data = await response.json();
-      console.log("Données de l'utilisateur :", data);
       return data;
     }
   }
@@ -176,7 +175,7 @@ export async function login(adresse_email: string, password: string) {
       id_user: 1,
       nom: "Doe",
       prenom: "John",
-      email: "john.doe@example.com",
+      adresse_email: "john.doe@example.com",
       telephone: "1234567890",
       image: "https://thispersondoesnotexist.com/",
       date_naissance: "1990-01-01",

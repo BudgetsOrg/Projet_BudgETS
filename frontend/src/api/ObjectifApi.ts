@@ -21,7 +21,7 @@ export async function getObjectif() {
       montant: 1000,
       image: "https://picsum.photos/1000/100",
       date_limite: "2026-12-31",
-      user_id: 1,
+      userId: 1,
     };
     const mockObjectif2: Objectif = {
       id_objectif: 2,
@@ -29,7 +29,7 @@ export async function getObjectif() {
       montant: 2000,
       image: "https://picsum.photos/1000/100",
       date_limite: "2026-12-31",
-      user_id: 1,
+      userId: 1,
     };
     return [mockObjectif1, mockObjectif2];
   }

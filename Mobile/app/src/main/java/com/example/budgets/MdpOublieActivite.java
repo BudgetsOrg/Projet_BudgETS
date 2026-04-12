@@ -7,6 +7,8 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import org.json.JSONObject;
+
 public class MdpOublieActivite extends AppCompatActivity {
     Button envoyerCode;
     Button retourConnexion;
@@ -27,6 +29,23 @@ public class MdpOublieActivite extends AppCompatActivity {
             startActivity(intent);
         });
 
+    }
+    private void envoyerEmailReset(String email) {
+        new Thread(() -> {
+            try {
+                JSONObject body = new JSONObject();
+                body.put("adresse_email", email);
+
+                ApiHelper.post("/auth/forgot-password", body.toString(), null);
+
+                runOnUiThread(() -> {
+                    Toast.makeText(this, "Email de réinitialisation envoyé", Toast.LENGTH_LONG).show();
+                    startActivity(new Intent(this, ModificationMdpActivite.class));
+                });
+            } catch (Exception e) {
+                runOnUiThread(() -> Toast.makeText(this, "Erreur réseau", Toast.LENGTH_SHORT).show());
+            }
+        }).start();
     }
 
 }

@@ -4,6 +4,7 @@
     min-height: 100vh;
     box-sizing: border-box;
     margin: 0;
+    padding-inline: 20px;
     position: relative;
     overflow-x:hidden;
 }
@@ -16,7 +17,6 @@
     height: 160px;
     background-color: #c8d6e0;
     overflow: hidden;
-    cursor: pointer;
 }
 
 .objectif_banniere_img {

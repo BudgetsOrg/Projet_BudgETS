@@ -113,3 +113,26 @@ export async function postObjectif(objectif: Objectif) {
 
   return response.json();
 }
+export async function inviteUtilisateurObjectif (id_objectif:number , email : string) {
+    const token = getToken() ?? "";
+
+  const baseUrl = local ? API_URL_LOCAL : API_URL_GLOBAL;
+
+  const response = await fetch(`${baseUrl}/objectif/${id_objectif}/inviter`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({email}),
+  });
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(
+      `Erreur création objectif (${response.status}): ${errorText}`,
+    );
+  }
+
+  return response.json();
+}

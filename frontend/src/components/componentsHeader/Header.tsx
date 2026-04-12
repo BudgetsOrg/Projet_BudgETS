@@ -1,7 +1,7 @@
 // Mohamed
 import { getUtilisateur } from "../../api/UtilisateurApi";
 import { useState, useEffect } from "react";
-import { getToken, viderLocalStorage } from "../../../public/token";
+import { getToken, viderSessionStorage } from "../../../public/token";
 import logo from "../../img/image_inscription_plante.png";
 import DropDownProfile from "./DropDownProfile";
 import type { Utilisateur } from "../../interfaces";
@@ -50,10 +50,11 @@ function Header() {
                 <a href="/PagePrincipale">Page Principale</a>
               </li>
 
-            ) : null}
+            ) : null} {/* Lorsqu'on aura fini de faire la page catégorie et de relier au backend on rendra visible cette partie.
             {estConnecte ? <li className="sous_sujet">
               <a href="/CategoriesDeDepense">Catégories de dépense</a>
             </li> : null}
+            */}
             <li className="sous_sujet">
               <a href="/EducationFinanciere">Page Éducation Financière</a>
             </li>

@@ -3,9 +3,11 @@ import { EnveloppesBudgetaires } from "../components/componentsPagePrincipale/En
 import { Summary } from "../components/componentsPagePrincipale/Summary/Summary.tsx";
 import ObjectifList from "../components/componentsPagePrincipale/Objectif/ObjectifList.tsx";
 import HistoriqueBudget from "../components/componentsPagePrincipale/HistoriqueBudget.tsx";
+import { getToken } from "../../public/token.ts";
 
 export function PagePrincipale() {
   const [enveloppesRefresh, setEnveloppesRefresh] = useState(0);
+  console.log("Voila le token : ", getToken());
 
   const handleEnveloppesChanged = () => {
     setEnveloppesRefresh((prev) => prev + 1);

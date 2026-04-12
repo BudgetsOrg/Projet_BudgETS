@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import type { Utilisateur } from "../../interfaces";
-import { viderLocalStorage } from "../../../public/token";
+import { viderSessionStorage } from "../../../public/token";
 
 function DropDownProfile({ utilisateurCourant }: { utilisateurCourant: Utilisateur | null }) {
     const redirigerPageAcceuil = () => {
@@ -39,7 +39,7 @@ function DropDownProfile({ utilisateurCourant }: { utilisateurCourant: Utilisate
                 </li>
                 <li className="option_deconnexion"
                     onClick={() => {
-                        viderLocalStorage();
+                        viderSessionStorage();
                         window.location.href = "/";
                     }}
                     style={{

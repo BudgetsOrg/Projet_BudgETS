@@ -103,19 +103,13 @@ function Inscription() {
         throw new Error(message || "Erreur lors de l'inscription");
       }
       const data = await reponse.json();
-      console.log("Utilisateur créé :", data);
-      alert(`Utilisateur crée voila le token : ${data.access_token}`);
       //setToken(data.access_token);
 
-      alert(
-        `L'utilisateur ${donneeInscription.prenom} ${donneeInscription.nom} a été ajouté.(message après fetch)`,
-      );
 
       viderChamps();
       window.location.href = "/PageConnexion";
     } catch (error: any) {
       console.error(error);
-      alert(error.message);
     }
   };
 

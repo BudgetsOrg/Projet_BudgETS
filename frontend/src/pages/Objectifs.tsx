@@ -3,7 +3,7 @@
 import { useLocation } from "react-router-dom";
 import { useState, useRef, useEffect } from "react";
 import imgEdit from "../img/edit.png";
-import { updateObjectif } from "../api/ObjectifApi";
+import { updateObjectif,getObjectif,inviteUtilisateurObjectif } from "../api/ObjectifApi";
 import { postEconomie, updateEconomie, deleteEconomie, getEconomie } from "../api/EconomieApi";
 import { BackgroundColor } from "devextreme-react/cjs/chart";
 import GraphiqueObjectif from "../components/graphiques/graphiqueObjectif";
@@ -123,9 +123,15 @@ function Objectif() {
   };
 
   // POPUP INVITATION
-  const handleEnvoyerInvitation = (): void => {
+  const handleEnvoyerInvitation = async (): Promise<void> => {
     if (email.trim()) {
       console.log("Invitation envoyée à :", email);
+      try {
+        await inviteUtilisateurObjectif(idObjectif,email);
+      } catch (error : any) {
+        console.log("Erreur dans l'ajout d'un utilisateur dans l'objectif : ",error);
+        
+      }
       setEmailEnvoye(true);
       setTimeout(() => {
         setEmailEnvoye(false);
@@ -204,6 +210,23 @@ function Objectif() {
     resetObjectifImage(imageUrl);
     setPopupOuvert("edition");
   };
+  useEffect(() => {
+  const recupererObjectif = async () => {
+    try {
+      const data = await getObjectif();
+      if (!Array.isArray(data)) return;
+      const objectif = data.find((o: any) => o.id_objectif === idObjectif);
+      if (objectif) {
+        setTitre(objectif.titre);
+        setMontantACumuler(Number(objectif.montant) || 0);
+        setImageUrl(objectif.image ?? null);
+      }
+    } catch (error: any) {
+      console.error("Erreur chargement objectif :", error);
+    }
+  };
+  if (idObjectif) recupererObjectif();
+}, []);
 
   const handleSauvegarderEdition = async (): Promise<void> => {
     const montantNum = parseFloat(editMontant.replace(",", ".").replace(" ", ""));
@@ -230,8 +253,6 @@ function Objectif() {
         titre: editTitre.trim(),
         montant: montantNum,
         image: nouvelleImageUrl ?? "",
-        date_limite: "",
-        userId: 0,
       });
       setTitre(editTitre.trim());
       setMontantACumuler(montantNum);
@@ -293,7 +314,6 @@ function Objectif() {
     <div className="objectif_container">
       <div
         className="objectif_banniere"
-        onClick={() => inputImageRef.current?.click()}
       >
         {imageUrl ? (
           <img

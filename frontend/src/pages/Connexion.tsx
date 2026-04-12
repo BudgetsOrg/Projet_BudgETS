@@ -9,7 +9,7 @@ import img_plante from "../img/image_inscription_plante.png";
 function Connexion() {
   const [erreur, setErreur] = useState("");
   const [donneeConnexion, setDonneeConnexion] = useState<Utilisateur>({
-    email: "",
+    adresse_email: "",
     nom: "",
     prenom: "",
     password: "",
@@ -40,7 +40,6 @@ function Connexion() {
       setToken(data.access_token);
     } catch (error) {
       setErreur("L'email ou le mot de passe est incorrect.");
-      alert("L'utilisateur avec le mail : " + email + " n'existe pas");
       return;
     }
     window.location.href = "/";

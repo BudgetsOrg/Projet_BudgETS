@@ -27,7 +27,7 @@ export interface Objectif {
   id_objectif?: number;
   titre: string;
   montant?: number;
-  date_limite: string;
+  date_limite?: string;
   image: string;
   userId?: number;
 }

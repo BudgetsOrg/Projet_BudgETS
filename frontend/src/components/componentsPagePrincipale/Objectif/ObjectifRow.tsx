@@ -9,12 +9,7 @@ interface ObjectifRowProps {
 export function ObjectifRow({ onRefresh, objectif }: ObjectifRowProps) {
   const navigate = useNavigate();
 
-  const nbUtilisateurs = objectif.users
-    ? objectif.users.length
-    : 0;
-  console.log("ObjectifRow rendered with objectif:", objectif);
-  console.log("Objectif has utilisateurs:", objectif.users);
-  console.log("Number of users sharing this objectif:", nbUtilisateurs);
+  const nbUtilisateurs = objectif.users ? objectif.users.length - 1 : 0;
   const handleClick = () => {
     navigate(`/PageObjectifs/${objectif.id_objectif}`, {
       state: {

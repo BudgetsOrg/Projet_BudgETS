@@ -12,7 +12,9 @@ export function ObjectifRow({ onRefresh, objectif }: ObjectifRowProps) {
   const nbUtilisateurs = objectif.users
     ? objectif.users.length
     : 0;
-
+  console.log("ObjectifRow rendered with objectif:", objectif);
+  console.log("Objectif has utilisateurs:", objectif.Utilisateurs);
+  console.log("Number of users sharing this objectif:", nbUtilisateurs);
   const handleClick = () => {
     navigate(`/PageObjectifs/${objectif.id_objectif}`, {
       state: {

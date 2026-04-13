@@ -11,13 +11,11 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
-import { ObjectifDto } from './dto/objectif.dto';
 import { AuthGuard } from '@nestjs/passport';
-
 import { ApiBearerAuth } from '@nestjs/swagger/dist/decorators/api-bearer.decorator';
 import { ObjectifService } from './objectif.service';
-import { UpdateObjectifDto } from './dto/updateObjectif.dto';
-import { ObjectifInviterDto } from './dto/objectifInviter.dto';
+import { ObjectifDto, ObjectifInviterDto, UpdateObjectifDto } from './dto';
+
 
 @ApiBearerAuth() // Indique que les routes de ce contrôleur nécessitent une authentification par token Bearer (JWT) pour Swagger
 @ApiResponse({ status: 401, description: 'Non autorisé' })

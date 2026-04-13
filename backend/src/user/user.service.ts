@@ -9,7 +9,7 @@ import {
 import { User } from '../entities/user.entity';
 import { BudgetRepository, UserRepository , ObjectifRepository} from 'src/repositories/index';
 import { InscriptionDto } from 'src/auth/dto';
-import { UpdateUserDto } from './dto/update_user.dto';
+import { UpdateUserDto } from './dto';
 
 @Injectable()
 export class UserService {

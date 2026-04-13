@@ -1,11 +1,10 @@
 import { Controller, Post, Get, Patch, Delete, Param, Body, ParseIntPipe, UseGuards } from "@nestjs/common";
 import { BudgetService } from "./budget.service";
-import { CreateBudgetDto } from "./dto/create_budget.dto";
-import { UpdateBudgetDto } from "./dto/update_budget.dto";
 import { Request } from "@nestjs/common"; //utilisé pour récupérer les informations de l'utilisateur connecté (req.user.id)
 import { AuthGuard } from "@nestjs/passport/dist/auth.guard";
 import { ApiBearerAuth, ApiResponse, ApiParam, ApiOperation } from "@nestjs/swagger";
 import { Budget } from "src/entities/budget.entity";
+import { CreateBudgetDto, UpdateBudgetDto } from "./dto";
 
 @ApiBearerAuth() // Indique que les routes de ce contrôleur nécessitent une authentification par token Bearer (JWT) pour Swagger
 @ApiResponse({ status: 401, description: 'Non autorisé' })

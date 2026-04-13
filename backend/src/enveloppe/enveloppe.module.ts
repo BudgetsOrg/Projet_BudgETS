@@ -6,15 +6,6 @@ import { EnveloppeController } from "./enveloppe.controller";
 
 
 
-/*Un décorateur, c'est comme une étiquette intelligente que l'on colle 
- au-dessus d'une classe, d'une fonction ou d'une variable pour lui donner 
-des super-pouvoirs ou définir son rôle.
-*/
-
-// En NestJS (et en TypeScript), ils commencent toujours par un @.
-
-//le decorator @Module(): C'est le chef d'orchestre : il rassemble les services et les contrôleurs.
-
 @Module({
     // imports : Liste les autres modules ou entités (via TypeOrm).
     imports: [TypeOrmModule.forFeature([Enveloppe,Budget])],

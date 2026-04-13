@@ -1,9 +1,9 @@
 import { Controller, Get, Post, Patch, Delete, Param, Body, Request, ParseIntPipe, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { ApiTags, ApiBearerAuth, ApiOperation, ApiResponse, ApiParam } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiResponse, ApiParam } from '@nestjs/swagger';
 import { EconomieService } from './economie.service';
-import { CreateEconomieDto } from './dto/create_economie.dto';
-import { UpdateEconomieDto } from './dto/update_economie.dto';
+import { CreateEconomieDto, UpdateEconomieDto } from './dto';
+
 
 @ApiResponse({ status: 401, description: 'Non autorisé' })
 @ApiBearerAuth()

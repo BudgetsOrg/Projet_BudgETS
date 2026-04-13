@@ -3,8 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Depense } from '../entities/depense.entity';
 import { Enveloppe } from '../entities/enveloppe.entity';
-import { CreateDepenseDto } from './dto/create_depense.dto';
-import { UpdateDepenseDto } from './dto/update_depense.dto';
+import { CreateDepenseDto, UpdateDepenseDto } from './dto';
 
 @Injectable()
 export class DepenseService {

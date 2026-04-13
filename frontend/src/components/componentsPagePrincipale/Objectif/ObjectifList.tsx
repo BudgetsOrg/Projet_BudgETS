@@ -5,7 +5,13 @@ import NouvelObjectif from "../../../popups/AjoutPopup/NouvelObjectif";
 
 export default function ObjectifList() {
   const [showPopup, setShowPopup] = useState(false);
-  const { objectifs, loading, error } = useObjectif();
+  const [objectifRefresh, setObjectifRefresh] = useState(0);
+  // le hook est changé pour utiliser le refreshKey, soit utiliser le hook quand il y a un changement
+  const { objectifs, loading, error } = useObjectif(objectifRefresh);
+
+  const handleObjectifChange = () => {
+    setObjectifRefresh((prev) => prev + 1);
+  };
 
   //Could be changed to a spinner or a cuter message
   if (loading) return <div>Chargement...</div>;
@@ -31,7 +37,11 @@ export default function ObjectifList() {
         ) : (
           objectifs.map((objectif) => (
             <div key={objectif.id_objectif} className="objectifs">
-              <ObjectifRow {...objectif} />
+              {/*Passer au composant le setter du state pour si qqun quitter l'objectif le visuel est up-to-date */}
+              <ObjectifRow
+                onRefresh={handleObjectifChange}
+                objectif={objectif}
+              />
             </div>
           ))
         )}
@@ -40,6 +50,8 @@ export default function ObjectifList() {
         <NouvelObjectif
           showPopup={showPopup}
           closePopup={() => setShowPopup(false)}
+          // une fois que le nouvel objectif est ajouté, on refresh la liste pour que le nouvel objectif s'affiche
+          onSaved={handleObjectifChange}
         ></NouvelObjectif>
       </div>
     </div>

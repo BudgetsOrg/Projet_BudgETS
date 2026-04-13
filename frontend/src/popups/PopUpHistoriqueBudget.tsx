@@ -17,7 +17,7 @@ export default function PopUpHistoriqueBudget({
     <div className="fixed top-15 h-100 w-100 right-40 z-50 bg-white bg-opacity-2 flex-col items-center justify-center rounded-lg shadow-lg">
       <div className="w-full bg-[var(--color-primary)] px-6 py-4 rounded-lg text-center">
         <h4 className="font-bold text-lg p-4 text-align-center text-white">
-          Choisir un budget
+          Fonctionnalité à venir!
         </h4>
       </div>
       <div className="flex flex-row justify-between gap-2 items-center mt-6">
@@ -30,7 +30,9 @@ export default function PopUpHistoriqueBudget({
         <button
           className="confirm-button py-2 px-4 rounded-lg"
           onClick={handleSubmit}
-        ></button>
+        >
+          Changer
+        </button>
       </div>
     </div>
   );

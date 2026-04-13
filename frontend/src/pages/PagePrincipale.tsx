@@ -3,13 +3,13 @@ import { EnveloppesBudgetaires } from "../components/componentsPagePrincipale/En
 import { Summary } from "../components/componentsPagePrincipale/Summary/Summary.tsx";
 import ObjectifList from "../components/componentsPagePrincipale/Objectif/ObjectifList.tsx";
 import HistoriqueBudget from "../components/componentsPagePrincipale/HistoriqueBudget.tsx";
-import { getToken } from "../../public/token.ts";
 
 export function PagePrincipale() {
   const [enveloppesRefresh, setEnveloppesRefresh] = useState(0);
   const handleEnveloppesChanged = () => {
     setEnveloppesRefresh((prev) => prev + 1);
   };
+
   return (
     <div className="space-y-8 px-4 bg-white">
       <div className="flex flex-row justify-between">

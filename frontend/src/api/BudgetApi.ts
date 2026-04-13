@@ -150,7 +150,7 @@ export async function updateBudget(solde: number, id_budget: number) {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify({ soldeDuMois: solde }),
+      body: JSON.stringify({ solde }),
     });
     return response.json();
   } else {
@@ -162,6 +162,7 @@ export async function updateBudget(solde: number, id_budget: number) {
       },
       body: JSON.stringify({ soldeDuMois: solde }),
     });
+    console.log("Budget mis à jour :", response);
     return response.json();
   }
 }

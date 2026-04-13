@@ -1,22 +1,41 @@
 import type { Objectif } from "../../../interfaces";
 import { useNavigate } from "react-router-dom";
 import { deleteObjectif } from "../../../api/ObjectifApi";
-export function ObjectifRow(objectif: Objectif) {
+
+interface ObjectifRowProps {
+  objectif: Objectif;
+  onRefresh: () => void;
+}
+export function ObjectifRow({ onRefresh, objectif }: ObjectifRowProps) {
   const navigate = useNavigate();
+
+  const nbUtilisateurs = objectif.Utilisateurs
+    ? objectif.Utilisateurs.length
+    : 0;
+
   const handleClick = () => {
     navigate(`/PageObjectifs/${objectif.id_objectif}`, {
-      state: { id_objectif: objectif.id_objectif, titre: objectif.titre, montantAccumule : objectif.montant,imageUrl: objectif.image },
+      state: {
+        id_objectif: objectif.id_objectif,
+        titre: objectif.titre,
+        montantAccumule: objectif.montant,
+        imageUrl: objectif.image,
+      },
     });
   };
 
   const handleDelete = async () => {
-    if(!objectif.id_objectif) return;
+    if (!objectif.id_objectif) return;
     try {
+      // change le state au du parent
+      console.log("Deleting objectif with id:", objectif.id_objectif);
       await deleteObjectif(objectif.id_objectif);
+      onRefresh();
     } catch (error) {
       console.log("Error deleting objectif:", error);
     }
   };
+
   return (
     <div
       className="relative w-full h-32 rounded-xl overflow-hidden shadow-lg hover:opacity-90 cursor-pointer"
@@ -35,14 +54,14 @@ export function ObjectifRow(objectif: Objectif) {
       <button
         className="absolute delete-button bottom-2 rounded-lg right-2 hover:bg-red-600 width-20 h-8"
         onClick={(e) => {
-          e.stopPropagation(); // Prevents clicking the card when clicking the trash
+          e.stopPropagation(); // pour pas cliquer sur objectif quand clique sur quitter
           handleDelete();
         }}
       >
         Quitter
       </button>
       <p className="absolute right-2 top-2 bg-black/50 text-white px-2 py-1 rounded">
-        Partagé avec 3 personnes
+        Partagé avec {nbUtilisateurs} personnes
       </p>
     </div>
   );

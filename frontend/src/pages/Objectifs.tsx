@@ -3,8 +3,17 @@
 import { useLocation } from "react-router-dom";
 import { useState, useRef, useEffect } from "react";
 import imgEdit from "../img/edit.png";
-import { updateObjectif, getObjectif, inviteUtilisateurObjectif } from "../api/ObjectifApi";
-import { postEconomie, updateEconomie, deleteEconomie, getEconomie } from "../api/EconomieApi";
+import {
+  updateObjectif,
+  getObjectif,
+  inviteUtilisateurObjectif,
+} from "../api/ObjectifApi";
+import {
+  postEconomie,
+  updateEconomie,
+  deleteEconomie,
+  getEconomie,
+} from "../api/EconomieApi";
 import { BackgroundColor } from "devextreme-react/cjs/chart";
 import GraphiqueObjectif from "../components/graphiques/graphiqueObjectif";
 import { useCloudinaryImage } from "../hooks/useCloudinaryImage";
@@ -15,24 +24,34 @@ interface Economie {
   date: string;
 }
 
-
-type TypePopup = "invitation" | "ajouter" | "edition" | "editionEconomie" | null;
+type TypePopup =
+  | "invitation"
+  | "ajouter"
+  | "edition"
+  | "editionEconomie"
+  | null;
 
 function Objectif() {
   const location = useLocation();
   const idObjectif = location.state?.id_objectif;
   // État principal
   const [titre, setTitre] = useState<string>(location.state?.titre ?? "");
-  const [montantACumuler, setMontantACumuler] = useState<number>(Number(location.state?.montantAccumule) || 0);
-  const [imageUrl, setImageUrl] = useState<string | null>(location.state?.imageUrl ?? null);
+  const [montantACumuler, setMontantACumuler] = useState<number>(
+    Number(location.state?.montantAccumule) || 0,
+  );
+  const [imageUrl, setImageUrl] = useState<string | null>(
+    location.state?.imageUrl ?? null,
+  );
   const [economies, setEconomies] = useState<Economie[]>([]);
 
   //Pop up modifier l'economie.
-  const [economieEnEdition, setEconomieEnEdition] = useState<Economie | null>(null);
+  const [economieEnEdition, setEconomieEnEdition] = useState<Economie | null>(
+    null,
+  );
   const [editEconomieMontant, setEditEconomieMontant] = useState<string>("");
   const [editEconomieDate, setEditEconomieDate] = useState<string>("");
 
-  //  Mode supprimer 
+  //  Mode supprimer
   const [modeSupprimer, setModeSupprimer] = useState<boolean>(false);
   const [selectionnes, setSelectionnes] = useState<number[]>([]);
   // Popups
@@ -145,19 +164,20 @@ function Objectif() {
           setEmail("");
           setPopupOuvert(null);
         }, 2000);
-
       } catch (error: any) {
-        console.log("Erreur dans l'ajout d'un utilisateur dans l'objectif : ", error);
+        console.log(
+          "Erreur dans l'ajout d'un utilisateur dans l'objectif : ",
+          error,
+        );
         const status = error?.response?.status || error?.status;
         if (status == 404) {
-          setMessageErreur("Il n'existe aucun Utilisateur relié à ce mail.")
+          setMessageErreur("Il n'existe aucun Utilisateur relié à ce mail.");
         } else {
           setMessageErreur("Erreur lors de l'envoi de l'invitation.");
         }
 
         setEmailEnvoye(false);
       }
-
     }
   };
 
@@ -185,13 +205,13 @@ function Objectif() {
       });
       await recupererEconomies();
     } catch (error: any) {
-      console.log(error.message)
+      console.log(error.message);
       return;
     }
     setPopupOuvert(null);
   };
 
-  // MODE SUPPRIMER 
+  // MODE SUPPRIMER
   const activerModeSupprimer = (): void => {
     setModeSupprimer(true);
     setSelectionnes([]);
@@ -204,9 +224,7 @@ function Objectif() {
 
   const toggleSelection = (id: number): void => {
     setSelectionnes((prev) =>
-      prev.includes(id)
-        ? prev.filter((i) => i !== id)
-        : [...prev, id]
+      prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id],
     );
   };
 
@@ -251,7 +269,9 @@ function Objectif() {
   }, []);
 
   const handleSauvegarderEdition = async (): Promise<void> => {
-    const montantNum = parseFloat(editMontant.replace(",", ".").replace(" ", ""));
+    const montantNum = parseFloat(
+      editMontant.replace(",", ".").replace(" ", ""),
+    );
     if (!editTitre.trim() || isNaN(montantNum) || montantNum <= 0) return;
 
     let nouvelleImageUrl = imageUrl;
@@ -300,7 +320,7 @@ function Objectif() {
       });
       await recupererEconomies();
     } catch (error: any) {
-      console.log("Erreur lors de la modfication de l'économie : ",error);
+      console.log("Erreur lors de la modfication de l'économie : ", error);
       return;
     }
     setPopupOuvert(null);
@@ -310,11 +330,13 @@ function Objectif() {
     try {
       const data = await getEconomie(idObjectif);
       if (!Array.isArray(data)) return;
-      setEconomies(data.map((e: any) => ({
-        id: e.id_economie ?? e.id,
-        montant: parseFloat(e.montant) || 0,
-        date: e.date?.split("T")[0] ?? e.date,
-      })));
+      setEconomies(
+        data.map((e: any) => ({
+          id: e.id_economie ?? e.id,
+          montant: parseFloat(e.montant) || 0,
+          date: e.date?.split("T")[0] ?? e.date,
+        })),
+      );
     } catch (error: any) {
       console.error("Erreur chargement économies :", error);
     }
@@ -326,9 +348,7 @@ function Objectif() {
 
   return (
     <div className="objectif_container">
-      <div
-        className="objectif_banniere"
-      >
+      <div className="objectif_banniere">
         {imageUrl ? (
           <img
             src={imageUrl}
@@ -451,7 +471,6 @@ function Objectif() {
                   onClick={() => modeSupprimer && toggleSelection(index)}
                 >
                   {modeSupprimer && (
-
                     <td className="col_checkbox">
                       <input
                         type="checkbox"
@@ -478,7 +497,6 @@ function Objectif() {
                         Modifier
                       </button>
                     </td>
-
                   )}
                 </tr>
               ))}
@@ -493,8 +511,6 @@ function Objectif() {
                   </tr>
                 ),
               )}
-
-
             </tbody>
           </table>
         </div>
@@ -504,7 +520,6 @@ function Objectif() {
       {popupOuvert === "invitation" && (
         <div className="popup_overlay" onClick={fermerInvitation}>
           <div className="popup_contenu" onClick={(e) => e.stopPropagation()}>
-
             <h3 className="popup_titre">Inviter un ami</h3>
 
             <p className="popup_description">
@@ -534,11 +549,13 @@ function Objectif() {
                 Annuler
               </button>
 
-              <button className="popup_btn_envoyer" onClick={handleEnvoyerInvitation}>
+              <button
+                className="popup_btn_envoyer"
+                onClick={handleEnvoyerInvitation}
+              >
                 Envoyer
               </button>
             </div>
-
           </div>
         </div>
       )}
@@ -687,8 +704,18 @@ function Objectif() {
               onChange={(e) => setEditEconomieDate(e.target.value)}
             />
             <div className="popup_boutons">
-              <button className="popup_btn_annuler" onClick={() => setPopupOuvert(null)}>Annuler</button>
-              <button className="popup_btn_envoyer" onClick={handleModifierEconomie}>Modifier</button>
+              <button
+                className="popup_btn_annuler"
+                onClick={() => setPopupOuvert(null)}
+              >
+                Annuler
+              </button>
+              <button
+                className="popup_btn_envoyer"
+                onClick={handleModifierEconomie}
+              >
+                Modifier
+              </button>
             </div>
           </div>
         </div>

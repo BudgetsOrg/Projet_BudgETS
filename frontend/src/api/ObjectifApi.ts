@@ -14,26 +14,6 @@ const local = false;
 export async function getObjectif() {
   const token = getToken() ?? "";
 
-  if (debug) {
-    const mockObjectif1: Objectif = {
-      id_objectif: 1,
-      titre: "Mock Objectif 2",
-      montant: 1000,
-      image: "https://picsum.photos/1000/100",
-      date_limite: "2026-12-31",
-      userId: 1,
-    };
-    const mockObjectif2: Objectif = {
-      id_objectif: 2,
-      titre: "Mock Objectif 3",
-      montant: 2000,
-      image: "https://picsum.photos/1000/100",
-      date_limite: "2026-12-31",
-      userId: 1,
-    };
-    return [mockObjectif1, mockObjectif2];
-  }
-
   const baseUrl = local ? API_URL_LOCAL : API_URL_GLOBAL;
   const response = await fetch(`${baseUrl}/objectif`, {
     method: "GET",
@@ -86,8 +66,19 @@ export async function deleteObjectif(id_objectif: number) {
       `Erreur suppression objectif (${response.status}): ${errorText}`,
     );
   }
+  console.log(`Objectif with id ${id_objectif} deleted successfully.`);
 
-  return response.json();
+  // Au lieu de prendre response.json(), on prend le text et on parse pour éviter les erreurs de parsing quand il n'y a pas de contenu
+  const text = await response.text();
+  if (!text) {
+    return null;
+  }
+
+  try {
+    return JSON.parse(text);
+  } catch {
+    return null;
+  }
 }
 
 export async function postObjectif(objectif: Objectif) {
@@ -113,8 +104,11 @@ export async function postObjectif(objectif: Objectif) {
 
   return response.json();
 }
-export async function inviteUtilisateurObjectif (id_objectif:number , email : string) {
-    const token = getToken() ?? "";
+export async function inviteUtilisateurObjectif(
+  id_objectif: number,
+  email: string,
+) {
+  const token = getToken() ?? "";
 
   const baseUrl = local ? API_URL_LOCAL : API_URL_GLOBAL;
 
@@ -124,10 +118,10 @@ export async function inviteUtilisateurObjectif (id_objectif:number , email : st
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
     },
-    body: JSON.stringify({email : email.trim() }),
+    body: JSON.stringify({ email: email.trim() }),
   });
 
-  const data = await response.text(); 
+  const data = await response.text();
 
   if (!response.ok) {
     throw {

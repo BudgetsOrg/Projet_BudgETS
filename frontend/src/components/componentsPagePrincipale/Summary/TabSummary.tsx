@@ -52,6 +52,7 @@ export function TabSummary({
   const loadBudget = async () => {
     try {
       const latestBudget = await getLastBudget();
+      console.log("Latest budget loaded:", latestBudget);
       setBudget(latestBudget);
     } catch (error) {
       console.error("Erreur de chargement du budget :", error);
@@ -67,7 +68,7 @@ export function TabSummary({
     }
   };
 
-  // Expose both refresh functions globally
+  // Pour refresh budget et enveloppes quand on fait des changements dans les popups, on expose une fonction globale que les popups peuvent appeler
   useEffect(() => {
     (window as any).refreshTabSummary = async () => {
       await loadBudget();
@@ -75,7 +76,6 @@ export function TabSummary({
     };
   }, []);
 
-  //TODO : Pourrait être plus cute
   if (loadingEnveloppe || loadingBudget) return <div>Chargement...</div>;
 
   if (errorEnveloppe || errorBudget)

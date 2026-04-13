@@ -6,11 +6,11 @@ import {
   LineElement,
   Title,
   Tooltip,
+  Filler,
   Legend,
 } from "chart.js";
 import type { Economie } from "../../interfaces";
-import { useEffect, useMemo, useState } from "react";
-import { getEconomie } from "../../api/EconomieApi";
+import { useMemo } from "react";
 import { Line } from "react-chartjs-2";
 ChartJS.register(
   CategoryScale,
@@ -19,41 +19,53 @@ ChartJS.register(
   LineElement,
   Title,
   Tooltip,
+  Filler,
   Legend,
 );
 
 function economiesParMois(economies: Economie[]) {
-  const moisMap = new Map<string, number>();
+  // Regrouper par date (YYYY-MM-DD)
+  const totauxParJour = new Map<string, number>();
 
   economies.forEach((economie) => {
-    const [year, month] = economie.date.split("-");
-    if (!year || !month) return;
+    const [annee, mois, jour] = economie.date.split("-");
+    if (!annee || !mois || !jour) return;
 
-    // On utilise "YYYY-MM" comme clé pour regrouper par mois
-    const monthKey = `${year}-${month}`; // YYYY-MM
-    // si même clé par mois, on additionne les montants
-    // le map est monthkey: montant total pour ce mois
-    moisMap.set(monthKey, (moisMap.get(monthKey) || 0) + economie.montant);
+    const cleJour = `${annee}-${mois}-${jour}`;
+    totauxParJour.set(
+      cleJour,
+      (totauxParJour.get(cleJour) ?? 0) + economie.montant,
+    );
   });
 
-  // on ne prend pas le map d'avant direct,
-  // on doit le trier par mois et prendre les 12 derniers mois
-  const sortedByMonth = Array.from(moisMap.entries())
-    .map(([month, total]) => ({ month, total }))
-    .sort((a, b) => a.month.localeCompare(b.month));
+  // Trier les jours chronologiquement
+  const sortedByDay = Array.from(totauxParJour.entries())
+    .map(([day, total]) => ({ day, total }))
+    .sort((a, b) => a.day.localeCompare(b.day));
 
-  const last12Months = sortedByMonth.slice(-12);
-  // labels=mois du map, values=montant total pour ce mois
+  // Faire la somme cumulative : chaque point inclut les jours précédents
+  let totalCumulatif = 0;
+  const additionParJour = sortedByDay.map(({ day, total }) => {
+    totalCumulatif += total;
+    return { day, total: totalCumulatif };
+  });
+
+  // Garder seulement les 12 dernières dates
+  const last12Days = additionParJour.slice(-12);
+
   return {
-    labels: last12Months.map((m) => m.month),
-    values: last12Months.map((m) => m.total),
+    labels: last12Days.map((m) => m.day),
+    values: last12Days.map((m) => m.total),
   };
 }
 
-export function GraphiqueObjectif(
-
-  { economies,date_limite }: { economies: Economie[],date_limite: number },
-) {
+export function GraphiqueObjectif({
+  economies,
+  date_limite,
+}: {
+  economies: Economie[];
+  date_limite: number;
+}) {
   const options = useMemo(
     () => ({
       responsive: true,
@@ -66,10 +78,18 @@ export function GraphiqueObjectif(
           text: "Vos économies par rapport à l'atteinte de votre objectif",
         },
       },
+      scales: {
+        x: {
+          ticks: {
+            autoSkip: true,
+          },
+        },
+      },
     }),
     [],
   );
 
+  // useMemo : garde en cache valeurs calculées àa moins qu'il y a eu un changement dans économies ou date_limite
   // on set les labels et les valeurs en appelant la fonction avec les économies en paramètre qui créé un map parfait
   const { labels, values } = useMemo(
     () => economiesParMois(economies),
@@ -81,16 +101,17 @@ export function GraphiqueObjectif(
       labels,
       datasets: [
         {
+          fill: true,
           label: "Vos économies",
           data: values,
-          borderColor: "var(--color-primary)",
-          backgroundColor: "var(--color-secondary)",
+          borderColor: "rgb(150, 193, 110)",
+          backgroundColor: "rgba(150, 193, 110, 0.5)",
         },
         {
           label: "Le but",
           data: labels.map(() => date_limite),
-          borderColor: "var(--color-secondary)",
-          backgroundColor: "rgba(11, 16, 13, 0.5)",
+          borderColor: "rgb(120, 237, 12)",
+          backgroundColor: "rgba(120, 237, 12, 0.5)",
         },
       ],
     }),
@@ -99,7 +120,11 @@ export function GraphiqueObjectif(
 
   if (labels.length === 0) return <div>Aucun graphique à afficher</div>;
 
-  return <Line options={options} data={data} />;
+  return (
+    <div className="w-full h-200">
+      <Line options={options} data={data} />
+    </div>
+  );
 }
 
 export default GraphiqueObjectif;

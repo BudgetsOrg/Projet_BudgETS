@@ -22,7 +22,6 @@ ChartJS.register(
 );
 
 export function GraphiqueEnveloppe({ depenses }: { depenses: Depense[] }) {
-
   const parseDate = (dateString: string): Date | null => {
     if (!dateString) {
       return null;
@@ -66,8 +65,8 @@ export function GraphiqueEnveloppe({ depenses }: { depenses: Depense[] }) {
       }
 
       const date = dateObj.toLocaleDateString("fr-CA"); // Format: YYYY-MM-DD
-      const daySpending = firstMap.get(date) || 0;
-      firstMap.set(date, daySpending + depense.montant);
+      const depensesParJour = firstMap.get(date) || 0;
+      firstMap.set(date, depensesParJour + depense.montant);
     });
 
     // un map trié par la date, clé= date et valeur = prix total de la journée
@@ -75,22 +74,22 @@ export function GraphiqueEnveloppe({ depenses }: { depenses: Depense[] }) {
       .map(([date, prix]) => ({ date, prix }))
       .sort((a, b) => a.date.localeCompare(b.date));
 
-    const last7DaysDepenses = sortedDepenses.slice(-7);
-    if (last7DaysDepenses.length === 0) {
+    const derniers7Jours = sortedDepenses.slice(-7);
+    if (derniers7Jours.length === 0) {
       return <div>Aucun graphique à afficher</div>;
     }
 
-    const maxPrix = Math.max(...last7DaysDepenses.map((depense) => depense.prix));
+    const maxPrix = Math.max(...derniers7Jours.map((depense) => depense.prix));
 
     return (
       <Bar
         data={{
-          labels: last7DaysDepenses.map((depense) => depense.date),
+          labels: derniers7Jours.map((depense) => depense.date),
           datasets: [
             {
               label: "Dépenses ($) ",
 
-              data: last7DaysDepenses.map((depense) => depense.prix),
+              data: derniers7Jours.map((depense) => depense.prix),
               backgroundColor: "#96c16e",
               borderColor: "#888",
               borderWidth: 0.5,

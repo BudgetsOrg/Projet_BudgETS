@@ -51,9 +51,12 @@ async function handleEdit(closePopup: () => void, onSaved: () => void) {
   const nouveauSolde = (document.getElementById("montant") as HTMLInputElement)
     .valueAsNumber;
   const monBudget = await getLastBudget();
+  console.log("Mon budget actuel :", monBudget);
   const id_budget = monBudget.id_budget;
+  console.log(id_budget);
   try {
-    await updateBudget(nouveauSolde, id_budget);
+    const newBudget = await updateBudget(nouveauSolde, id_budget);
+    console.log("Budget mis à jour :", newBudget);
     closePopup();
     onSaved();
   } catch (error) {

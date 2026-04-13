@@ -403,7 +403,7 @@ function Objectif() {
           <h1 className="objectif_titre">{titre}</h1>
           <div className="objectif_montant_bloc">
             <span className="objectif_montant_label">
-              Montant a accumuler :
+              Montant à accumuler :
             </span>
             <span className="objectif_montant_valeur">
               {formatMontantCourt(montantACumuler)}

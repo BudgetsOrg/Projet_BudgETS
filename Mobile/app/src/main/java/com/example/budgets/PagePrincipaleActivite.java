@@ -17,11 +17,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class PagePrincipaleActivite extends AppCompatActivity {
 
-    // === Vues ===
     private ImageView imgProfil;
     private EditText soldeMois;
     private RecyclerView listeEnveloppesView;
@@ -31,11 +29,12 @@ public class PagePrincipaleActivite extends AppCompatActivity {
     private TextView message;
     private Button creerBudjet;
 
-    // === Données ===
-    private final List<Enveloppe> enveloppes = new ArrayList<>();
-    private EnveloppeAdapter enveloppeAdapter;
+    // Utilisation d'une ArrayList pour être compatible avec les adapters
+    private final ArrayList<Enveloppe> enveloppes = new ArrayList<>();
 
-    // Solde du mois (modifiable par l'utilisateur)
+    private EnveloppeAdapter enveloppeAdapter;
+    private EnveloppeRecenteAdapter recenteAdapter; // Pour les carrés verts
+
     private double soldeTotal = 0.0;
 
     @Override
@@ -53,34 +52,29 @@ public class PagePrincipaleActivite extends AppCompatActivity {
         message             = findViewById(R.id.message);
         creerBudjet         = findViewById(R.id.creerBudjet);
 
-        // --- Configuration de l'Adapter ---
-        // On implémente l'interface OnEnveloppeChangeListener définie dans ton Adapter
-        enveloppeAdapter = new EnveloppeAdapter(enveloppes);
-
+        // --- 1. CONFIGURATION LISTE VERTICALE ---
+        // On passe bien le Runnable (this::mettreAJourAffichage) car ton adapter l'attend
+        enveloppeAdapter = new EnveloppeAdapter(enveloppes, this::mettreAJourAffichage);
         listeEnveloppesView.setLayoutManager(new LinearLayoutManager(this));
         listeEnveloppesView.setAdapter(enveloppeAdapter);
 
-        // --- Configuration RecyclerView horizontal (Récents) ---
+        // --- 2. CONFIGURATION CARRÉS VERTS (HORIZONTAL) ---
+        recenteAdapter = new EnveloppeRecenteAdapter(enveloppes);
         recemmentConsulteView.setLayoutManager(
                 new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         );
+        recemmentConsulteView.setAdapter(recenteAdapter);
 
         // --- Événements ---
         soldeMois.setOnFocusChangeListener((v, hasFocus) -> {
-            if (!hasFocus) {
-                lireSoldeUtilisateur();
-            }
+            if (!hasFocus) lireSoldeUtilisateur();
         });
 
         creerBudjet.setOnClickListener(v -> afficherDialogCreerEnveloppe());
 
-        // --- État initial ---
         mettreAJourAffichage();
     }
 
-    /**
-     * Affiche le dialogue pour créer une nouvelle enveloppe.
-     */
     private void afficherDialogCreerEnveloppe() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Créer une enveloppe");
@@ -109,63 +103,66 @@ public class PagePrincipaleActivite extends AppCompatActivity {
                 return;
             }
 
-            double budget = Double.parseDouble(budgetStr);
+            try {
+                double budget = Double.parseDouble(budgetStr);
+                Enveloppe nouvelle = new Enveloppe(0, nom, String.valueOf(budget));
 
-            // Création de l'objet (ID mis à 0 en attendant l'ID réel de ta base de données)
-            Enveloppe nouvelle = new Enveloppe(0, nom, budget);
-            enveloppes.add(nouvelle);
+                // On ajoute au début de la liste
+                enveloppes.add(0, nouvelle);
 
-            enveloppeAdapter.notifyItemInserted(enveloppes.size() - 1);
-            mettreAJourAffichage();
+                // --- 3. NOTIFIER LES DEUX ADAPTERS ---
+                enveloppeAdapter.notifyItemInserted(0);
+                recenteAdapter.notifyItemInserted(0);
+
+                // Scroll au début pour voir l'ajout
+                listeEnveloppesView.scrollToPosition(0);
+                recemmentConsulteView.scrollToPosition(0);
+
+                mettreAJourAffichage();
+            } catch (Exception e) {
+                Toast.makeText(this, "Montant invalide", Toast.LENGTH_SHORT).show();
+            }
         });
 
         builder.setNegativeButton("Annuler", null);
         builder.show();
     }
 
-    /**
-     * Calcule le pourcentage restant et met à jour l'interface.
-     */
-    private void mettreAJourAffichage() {
+    public void mettreAJourAffichage() {
+        // Mise à jour de la visibilité du message
         if (enveloppes.isEmpty()) {
             message.setVisibility(View.VISIBLE);
-            listeEnveloppesView.setVisibility(View.GONE);
-            diagramme.setProgress(100);
-            pourcentage.setText("100%");
+            diagramme.setProgress(0);
+            pourcentage.setText("0%");
         } else {
             message.setVisibility(View.GONE);
-            listeEnveloppesView.setVisibility(View.VISIBLE);
 
             double totalAlloue = 0;
-            // Note: Ton modèle Enveloppe actuel n'a pas de champ "dépensé" persistant,
-            // donc ici on calcule uniquement sur la base du montant total alloué.
             for (Enveloppe env : enveloppes) {
-                totalAlloue += env.getMontant();
+                try {
+                    totalAlloue += Double.parseDouble(env.getMontant());
+                } catch (Exception e) { }
             }
 
-            // Calcul fictif du pourcentage (à adapter selon tes besoins réels de dépenses)
-            // Ici, on affiche 100% car on vient de créer les enveloppes
-            int pct = 100;
+            // Calcul du pourcentage par rapport au solde saisi
+            int pct = (soldeTotal > 0) ? (int) ((totalAlloue / soldeTotal) * 100) : 0;
+            pct = Math.min(pct, 100);
 
             diagramme.setProgress(pct);
             pourcentage.setText(pct + "%");
-
-            // Couleur
-            if (pct <= 20) pourcentage.setTextColor(0xFFD32F2F);
-            else if (pct <= 50) pourcentage.setTextColor(0xFFF57C00);
-            else pourcentage.setTextColor(0xFF247103);
         }
+
+        // Sécurité : si on arrive ici via une suppression, on prévient l'adapter horizontal
+        if(recenteAdapter != null) recenteAdapter.notifyDataSetChanged();
     }
 
-    /**
-     * Formate le solde saisi par l'utilisateur.
-     */
     private void lireSoldeUtilisateur() {
         String texte = soldeMois.getText().toString().replace("$", "").trim();
         try {
             if (!texte.isEmpty()) {
                 soldeTotal = Double.parseDouble(texte);
                 soldeMois.setText(String.format("%.2f$", soldeTotal));
+                mettreAJourAffichage();
             }
         } catch (NumberFormatException e) {
             soldeTotal = 0;

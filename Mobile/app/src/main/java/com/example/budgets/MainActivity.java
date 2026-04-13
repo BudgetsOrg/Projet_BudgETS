@@ -12,18 +12,14 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Liaison avec le XML (Assurez-vous que l'ID dans activity_main.xml est bien bottom_navigation)
-        BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation); // L'ID du premier XML
+        BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
 
-        // 1. Charger l'accueil par défaut au premier lancement
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.fragment_container, new AccueilFragment())
                     .commit();
         }
 
-
-        // 2. Gestion de la navigation entre les fragments
         bottomNav.setOnItemSelectedListener(item -> {
             Fragment selectedFragment;
 

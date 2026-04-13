@@ -1,15 +1,10 @@
 package com.example.budgets;
 
 import android.app.Activity;
-import android.content.Context;
-import android.content.SharedPreferences;
+import android.content.*;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.view.*;
+import android.widget.*;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -19,74 +14,57 @@ import java.util.List;
 
 public class EnveloppeAdapter extends RecyclerView.Adapter<EnveloppeAdapter.MyViewHolder> {
 
-    List<Enveloppe> listeEnveloppes;
-    OnEnveloppeChangeListener listener;
+    List<Enveloppe> liste;
+    Runnable onChange;
 
-    // 🔥 INTERFACE
-    public interface OnEnveloppeChangeListener {
-        void onEnveloppeSupprimee();
-    }
-
-    public EnveloppeAdapter(List<Enveloppe> listeEnveloppes) {
-        this.listeEnveloppes = listeEnveloppes;
-        this.listener = listener;
+    public EnveloppeAdapter(List<Enveloppe> liste, Runnable onChange) {
+        this.liste = liste;
+        this.onChange = onChange;
     }
 
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext())
+        View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.enveloppe, parent, false);
-        return new MyViewHolder(view);
+        return new MyViewHolder(v);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull MyViewHolder h, int position) {
 
-        Enveloppe enveloppe = listeEnveloppes.get(position);
+        Enveloppe e = liste.get(position);
 
-        holder.textViewNom.setText(enveloppe.getTitre());
-        holder.textViewMontant.setText(enveloppe.getMontant() + "$");
+        h.nom.setText(e.getTitre());
+        h.montant.setText(e.getMontant() + "$");
 
-        holder.btnSupprimer.setOnClickListener(v -> {
+        h.supprimer.setOnClickListener(v -> {
 
-            Context context = v.getContext();
+            Context ctx = v.getContext();
 
-            new AlertDialog.Builder(context)
+            new AlertDialog.Builder(ctx)
                     .setTitle("Supprimer")
-                    .setMessage("Supprimer " + enveloppe.getTitre() + " ?")
-                    .setPositiveButton("Oui", (dialog, which) -> {
+                    .setMessage("Supprimer " + e.getTitre() + " ?")
+                    .setPositiveButton("Oui", (d, w) -> {
 
                         new Thread(() -> {
                             try {
-                                SharedPreferences prefs = context.getSharedPreferences("auth", Context.MODE_PRIVATE);
+                                SharedPreferences prefs = ctx.getSharedPreferences("auth", Context.MODE_PRIVATE);
                                 String token = prefs.getString("token", "");
 
-                                ApiHelper.delete("/enveloppe/" + enveloppe.getId(), token);
+                                ApiHelper.delete("/enveloppe/" + e.getId(), token);
 
-                                ((Activity) context).runOnUiThread(() -> {
+                                ((Activity) ctx).runOnUiThread(() -> {
 
-                                    int pos = holder.getAdapterPosition();
+                                    liste.remove(position);
+                                    notifyItemRemoved(position);
 
-                                    if (pos != RecyclerView.NO_POSITION) {
-                                        listeEnveloppes.remove(pos);
-                                        notifyItemRemoved(pos);
-                                    }
+                                    if (onChange != null) onChange.run();
 
-                                    // 🔥 callback
-                                    if (listener != null) {
-                                        listener.onEnveloppeSupprimee();
-                                    }
-
-                                    Toast.makeText(context, "Supprimé", Toast.LENGTH_SHORT).show();
                                 });
 
-                            } catch (Exception e) {
-                                Log.e("API_DELETE", e.getMessage());
-
-                                ((Activity) context).runOnUiThread(() ->
-                                        Toast.makeText(context, "Erreur", Toast.LENGTH_SHORT).show()
-                                );
+                            } catch (Exception ex) {
+                                Log.e("API", ex.getMessage());
                             }
                         }).start();
 
@@ -98,18 +76,18 @@ public class EnveloppeAdapter extends RecyclerView.Adapter<EnveloppeAdapter.MyVi
 
     @Override
     public int getItemCount() {
-        return listeEnveloppes.size();
+        return liste.size();
     }
 
-    public static class MyViewHolder extends RecyclerView.ViewHolder {
-        TextView textViewNom, textViewMontant;
-        Button btnSupprimer;
+    static class MyViewHolder extends RecyclerView.ViewHolder {
+        TextView nom, montant;
+        Button supprimer;
 
-        public MyViewHolder(View itemView) {
-            super(itemView);
-            textViewNom = itemView.findViewById(R.id.nomEnveloppe);
-            textViewMontant = itemView.findViewById(R.id.montantEnveloppe);
-            btnSupprimer = itemView.findViewById(R.id.btnSupprimer);
+        public MyViewHolder(View v) {
+            super(v);
+            nom = v.findViewById(R.id.nomEnveloppe);
+            montant = v.findViewById(R.id.montantEnveloppe);
+            supprimer = v.findViewById(R.id.btnSupprimer);
         }
     }
 }

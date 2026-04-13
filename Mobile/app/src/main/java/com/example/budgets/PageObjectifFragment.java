@@ -151,14 +151,19 @@ public class PageObjectifFragment extends Fragment {
                 ArrayList<Economie> temp = new ArrayList<>();
 
                 for (int i = 0; i < array.length(); i++) {
+
                     JSONObject o = array.getJSONObject(i);
+
+                    int id = o.optInt("id", o.optInt("id_economie"));
+
+                    double montant = o.optDouble("montant", 0);
+
                     temp.add(new Economie(
-                            o.getInt("id"),
+                            id,
                             "Économie",
-                            o.getDouble("montant") + "$"
+                            montant + "$"
                     ));
                 }
-
                 if (isAdded()) {
                     requireActivity().runOnUiThread(() -> {
                         listeEconomies.clear();

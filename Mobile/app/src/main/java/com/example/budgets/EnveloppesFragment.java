@@ -5,56 +5,115 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.Toast;
+import android.view.*;
+import android.widget.*;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
+import androidx.annotation.*;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.*;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
+import org.json.*;
 
 import java.util.ArrayList;
 
 public class EnveloppesFragment extends Fragment {
 
+    private static final String PREFS_CACHE = "cache";
+    private static final String KEY_ENVELOPPES = "fragment_enveloppes_liste";
+
     private RecyclerView recycler;
     private EnveloppeAdapter adapter;
     private ArrayList<Enveloppe> liste = new ArrayList<>();
 
+
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_enveloppes, container, false);
 
         recycler = v.findViewById(R.id.recyclerEnveloppes);
+        // Assure-toi d'avoir ce TextView dans ton XML pour la cohérence avec tes autres classes
+
+
         recycler.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapter = new EnveloppeAdapter(liste);
+
+        // Initialisation de l'adapter avec un callback vide (comme demandé)
+        adapter = new EnveloppeAdapter(liste, () -> {
+
+            sauvegarderCache();
+        });
+
         recycler.setAdapter(adapter);
 
         v.findViewById(R.id.btnAjouterEnveloppe).setOnClickListener(view -> ouvrirPopup());
 
+        // 1. Charger le cache pour un affichage instantané
+        chargerDepuisCache();
+
+        // 2. Rafraîchir via l'API
         chargerEnveloppes();
+
         return v;
     }
 
+
+    // ─────────────────────────── CACHE ───────────────────────────
+
+    private void sauvegarderCache() {
+        if (getActivity() == null) return;
+        try {
+            JSONArray array = new JSONArray();
+            for (Enveloppe e : liste) {
+                JSONObject obj = new JSONObject();
+                obj.put("id", e.getId());
+                obj.put("titre", e.getTitre());
+                obj.put("montant", e.getMontant());
+                array.put(obj);
+            }
+            getActivity().getSharedPreferences(PREFS_CACHE, Context.MODE_PRIVATE)
+                    .edit()
+                    .putString(KEY_ENVELOPPES, array.toString())
+                    .apply();
+        } catch (Exception e) {
+            Log.e("CACHE", "Erreur sauvegarde : " + e.getMessage());
+        }
+    }
+
+    private void chargerDepuisCache() {
+        if (getActivity() == null) return;
+        try {
+            SharedPreferences prefs = getActivity().getSharedPreferences(PREFS_CACHE, Context.MODE_PRIVATE);
+            String json = prefs.getString(KEY_ENVELOPPES, null);
+            if (json == null) return;
+
+            JSONArray array = new JSONArray(json);
+            liste.clear();
+            for (int i = 0; i < array.length(); i++) {
+                JSONObject obj = array.getJSONObject(i);
+                liste.add(new Enveloppe(
+                        obj.getInt("id"),
+                        obj.getString("titre"),
+                        obj.getString("montant")
+                ));
+            }
+            adapter.notifyDataSetChanged();
+
+        } catch (Exception e) {
+            Log.e("CACHE", "Erreur lecture : " + e.getMessage());
+        }
+    }
+
+    // ─────────────────────────── API (GET) ───────────────────────────
+
     private void chargerEnveloppes() {
         if (getActivity() == null) return;
+
         SharedPreferences prefs = getActivity().getSharedPreferences("auth", Context.MODE_PRIVATE);
         String token = prefs.getString("token", "");
 
         new Thread(() -> {
             try {
                 String res = ApiHelper.get("/enveloppe", token);
-                Log.d("API_DEBUG", "GET /enveloppe : " + res);
                 if (res == null || res.isEmpty()) return;
 
                 JSONArray array = new JSONArray(res);
@@ -62,42 +121,43 @@ public class EnveloppesFragment extends Fragment {
 
                 for (int i = 0; i < array.length(); i++) {
                     JSONObject obj = array.getJSONObject(i);
+                    // Utilisation de "id" pour être raccord avec AccueilFragment
                     temp.add(new Enveloppe(
-                            obj.getInt("id"),
+                            obj.optInt("id_enveloppe", obj.optInt("id_enveloppe")),
                             obj.getString("titre"),
-                            obj.getDouble("montant")
+                            String.valueOf(obj.getDouble("montant"))
                     ));
                 }
 
                 if (isAdded()) {
-                    getActivity().runOnUiThread(() -> {
+                    requireActivity().runOnUiThread(() -> {
                         liste.clear();
                         liste.addAll(temp);
                         adapter.notifyDataSetChanged();
-                        Log.d("API_DEBUG", "Enveloppes chargées : " + liste.size());
+                        sauvegarderCache();
                     });
                 }
             } catch (Exception e) {
-                Log.e("API_DEBUG", "Erreur chargement enveloppes : " + e.getMessage());
+                Log.e("API_DEBUG", "Erreur GET : " + e.getMessage());
             }
         }).start();
     }
+
+    // ─────────────────────────── POPUP & POST ───────────────────────────
 
     private void ouvrirPopup() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         View v = getLayoutInflater().inflate(R.layout.popup_enveloppe, null);
         builder.setView(v);
+
         AlertDialog dialog = builder.create();
 
-        EditText titre   = v.findViewById(R.id.nomEnv);
+        EditText titre = v.findViewById(R.id.nomEnv);
         EditText montant = v.findViewById(R.id.montantEnv);
-        Button btnAjouter  = v.findViewById(R.id.btnAjouterEnv);
-
+        Button btnAjouter = v.findViewById(R.id.btnAjouterEnv);
 
         btnAjouter.setOnClickListener(view -> {
             String t = titre.getText().toString().trim();
-            // FIX VIRGULE : locale FR/QC utilise "," comme séparateur décimal
-            // "150,50" → "150.50" pour que Double.parseDouble() et l'API acceptent la valeur
             String m = montant.getText().toString().trim().replace(",", ".");
 
             if (t.isEmpty() || m.isEmpty()) {
@@ -107,22 +167,19 @@ public class EnveloppesFragment extends Fragment {
 
             try {
                 double valeur = Double.parseDouble(m);
-                if (valeur <= 0) {
-                    Toast.makeText(getContext(), "Le montant doit être supérieur à 0", Toast.LENGTH_SHORT).show();
-                    return;
-                }
+                if (valeur <= 0) throw new Exception();
                 creerEnveloppeBackend(t, valeur, dialog);
-            } catch (NumberFormatException e) {
+            } catch (Exception e) {
                 Toast.makeText(getContext(), "Montant invalide", Toast.LENGTH_SHORT).show();
             }
         });
-
 
         dialog.show();
     }
 
     private void creerEnveloppeBackend(String titre, double montant, AlertDialog dialog) {
         if (getActivity() == null) return;
+
         SharedPreferences prefs = getActivity().getSharedPreferences("auth", Context.MODE_PRIVATE);
         String token = prefs.getString("token", "");
 
@@ -130,49 +187,30 @@ public class EnveloppesFragment extends Fragment {
             try {
                 JSONObject body = new JSONObject();
                 body.put("titre", titre);
-                // FIX : envoyer un nombre JSON et non une String
                 body.put("montant", montant);
 
                 String response = ApiHelper.post("/enveloppe", body.toString(), token);
-                Log.d("API_DEBUG", "POST /enveloppe réponse : " + response);
+                if (response == null || response.isEmpty()) return;
 
-                if (response == null || response.isEmpty()) {
-                    if (isAdded()) getActivity().runOnUiThread(() ->
-                            Toast.makeText(getContext(), "Erreur serveur", Toast.LENGTH_SHORT).show());
-                    return;
-                }
-
-                JSONObject newObj = new JSONObject(response);
-
-                // Vérifier si l'API retourne une erreur dans le JSON
-                if (newObj.has("message") && !newObj.has("id")) {
-                    String msg = newObj.optString("message", "Erreur serveur");
-                    if (isAdded()) getActivity().runOnUiThread(() ->
-                            Toast.makeText(getContext(), msg, Toast.LENGTH_LONG).show());
-                    return;
-                }
-
-                Enveloppe enveloppe = new Enveloppe(
-                        newObj.optInt("id", 0),
-                        newObj.optString("titre", titre),
-                        newObj.optDouble("montant", montant)
+                JSONObject obj = new JSONObject(response);
+                Enveloppe env = new Enveloppe(
+                        obj.optInt("id_enveloppe", 0),
+                        obj.optString("titre", titre),
+                        String.valueOf(obj.optDouble("montant", montant))
                 );
 
                 if (isAdded()) {
-                    getActivity().runOnUiThread(() -> {
-                        // Ajouter immédiatement dans la liste sans recharger l'API
-                        liste.add(0, enveloppe);
+                    requireActivity().runOnUiThread(() -> {
+                        liste.add(0, env);
                         adapter.notifyItemInserted(0);
                         recycler.scrollToPosition(0);
+                        sauvegarderCache();
                         dialog.dismiss();
                         Toast.makeText(getContext(), "Enveloppe ajoutée ✓", Toast.LENGTH_SHORT).show();
                     });
                 }
-
             } catch (Exception e) {
-                Log.e("API_DEBUG", "Erreur création enveloppe : " + e.getMessage());
-                if (isAdded()) getActivity().runOnUiThread(() ->
-                        Toast.makeText(getContext(), "Erreur: " + e.getMessage(), Toast.LENGTH_LONG).show());
+                Log.e("API_DEBUG", "Erreur POST : " + e.getMessage());
             }
         }).start();
     }

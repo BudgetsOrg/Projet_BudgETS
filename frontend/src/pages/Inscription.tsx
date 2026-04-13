@@ -8,17 +8,7 @@ import { setToken, getToken } from "../../public/token";
 import img_retour from "../img/arrow_left_alt.png";
 import img_plante from "../img/image_inscription_plante_coupe.png";
 import img_avatar_default from "../img/image_avatar_default.png";
-/*interface Utilisateur {
-  nom: string;
-  prenom: string;
-  dateNaissance: "";
-  email: string;
-  telephone?:string;
-  password: string;
-  solde ?: number;
-}
-  */
-const bdUtilisateurs: Utilisateur[] = [];
+
 
 function Inscription() {
   const [donneeInscription, setDonneeInscription] = useState<Utilisateur>({
@@ -29,34 +19,6 @@ function Inscription() {
     date_naissance: "",
     soldeDumois: 0,
   });
-  /* const stockerUtilisateur = (e: React.FormEvent) => {
-  e.preventDefault(); 
-  const nomUtilisateur = (document.getElementsByName("btn_nom")[0] as HTMLInputElement).value
-  const prenomUtilisateur = (document.getElementsByName("btn_prenom")[0] as HTMLInputElement).value
-  const dateNaissanceUtilisateur = (document.getElementsByName("btn_date_naissance")[0] as HTMLInputElement).value
-  const emailUtilisateur = (document.getElementsByName("btn_email")[0] as HTMLInputElement).value
-  const passwordUtilisateur = (document.getElementsByName("btn_password")[0] as HTMLInputElement).value
-  const soldeUtilisateur = parseFloat(
-    (document.getElementsByName("btn_solde")[0] as HTMLInputElement).value.replace(",", ".")
-  );
-
-  const nouvelUtilisateur: Utilisateur = {
-    nom: nomUtilisateur,
-    prenom: (document.getElementsByName("btn_prenom")[0] as HTMLInputElement).value,
-    dateNaissance: (document.getElementsByName("btn_date_naissance")[0] as HTMLInputElement).value,
-    email: (document.getElementsByName("btn_email")[0] as HTMLInputElement).value,
-    password: (document.getElementsByName("btn_password")[0] as HTMLInputElement).value,
-    solde: parseFloat(
-      (document.getElementsByName("btn_solde")[0] as HTMLInputElement).value.replace(",", ".")
-    )
-  };
-
-  bdUtilisateurs.push(nouvelUtilisateur);
-
-  console.log("Ajouté :", nouvelUtilisateur);
-  console.log("BD :", bdUtilisateurs);
-};
-*/
   const retourPageConnexion = () => {
     window.location.href = "/PageConnexion";
   };
@@ -102,10 +64,6 @@ function Inscription() {
           : errorData.message;
         throw new Error(message || "Erreur lors de l'inscription");
       }
-      const data = await reponse.json();
-      //setToken(data.access_token);
-
-
       viderChamps();
       window.location.href = "/PageConnexion";
     } catch (error: any) {

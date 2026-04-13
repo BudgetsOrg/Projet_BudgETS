@@ -17,6 +17,7 @@ import {
 import { BackgroundColor } from "devextreme-react/cjs/chart";
 import GraphiqueObjectif from "../components/graphiques/graphiqueObjectif";
 import { useCloudinaryImage } from "../hooks/useCloudinaryImage";
+import type { Utilisateur } from "../interfaces";
 
 interface Economie {
   id: number;
@@ -42,6 +43,11 @@ function Objectif() {
   const [imageUrl, setImageUrl] = useState<string | null>(
     location.state?.imageUrl ?? null,
   );
+
+  const [utilisateurObjectif, setUtilisateurObjectif] = useState<Utilisateur[]>(
+    location.state?.users ?? [],
+  );
+
   const [economies, setEconomies] = useState<Economie[]>([]);
 
   //Pop up modifier l'economie.
@@ -254,8 +260,15 @@ function Objectif() {
     const recupererObjectif = async () => {
       try {
         const data = await getObjectif();
+
         if (!Array.isArray(data)) return;
         const objectif = data.find((o: any) => o.id_objectif === idObjectif);
+        if (objectif) {
+          setTitre(objectif.titre);
+          setMontantACumuler(Number(objectif.montant) || 0);
+          setImageUrl(objectif.image ?? null);
+          setUtilisateurObjectif(objectif.users ?? []); // ← ici
+        }
         if (objectif) {
           setTitre(objectif.titre);
           setMontantACumuler(Number(objectif.montant) || 0);
@@ -295,6 +308,7 @@ function Objectif() {
         titre: editTitre.trim(),
         montant: montantNum,
         image: nouvelleImageUrl ?? "",
+        users: utilisateurObjectif ?? []
       });
       setTitre(editTitre.trim());
       setMontantACumuler(montantNum);
@@ -374,7 +388,7 @@ function Objectif() {
             setPopupOuvert("invitation");
           }}
         >
-          Invité +
+          Invité + ({utilisateurObjectif.length})
         </button>
       </div>
 
@@ -427,7 +441,13 @@ function Objectif() {
                   <button className="btn_ajouter" onClick={ouvrirAjouter}>
                     Ajouter +
                   </button>
-                  <div className="separateur_vertical" />
+                  <div
+                    style={{
+                      height: "25px",
+                      backgroundColor: "#D9D9D9",
+                      width: "4px",
+                    }}
+                  />
                   <button
                     className="btn_supprimer"
                     onClick={activerModeSupprimer}
@@ -443,6 +463,13 @@ function Objectif() {
                   >
                     Confirmer ({selectionnes.length})
                   </button>
+                  <div
+                    style={{
+                      height: "25px",
+                      backgroundColor: "#D9D9D9",
+                      width: "4px",
+                    }}
+                  />
                   <button className="btn_supprimer" onClick={annulerSupprimer}>
                     Annuler
                   </button>
@@ -452,71 +479,81 @@ function Objectif() {
           </div>
 
           {/* Tableau */}
-          <table className="objectif_table">
-            <thead>
-              <tr>
-                {modeSupprimer && <th className="col_checkbox"></th>}
-                <th>Montant</th>
-                <th>Date</th>
-                {!modeSupprimer && <th>Action</th>}
-              </tr>
-            </thead>
-            <tbody>
-              {economies.map((eco: Economie, index: number) => (
-                <tr
-                  key={eco.id}
-                  className={
-                    selectionnes.includes(index) ? "ligne_selectionnee" : ""
-                  }
-                  onClick={() => modeSupprimer && toggleSelection(index)}
-                >
-                  {modeSupprimer && (
-                    <td className="col_checkbox">
-                      <input
-                        type="checkbox"
-                        checked={selectionnes.includes(index)}
-                        onChange={() => toggleSelection(index)}
-                        onClick={(e) => e.stopPropagation()}
-                      />
-                    </td>
-                  )}
-                  <td>{formatPrix(eco.montant)}</td>
-                  <td>{formatDate(eco.date)}</td>
-                  {!modeSupprimer && (
-                    <td>
-                      <button
-                        className="btn_modifier"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setEconomieEnEdition(eco);
-                          setEditEconomieMontant(String(eco.montant));
-                          setEditEconomieDate(eco.date);
-                          setPopupOuvert("editionEconomie");
-                        }}
-                      >
-                        Modifier
-                      </button>
-                    </td>
-                  )}
+          <div className="objectif_table_wrapper">
+            <table className="objectif_table">
+              <thead>
+                <tr>
+                  {modeSupprimer && <th className="col_checkbox"></th>}
+                  <th>Montant</th>
+                  <th>Date</th>
+                  {!modeSupprimer && <th>Action</th>}
                 </tr>
-              ))}
+              </thead>
+              <tbody>
+                {economies.map((eco: Economie, index: number) => (
+                  <>
+                    <tr
+                      key={eco.id}
+                      className={
+                        selectionnes.includes(index) ? "ligne_selectionnee" : ""
+                      }
+                      onClick={() => modeSupprimer && toggleSelection(index)}
+                    >
+                      {modeSupprimer && (
+                        <td className="col_checkbox">
+                          <input
+                            type="checkbox"
+                            checked={selectionnes.includes(index)}
+                            onChange={() => toggleSelection(index)}
+                            onClick={(e) => e.stopPropagation()}
+                          />
+                        </td>
+                      )}
+                      <td>{formatPrix(eco.montant)}</td>
+                      <td>{formatDate(eco.date)}</td>
+                      {!modeSupprimer && (
+                        <td>
+                          <button
+                            className="btn_modifier"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setEconomieEnEdition(eco);
+                              setEditEconomieMontant(String(eco.montant));
+                              setEditEconomieDate(eco.date);
+                              setPopupOuvert("editionEconomie");
+                            }}
+                          >
+                            Modifier
+                          </button>
+                        </td>
+                      )}
+                    </tr>
+                    <tr key={`sep-${eco.id}`}>
+                      <td colSpan={modeSupprimer ? 4 : 3}>
+                        <div style={{ height: "5px", backgroundColor: "#D9D9D9", width: "100%" }} />
+                      </td>
+                    </tr>
+                  </>
 
-              {Array.from({ length: Math.max(0, 5 - economies.length) }).map(
-                (_, i: number) => (
-                  <tr key={`vide-${i}`} className="ligne_vide">
-                    {modeSupprimer && <td className="col_checkbox"></td>}
-                    <td></td>
-                    <td></td>
-                    {!modeSupprimer && <td></td>}
-                  </tr>
-                ),
-              )}
-            </tbody>
-          </table>
+                ))}
+
+                {Array.from({ length: Math.max(0, 5 - economies.length) }).map(
+                  (_, i: number) => (
+                    <tr key={`vide-${i}`} className="ligne_vide">
+                      {modeSupprimer && <td className="col_checkbox"></td>}
+                      <td></td>
+                      <td></td>
+                      {!modeSupprimer && <td></td>}
+                    </tr>
+                  ),
+                )}
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
 
-      {/* POPUP INVITATION  */}
+      {/* PopUp Invitation  */}
       {popupOuvert === "invitation" && (
         <div className="popup_overlay" onClick={fermerInvitation}>
           <div className="popup_contenu" onClick={(e) => e.stopPropagation()}>
@@ -525,6 +562,40 @@ function Objectif() {
             <p className="popup_description">
               Entrez l'adresse email de la personne à inviter.
             </p>
+            {utilisateurObjectif.length > 0 && (
+              <div style={{ marginBottom: "12px" }}>
+                <p style={{ fontWeight: "bold", marginBottom: "8px" }}>Personnes invitées :</p>
+                {utilisateurObjectif.map((u: any) => (
+                  <div key={u.id_user} style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "8px",
+                    padding: "6px 0",
+                    borderBottom: "1px solid #eee"
+                  }}>
+                    <div style={{
+                      width: "32px",
+                      height: "32px",
+                      borderRadius: "50%",
+                      backgroundColor: "#2d7a4f",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      color: "white",
+                      fontSize: "14px",
+                      fontWeight: "bold",
+                      flexShrink: 0
+                    }}>
+                      {u.prenom?.[0]}{u.nom?.[0]}
+                    </div>
+                    <div>
+                      <p style={{ margin: 0, fontWeight: "600" }}>{u.prenom} {u.nom}</p>
+                      <p style={{ margin: 0, fontSize: "12px", color: "gray" }}>{u.adresse_email}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
 
             <input
               type="email"

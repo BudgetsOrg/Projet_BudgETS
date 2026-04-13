@@ -2,7 +2,7 @@
 import { getUtilisateur } from "../../api/UtilisateurApi";
 import { useState, useEffect } from "react";
 import { getToken, viderSessionStorage } from "../../../public/token";
-import logo from "../../img/image_inscription_plante.png";
+import logo from "../../img/logo.png";
 import DropDownProfile from "./DropDownProfile";
 import type { Utilisateur } from "../../interfaces";
 

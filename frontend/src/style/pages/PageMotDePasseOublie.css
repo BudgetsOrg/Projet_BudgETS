@@ -1,0 +1,64 @@
+.container_mdp_oublie{
+    background: linear-gradient(to left, rgb(33, 113, 92), rgb(1, 53, 40));
+    width: 100%;
+    min-height: 100vh;
+    display:flex;
+    flex-direction: column;
+    justify-content: flex-start; 
+    align-items: center;
+    gap: 15px;
+    position: relative;
+    padding-top : 60px;
+}
+.container_mdp_oublie h1 {
+    color: rgb(170, 221, 102);
+    font-size: 55px;
+    font-weight: bold;
+}
+.container_mdp_oublie label {
+    color : rgb(212, 228, 110);
+    font-size : 14px;
+    padding-bottom : 100px;
+
+}
+.container_mdp_oublie input {
+    width: 458px;
+    height: 35px;
+    border-radius: 20px;
+    border: none;
+    padding-left: 15px;
+    outline: none;
+}
+.container_mdp_oublie button {
+    color : white;
+    background-color: rgb(4,25,20);
+    height: 40px;
+    width: 458px;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+
+/* Grandes formes de fond */
+.triangle_droite_page_mdp_oublie {
+    position : absolute;
+    bottom: 0;
+    right: 0;
+    width: 100%; 
+    height: 41vh;
+    background: rgb(1,53,40);
+    clip-path: polygon(0% 100%, 100% 0%, 100% 100%);
+}
+
+.triangle_gauche_page_mdp_oublie {
+    position : absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%; 
+    height: 53vh;
+    background: rgb(4,25,20);
+    clip-path: polygon(0% 0%, 40% 100%, 0% 100%);
+}
+.triangle_page_mdp_oublie {
+
+}

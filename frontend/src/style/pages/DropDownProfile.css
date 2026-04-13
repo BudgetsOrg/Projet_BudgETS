@@ -1,0 +1,28 @@
+.dropDownProfile {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background: white;
+    z-index: 100;
+    padding: 16px;        /* ← ajoute du padding */
+    min-width: 200px;     /* ← largeur minimale */
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15); /* ← ombre pour le voir */
+    color: black; 
+}
+.dropDownProfile ::before {
+    position:absolute;
+    top:-2rem;
+    right: 2rem;
+    width: 25px;
+    height: 25px;
+    background-color: white;
+}
+.dropDownProfile .option_profile:hover {
+    background-color: rgba(127, 167, 90, 0.5);
+    cursor: pointer;
+}
+.dropDownProfile .option_deconnexion:hover {
+    background-color: rgba(255, 0, 0, 0.5);
+    cursor: pointer;
+}

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { getEnveloppe } from "../api/api";
-import type { Enveloppe } from "../interfaces/interfaces";
+import { getEnveloppe } from "../api/EnveloppeApi";
+import type { Enveloppe } from "../interfaces";
 
 export default function useEnveloppes() {
   const [enveloppes, setEnveloppes] = useState<Enveloppe[]>([]);

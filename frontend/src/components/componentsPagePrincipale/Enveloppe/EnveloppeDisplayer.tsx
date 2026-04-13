@@ -1,13 +1,42 @@
-import useEnveloppes from "../../../hooks/UseEnveloppes";
+import { useEffect, useRef, useState } from "react";
 import { EnveloppeCard } from "./EnveloppeCard";
+import { getEnveloppe } from "../../../api/EnveloppeApi";
+import type { Enveloppe } from "../../../interfaces";
 
-export function EnveloppesBudgetaires() {
-  const { enveloppes, loading, error } = useEnveloppes();
+interface displayerProps {
+  onEnveloppesChanged: () => void;
+  refreshKey: number;
+}
 
+export function EnveloppesBudgetaires({
+  onEnveloppesChanged,
+  refreshKey,
+}: displayerProps) {
+  const [enveloppes, setEnveloppes] = useState<Enveloppe[]>([]);
+  const [loading, setLoading] = useState(true);
+  const hasLoadedOnceRef = useRef(false);
+
+  // when called, fetches enveloppes and sets them
+  const loadEnveloppes = async () => {
+    try {
+      // Avoid "blink" on refresh (e.g., after delete): keep current list visible.
+      if (!hasLoadedOnceRef.current) setLoading(true);
+      const latestEnveloppes = await getEnveloppe();
+      setEnveloppes(latestEnveloppes);
+    } catch (error) {
+      console.error("Erreur de chargement:", error);
+      // If this is a refresh, keep the previous data instead of clearing the UI.
+      if (!hasLoadedOnceRef.current) setEnveloppes([]);
+    } finally {
+      setLoading(false);
+      hasLoadedOnceRef.current = true;
+    }
+  };
+  useEffect(() => {
+    loadEnveloppes();
+  }, [refreshKey]);
   //Could be changed to a spinner or a cuter message
-  if (loading) return <div>Chargement...</div>;
-
-  if (error) return <div>Erreur: {error}</div>;
+  if (loading && enveloppes.length === 0) return <div>Chargement...</div>;
 
   if (enveloppes.length === 0)
     return <div>Vous n'avez présentement aucune enveloppe budgétaires. </div>;
@@ -19,7 +48,7 @@ export function EnveloppesBudgetaires() {
       <div className="flex gap-4 pb-4">
         {enveloppes.map((env) => (
           <div key={env.id_enveloppe} className="flex-shrink-0 w-64">
-            <EnveloppeCard {...env} />
+            <EnveloppeCard {...env} onSaved={onEnveloppesChanged} />
           </div>
         ))}
       </div>

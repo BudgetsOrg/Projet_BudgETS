@@ -3,17 +3,21 @@ import { useObjectif } from "../../../hooks/useObjectifs";
 import { ObjectifRow } from "./ObjectifRow";
 import NouvelObjectif from "../../../popups/AjoutPopup/NouvelObjectif";
 
-export function ObjectifList() {
+export default function ObjectifList() {
   const [showPopup, setShowPopup] = useState(false);
-  const { objectifs, loading, error } = useObjectif();
+  const [objectifRefresh, setObjectifRefresh] = useState(0);
+  // le hook est changé pour utiliser le refreshKey, soit utiliser le hook quand il y a un changement
+  const { objectifs, loading, error } = useObjectif(objectifRefresh);
+
+  const handleObjectifChange = () => {
+    setObjectifRefresh((prev) => prev + 1);
+  };
 
   //Could be changed to a spinner or a cuter message
   if (loading) return <div>Chargement...</div>;
 
   if (error) return <div>Erreur: {error}</div>;
 
-  if (objectifs.length === 0)
-    return <div>Vous n'avez présentement aucun objectif. </div>;
   return (
     <div>
       <div className="flex flex-row gap-4">
@@ -26,16 +30,28 @@ export function ObjectifList() {
         </button>
       </div>
       <div className="space-y-4">
-        {objectifs.map((objectif) => (
-          <div key={objectif.id_objectif} className="objectifs">
-            <ObjectifRow {...objectif} />
-          </div>
-        ))}
+        {objectifs.length === 0 ? (
+          <p className="text-gray-500 text-center">
+            Aucun objectif trouvé. Ajoutez-en un !
+          </p>
+        ) : (
+          objectifs.map((objectif) => (
+            <div key={objectif.id_objectif} className="objectifs">
+              {/*Passer au composant le setter du state pour si qqun quitter l'objectif le visuel est up-to-date */}
+              <ObjectifRow
+                onRefresh={handleObjectifChange}
+                objectif={objectif}
+              />
+            </div>
+          ))
+        )}
       </div>
       <div className="absolute ">
         <NouvelObjectif
           showPopup={showPopup}
           closePopup={() => setShowPopup(false)}
+          // une fois que le nouvel objectif est ajouté, on refresh la liste pour que le nouvel objectif s'affiche
+          onSaved={handleObjectifChange}
         ></NouvelObjectif>
       </div>
     </div>

@@ -1,17 +1,34 @@
+
+/*Permet de rendre defilant le header.*/
+/*.container_header {
+  background-color: transparent;
+  position:fixed;
+  top:0;
+  width: 100%;
+  z-index:1000;
+}*/
+.container_header {
+  background-color: #2F2F2F;
+}
 .container_header ul {
   display: flex;
   list-style-type: none;
   margin: 0;
   padding: 0;
-  overflow: hidden;
+  padding-top: 5px;
+  overflow: visible;
   justify-content: space-between;
 }
 .container_header .sous_sujet {
   display: block;
-  color: black;
+  color: white;
   text-align: center;
   padding: 14px 16px;
   text-decoration: none;
+
+}
+.container_header .sous_sujet :hover {
+  color: #7FA75A;
 }
 .container_header .image_header {
   width: 40px;
@@ -25,11 +42,13 @@
 background-color: rgba(23, 22, 27,0.1);
 }
 .container_header .btn_connexion_header {
+  width: 153px;
+  height: 32px;
+  text-justify: center;
   background: linear-gradient(to top, rgb(18,91,72) 40%, rgb(92,151,89) 86%, rgb(147,195,101) );
   color: white;
   border: none;
-  border-radius: 8px;
-  padding: 10px 20px;
+  border-radius: 999px;
   cursor: pointer;
 }
 .left {

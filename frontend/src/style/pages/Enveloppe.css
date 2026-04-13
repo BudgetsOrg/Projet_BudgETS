@@ -1,4 +1,3 @@
-
 .enveloppe_container {
   background-color: #fff;
   padding: 28px 60px;
@@ -15,6 +14,11 @@
   align-items: center;
   margin-bottom: 16px;
 }
+.enveloppe_header_gauche {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
 
 .enveloppe_titre {
   font-size: 1.8rem;
@@ -22,7 +26,6 @@
   color: #1a1a1a;
   margin: 0;
 }
-
 .enveloppe_budget {
   display: flex;
   align-items: center;
@@ -52,7 +55,6 @@
 }
 
 .enveloppe_barre_remplie {
-  background-color: #e8442a;
   height: 100%;
   border-radius: 999px;
   transition: width 0.4s ease;
@@ -82,11 +84,21 @@
   color: #1a1a1a;
   margin: 0;
 }
+.enveloppe_edit {
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+  border-radius: 100%;
+  background-color: #125b48;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 
 .enveloppe_depenses_actions {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 12px;
 }
 
 .btn_ajouter {
@@ -94,7 +106,7 @@
   color: white;
   border: none;
   border-radius: 999px;
-  padding: 6px 18px;
+  padding: 6px 12px;
   font-size: 0.9rem;
   font-weight: 600;
   cursor: pointer;
@@ -121,13 +133,18 @@
 }
 
 /* Tableau */
+.table_wrapper {
+  border-radius: 12px;
+  overflow: hidden; /* 🔥 super important */
+  border: 1px solid #ddd; /* optionnel */
+}
 .enveloppe_table {
   width: 100%;
   border-collapse: collapse;
 }
 
 .enveloppe_table thead tr {
-  background-color: #e0e0e0;
+  background-color: #d9d9d9;
 }
 
 .enveloppe_table th {
@@ -145,8 +162,9 @@
   text-align: right;
 }
 
+/*Permet d'appliquer un style sur chaque ligne du tableau.*/
+
 .enveloppe_table tbody tr {
-  border-bottom: 1px solid #d5d5d5;
 }
 
 .enveloppe_table tbody tr:last-child {
@@ -154,7 +172,7 @@
 }
 
 .enveloppe_table td {
-  padding: 12px 14px;
+  padding: 8px 14px;
   font-size: 0.9rem;
   color: #333;
   background-color: #f9f9f9;
@@ -187,7 +205,7 @@
   display: flex;
   flex-direction: column;
   gap: 10px;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.18);
 }
 
 .modal_contenu h2 {

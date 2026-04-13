@@ -1,28 +1,49 @@
+import { useEffect, useState } from "react";
+import { getEnveloppe } from "../../../api/EnveloppeApi";
 import { PieChart } from "react-minimal-pie-chart";
-import useEnveloppes from "../../../hooks//UseEnveloppes";
-import type { Data } from "../../../interfaces/interfaces";
+import type { Data } from "../../../interfaces";
+import type { Enveloppe } from "../../../interfaces";
 
-export function SummaryPieChart() {
-  const { enveloppes, loading, error } = useEnveloppes();
+interface PieChartProps {
+  refreshKey: number;
+}
+export function SummaryPieChart({ refreshKey }: PieChartProps) {
+  const [enveloppes, setEnveloppes] = useState<Enveloppe[]>([]);
+  const [loading, setLoading] = useState(true); // Handle loading locally
 
-  //Could be changed to a spinner or a cuter message
-  if (loading) return <div>Chargement...</div>;
+  useEffect(() => {
+    loadEnveloppes();
+  }, [refreshKey]);
 
-  if (error) return <div>Erreur: {error}</div>;
-  enveloppes.sort((a, b) => b.montant - a.montant);
-  const dataTab: Data[] = enveloppes.map((env, index) => ({
+  // the hook is not used.
+  const loadEnveloppes = async () => {
+    try {
+      const latestEnveloppes = await getEnveloppe();
+      setEnveloppes(latestEnveloppes);
+    } catch (error) {
+      console.error("Erreur de chargement des enveloppes :", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+  if (loading) return <div>Chargement du graphique...</div>;
+  const sortedEnveloppes = [...enveloppes].sort(
+    (a, b) => b.montant - a.montant,
+  );
+  const dataTab: Data[] = sortedEnveloppes.map((env, index) => ({
     title: env.titre,
-    value: env.montant,
+    value: Number(env.montant),
     color: seedColors(env.id_enveloppe, index),
   }));
 
+  if (dataTab.length === 0) {
+    return <div>Aucun graphique</div>;
+  }
+
   return (
-    <div className="relative h-full">
-      <PieChart
-        data={dataTab}
-        radius={50}
-        className="absolute inset-0 h-full w-full"
-      />
+    <div className="h-64 w-full flex flex-col gap-2 items-center justify-center">
+      <h2 className="font-bold"> Répartition des enveloppes </h2>
+      <PieChart data={dataTab} radius={50} className="h-full w-full" />
     </div>
   );
 }

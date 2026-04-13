@@ -1,23 +1,28 @@
-
 @import "../style/pages/style_tailwind.css";
 
 @import "./pages/Inscription.css";
 @import "./pages/Connexion.css";
 @import "./pages/Enveloppe.css";
 @import "./general/Header.css";
+@import "./pages/Objectifs.css";
+@import "./pages/PageMotDePasseOublie.css";
+@import "./pages/DropDownProfile.css";
 
 /* Reset global pour éviter le contour blanc / margin par défaut */
 @layer base {
-  html, body {
+  html,
+  body {
     margin: 0;
     padding: 0;
     width: 100%;
     min-height: 100%;
     box-sizing: border-box;
-    font-family: 'Inter', sans-serif;
+    font-family: "Inter", sans-serif;
   }
 
-  *, *::before, *::after {
+  *,
+  *::before,
+  *::after {
     box-sizing: inherit;
   }
 }

@@ -1,15 +1,17 @@
 import { useEffect, useState } from "react";
-import { getObjectif } from "../api/api";
-import type { Objectif } from "../interfaces/interfaces";
+import { getObjectif } from "../api/ObjectifApi";
+import type { Objectif } from "../interfaces";
 //TODO: streamline this hook with useQuery from react-query or similar library for better caching and error handling.
 
-export function useObjectif() {
+export function useObjectif(refreshKey: number = 0) {
   const [objectifs, setObjectif] = useState<Objectif[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     async function fetchData() {
+      setLoading(true);
+      setError(null);
       try {
         const data = await getObjectif();
         setObjectif(data);
@@ -20,7 +22,7 @@ export function useObjectif() {
       }
     }
     fetchData();
-  }, []);
+  }, [refreshKey]);
 
   return { objectifs, loading, error };
 }

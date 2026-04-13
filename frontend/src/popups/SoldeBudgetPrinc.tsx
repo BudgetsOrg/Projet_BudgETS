@@ -1,5 +1,3 @@
-import React from "react";
-import type { Budget } from "../interfaces";
 import { getLastBudget, updateBudget } from "../api/BudgetApi";
 export default function SoldeBudget({
   showPopup,

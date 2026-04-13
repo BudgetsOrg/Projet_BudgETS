@@ -2,6 +2,8 @@ import type { Utilisateur } from "../../interfaces";
 import SuppressionCompte from "../../popups/SuppressionPopup/SuppressionCompte";
 import { useState } from "react";
 import { deleteUtilisateur, updateUtilisateur } from "../../api/UtilisateurApi";
+import { useNavigate } from "react-router-dom";
+import { viderSessionStorage } from "../../../public/token";
 
 interface TableInfoProfilProps {
   user: Utilisateur;
@@ -16,6 +18,7 @@ export function TableInfoProfil({
 }: TableInfoProfilProps) {
   const [editMode, setEditMode] = useState(false);
   const [showSuppressionPopup, setShowSuppressionPopup] = useState(false);
+  const navigate = useNavigate();
 
   const formatDateForInput = (date: string | undefined | null) => {
     if (!date) return "";
@@ -57,7 +60,10 @@ export function TableInfoProfil({
 
   const handleDeleteAccount = async () => {
     try {
-      await deleteUtilisateur();
+      const result = await deleteUtilisateur();
+      console.log("Delete account result:", result);
+      navigate("/"); // Redirige vers la page principale après la suppression du compte
+      viderSessionStorage(); // Vide le sessionStorage après la suppression du compte
     } catch (error) {
       console.error("Erreur suppression utilisateur:", error);
       alert(

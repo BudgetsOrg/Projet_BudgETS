@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { getObjectif } from "../api/ObjectifApi";
 import type { Objectif } from "../interfaces";
-//TODO: streamline this hook with useQuery from react-query or similar library for better caching and error handling.
 
 export function useObjectif(refreshKey: number = 0) {
   const [objectifs, setObjectif] = useState<Objectif[]>([]);

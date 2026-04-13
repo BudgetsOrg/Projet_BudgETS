@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { getLastBudget } from "../../../api/BudgetApi";
 import { getEnveloppe } from "../../../api/EnveloppeApi";
-import { useBudgets } from "../../../hooks/UseBudgets";
+import useBudgets from "../../../hooks/UseBudgets";
 import useEnveloppes from "../../../hooks/UseEnveloppes";
 import type { Budget, Enveloppe } from "../../../interfaces";
 import NouvelleEnveloppe from "../../../popups/AjoutPopup/NouvelleEnveloppe";

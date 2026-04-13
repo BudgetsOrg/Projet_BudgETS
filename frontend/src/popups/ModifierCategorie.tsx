@@ -1,33 +1,45 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import type { Categorie } from "../interfaces";
 import { updateCategorie } from "../api/CategorieApi";
 export default function ModifierCategorie({
   showPopup,
   closePopup,
   onSaved,
+  categorie,
 }: {
   showPopup: boolean;
   closePopup: () => void;
   onSaved?: () => void;
+  categorie: Categorie | null;
 }) {
   const [nom, setNom] = useState("");
+
+  useEffect(() => {
+    if (showPopup && categorie) {
+      setNom(categorie.nom_categorie);
+    }
+  }, [showPopup, categorie]);
   const handleClose = () => {
     setNom("");
     closePopup();
   };
 
   const handleSubmit = async () => {
+    if (!categorie) {
+      alert("Aucune catégorie sélectionnée.");
+      return;
+    }
+
+    console.log(nom.trim());
     if (!nom.trim()) {
       alert("Veuillez remplir le nom de la catégorie");
       return;
     }
 
-    const modifierCategorie: Categorie = {
-      nom_categorie: nom.trim(),
-    };
-
     try {
-      const response = await updateCategorie(modifierCategorie);
+      const response = await updateCategorie(categorie.id_categorie, {
+        nom_categorie: nom.trim(),
+      });
       console.log("API Response:", response);
       handleClose();
       onSaved?.();
@@ -57,7 +69,6 @@ export default function ModifierCategorie({
           type="text"
           id="nom"
           name="nom"
-          placeholder={nom}
           className="border border-gray-300 rounded-lg w-full"
           value={nom}
           onChange={(e) => setNom(e.target.value)}

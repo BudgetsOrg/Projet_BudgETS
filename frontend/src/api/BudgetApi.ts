@@ -1,4 +1,3 @@
-import type { NumberBoxTypes } from "devextreme-react/cjs/number-box";
 import { getToken } from "../../public/token";
 import type { Budget } from "../interfaces";
 const API_URL_GLOBAL = "https://projetbudgets-backend.up.railway.app";
@@ -6,6 +5,8 @@ const API_URL_LOCAL = import.meta.env.VITE_API_URL || "http://localhost:3000";
 const debug = false;
 // choose one
 const local = false;
+
+// getLastBudget, getBudgetById, getBudgetHistorique, postBudget, deleteBudget, updateBudget
 
 export async function getLastBudget() {
   const token = getToken() ?? "";

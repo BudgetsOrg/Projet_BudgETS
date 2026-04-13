@@ -6,6 +6,8 @@ interface EnveloppeCardProps extends Enveloppe {
   onSaved: () => void;
 }
 
+// rappel : onSaved() vient de EnveloppeDisplayer qui vient de pagePrincipale. Dans cette page, ça update le state +=1
+
 export function EnveloppeCard({
   id_enveloppe,
   titre,
@@ -13,13 +15,17 @@ export function EnveloppeCard({
   image,
   onSaved,
 }: EnveloppeCardProps) {
-  // cliquer sur env permet d'aller à la page, state donne le id à l'enveloppe
+  // cliquer sur une enveloppe permet d'aller à la page, state donne les infos à la page enveloppe pour éviter de faire un fetch supplémentaire
   const navigate = useNavigate();
 
+  // quand clique navigate à page enveloppe avec l'id de l'enveloppe
   const handleClick = () => {
-    navigate(`/PageEnveloppe/${id_enveloppe}`, { state: { id_enveloppe, titre, montant } });
+    navigate(`/PageEnveloppe/${id_enveloppe}`, {
+      state: { id_enveloppe, titre, montant },
+    });
   };
 
+  // quand delete, appeler api delete
   const handleDelete = async () => {
     try {
       await deleteEnveloppe(id_enveloppe);
@@ -28,10 +34,13 @@ export function EnveloppeCard({
       console.log("Error deleting enveloppe:", error);
     }
   };
+
   return (
     <div
+      // On donne un id à chaque carte enveloppe
       id={String(id_enveloppe)}
       className="rounded-xl overflow-hidden shadow-md flex flex-col h-64 hover:opacity-90 cursor-pointer shadow-lg transition-shadow duration-300"
+      // quand clique, va à la fonction
       onClick={handleClick}
     >
       {/*le titre*/}
@@ -40,7 +49,7 @@ export function EnveloppeCard({
         <button
           className="bg-white hover:bg-[var(--color-delete)] rounded-full"
           onClick={(e) => {
-            e.stopPropagation(); // Prevents clicking the card when clicking the trash
+            e.stopPropagation(); // Empêche de cliquer sur l'enveloppe quand clique sur delete
             handleDelete();
           }}
         >
@@ -49,6 +58,7 @@ export function EnveloppeCard({
       </div>
       <div
         className="flex-grow w-full"
+        // style pour une carte!
         style={{
           backgroundImage: `url(${image})`,
           backgroundSize: "cover",

@@ -1,9 +1,11 @@
 import { getToken } from "../../public/token";
-import type { Categorie, Depense } from "../interfaces";
+import type { Categorie } from "../interfaces";
 const API_URL_GLOBAL = "https://projetbudgets-backend.up.railway.app";
 const API_URL_LOCAL = "http://localhost:3000";
 const debug = false;
 const local = false;
+
+// getCategorie, getOneCategorie, postCategorie, deleteCategorie, updateCategorie
 
 export async function getCategorie() {
   const token = getToken() ?? "";
@@ -123,12 +125,15 @@ export async function deleteCategorie(id_categorie: number) {
   }
 }
 
-export async function updateCategorie(categorie: Categorie) {
+export async function updateCategorie(
+  id_categorie: number,
+  categorie: Partial<Categorie>,
+) {
   const token = getToken() ?? "";
 
   if (local) {
     const response = await fetch(
-      `${API_URL_LOCAL}/categorie/${categorie.id_categorie}`,
+      `${API_URL_LOCAL}/categorie/${id_categorie}`,
       {
         method: "PATCH",
         headers: {
@@ -141,7 +146,7 @@ export async function updateCategorie(categorie: Categorie) {
     return response.json();
   } else {
     const response = await fetch(
-      `${API_URL_GLOBAL}/categorie/${categorie.id_categorie}`,
+      `${API_URL_GLOBAL}/categorie/${id_categorie}`,
       {
         method: "PATCH",
         headers: {

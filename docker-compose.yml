@@ -5,7 +5,7 @@ services:
     ports:
       - "3307:3306" 
     environment:
-      - MARIADB_ROOT_PASSWORD=root
+      - MARIADB_ROOT_PASSWORD=rootdock
       - MARIADB_DATABASE=budget_db
     volumes:
       - budget-data:/var/lib/mysql

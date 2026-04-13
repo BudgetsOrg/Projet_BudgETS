@@ -1,0 +1,115 @@
+.page_connexion {
+    background: linear-gradient(to left, rgb(33,113,92), rgb(1,53,40));
+    width: 100%;
+    min-height: 100vh;
+    margin: 0;
+    position: relative; 
+    overflow-x: hidden; 
+    font-family: 'Inter', sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 10px;
+    position: relative;
+    z-index: 10; 
+}
+
+.connexion_container {
+    display: flex;
+    width: 100%;
+    height: 100vh;
+}
+
+/*Partie Gauche (Image)*/
+.container_gauche {
+    width: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.image_connexion {
+    width: 500px;
+    height: 500px;
+    border-radius: 50%; 
+    object-fit: cover;
+}
+
+/*Partie droite (Form)  */
+.connexion_information {
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center; 
+    align-items: flex-start;
+    gap: 15px;
+}
+
+.connexion_information h1 {
+    color: rgb(170,221,102);
+    font-size: 45px;
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+.connexion_information input {
+    width: 458px;
+    height: 35px;
+    border-radius: 20px;
+    border: none;
+    padding-left: 15px;
+    outline: none;
+}
+
+/* Mot de passe oubliée label  */
+.connexion_information label {
+    color: rgb(170,221,102);
+    font-size: 14px;
+    align-self:center;
+    cursor: pointer;
+}
+
+.btn_connexion {
+    width: 458px;
+    height: 40px;
+    border-radius: 8px;
+    border: none;
+    background: #002d26;
+    color: white;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.btn_inscription {
+    width: 458px;
+    height: 40px;
+    border-radius: 8px;
+    background: transparent;
+    border: 2px solid rgb(170,221,102);
+    color: rgb(170,221,102);
+    cursor: pointer;
+    font-weight: bold;
+}
+
+button:hover {
+    opacity: 0.9;
+}
+
+/* Grandes formes de fond */
+.triangle-droite {
+    bottom: 0;
+    right: 0;
+    width: 100%; 
+    height: 41vh;
+    background: rgb(1,53,40);
+    clip-path: polygon(0% 100%, 100% 0%, 100% 100%);
+}
+
+.triangle-gauche {
+    bottom: 0;
+    left: 0;
+    width: 100%; 
+    height: 53vh;
+    background: rgb(4,25,20);
+    clip-path: polygon(0% 0%, 40% 100%, 0% 100%);
+}

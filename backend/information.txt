@@ -1,0 +1,53 @@
+Qqun qui n'a pas le backend installer peut juste faire:
+
+cd backend
+npm install
+
+cela va aller lire tout le spackages dans packages.json puis installer ceux qui ne sont pas déjas installés
+
+class validator
+$ npm i --save class-validator class-transformer
+
+bibliothèque officielle de NestJS pour gérer les JSON Web Tokens (JWT).
+npm i --save @nestjs/jwt installer
+
+// POUR LE TOKEN (JWT)
+npm install --save passport-jwt
+npm install --save-dev @types/passport-jwt
+
+//C'est l'outil spécifique qui sait lire les jetons de tes utilisateurs.
+npm install @nestjs/passport passport passport-jwt
+
+npm install -D @types/passport @types/passport-jwt
+
+//argon
+npm install argon2
+
+//pour Gmail SMTP
+npm install nodemailer
+npm install -D @types/nodemailer
+//Pour Sécurité
+npm install helmet
+
+//Pour Swagger documentation API
+npm install Swagger
+
+//pas encore utiliser
+$ npm i bcrypt
+$ npm i -D @types/bcrypt
+
+
+npm i @nestjs/mapped-types
+
+//pour la page d'incriptioon le front end doit sassurer de convertir le , en .
+pour les décimales, car JavaScript (et donc @Type) ne reconnaît pas la 
+virgule comme un séparateur mathématique par défaut.
+
+//Tester le cors protection:
+Pour tester:
+
+Va vers Google.ca. Une fois la page a load, ouvre le console et mettre:
+
+fetch('https://projetbudgets-backend.up.railway.app/budget/me')
+
+Si la réponse retournée est un CORS Error, le CORS protection marche.

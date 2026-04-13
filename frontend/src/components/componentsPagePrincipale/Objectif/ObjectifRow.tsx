@@ -13,7 +13,7 @@ export function ObjectifRow({ onRefresh, objectif }: ObjectifRowProps) {
   const handleClick = () => {
     navigate(`/PageObjectifs/${objectif.id_objectif}`, {
       state: {
-        objectif: objectif.id_objectif,
+        id_objectif: objectif.id_objectif,
         titre: objectif.titre,
         montantAccumule: objectif.montant,
         imageUrl: objectif.image,

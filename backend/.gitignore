@@ -8,3 +8,7 @@ node_modules/
 dist/
 
 notesfordocker.txt
+
+src/mail/daily_reminder_preview.html
+src/mail/invitation_preview.html
+src/mail/Reset_password_preview.html

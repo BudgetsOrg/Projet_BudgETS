@@ -34,28 +34,25 @@ export class ObjectifRepository {
     return await this.repo.save(newObjectif);
   }
 
-  //Read all : by user dans ce cas
   async getAll(userId: number): Promise<Objectif[]> {
-    return await this.repo.find({
-        where: { users: { id_user: userId } },
-        relations: ['economies', 'users'], 
-    });
-}
-
-  //read one
-  async getOne(userId: number, objectifId: number): Promise<Objectif | null> {
-    return await this.repo.findOne({
-      where: {
-        id_objectif: objectifId,
-        users: {
-          id_user: userId,
-        },
-      },
-      relations: ['users', 'economies'], //pour avoir les membres
-    });
+    return await this.repo
+        .createQueryBuilder('objectif')
+        .innerJoin('objectif.users', 'filterUser', 'filterUser.id_user = :userId', { userId })
+        .leftJoinAndSelect('objectif.users', 'users')
+        .leftJoinAndSelect('objectif.economies', 'economies')
+        .getMany();
   }
 
-  //UPDATE
+  async getOne(userId: number, objectifId: number): Promise<Objectif | null> {
+    return await this.repo
+        .createQueryBuilder('objectif')
+        .innerJoin('objectif.users', 'filterUser', 'filterUser.id_user = :userId', { userId })
+        .leftJoinAndSelect('objectif.users', 'users')
+        .leftJoinAndSelect('objectif.economies', 'economies')
+        .where('objectif.id_objectif = :objectifId', { objectifId })
+        .getOne();
+  }
+  
   async update(
     userId: number,
     objectifId: number,

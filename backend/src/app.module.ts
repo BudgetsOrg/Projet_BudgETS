@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import * as dotenv from 'dotenv';
+import { ScheduleModule } from '@nestjs/schedule';
 
 import { TypeOrmModule } from '@nestjs/typeorm';
 import {
@@ -25,6 +26,7 @@ dotenv.config();
 
 @Module({
   imports: [
+    ScheduleModule.forRoot(),
     TypeOrmModule.forRoot({
       type: 'mariadb',
       host: process.env.DB_HOST,

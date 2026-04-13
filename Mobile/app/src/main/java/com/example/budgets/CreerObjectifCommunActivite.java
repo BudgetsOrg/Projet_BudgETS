@@ -116,20 +116,20 @@ public class CreerObjectifCommunActivite extends AppCompatActivity {
                 JSONObject json = new JSONObject(response);
 
                 // FIX 3 : NestJS retourne message comme TABLEAU en cas d'erreur
-                if (!json.has("id")) {
+                if (!json.has("id_objectif"))  {
                     String msg = ApiHelper.extraireMessageErreur(response);
                     Log.e(TAG, "Erreur API : " + msg);
                     runOnUiThread(() -> Toast.makeText(this, msg, Toast.LENGTH_LONG).show());
                     return;
                 }
 
-                int objectifId = json.getInt("id");
+                int objectifId = json.getInt("id_objectif");
                 Log.d(TAG, "Objectif créé id=" + objectifId + ", invitation des participants...");
 
                 // Inviter chaque participant
                 for (String mail : participants) {
                     JSONObject invite = new JSONObject();
-                    invite.put("adresse_email", mail);
+                    invite.put("email", mail);
                     String inviteResp = ApiHelper.post(
                             "/objectif/" + objectifId + "/inviter",
                             invite.toString(), token);

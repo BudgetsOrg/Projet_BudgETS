@@ -86,7 +86,7 @@ public class ObjectifsFragment extends Fragment {
                     double cible   = obj.has("montant")
                             ? parseDoubleSafe(obj, "montant")
                             : parseDoubleSafe(obj, "montant");temp.add(new Objectif(
-                            obj.getInt("id"),
+                            obj.getInt("id_objectif"),
                             obj.getString("titre"),
                             epargne, cible, commun
                     ));
@@ -213,7 +213,7 @@ public class ObjectifsFragment extends Fragment {
 
                 // FIX 4 : NestJS retourne message comme TABLEAU en cas d'erreur 400
                 // ex: {"statusCode":400,"message":["Le montant doit être supérieur à 0"],"error":"Bad Request"}
-                if (!json.has("id")) {
+                if (!json.has("id_objectif")) {
                     // C'est une erreur — extraire le message correctement
                     String msg = ApiHelper.extraireMessageErreur(response);
                     Log.e(TAG, "Erreur API : " + msg);
@@ -223,7 +223,7 @@ public class ObjectifsFragment extends Fragment {
 
                 // Succès
                 Objectif objectif = new Objectif(
-                        json.optInt("id", 0),
+                        json.optInt("id_objectif", 0),
                         json.optString("titre", titre),
                         0,
                         json.optDouble("montant", montant),

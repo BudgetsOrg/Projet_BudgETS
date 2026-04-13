@@ -31,7 +31,7 @@ export class BudgetRepository{
         return await this.repo.findOne({where:{user:{ adresse_email: email}}});
     }
 
-    // methode pour recuperer les budget d'un utilisateur specifique
+    //Methode pour recuperer les budget d'un utilisateur specifique
     async findByUser(userId:number):Promise<Budget[]> {
         // Logique findAll
         return await this.repo.find({
@@ -48,10 +48,10 @@ export class BudgetRepository{
         });
     }
 
-    // // UPDATE
+    // UPDATE
     
 
-    // // DELETE
+    // DELETE
     
 
 }

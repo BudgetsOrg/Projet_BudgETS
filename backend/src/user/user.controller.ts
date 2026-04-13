@@ -13,13 +13,7 @@ export class UserController {
     // il faut toujours que ça pointe vers une instance de UserService pour que les méthodes du service soient accessibles dans le controller.
     constructor(private readonly userService: UserService) {} 
     
-    // Gere les requetes HTTP DELETE sur le chemin users/id, parseintpipe convertit le paramètre id de string à number,
-    // puis appelle la méthode delete du service pour supprimer le user correspondant à l'id fourni.
-    // @Delete(':id')
-    // delete(@Param('id', ParseIntPipe) id: number) {
-    //     return this.userService.delete(id);
-    // }
-    
+    // UPDATE USER 
     @Patch('me')
     @UseGuards(AuthGuard('jwt'))
     @ApiResponse({ status: 200, description: 'Profil mis à jour avec succès' })
@@ -29,6 +23,7 @@ export class UserController {
     return this.userService.update(req.user.id, updateUserDto);
     }
 
+    //DELETE USER
     @Delete('me')
     @UseGuards(AuthGuard('jwt'))
     @ApiResponse({ status: 200, description: 'Compte supprimé avec succès' })
@@ -37,7 +32,8 @@ export class UserController {
     return this.userService.delete(req.user.id);
     }
 
-    @UseGuards(AuthGuard('jwt')) // C'est ce verrou qui teste ton token
+    //READ USER
+    @UseGuards(AuthGuard('jwt')) 
     @ApiResponse({ status: 200, description: 'Profil récupéré avec succès' })
     @Get('me')
     getProfile(@Request() req) {

@@ -4,6 +4,8 @@ import { ValidationPipe } from '@nestjs/common/pipes/validation.pipe';
 import { DocumentBuilder } from '@nestjs/swagger';
 import { SwaggerModule } from '@nestjs/swagger';
 import helmet from 'helmet';
+import { ClassSerializerInterceptor } from '@nestjs/common';
+import { Reflector } from '@nestjs/core';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -20,6 +22,8 @@ async function bootstrap() {
 });
   // Utilise le ValidationPipe global pour valider les données entrantes et transformer les données en objets DTO 
   app.useGlobalPipes(new ValidationPipe({ transform: true }));
+  // Utilise le ClassSerializerInterceptor global pour transformer les attributs avec @exclude en objets sérialisés avant de les envoyer dans les réponses HTTP.
+  app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
 
   // Configuration de Swagger pour la documentation de l'API -- Titre -- Légendes -- Structure + Construit le document Swagger et le met sur l'endpoint /api
   const config = new DocumentBuilder()

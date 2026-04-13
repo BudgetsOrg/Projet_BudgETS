@@ -245,7 +245,7 @@ function Objectif() {
       }
       await recupererEconomies();
     } catch (error: any) {
-      alert("Erreur lors de la suppression : " + error.message);
+      console.log("Erreur lors de la suppression : " + error.message)
     }
     setModeSupprimer(false);
     setSelectionnes([]);
@@ -302,7 +302,6 @@ function Objectif() {
       }
     } catch (err) {
       console.error("Erreur upload image :", err);
-      alert("Erreur lors du téléchargement de l'image.");
       return;
     }
 
@@ -319,7 +318,7 @@ function Objectif() {
       setImageUrl(nouvelleImageUrl);
     } catch (error: any) {
       console.error("Erreur modification objectif :", error);
-      alert("Erreur lors de la modification : " + error.message);
+      // A changer pour un message affichage en rouge. alert("Erreur lors de la modification : " + error.message);
       return;
     }
     setPopupOuvert(null);

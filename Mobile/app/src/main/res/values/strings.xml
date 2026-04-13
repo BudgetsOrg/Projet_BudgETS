@@ -22,4 +22,13 @@
     <string name="mdp_pv">************</string>
     <string name="modifier_info">modifier information</string>
     <string name="supprimer">Supprimer mon compte</string>
+    <string name="avatar">Avatar</string>
+    <string name="ami_nom_courriel">Ami Nom / Courriel</string>
+    <string name="delete_ami">Supprimer</string>
+    <string name="ajouterAmi">Ajouter un ami par courriel :</string>
+    <string name="liste_amis">Liste de mes amis :</string>
+    <string name="boutton_ajouter_ami">Ajouter l\'ami</string>
+    <string name="exemple_courriel">exemple@courriel.com</string>
+    <string name="my_friends">Mes Amis</string>
+    <string name="supprimer_ami">Supprimer l\'ami</string>
 </resources>

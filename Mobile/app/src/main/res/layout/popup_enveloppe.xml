@@ -1,0 +1,37 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="300dp"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="20dp"
+    android:background="#FFFFFF">
+
+    <TextView
+        android:text="Nouvelle enveloppe"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="15dp"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"/>
+
+    <EditText
+        android:id="@+id/nomEnv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Nom (ex: Nourriture)"/>
+
+    <EditText
+        android:id="@+id/montantEnv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Montant"
+        android:inputType="numberDecimal"/>
+
+    <Button
+        android:id="@+id/btnAjouterEnv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Ajouter"
+        android:backgroundTint="#AADD66"
+        android:textColor="#FFFFFF"
+        android:layout_marginTop="15dp"/>
+</LinearLayout>

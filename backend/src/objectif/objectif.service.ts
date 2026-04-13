@@ -9,7 +9,7 @@ import { ObjectId } from 'typeorm';
 export class ObjectifService {
   constructor(
     private readonly objectifRepo: ObjectifRepository,
-    private readonly mailService : MailService
+    private readonly mailService: MailService,
   ) {}
 
   //Méthode pour :Create un objectif
@@ -53,13 +53,24 @@ export class ObjectifService {
 
   //Méthode pour :inviter une personne
 
-  async addMember(ObjectId: number, email:string, inviterName:string ):Promise<Objectif>{
-      //On fait l'ajout en base de donnes via le repo
-      const updateGoal= await this.objectifRepo.addMemberByEmail(ObjectId,email)
-      //On envoie le mail d'inivation 
-      await this.mailService.sendInvitationEmail(email,inviterName,updateGoal.titre);
-      return updateGoal;
-  } 
+  async addMember(
+    ObjectId: number,
+    email: string,
+    inviterName: string,
+  ): Promise<Objectif> {
+    //On fait l'ajout en base de donnes via le repo
+    const updateGoal = await this.objectifRepo.addMemberByEmail(
+      ObjectId,
+      email,
+    );
+    //On envoie le mail d'inivation
+    await this.mailService.sendInvitationEmail(
+      email,
+      inviterName,
+      updateGoal.titre,
+    );
+    return updateGoal;
+  }
 
   //Methode pour :Delete un objectif
 

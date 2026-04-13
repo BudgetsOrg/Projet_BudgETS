@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="25dp"
+    android:background="#FFFFFF">
+
+    <!-- BUG FIX : le CardView original avait android:layout_width="350dp" fixe,
+         ce qui pouvait déborder ou mal s'afficher dans un AlertDialog.
+         Remplacé par un LinearLayout simple avec match_parent. -->
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#1B4D3E"
+        android:gravity="center"
+        android:padding="10dp"
+        android:text="Nouvel objectif"
+        android:textColor="#FFFFFF"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="20dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Titre de votre objectif :"
+        android:textStyle="bold"
+        android:textColor="#000000" />
+
+    <EditText
+        android:id="@+id/nomObj"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:hint="Ex: Achat voiture"
+        android:inputType="text"
+        android:padding="10dp"
+        android:layout_marginBottom="15dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Montant de l'objectif :"
+        android:textStyle="bold"
+        android:textColor="#000000" />
+
+    <EditText
+        android:id="@+id/montantObj"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:hint="Ex: 1000"
+        android:inputType="numberDecimal"
+        android:padding="10dp"
+        android:layout_marginBottom="25dp" />
+
+    <Button
+        android:id="@+id/btnCreerObj"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="#8BC34A"
+        android:text="Ajouter"
+        android:textColor="#FFFFFF" />
+
+    <!-- BUG FIX : bouton Annuler manquant dans l'original -->
+    <Button
+        android:id="@+id/btnAnnulerObj"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:backgroundTint="#F44336"
+        android:text="Annuler"
+        android:textColor="#FFFFFF" />
+
+</LinearLayout>

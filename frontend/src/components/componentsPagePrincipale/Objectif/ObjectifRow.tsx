@@ -13,7 +13,7 @@ export function ObjectifRow({ onRefresh, objectif }: ObjectifRowProps) {
     ? objectif.users.length
     : 0;
   console.log("ObjectifRow rendered with objectif:", objectif);
-  console.log("Objectif has utilisateurs:", objectif.Utilisateurs);
+  console.log("Objectif has utilisateurs:", objectif.users);
   console.log("Number of users sharing this objectif:", nbUtilisateurs);
   const handleClick = () => {
     navigate(`/PageObjectifs/${objectif.id_objectif}`, {

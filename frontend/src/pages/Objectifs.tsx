@@ -2,6 +2,7 @@
 // Affiche le détail d'un objectif d'épargne avec image de couverture et invitation par email
 import { useLocation } from "react-router-dom";
 import { useState, useRef, useEffect } from "react";
+import { getUtilisateur } from "../api/UtilisateurApi";
 import imgEdit from "../img/edit.png";
 import {
   updateObjectif,
@@ -54,6 +55,8 @@ function Objectif() {
   const [economieEnEdition, setEconomieEnEdition] = useState<Economie | null>(
     null,
   );
+  const [currentUserId, setCurrentUserId] = useState<number | null>(null);
+
   const [editEconomieMontant, setEditEconomieMontant] = useState<string>("");
   const [editEconomieDate, setEditEconomieDate] = useState<string>("");
 
@@ -267,7 +270,8 @@ function Objectif() {
           setTitre(objectif.titre);
           setMontantACumuler(Number(objectif.montant) || 0);
           setImageUrl(objectif.image ?? null);
-          setUtilisateurObjectif(objectif.users ?? []); // ← ici
+          setUtilisateurObjectif(
+            objectif.users ?? []); 
         }
         if (objectif) {
           setTitre(objectif.titre);
@@ -360,6 +364,19 @@ function Objectif() {
     if (idObjectif) recupererEconomies();
   }, []);
 
+  useEffect(() => {
+  const fetchCurrentUser = async () => {
+    try {
+      const user = await getUtilisateur();
+      // On suppose que l'objet retourné contient un id_user
+      setCurrentUserId(user.id_user); 
+    } catch (error) {
+      console.error("Erreur lors de la récupération de l'utilisateur", error);
+    }
+  };
+  fetchCurrentUser();
+}, []);
+
   return (
     <div className="objectif_container">
       <div className="objectif_banniere">
@@ -388,7 +405,7 @@ function Objectif() {
             setPopupOuvert("invitation");
           }}
         >
-          Invité + ({utilisateurObjectif.length})
+          Invité + ({utilisateurObjectif.length -1})
         </button>
       </div>
 
@@ -562,41 +579,45 @@ function Objectif() {
             <p className="popup_description">
               Entrez l'adresse email de la personne à inviter.
             </p>
-            {utilisateurObjectif.length > 0 && (
-              <div style={{ marginBottom: "12px" }}>
-                <p style={{ fontWeight: "bold", marginBottom: "8px" }}>Personnes invitées :</p>
-                {utilisateurObjectif.map((u: any) => (
-                  <div key={u.id_user} style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "8px",
-                    padding: "6px 0",
-                    borderBottom: "1px solid #eee"
-                  }}>
-                    <div style={{
-                      width: "32px",
-                      height: "32px",
-                      borderRadius: "50%",
-                      backgroundColor: "#2d7a4f",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      color: "white",
-                      fontSize: "14px",
-                      fontWeight: "bold",
-                      flexShrink: 0
-                    }}>
-                      {u.prenom?.[0]}{u.nom?.[0]}
-                    </div>
-                    <div>
-                      <p style={{ margin: 0, fontWeight: "600" }}>{u.prenom} {u.nom}</p>
-                      <p style={{ margin: 0, fontSize: "12px", color: "gray" }}>{u.adresse_email}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-
+            {/* Dans le PopUp Invitation */}
+{utilisateurObjectif.length > 0 && (
+  <div style={{ marginBottom: "12px" }}>
+    <p style={{ fontWeight: "bold", marginBottom: "8px" }}>Personnes invitées :</p>
+    {utilisateurObjectif
+      // On filtre pour ne garder que ceux qui ne sont PAS l'utilisateur courant
+      // Remplace 'id_user_connecte' par ta variable réelle (ex: auth.user.id)
+      .filter((u) => u.id_user !== currentUserId) 
+      .map((u: any) => (
+        <div key={u.id_user} style={{
+          display: "flex",
+          alignItems: "center",
+          gap: "8px",
+          padding: "6px 0",
+          borderBottom: "1px solid #eee"
+        }}>
+          <div style={{
+            width: "32px",
+            height: "32px",
+            borderRadius: "50%",
+            backgroundColor: "#2d7a4f",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            color: "white",
+            fontSize: "14px",
+            fontWeight: "bold",
+            flexShrink: 0
+          }}>
+            {u.prenom?.[0]}{u.nom?.[0]}
+          </div>
+          <div>
+            <p style={{ margin: 0, fontWeight: "600" }}>{u.prenom} {u.nom}</p>
+            <p style={{ margin: 0, fontSize: "12px", color: "gray" }}>{u.adresse_email}</p>
+          </div>
+        </div>
+      ))}
+  </div>
+)}
             <input
               type="email"
               className="popup_input"

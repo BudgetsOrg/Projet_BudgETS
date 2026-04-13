@@ -5,6 +5,8 @@ const API_URL_LOCAL = "http://localhost:3000";
 const debug = false;
 const local = false;
 
+// getDepenses, getOneDepense, postDepense, deleteDepense, updateDepense
+
 export async function getDepenses(id_enveloppe: number) {
   const token = getToken() ?? "";
 
@@ -143,10 +145,10 @@ export async function updateDepense(depense: Depense) {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify(({
-  ...depense,
-  date: depense.date?.split("T")[0], 
-}) ),
+        body: JSON.stringify({
+          ...depense,
+          date: depense.date?.split("T")[0],
+        }),
       },
     );
     return response.json();
@@ -159,7 +161,7 @@ export async function updateDepense(depense: Depense) {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify( depense ),
+        body: JSON.stringify(depense),
       },
     );
     return response.json();

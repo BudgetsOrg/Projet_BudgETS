@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
-import { getLastBudget, postBudget, updateBudget } from "../api/BudgetApi";
+import { getLastBudget, postBudget } from "../api/BudgetApi";
 import type { Budget } from "../interfaces";
 
 // Utilise la fonction getBudget pour récupérer les budgets de l'utilisateur et gère les états de chargement et d'erreur
-export function useBudgets() {
+export default function useBudgets() {
   // un seul budget donc pas une liste
   const [budget, setBudget] = useState<Budget>(null as any);
   const [loading, setLoading] = useState(true);
@@ -34,14 +34,3 @@ export async function postBudgets(budget: Budget) {
     throw new Error(err?.message ?? "Erreur lors de l'envoi du budget");
   }
 }
-/*
-export async function updateBudget(budget: Budget) {
-  try {
-    const updatedBudget = await updateBudget(budget);
-    return updatedBudget as Budget;
-  } catch (err: any) {
-    throw new Error(err?.message ?? "Erreur lors de la mise à jour du budget");
-  }
-}
-
-*/

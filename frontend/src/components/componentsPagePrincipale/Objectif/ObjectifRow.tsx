@@ -13,7 +13,7 @@ export function ObjectifRow({ onRefresh, objectif }: ObjectifRowProps) {
   const handleClick = () => {
     navigate(`/PageObjectifs/${objectif.id_objectif}`, {
       state: {
-        id_objectif: objectif.id_objectif,
+        objectif: objectif.id_objectif,
         titre: objectif.titre,
         montantAccumule: objectif.montant,
         imageUrl: objectif.image,
@@ -21,7 +21,9 @@ export function ObjectifRow({ onRefresh, objectif }: ObjectifRowProps) {
     });
   };
 
+  // gérer la suppression
   const handleDelete = async () => {
+    // si il n'y a pas de id,
     if (!objectif.id_objectif) return;
     try {
       // change le state au du parent

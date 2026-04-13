@@ -8,7 +8,10 @@ const API_URL_GLOBAL = "https://projetbudgets-backend.up.railway.app";
 const API_URL_LOCAL = "http://localhost:3000";
 const debug = false;
 const local = false;
-//A modifier pour get un user.
+
+// getUtilisateur, postUtilisateur, updateUtilisateur, updateUtilisateurImage, deleteUtilisateur, login,
+// postConnexion, postForgotPassword, postResetPassword
+
 export async function getUtilisateur() {
   const token = getToken() ?? "";
 
@@ -200,19 +203,7 @@ export async function login(adresse_email: string, password: string) {
     return user;
   }
 }
-/*
-//TODO : Change with the actual login information, used as a placeholder for the profile page;
-export function getLoggedInUser() {
-  if (debug) {
-    login("john.doe", "password"); // This will set the loggedInUser variable to the mock user, which is fine for now as we are just testing the profile page with a mock user. We should handle this more gracefully in a real application.
-  }
-  if (!loggedInUser) {
-    //We should probably send the user back to the login page instead of throwing an error
-    throw new Error("No user is currently logged in");
-  }
-  return loggedInUser;
-}
-*/
+
 export async function postForgotPassword(adresse_email: string) {
   const token = getToken() ?? "";
 

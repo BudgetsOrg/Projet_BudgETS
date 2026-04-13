@@ -65,32 +65,51 @@ export class ObjectifRepository {
   }
 
   //ajout d'une personne par email
-
   async addMemberByEmail(objectifId: number, email: string): Promise<Objectif> {
-    // Trouver l'objectif avec ses membres actuels
+
+    // Trouver l'objectif et ses membres actuels
     const objectif = await this.repo.findOne({
       where: { id_objectif: objectifId },
       relations: ['users'],
     });
 
+    //Si l'objectif n'est pas trouver tu envoie une erreur 
     if (!objectif) throw new NotFoundException('Objectif introuvable');
 
-    // Trouver le futur membre (tu auras besoin d'injecter UserRepository ou d'utiliser le QueryRunner)
-    // Ici on assume que tu as accès à la table User
+    //Tu cherche l'utilisateur a ajouter en utilisant le userRepo 
+    //qui se trouve dans le fichier les repositorie
     const userToAdd = await this.userRepo.findOneBy({ adresse_email: email });
 
+    //si il trouve pas le user a ajouter il y a erreur
     if (!userToAdd)
       throw new NotFoundException('Utilisateur non trouvé avec cet email');
 
     // Vérifier s'il est déjà membre pour éviter les doublons
-    const isAlreadyMember = objectif.users.some(
-      (u) => u.id_user === userToAdd.id_user,
-    );
 
+    //Methode 1: si on utilise some ill va parcourir le tableau de user dans les objectif
+    //et pour chaque element elle va voir si elle est vrai 
+    //si vrai, elle s'arrete et elle retourne
+    // const isAlreadyMember = objectif.users.some(
+    //   (u) => u.id_user === userToAdd.id_user,
+    // );
+
+    ////Methode 2: 
+    let isAlreadyMember = false;
+
+    for (const u of objectif.users) {
+      if (u.id_user === userToAdd.id_user) {
+        isAlreadyMember = true;
+        break;
+      }
+    }
+
+    //S'il n'est pas  deja un membre tu ajoute le membre a l'objectif
     if (!isAlreadyMember) {
       objectif.users.push(userToAdd);
       return await this.repo.save(objectif);
     }
+
+
 
     return objectif;
   }

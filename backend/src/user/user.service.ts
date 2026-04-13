@@ -19,7 +19,7 @@ export class UserService {
       private readonly objectifRepository : ObjectifRepository
   ) {}
 
-  //Trouve le user par son id, si il n'existe pas, throw une exception, puis retourne le user trouvé.
+  //CHERCHER UN USER (READ)
   async findOne(id: number) {
     const user = await this.userRepository.get(id);
     if (!user) {
@@ -28,6 +28,7 @@ export class UserService {
     return user;
   }
 
+  //TU CHERCHE LE USER PUIS TU MODIFY UN DES CASE MODIFIABLE ( UPDATE )
   async update(userId: number, updateUserDto: UpdateUserDto) {
     const user = await this.userRepository.get(userId);
 
@@ -38,7 +39,7 @@ export class UserService {
     return this.userRepository.update(userId, updateUserDto);
   }
 
-  //Supprime le user trouvé par son id, puis retourne un message de confirmation.
+  //DELETE USER
   async delete(id: number) {
     await this.findOne(id);
     const objectifs = await this.objectifRepository.getAll(id);
@@ -85,6 +86,7 @@ export class UserService {
     }
   }
 
+  //CREATE UN USER
   async create(userData: InscriptionDto):Promise<User> {
     //verifier que tu as bel est bien un nom ,un prenom et un email
      this.validationChamp(userData)
@@ -104,7 +106,7 @@ export class UserService {
       throw new BadRequestException("L'email est obligatoire.");
     }
 
-    // Vérification si l'email existe déjà
+    // Verification si l'email existe déjà
     const existingUser = await this.userRepository.findByEmail(
       userData.adresse_email,
     );

@@ -33,7 +33,7 @@ export class UserRepository{
         return await this.repo.findOne({where:{id_user:id}});
     }
 
-    //Methode pour chercher avec email
+    // Methode pour chercher avec email
     async findByEmail(email:string){
         return await this.repo.findOne({where:{ adresse_email: email}});
     }

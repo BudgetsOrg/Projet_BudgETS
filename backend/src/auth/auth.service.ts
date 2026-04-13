@@ -83,6 +83,7 @@ export class AuthService {
     // });
   }
 
+
   async forgotPassword(email: string) {
     const user = await this.userService.findByEmail(email);
 
@@ -97,7 +98,7 @@ export class AuthService {
       secret: process.env.JWT_SECRET,
     });
 
-    // Envoyer via Resend
+    // Envoyer via Gmail
     await this.mailService.sendResetPasswordEmail(
       user.adresse_email,
       resetToken,
@@ -106,16 +107,15 @@ export class AuthService {
     return { message: 'Email de récupération envoyé.' };
   }
 
-  // Dans auth.service.ts
 
-async resetPassword(dto: ResetPasswordDto) {
+  async resetPassword(dto: ResetPasswordDto) {
     try {
-        // Vérifier et décoder le token (on vérifie s'il n'est pas expiré)
+        // s'assurer que le token n'est pas expirer
         const payload = await this.jwtService.verifyAsync(dto.token, {
             secret: process.env.JWT_SECRET,
         });
 
-        // Extraire l'ID de l'utilisateur (le 'sub' qu'on a mis dedans lors du forgotPassword)
+        // extraire l'ID de l'utilisateur 
         const userId = payload.sub;
 
         // Hasher le nouveau mot de passe
@@ -126,7 +126,7 @@ async resetPassword(dto: ResetPasswordDto) {
 
         return { message: "Mot de passe modifié avec succès !" };
     } catch (error) {
-        // Si le token est expiré ou corrompu, NestJS lancera une erreur
+        // Si le token est expiré ou corrompu = message d'erreur
         throw new ForbiddenException("Lien invalide ou expiré.");
     }
   }

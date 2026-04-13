@@ -62,7 +62,7 @@ export default function NouvelleEnveloppe({
   if (!showPopup) return null;
 
   return (
-    <div className="fixed top-15 h-100 w-100 left-40 bg-white bg-opacity-2 flex-col items-center justify-center rounded-lg shadow-lg">
+    <div className="fixed top-15 h-120 w-100 left-40 bg-white bg-opacity-2 flex-col items-center justify-center rounded-lg shadow-lg">
       <div className="w-full bg-[var(--color-primary)] px-6 py-4 rounded-lg text-center">
         <h4 className="font-bold text-lg p-4 text-align-center text-white">
           Créer une nouvelle enveloppe

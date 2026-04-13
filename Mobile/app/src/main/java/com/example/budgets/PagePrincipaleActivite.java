@@ -54,7 +54,7 @@ public class PagePrincipaleActivite extends AppCompatActivity {
 
         // --- 1. CONFIGURATION LISTE VERTICALE ---
         // On passe bien le Runnable (this::mettreAJourAffichage) car ton adapter l'attend
-        enveloppeAdapter = new EnveloppeAdapter(enveloppes, this::mettreAJourAffichage);
+        enveloppeAdapter = new EnveloppeAdapter(enveloppes);
         listeEnveloppesView.setLayoutManager(new LinearLayoutManager(this));
         listeEnveloppesView.setAdapter(enveloppeAdapter);
 

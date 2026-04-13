@@ -38,19 +38,16 @@ public class EnveloppesFragment extends Fragment {
         recycler.setLayoutManager(new LinearLayoutManager(getContext()));
 
         // Initialisation de l'adapter avec un callback vide (comme demandé)
-        adapter = new EnveloppeAdapter(liste, () -> {
-
-            sauvegarderCache();
-        });
+        adapter = new EnveloppeAdapter(liste);
 
         recycler.setAdapter(adapter);
 
         v.findViewById(R.id.btnAjouterEnveloppe).setOnClickListener(view -> ouvrirPopup());
 
-        // 1. Charger le cache pour un affichage instantané
+        //  Charger le cache pour un affichage instantané
         chargerDepuisCache();
 
-        // 2. Rafraîchir via l'API
+        // Rafraîchir via l'API
         chargerEnveloppes();
 
         return v;

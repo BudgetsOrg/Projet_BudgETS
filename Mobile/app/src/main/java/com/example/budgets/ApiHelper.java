@@ -15,7 +15,6 @@ public class ApiHelper {
     private static final String BASE_URL = "https://projetbudgets-backend.up.railway.app";
     private static final String TAG = "API_HTTP";
 
-    // ─── GET ────────────────────────────────────────────────────────────────────
     public static String get(String endpoint, String token) throws Exception {
         URL url = new URL(BASE_URL + endpoint);
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -34,7 +33,7 @@ public class ApiHelper {
         return body;
     }
 
-    // ─── POST ───────────────────────────────────────────────────────────────────
+
     public static String post(String endpoint, String jsonBody, String token) throws Exception {
         Log.d(TAG, "POST " + endpoint + " corps : " + jsonBody);
 
@@ -64,7 +63,7 @@ public class ApiHelper {
         return body;
     }
 
-    // ─── PATCH ──────────────────────────────────────────────────────────────────
+
     public static String patch(String endpoint, String jsonBody, String token) throws Exception {
         Log.d(TAG, "PATCH " + endpoint + " corps : " + jsonBody);
 
@@ -93,7 +92,7 @@ public class ApiHelper {
         return body;
     }
 
-    // ─── DELETE ─────────────────────────────────────────────────────────────────
+
     public static String delete(String endpoint, String token) throws Exception {
         URL url = new URL(BASE_URL + endpoint);
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -112,7 +111,7 @@ public class ApiHelper {
         return body;
     }
 
-    // ─── Lecture réponse ────────────────────────────────────────────────────────
+
     private static String lireReponse(HttpURLConnection conn, int status) throws Exception {
         InputStream stream = (status >= 200 && status < 300)
                 ? conn.getInputStream()
@@ -133,16 +132,13 @@ public class ApiHelper {
         return sb.toString();
     }
 
-    // ─── Utilitaire : extraire le message d'erreur NestJS ───────────────────────
-    // NestJS retourne soit :
-    //   {"statusCode":400, "message": ["erreur1","erreur2"], "error":"Bad Request"}
-    //   {"statusCode":401, "message": "Unauthorized"}
+
     // Cette méthode normalise les deux formats en une String lisible.
     public static String extraireMessageErreur(String jsonReponse) {
         try {
             org.json.JSONObject obj = new org.json.JSONObject(jsonReponse);
 
-            // Cas tableau : message est un JSONArray
+
             if (obj.optJSONArray("message") != null) {
                 org.json.JSONArray arr = obj.getJSONArray("message");
                 StringBuilder sb = new StringBuilder();
@@ -153,11 +149,11 @@ public class ApiHelper {
                 return sb.toString();
             }
 
-            // Cas string : message est une String
+
             if (obj.has("message")) {
                 return obj.getString("message");
             }
         } catch (Exception ignored) {}
-        return jsonReponse; // retourner brut si pas parsable
+        return jsonReponse;
     }
 }

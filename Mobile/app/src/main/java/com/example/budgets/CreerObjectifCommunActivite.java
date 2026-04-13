@@ -57,7 +57,7 @@ public class CreerObjectifCommunActivite extends AppCompatActivity {
     private void envoyerAuBackend() {
         String titre = etTitre.getText().toString().trim();
 
-        // FIX 1 : nettoyer le montant (virgule → point, espaces, caractères parasites)
+        // nettoyer le montant (virgule → point, espaces, caractères parasites)
         String montantStr = etMontant.getText().toString()
                 .trim()
                 .replace(",", ".")
@@ -96,7 +96,7 @@ public class CreerObjectifCommunActivite extends AppCompatActivity {
 
         new Thread(() -> {
             try {
-                // FIX 2 : BigDecimal évite la notation scientifique dans le JSON
+                //  BigDecimal évite la notation scientifique dans le JSON
                 BigDecimal montantDecimal = BigDecimal.valueOf(montantFinal);
 
                 JSONObject body = new JSONObject();
@@ -115,7 +115,7 @@ public class CreerObjectifCommunActivite extends AppCompatActivity {
 
                 JSONObject json = new JSONObject(response);
 
-                // FIX 3 : NestJS retourne message comme TABLEAU en cas d'erreur
+                // NestJS retourne message comme TABLEAU en cas d'erreur
                 if (!json.has("id_objectif"))  {
                     String msg = ApiHelper.extraireMessageErreur(response);
                     Log.e(TAG, "Erreur API : " + msg);

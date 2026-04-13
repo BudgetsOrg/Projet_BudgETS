@@ -35,10 +35,10 @@ public class EnveloppeRecenteAdapter extends RecyclerView.Adapter<EnveloppeRecen
         holder.itemView.setOnClickListener(v -> {
             Intent intent = new Intent(v.getContext(), PageUneEnveloppe.class);
             intent.putExtra("titre", enveloppe.getTitre());
-            // BUG FIX : passer le budget comme double (pas String)
+           //passer le budget comme double (pas String)
             // pour éviter le crash getStringExtra("budget").replace("$","")
             intent.putExtra("budget", enveloppe.getMontant());
-            // BUG FIX : passer l'id pour que PageUneEnveloppe puisse
+            //passer l'id pour que PageUneEnveloppe puisse
             // appeler GET /depense/enveloppe/{id} et DELETE /enveloppe/{id}
             intent.putExtra("id", enveloppe.getId());
             v.getContext().startActivity(intent);

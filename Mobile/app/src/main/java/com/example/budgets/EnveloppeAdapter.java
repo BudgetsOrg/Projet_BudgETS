@@ -17,7 +17,7 @@ public class EnveloppeAdapter extends RecyclerView.Adapter<EnveloppeAdapter.MyVi
     List<Enveloppe> liste;
     Runnable onChange;
 
-    public EnveloppeAdapter(List<Enveloppe> liste, Runnable onChange) {
+    public EnveloppeAdapter(List<Enveloppe> liste) {
         this.liste = liste;
         this.onChange = onChange;
     }

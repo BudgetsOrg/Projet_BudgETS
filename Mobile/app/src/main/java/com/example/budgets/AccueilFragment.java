@@ -46,22 +46,22 @@ public class AccueilFragment extends Fragment {
         recyclerView = view.findViewById(R.id.listeEnveloppes);
         creerBudjet  = view.findViewById(R.id.creerBudjet);
 
-        adapter = new EnveloppeAdapter(listeEnveloppes, this::recalculerCercle);
+        adapter = new EnveloppeAdapter(listeEnveloppes);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(adapter);
 
         creerBudjet.setOnClickListener(v -> afficherPopUp());
 
-        // 1. Afficher le cache immédiatement
+        // Afficher le cache immédiatement
         chargerDepuisCache();
 
-        // 2. Rafraîchir depuis le serveur
+        // Rafraîchir depuis le serveur
         chargerDonneesServeur();
 
         return view;
     }
 
-    // ─────────────────────────── CACHE ───────────────────────────
+    //  CACHE
 
     private void sauvegarderCache() {
         if (getActivity() == null) return;
@@ -113,7 +113,7 @@ public class AccueilFragment extends Fragment {
         }
     }
 
-    // ─────────────────────────── API ───────────────────────────
+    //  API
 
     private void chargerDonneesServeur() {
         if (getActivity() == null) return;
@@ -161,7 +161,7 @@ public class AccueilFragment extends Fragment {
         }).start();
     }
 
-    // ─────────────────────────── POPUP ───────────────────────────
+    //  POPUP
 
     private void afficherPopUp() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
@@ -221,13 +221,13 @@ public class AccueilFragment extends Fragment {
         dialog.show();
     }
 
-    // ─────────────────────────── CERCLE ───────────────────────────
+    //  CERCLE
 
     private void recalculerCercle() {
         double total = 0;
         for (Enveloppe e : listeEnveloppes) {
             try {
-                // FIX : getMontant() retourne String, il faut parser
+                // getMontant() retourne String, il faut parser
                 total += Double.parseDouble(e.getMontant());
             } catch (NumberFormatException ex) {
                 Log.w("CALCUL", "Montant invalide : " + e.getMontant());

@@ -65,7 +65,7 @@ public class ObjectifsFragment extends Fragment {
         if (!premierChargement) chargerObjectifs();
     }
 
-    // ─── Chargement depuis l'API ─────────────────────────────────────────────────
+    // Chargement depuis l'API
     private void chargerObjectifs() {
         if (getActivity() == null) return;
         SharedPreferences prefs = requireActivity().getSharedPreferences("auth", Context.MODE_PRIVATE);
@@ -127,8 +127,8 @@ public class ObjectifsFragment extends Fragment {
         btnCreer.setOnClickListener(view -> {
             String titre = etTitre.getText().toString().trim();
 
-            // FIX 1 : remplacer virgule par point (locale FR/QC)
-            // FIX 2 : supprimer les espaces et caractères invisibles
+            //  remplacer virgule par point (locale FR/QC)
+            // supprimer les espaces et caractères invisibles
             String montantStr = etMontant.getText().toString()
                     .trim()
                     .replace(",", ".")
@@ -188,10 +188,8 @@ public class ObjectifsFragment extends Fragment {
 
         new Thread(() -> {
             try {
-                // FIX 3 : utiliser BigDecimal pour éviter la notation scientifique
-                // JSONObject.put(key, 1500.0) peut produire 1500.0 (OK)
-                // mais pour des valeurs comme 0.1, Java peut produire 1E-1
-                // BigDecimal.valueOf() garantit le format décimal normal
+                //  utiliser BigDecimal pour éviter la notation scientifique
+
                 BigDecimal montantDecimal = BigDecimal.valueOf(montant);
 
                 JSONObject body = new JSONObject();
@@ -211,8 +209,8 @@ public class ObjectifsFragment extends Fragment {
 
                 JSONObject json = new JSONObject(response);
 
-                // FIX 4 : NestJS retourne message comme TABLEAU en cas d'erreur 400
-                // ex: {"statusCode":400,"message":["Le montant doit être supérieur à 0"],"error":"Bad Request"}
+                //  NestJS retourne message comme TABLEAU en cas d'erreur 400
+
                 if (!json.has("id_objectif")) {
                     // C'est une erreur — extraire le message correctement
                     String msg = ApiHelper.extraireMessageErreur(response);

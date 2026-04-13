@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from "@nestjs/common";
+import { BadRequestException, Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Budget, User } from "src/entities";
 import { Repository } from "typeorm/repository/Repository.js";
@@ -60,6 +60,7 @@ export class BudgetService{
     }
 
     async update(userId: number, id: number, updateBudgetDto: UpdateBudgetDto) {
+        await this.checkEnveloppesTotal(userId, id, updateBudgetDto.soldeDuMois);
         const budget = await this.budgetRepository.findOne({
             where: { id_budget: id, user: { id_user: userId } }, //validation pour s'assurer que le budget appartient à l'utilisateur qui essaie de le mettre à jour
         });
@@ -85,4 +86,19 @@ export class BudgetService{
         return { message: 'Budget supprimé avec succès' };
     }
 
+    private async checkEnveloppesTotal(userId: number, budgetId: number, newSolde: number) {
+        const budget = await this.budgetRepository.findOne({
+            where: { id_budget: budgetId, user: { id_user: userId } },
+            relations: ['enveloppes'],
+        });
+
+        if (!budget) throw new NotFoundException('Budget non trouvé');
+
+        const totalAllocated = budget.enveloppes
+            .reduce((sum, env) => sum + Number(env.montant), 0);
+
+        if (newSolde < totalAllocated) {
+            throw new BadRequestException('Le solde ne peut pas être inférieur au total des enveloppes.');
+        }
+    }   
 }

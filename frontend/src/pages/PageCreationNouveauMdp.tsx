@@ -6,24 +6,19 @@ function PageCreationNouveauMdp() {
         const password = (document.getElementById("input_nouveau_mdp") as HTMLInputElement).value;
 
 
-        alert("On rentre dans la fonction : "+ password);
         try {
             const reponse = await postResetPassword(token,password);
             if (!reponse.ok) {
-                alert("On rentre dans l'erreur")
                 const errorData = await reponse.json();
                 const message = Array.isArray(errorData.message)
                     ? errorData.message.join(', ')
                     : errorData.message;
                 throw new Error(message || "Erreur lors de la connexion");
             }
-            alert("On est apres le message d'erreur.")
             const data = await reponse.json();
-            alert("Mot de passe changé : "+ data) // Plus tard creer un pop up au lieux du alert.
-            console.log("Mot de passe changé : " , data);
+            console.log("Mot de passe changé ");
             window.location.href = "/";
         } catch (error : any) {
-            alert("On rentre dans l'erreur ");
             console.error(error)
             return;
         }

@@ -8,55 +8,18 @@ import { setToken, getToken } from "../../public/token";
 import img_retour from "../img/arrow_left_alt.png";
 import img_plante from "../img/image_inscription_plante_coupe.png";
 import img_avatar_default from "../img/image_avatar_default.png";
-/*interface Utilisateur {
-  nom: string;
-  prenom: string;
-  dateNaissance: "";
-  email: string;
-  telephone?:string;
-  password: string;
-  solde ?: number;
-}
-  */
-const bdUtilisateurs: Utilisateur[] = [];
+
 
 function Inscription() {
+  const [erreur, setErreur] = useState<string | null>(null);
   const [donneeInscription, setDonneeInscription] = useState<Utilisateur>({
     nom: "",
     prenom: "",
     adresse_email: "",
     password: "",
     date_naissance: "",
-    soldeDumois: 0,
+    soldeDumois: "" as any,
   });
-  /* const stockerUtilisateur = (e: React.FormEvent) => {
-  e.preventDefault(); 
-  const nomUtilisateur = (document.getElementsByName("btn_nom")[0] as HTMLInputElement).value
-  const prenomUtilisateur = (document.getElementsByName("btn_prenom")[0] as HTMLInputElement).value
-  const dateNaissanceUtilisateur = (document.getElementsByName("btn_date_naissance")[0] as HTMLInputElement).value
-  const emailUtilisateur = (document.getElementsByName("btn_email")[0] as HTMLInputElement).value
-  const passwordUtilisateur = (document.getElementsByName("btn_password")[0] as HTMLInputElement).value
-  const soldeUtilisateur = parseFloat(
-    (document.getElementsByName("btn_solde")[0] as HTMLInputElement).value.replace(",", ".")
-  );
-
-  const nouvelUtilisateur: Utilisateur = {
-    nom: nomUtilisateur,
-    prenom: (document.getElementsByName("btn_prenom")[0] as HTMLInputElement).value,
-    dateNaissance: (document.getElementsByName("btn_date_naissance")[0] as HTMLInputElement).value,
-    email: (document.getElementsByName("btn_email")[0] as HTMLInputElement).value,
-    password: (document.getElementsByName("btn_password")[0] as HTMLInputElement).value,
-    solde: parseFloat(
-      (document.getElementsByName("btn_solde")[0] as HTMLInputElement).value.replace(",", ".")
-    )
-  };
-
-  bdUtilisateurs.push(nouvelUtilisateur);
-
-  console.log("Ajouté :", nouvelUtilisateur);
-  console.log("BD :", bdUtilisateurs);
-};
-*/
   const retourPageConnexion = () => {
     window.location.href = "/PageConnexion";
   };
@@ -75,13 +38,20 @@ function Inscription() {
     event: React.ChangeEvent<HTMLInputElement>,
   ) => {
     const id = event.target.id;
-    let value: string | number | Date = event.target.value;
 
-    if (id === "soldeDumois") {
-      const parsed = parseFloat(value.replace(",", "."));
-      value = isNaN(parsed) ? 0 : parsed;
-      console.log("Solde converssion de , en .");
+    const valeurBrute = event.target.value;
+
+    let value: any = valeurBrute;
+if (id === "soldeDumois") {
+    // Si l'utilisateur efface tout, on garde une chaîne vide
+    if (valeurBrute === "") {
+      value = "";
+    } else {
+      // On remplace la virgule par un point et on convertit en nombre
+      const parsed = parseFloat(valeurBrute.replace(",", "."));
+      value = isNaN(parsed) ? "" : parsed;
     }
+  }
     setDonneeInscription({
       ...donneeInscription,
       [id]: value,
@@ -92,6 +62,39 @@ function Inscription() {
   ) => {
     event.preventDefault();
 
+
+
+    setErreur(null);
+
+    if ((donneeInscription.soldeDumois || 0) <= 0) {
+    setErreur("Le solde du mois doit être supérieur à 0.");
+    return;
+  }
+
+  if (!donneeInscription.nom  || !donneeInscription.prenom || !donneeInscription.adresse_email || !donneeInscription.password || !donneeInscription.date_naissance) {
+    setErreur("Veuillez remplir tous les champs obligatoires.");
+    return;
+  }
+  //Vérification de l'âge legal soit de 18 ans.
+    if (donneeInscription.date_naissance) {
+        const aujourdhui = new Date();
+        const dateNaissance = new Date(donneeInscription.date_naissance);
+        
+        let age = aujourdhui.getFullYear() - dateNaissance.getFullYear();
+        const mois = aujourdhui.getMonth() - dateNaissance.getMonth();
+        
+        if (mois < 0 || (mois === 0 && aujourdhui.getDate() < dateNaissance.getDate())) {
+            age--;
+        }
+
+        if (age < 18) {
+            setErreur("Vous devez avoir au moins 18 ans pour vous inscrire.");
+            return;
+        }
+    } else {
+        setErreur("Veuillez saisir votre date de naissance.");
+        return;
+    }
     try {
       const reponse = await postUtilisateur(donneeInscription);
 
@@ -102,14 +105,11 @@ function Inscription() {
           : errorData.message;
         throw new Error(message || "Erreur lors de l'inscription");
       }
-      const data = await reponse.json();
-      //setToken(data.access_token);
-
-
       viderChamps();
       window.location.href = "/PageConnexion";
     } catch (error: any) {
       console.error(error);
+      setErreur(error.message);
     }
   };
 
@@ -117,6 +117,11 @@ function Inscription() {
     <>
       <div className="main_inscription">
         <h1>Inscription</h1>
+        {erreur && (
+        <p style={{ color: "red", fontWeight: "bold", textAlign: "center" }}>
+          {erreur}
+        </p>
+      )}
         <p className="sous-titre">Remplissez les informations suivantes :</p>
 
         <img
@@ -140,6 +145,7 @@ function Inscription() {
               placeholder="Nom"
               value={donneeInscription.nom}
               onChange={gererEntreeUtilisateur}
+              required
             />
             <input
               type="text"
@@ -147,6 +153,7 @@ function Inscription() {
               placeholder="Prénom"
               value={donneeInscription.prenom}
               onChange={gererEntreeUtilisateur}
+              required
             />
           </div>
           <div className="form_horizontal">
@@ -157,6 +164,7 @@ function Inscription() {
               placeholder="AAAA/MM/JJ"
               value={donneeInscription.date_naissance}
               onChange={gererEntreeUtilisateur}
+              required
             />
           </div>
           <input
@@ -165,6 +173,7 @@ function Inscription() {
             placeholder="Adresse email"
             value={donneeInscription.adresse_email}
             onChange={gererEntreeUtilisateur}
+            required
           />
           <input
             type="password"
@@ -172,6 +181,7 @@ function Inscription() {
             placeholder="Mot de passe"
             value={donneeInscription.password}
             onChange={gererEntreeUtilisateur}
+            required
           />
           <label>Quel est votre solde de ce mois :</label>
           <input
@@ -180,6 +190,7 @@ function Inscription() {
             placeholder="Solde du mois"
             value={donneeInscription.soldeDumois ?? ""}
             onChange={gererEntreeUtilisateur}
+            required
           />
 
           <div className="image_container">

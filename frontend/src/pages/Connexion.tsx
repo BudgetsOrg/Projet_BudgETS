@@ -33,7 +33,7 @@ function Connexion() {
       setErreur("L'email ou le mot de passe est incorrect.");
       return;
     }
-    window.location.href = "/";
+    window.location.href = "/PagePrincipale";
   };
   const redirigerMotDePasseOublie = () => {
     window.location.href = "/PageMdpOublie";

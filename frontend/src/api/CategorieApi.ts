@@ -2,7 +2,11 @@ import { getToken } from "../../public/token";
 import type { Categorie, Depense } from "../interfaces";
 const API_URL_GLOBAL = "https://projetbudgets-backend.up.railway.app";
 const API_URL_LOCAL = "http://localhost:3000";
+<<<<<<< HEAD
 const debug = true;
+=======
+const debug = false;
+>>>>>>> frontend-web
 const local = false;
 
 export async function getCategorie() {
@@ -71,7 +75,10 @@ export async function getOneCategorie(id_categorie: number) {
   }
 }
 
+<<<<<<< HEAD
 // ne fonctionnera pas pour le moment, à revoir
+=======
+>>>>>>> frontend-web
 export async function postCategorie(categorie: Categorie) {
   const token = getToken() ?? "";
 

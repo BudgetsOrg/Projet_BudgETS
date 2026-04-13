@@ -2,13 +2,15 @@ import { getToken } from "../../public/token";
 import type { Economie } from "../interfaces";
 const API_URL_GLOBAL = "https://projetbudgets-backend.up.railway.app";
 const API_URL_LOCAL = "http://localhost:3000";
-//localStorage.getItem("token");
+
 const debug = false;
 // choose one
 const local = false;
 
+// getEconomie, getOneEconomie, postEconomie, deleteEconomie, updateEconomie
+
 export async function getEconomie(id_objectif: number) {
-const token = getToken() ?? "";
+  const token = getToken() ?? "";
 
   if (debug) {
     const mockEconomie1 = {
@@ -52,7 +54,7 @@ const token = getToken() ?? "";
 }
 
 export async function getOneEconomie(id_economie: number) {
-const token = getToken() ?? "";
+  const token = getToken() ?? "";
 
   if (local) {
     const response = await fetch(`${API_URL_LOCAL}/economie/${id_economie}`, {
@@ -74,7 +76,7 @@ const token = getToken() ?? "";
 }
 
 export async function postEconomie(economie: Economie) {
-const token = getToken() ?? "";
+  const token = getToken() ?? "";
 
   if (local) {
     const response = await fetch(`${API_URL_LOCAL}/economie`, {
@@ -100,7 +102,7 @@ const token = getToken() ?? "";
 }
 
 export async function deleteEconomie(id_economie: number) {
-const token = getToken() ?? "";
+  const token = getToken() ?? "";
 
   if (local) {
     const response = await fetch(`${API_URL_LOCAL}/economie/${id_economie}`, {
@@ -122,7 +124,7 @@ const token = getToken() ?? "";
 }
 
 export async function updateEconomie(economie: Economie) {
-const token = getToken() ?? "";
+  const token = getToken() ?? "";
 
   if (local) {
     const response = await fetch(
@@ -133,7 +135,7 @@ const token = getToken() ?? "";
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify(economie ),
+        body: JSON.stringify(economie),
       },
     );
     return response.json();
@@ -146,7 +148,7 @@ const token = getToken() ?? "";
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify(economie ),
+        body: JSON.stringify(economie),
       },
     );
     return response.json();

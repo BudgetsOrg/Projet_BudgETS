@@ -3,6 +3,7 @@ import { EnveloppeCard } from "./EnveloppeCard";
 import { getEnveloppe } from "../../../api/EnveloppeApi";
 import type { Enveloppe } from "../../../interfaces";
 
+// on reçoit de PagePrincipale : refreshKey ->le state(0), onEnveloppesChanged, fait changer l'état
 interface displayerProps {
   onEnveloppesChanged: () => void;
   refreshKey: number;
@@ -12,30 +13,38 @@ export function EnveloppesBudgetaires({
   onEnveloppesChanged,
   refreshKey,
 }: displayerProps) {
+  // getterSetter Enveloppes, même choses pour loading
   const [enveloppes, setEnveloppes] = useState<Enveloppe[]>([]);
   const [loading, setLoading] = useState(true);
+
+  // useRef() ne prévoque pas de refresh, utilisé pour le premier chargement
   const hasLoadedOnceRef = useRef(false);
 
-  // when called, fetches enveloppes and sets them
+  // quand appelé, get les enveloppes de l'api et les set
   const loadEnveloppes = async () => {
     try {
-      // Avoid "blink" on refresh (e.g., after delete): keep current list visible.
+      // si premier load, on set le refresh
       if (!hasLoadedOnceRef.current) setLoading(true);
+      // on va chercher les enveloppes et set les enveloppes qu'on a
       const latestEnveloppes = await getEnveloppe();
       setEnveloppes(latestEnveloppes);
     } catch (error) {
       console.error("Erreur de chargement:", error);
-      // If this is a refresh, keep the previous data instead of clearing the UI.
+      // Si c'est un refresh, on ne reload pas l'infos on prends les enveloppes telles quelles
       if (!hasLoadedOnceRef.current) setEnveloppes([]);
     } finally {
       setLoading(false);
+      // ensuite, on n'utilisera pas
       hasLoadedOnceRef.current = true;
     }
   };
+
+  // quand la valeur de la clé change, il faut appeler loadEnveloppes().
   useEffect(() => {
     loadEnveloppes();
   }, [refreshKey]);
-  //Could be changed to a spinner or a cuter message
+
+  // if loading == true voici de quoi à l'air le chargement
   if (loading && enveloppes.length === 0) return <div>Chargement...</div>;
 
   if (enveloppes.length === 0)

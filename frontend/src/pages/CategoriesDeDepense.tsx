@@ -5,16 +5,28 @@ import NouvelleCategorie from "../popups/AjoutPopup/NouvelleCategorie";
 import ModifierCategorie from "../popups/ModifierCategorie";
 
 export default function CategoriesDeDepense() {
+  // state pour categories
   const [categories, setCategories] = useState<Categorie[]>([]);
+  // state pour le loading
   const [isLoading, setIsLoading] = useState(true);
+  // state pour l'erreur
   const [error, setError] = useState<string | null>(null);
+  // state pour le pop up d'ajouter une enveloppe
   const [showAjoutPopup, setShowAjoutPopup] = useState(false);
+  // state pour modifier une enveloppe
   const [showModifierPopup, setShowModifierPopup] = useState(false);
+  // state catégorie sélectionner pour modification
+  const [selectedCategorie, setSelectedCategorie] = useState<Categorie | null>(
+    null,
+  );
+  // state pour le refresh
   const [refreshKey, setRefreshKey] = useState(0);
+  // quand une catégorie change, changer valeur de la clé, inciter changement du reste
   const onCategoriesChanged = () => {
     setRefreshKey((prev) => prev + 1);
   };
 
+  // load les catégories et gère le load initial et ceux causés par chan
   useEffect(() => {
     const loadCategories = async () => {
       try {
@@ -28,21 +40,13 @@ export default function CategoriesDeDepense() {
       }
     };
 
+    // quand la valeur de la clé change, il faut appeler loadCategories().
     loadCategories();
   }, [refreshKey]);
 
-  const loadCategories = async () => {
-    try {
-      const categories = await getCategorie();
-      setCategories(categories);
-    } catch (error) {
-      console.error("Erreur de chargement des enveloppes :", error);
-    }
-  };
-
+  // appeler pour suppression et change state pour refresh
   const handleSupprimer = async (id_categorie: number) => {
     await deleteCategorie(id_categorie);
-    await loadCategories(); // Update local table
     onCategoriesChanged();
   };
 
@@ -78,7 +82,11 @@ export default function CategoriesDeDepense() {
                     <div className="flex justify-end gap-4">
                       <button
                         className="confirm-button rounded-lg p-2"
-                        onClick={() => setShowModifierPopup(true)}
+                        onClick={() => {
+                          // lui dire quelle catégorie veut être modifiée
+                          setSelectedCategorie(categorie);
+                          setShowModifierPopup(true);
+                        }}
                       >
                         Modifier
                       </button>
@@ -119,9 +127,13 @@ export default function CategoriesDeDepense() {
         </div>
         <ModifierCategorie
           showPopup={showModifierPopup}
-          closePopup={() => setShowModifierPopup(false)}
+          closePopup={() => {
+            setShowModifierPopup(false);
+            setSelectedCategorie(null);
+          }}
+          categorie={selectedCategorie}
+          // quand on save, dit qu'il y a changement
           onSaved={async () => {
-            await loadCategories(); // Update local table
             onCategoriesChanged();
           }}
         />
@@ -129,8 +141,8 @@ export default function CategoriesDeDepense() {
         <NouvelleCategorie
           showPopup={showAjoutPopup}
           closePopup={() => setShowAjoutPopup(false)}
+          // quand on save, dit qu'il y a changement
           onSaved={async () => {
-            await loadCategories(); // Update local table
             onCategoriesChanged();
           }}
         />

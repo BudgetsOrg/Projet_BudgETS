@@ -1,15 +1,14 @@
-// mes fonctions pour aller chercher les données à l'API
-// par contre, nous sommes en debug pour l'instant donc debug = true et nous avons des données préparées.
-
 import { getToken } from "../../public/token";
 import type { Objectif } from "../interfaces";
 
 const API_URL_GLOBAL = "https://projetbudgets-backend.up.railway.app";
 const API_URL_LOCAL = "http://localhost:3000";
-//localStorage.getItem("token");
+
 const debug = false;
 // choose one
 const local = false;
+
+// getObjectif, inviteUtilisateurObjectif, postObjectif, deleteObjectif, updateObjectif, inviteUtilisateurObjectif
 
 export async function getObjectif() {
   const token = getToken() ?? "";

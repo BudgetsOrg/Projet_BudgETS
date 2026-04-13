@@ -6,8 +6,10 @@ const debug = false;
 // choose one
 const local = false;
 
+// getEnveloppe, getEnveloppeById, postEnveloppe, deleteEnveloppe, updateEnveloppe
+
 export async function getEnveloppe() {
-const token = getToken() ?? "";
+  const token = getToken() ?? "";
 
   if (debug) {
     const mockEnveloppe1 = {
@@ -45,7 +47,7 @@ const token = getToken() ?? "";
 }
 
 export async function getEnveloppeById(id_enveloppe: number) {
-const token = getToken() ?? "";
+  const token = getToken() ?? "";
 
   if (local) {
     const response = await fetch(`${API_URL_LOCAL}/enveloppe/${id_enveloppe}`, {
@@ -70,7 +72,7 @@ const token = getToken() ?? "";
 }
 
 export async function postEnveloppe(enveloppe: Enveloppe) {
-const token = getToken() ?? "";
+  const token = getToken() ?? "";
 
   if (local) {
     const response = await fetch(`${API_URL_LOCAL}/enveloppe`, {
@@ -96,7 +98,7 @@ const token = getToken() ?? "";
 }
 
 export async function deleteEnveloppe(id_enveloppe: number) {
-const token = getToken() ?? "";
+  const token = getToken() ?? "";
 
   if (local) {
     const response = await fetch(`${API_URL_LOCAL}/enveloppe/${id_enveloppe}`, {
@@ -121,7 +123,7 @@ const token = getToken() ?? "";
 }
 
 export async function updateEnveloppe(enveloppe: Enveloppe) {
-const token = getToken() ?? "";
+  const token = getToken() ?? "";
 
   if (local) {
     const response = await fetch(
@@ -132,7 +134,7 @@ const token = getToken() ?? "";
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify(enveloppe ),
+        body: JSON.stringify(enveloppe),
       },
     );
     return response.json();
@@ -145,7 +147,7 @@ const token = getToken() ?? "";
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify( enveloppe ),
+        body: JSON.stringify(enveloppe),
       },
     );
     return response.json();

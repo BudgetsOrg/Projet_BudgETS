@@ -26,18 +26,16 @@ import { ObjectifInviterDto } from './dto/objectifInviter.dto';
 export class ObjectifController {
   constructor(private readonly objectifService: ObjectifService) {}
 
-  // Get('all-objectifs')
-  // getAll{
-
-  // }
+  
+  //url pour cree un objectif pis le lie a un user
+  // JwtStrategy(ill se trouve dans auth) , 'req.user' contient l'utilisateur trouvé en DB
   @ApiResponse({ status: 201, description: 'Objectif créé avec succès' })
   @ApiResponse({ status: 400, description: 'Requête invalide' })
   @Post()
-  async create(@Body() dto: ObjectifDto, @Req() req: any) {
-    // Grace a JwtStrategy, 'req.user' contient l'utilisateur trouvé en DB
+  async create(
+    @Body() dto: ObjectifDto, 
+    @Req() req: any) {
     const userId = req.user.id;
-
-    // On appelle ton service avec les données du DTO et l'ID du user
     return this.objectifService.create(dto, userId);
   }
 
@@ -49,7 +47,8 @@ export class ObjectifController {
   @ApiResponse({ status: 404, description: 'Objectifs non trouvés' })
   @ApiOperation({ summary: "Récupérer tous les objectifs de l'utilisateur" })
   @Get()
-  async findAll(@Req() req: any) {
+  async findAll(
+    @Req() req: any) {
     return this.objectifService.findAll(req.user.id);
   }
 
@@ -59,7 +58,9 @@ export class ObjectifController {
   @ApiResponse({ status: 400, description: 'Requête invalide' })
   @ApiOperation({ summary: 'Récupérer un objectif par son ID' })
   @Get(':id')
-  async findOne(@Param('id', ParseIntPipe) id: number, @Req() req: any) {
+  async findOne(
+    @Param('id', ParseIntPipe) id: number,
+    @Req() req: any) {
     return this.objectifService.findOne(req.user.id, id);
   }
 
@@ -81,7 +82,9 @@ export class ObjectifController {
   @ApiResponse({ status: 404, description: 'Objectif non trouvé' })
   @ApiResponse({ status: 400, description: 'Requête invalide' })
   @Delete(':id')
-  async remove(@Param('id', ParseIntPipe) id: number, @Req() req: any) {
+  async remove(
+    @Param('id', ParseIntPipe) id: number, 
+    @Req() req: any) {
     return this.objectifService.leaveOrDelete(id, req.user.id);
   }
 
@@ -93,10 +96,10 @@ export class ObjectifController {
   @Post(':id/inviter')
   async inviteMember(
     @Param('id') id: number,
-    @Body() body: ObjectifInviterDto,
+    @Body() dto: ObjectifInviterDto,
     @Req() req: any,
   ) {
     const inviterName = `${req.user.prenom} ${req.user.nom}`;
-    return this.objectifService.addMember(id, body.email, inviterName);
+    return this.objectifService.addMember(id, dto.email, inviterName);
   }
 }

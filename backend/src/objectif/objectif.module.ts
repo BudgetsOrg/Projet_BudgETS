@@ -9,7 +9,7 @@ import { MailModule } from 'src/mail/mail.module';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Objectif, User]),MailModule],
-  controllers: [ObjectifController], //servent a definir les routes donc https:// get post ou  put
+  controllers: [ObjectifController], 
   providers: [ObjectifService, ObjectifRepository],
   exports: [ObjectifRepository],
 })

@@ -9,8 +9,8 @@ interface ObjectifRowProps {
 export function ObjectifRow({ onRefresh, objectif }: ObjectifRowProps) {
   const navigate = useNavigate();
 
-  const nbUtilisateurs = objectif.Utilisateurs
-    ? objectif.Utilisateurs.length
+  const nbUtilisateurs = objectif.users
+    ? objectif.users.length
     : 0;
 
   const handleClick = () => {

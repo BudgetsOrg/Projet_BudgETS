@@ -29,7 +29,7 @@ export interface Objectif {
   montant?: number;
   date_limite?: string;
   image: string;
-  Utilisateurs: Utilisateur[];
+  users: Utilisateur[];
 }
 
 export interface Utilisateur {

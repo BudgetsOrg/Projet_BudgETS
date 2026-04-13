@@ -349,7 +349,13 @@ function Enveloppe() {
               <button className="btn_ajouter" onClick={confirmerSuppression}>
                 Confirmer ({selectionnes.length})
               </button>
-
+              <div
+                style={{
+                  height: "25px",
+                  backgroundColor: "#D9D9D9",
+                  width: "4px",
+                }}
+              />
               <button className="btn_supprimer" onClick={annulerSupprimer}>
                 Annuler
               </button>

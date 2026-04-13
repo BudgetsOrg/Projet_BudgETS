@@ -3,6 +3,12 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Objectif, User } from 'src/entities';
 import { Repository } from 'typeorm';
 
+/**
+ * @class ObjectifRepository
+ * but: custom repository 
+ * 
+ */
+
 @Injectable()
 export class ObjectifRepository {
   constructor(
@@ -108,8 +114,6 @@ export class ObjectifRepository {
       objectif.users.push(userToAdd);
       return await this.repo.save(objectif);
     }
-
-
 
     return objectif;
   }

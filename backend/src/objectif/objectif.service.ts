@@ -3,8 +3,11 @@ import { Objectif } from 'src/entities';
 import { ObjectifDto } from './dto/objectif.dto';
 import { ObjectifRepository } from 'src/repositories';
 import { MailService } from 'src/mail/mail.service';
-import { ObjectId } from 'typeorm';
 
+/**
+ * @class ObjectifService
+ * 
+ */
 @Injectable()
 export class ObjectifService {
   constructor(
@@ -52,7 +55,6 @@ export class ObjectifService {
   }
 
   //Méthode pour :inviter une personne
-
   async addMember(
     ObjectId: number,
     email: string,
@@ -73,7 +75,6 @@ export class ObjectifService {
   }
 
   //Methode pour :Delete un objectif
-
   async leaveOrDelete(objectifId: number, userId: number): Promise<void> {
     await this.objectifRepo.leaveOrDelete(objectifId, userId);
   }

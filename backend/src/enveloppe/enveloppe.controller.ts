@@ -1,12 +1,12 @@
 import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, UseGuards } from "@nestjs/common";
 import { ApiResponse, ApiParam, ApiOperation } from '@nestjs/swagger';
 import { EnveloppeService } from "./enveloppe.service";
-import { UpdateEnveloppeDto } from "./dto/update_enveloppe.dto";
-import { JwtAuthGuard } from "../auth/guard/jwt.guard";
 import { Request } from "@nestjs/common";
-import { CreateEnveloppeDto } from "./dto/create_enveloppe.dto";
 import { AuthGuard } from "@nestjs/passport/dist/auth.guard";
 import { ApiBearerAuth } from '@nestjs/swagger/dist/decorators/api-bearer.decorator';
+import { CreateEnveloppeDto, UpdateEnveloppeDto } from "./dto";
+
+
 
 @ApiBearerAuth() // Indique que les routes de ce contrôleur nécessitent une authentification par token Bearer (JWT) pour Swagger
 @UseGuards(AuthGuard('jwt'))

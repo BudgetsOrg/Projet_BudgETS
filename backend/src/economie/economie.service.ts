@@ -3,8 +3,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Economie } from '../entities/economie.entity';
 import { Objectif } from '../entities/objectif.entity';
-import { CreateEconomieDto } from './dto/create_economie.dto';
-import { UpdateEconomieDto } from './dto/update_economie.dto';
+import { CreateEconomieDto, UpdateEconomieDto } from './dto';
+
 
 @Injectable()
 export class EconomieService {

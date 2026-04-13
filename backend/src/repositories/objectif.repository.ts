@@ -32,7 +32,7 @@ export class ObjectifRepository {
   async getAll(userId: number): Promise<Objectif[]> {
     return await this.repo.find({
         where: { users: { id_user: userId } },
-        relations: ['economies'],
+        relations: ['economies', 'users'], 
     });
 }
 

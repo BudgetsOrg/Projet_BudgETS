@@ -33,9 +33,10 @@ export class AuthService {
         soldeDumois: dto.soldeDumois,
       });
 
+      await this.userService.updateDerniereConnexion(user.id_user);
       //returne token
       return this.signToken(user.id_user, user.adresse_email);
-    } catch (error) {
+    } catch (error:any) {
       if (error.code === 'ER_DUP_ENTRY') {
         throw new ForbiddenException('Identifiants déjà utilisés');
       }
@@ -44,21 +45,30 @@ export class AuthService {
   }
 
   async connexion(dto: ConnexionDto) {
-    // findByEmail au lieu de findOne
     const user = await this.userService.findByEmail(dto.adresse_email);
 
     if (!user) {
       throw new ForbiddenException('Identifiants incorrects');
     }
 
-    // Comparer le mot de passe en clair du DTO avec le hash de la DB
     const matches = await argon.verify(user.password, dto.password);
 
     if (!matches) {
       throw new ForbiddenException('Identifiants incorrects');
     }
 
-    return this.signToken(user.id_user, user.adresse_email);
+    // Sauvegarder la dernière connexion avant de la mettre à jour
+    const derniereConnexion = user.derniere_connexion;
+
+    // Mettre à jour à maintenant
+    await this.userService.updateDerniereConnexion(user.id_user);
+
+    const token = await this.signToken(user.id_user, user.adresse_email);
+
+    return {
+      ...token,
+      derniere_connexion: derniereConnexion,
+    };
   }
 
   //le token

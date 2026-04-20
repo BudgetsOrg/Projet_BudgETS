@@ -70,6 +70,12 @@ export class UserService {
     return age;
   }
 
+  async updateDerniereConnexion(userId: number): Promise<void> {
+    await this.userRepository.update(userId, {
+      derniere_connexion: new Date(),
+    });
+  }
+
   // vallidation des champ
   private validationChamp(userData:InscriptionDto){
     if (!userData.nom) {

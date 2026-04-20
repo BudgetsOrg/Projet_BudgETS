@@ -39,6 +39,9 @@ export class User {
   @Column({ type:'date' })
   date_naissance: Date;
 
+  @ApiPropertyOptional({ example: '2023-01-01T00:00:00.000Z' })
+  @Column({ type: 'datetime', nullable: true })
+  derniere_connexion: Date;
 
   @ApiPropertyOptional({ example: 'https://example.com/avatar.jpg', nullable: true })
   @Column({type: 'varchar',nullable: true, default: null})

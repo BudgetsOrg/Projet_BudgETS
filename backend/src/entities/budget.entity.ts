@@ -31,7 +31,9 @@ export class Budget {
   //On set le cham de date_creation à la première date du mois
   @BeforeInsert()
   setDateCreation() {
-    const now = new Date();
-    this.date_creation = new Date(now.getFullYear(), now.getMonth(), 1);
+    if (!this.date_creation) {
+      const now = new Date();
+      this.date_creation = new Date(now.getFullYear(), now.getMonth(), 1);
+    }
   }
 }

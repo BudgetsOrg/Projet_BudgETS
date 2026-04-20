@@ -1,6 +1,6 @@
 import { getToken } from "../../public/token";
 import type { Economie } from "../interfaces";
-const API_URL_GLOBAL = "https://projetbudgets-backend.up.railway.app";
+const API_URL_GLOBAL = "https://budgets-backend.up.railway.app";
 const API_URL_LOCAL = "http://localhost:3000";
 
 const debug = false;

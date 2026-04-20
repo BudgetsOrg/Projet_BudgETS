@@ -4,7 +4,7 @@
 import { getToken } from "../../public/token";
 import type { Utilisateur } from "../interfaces";
 let loggedInUser: Utilisateur | null = null;
-const API_URL_GLOBAL = "https://projetbudgets-backend.up.railway.app";
+const API_URL_GLOBAL = "https://budgets-backend.up.railway.app";
 const API_URL_LOCAL = "http://localhost:3000";
 const debug = false;
 const local = false;

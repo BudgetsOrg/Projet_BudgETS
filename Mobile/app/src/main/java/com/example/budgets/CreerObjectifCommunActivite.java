@@ -57,7 +57,7 @@ public class CreerObjectifCommunActivite extends AppCompatActivity {
     private void envoyerAuBackend() {
         String titre = etTitre.getText().toString().trim();
 
-        // nettoyer le montant (virgule → point, espaces, caractères parasites)
+
         String montantStr = etMontant.getText().toString()
                 .trim()
                 .replace(",", ".")
@@ -96,7 +96,7 @@ public class CreerObjectifCommunActivite extends AppCompatActivity {
 
         new Thread(() -> {
             try {
-                //  BigDecimal évite la notation scientifique dans le JSON
+
                 BigDecimal montantDecimal = BigDecimal.valueOf(montantFinal);
 
                 JSONObject body = new JSONObject();
@@ -115,7 +115,7 @@ public class CreerObjectifCommunActivite extends AppCompatActivity {
 
                 JSONObject json = new JSONObject(response);
 
-                // NestJS retourne message comme TABLEAU en cas d'erreur
+
                 if (!json.has("id_objectif"))  {
                     String msg = ApiHelper.extraireMessageErreur(response);
                     Log.e(TAG, "Erreur API : " + msg);
@@ -126,7 +126,7 @@ public class CreerObjectifCommunActivite extends AppCompatActivity {
                 int objectifId = json.getInt("id_objectif");
                 Log.d(TAG, "Objectif créé id=" + objectifId + ", invitation des participants...");
 
-                // Inviter chaque participant
+
                 for (String mail : participants) {
                     JSONObject invite = new JSONObject();
                     invite.put("email", mail);

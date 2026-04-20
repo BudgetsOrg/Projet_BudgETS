@@ -72,17 +72,17 @@ public class ConnexionActivite extends AppCompatActivity {
                     if (json.has("access_token")) {
                         String token = json.getString("access_token");
 
-                        // Sauvegarde du token
+
                         SharedPreferences prefs = getSharedPreferences("auth", MODE_PRIVATE);
                         prefs.edit().putString("token", token).apply();
 
                         runOnUiThread(() -> {
                             Toast.makeText(this, "Connexion réussie", Toast.LENGTH_SHORT).show();
 
-                            // Navigation SEULEMENT en cas de succès
+
                             Intent intent = new Intent(ConnexionActivite.this, MainActivity.class);
                             startActivity(intent);
-                            finish(); // empêche de revenir en arrière
+                            finish();
                         });
 
                     } else {

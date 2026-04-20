@@ -32,7 +32,7 @@ public class EnveloppesFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_enveloppes, container, false);
 
         recycler = v.findViewById(R.id.recyclerEnveloppes);
-        // Assure-toi d'avoir ce TextView dans ton XML pour la cohérence avec tes autres classes
+
 
 
         recycler.setLayoutManager(new LinearLayoutManager(getContext()));

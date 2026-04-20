@@ -1,10 +1,14 @@
 package com.example.budgets;
 
 import android.app.Activity;
-import android.content.*;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
-import android.view.*;
-import android.widget.*;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -19,14 +23,15 @@ public class EnveloppeAdapter extends RecyclerView.Adapter<EnveloppeAdapter.MyVi
 
     public EnveloppeAdapter(List<Enveloppe> liste) {
         this.liste = liste;
-        this.onChange = onChange;
     }
 
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.enveloppe, parent, false);
+
         return new MyViewHolder(v);
     }
 
@@ -47,21 +52,21 @@ public class EnveloppeAdapter extends RecyclerView.Adapter<EnveloppeAdapter.MyVi
                     .setMessage("Supprimer " + e.getTitre() + " ?")
                     .setPositiveButton("Oui", (d, w) -> {
 
+                        int pos = h.getBindingAdapterPosition();
+
+                        if (pos != RecyclerView.NO_POSITION) {
+                            liste.remove(pos);
+                            notifyItemRemoved(pos);
+                            if (onChange != null) onChange.run();
+                        }
+
                         new Thread(() -> {
                             try {
+
                                 SharedPreferences prefs = ctx.getSharedPreferences("auth", Context.MODE_PRIVATE);
                                 String token = prefs.getString("token", "");
 
                                 ApiHelper.delete("/enveloppe/" + e.getId(), token);
-
-                                ((Activity) ctx).runOnUiThread(() -> {
-
-                                    liste.remove(position);
-                                    notifyItemRemoved(position);
-
-                                    if (onChange != null) onChange.run();
-
-                                });
 
                             } catch (Exception ex) {
                                 Log.e("API", ex.getMessage());
@@ -80,11 +85,14 @@ public class EnveloppeAdapter extends RecyclerView.Adapter<EnveloppeAdapter.MyVi
     }
 
     static class MyViewHolder extends RecyclerView.ViewHolder {
+
         TextView nom, montant;
         Button supprimer;
 
         public MyViewHolder(View v) {
+
             super(v);
+
             nom = v.findViewById(R.id.nomEnveloppe);
             montant = v.findViewById(R.id.montantEnveloppe);
             supprimer = v.findViewById(R.id.btnSupprimer);

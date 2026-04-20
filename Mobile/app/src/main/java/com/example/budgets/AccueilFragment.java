@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.*;
 import android.view.animation.DecelerateInterpolator;
@@ -16,7 +18,6 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.*;
 
 import org.json.*;
-
 import java.util.*;
 
 public class AccueilFragment extends Fragment {
@@ -26,12 +27,15 @@ public class AccueilFragment extends Fragment {
     private static final String KEY_SOLDE      = "accueil_solde";
 
     private TextView    message, pourcentage;
+    private EditText    soldeMois;
     private ProgressBar diagramme;
     private RecyclerView recyclerView;
+    private RecyclerView recemmentConsulteView;
     private Button      creerBudjet;
 
     private ArrayList<Enveloppe> listeEnveloppes = new ArrayList<>();
     private EnveloppeAdapter     adapter;
+    private EnveloppeRecenteAdapter recenteAdapter;
 
     private double soldeTotal = 0;
 
@@ -42,26 +46,50 @@ public class AccueilFragment extends Fragment {
 
         message      = view.findViewById(R.id.message);
         pourcentage  = view.findViewById(R.id.pourcentage);
+        soldeMois    = view.findViewById(R.id.soldeMois);
         diagramme    = view.findViewById(R.id.diagramme);
         recyclerView = view.findViewById(R.id.listeEnveloppes);
+        recemmentConsulteView = view.findViewById(R.id.recemmentConsulte);
         creerBudjet  = view.findViewById(R.id.creerBudjet);
 
         adapter = new EnveloppeAdapter(listeEnveloppes);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(adapter);
 
+        recenteAdapter = new EnveloppeRecenteAdapter(listeEnveloppes);
+        recemmentConsulteView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
+        recemmentConsulteView.setAdapter(recenteAdapter);
+
+        // Ecouter les changements sur le budget du mois pour mettre à jour le cercle
+        soldeMois.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+            @Override
+            public void afterTextChanged(Editable s) {
+                recalculerCercle();
+            }
+        });
+
         creerBudjet.setOnClickListener(v -> afficherPopUp());
 
-        // Afficher le cache immédiatement
         chargerDepuisCache();
-
-        // Rafraîchir depuis le serveur
         chargerDonneesServeur();
 
         return view;
     }
 
-    //  CACHE
+    private void rafraichirToutesLesListes() {
+        if (isAdded()) {
+            adapter.notifyDataSetChanged();
+            if (recenteAdapter != null) {
+                recenteAdapter.notifyDataSetChanged();
+            }
+            message.setVisibility(listeEnveloppes.isEmpty() ? View.VISIBLE : View.GONE);
+            recalculerCercle();
+        }
+    }
 
     private void sauvegarderCache() {
         if (getActivity() == null) return;
@@ -78,10 +106,10 @@ public class AccueilFragment extends Fragment {
                     .getSharedPreferences(PREFS_CACHE, Context.MODE_PRIVATE)
                     .edit()
                     .putString(KEY_ENVELOPPES, array.toString())
-                    .putString(KEY_SOLDE, String.valueOf(soldeTotal))
+                    .putString(KEY_SOLDE, soldeMois.getText().toString())
                     .apply();
         } catch (Exception e) {
-            Log.e("CACHE", "Erreur sauvegarde : " + e.getMessage());
+            Log.e("CACHE", e.getMessage());
         }
     }
 
@@ -92,7 +120,8 @@ public class AccueilFragment extends Fragment {
             String json = prefs.getString(KEY_ENVELOPPES, null);
             if (json == null) return;
 
-            soldeTotal = Double.parseDouble(prefs.getString(KEY_SOLDE, "0"));
+            String cacheSolde = prefs.getString(KEY_SOLDE, "0");
+            soldeMois.setText(cacheSolde);
 
             JSONArray array = new JSONArray(json);
             listeEnveloppes.clear();
@@ -104,20 +133,15 @@ public class AccueilFragment extends Fragment {
                         obj.getString("montant")
                 ));
             }
-            adapter.notifyDataSetChanged();
-            message.setVisibility(listeEnveloppes.isEmpty() ? View.VISIBLE : View.GONE);
-            recalculerCercle();
+            rafraichirToutesLesListes();
 
         } catch (Exception e) {
-            Log.e("CACHE", "Erreur lecture : " + e.getMessage());
+            Log.e("CACHE", e.getMessage());
         }
     }
 
-    //  API
-
     private void chargerDonneesServeur() {
         if (getActivity() == null) return;
-
         SharedPreferences prefs = getActivity().getSharedPreferences("auth", Context.MODE_PRIVATE);
         String token = prefs.getString("token", "");
 
@@ -125,16 +149,13 @@ public class AccueilFragment extends Fragment {
             try {
                 String response = ApiHelper.get("/budget/me", token);
                 JSONObject obj  = new JSONObject(response);
-
                 soldeTotal = obj.optDouble("soldeDuMois", 0);
 
                 JSONArray array = obj.optJSONArray("enveloppes");
                 ArrayList<Enveloppe> temp = new ArrayList<>();
-
                 if (array != null) {
                     for (int i = 0; i < array.length(); i++) {
                         JSONObject e = array.getJSONObject(i);
-                        // FIX : montant est String dans Enveloppe
                         temp.add(new Enveloppe(
                                 e.getInt("id_enveloppe"),
                                 e.getString("titre"),
@@ -147,21 +168,16 @@ public class AccueilFragment extends Fragment {
                     getActivity().runOnUiThread(() -> {
                         listeEnveloppes.clear();
                         listeEnveloppes.addAll(temp);
-                        adapter.notifyDataSetChanged();
-
-                        message.setVisibility(listeEnveloppes.isEmpty() ? View.VISIBLE : View.GONE);
-                        recalculerCercle();
-                        sauvegarderCache();   // ← persistance
+                        soldeMois.setText(soldeTotal + "$");
+                        rafraichirToutesLesListes();
+                        sauvegarderCache();
                     });
                 }
-
             } catch (Exception e) {
-                Log.e("API", "Erreur serveur, cache affiché : " + e.getMessage());
+                Log.e("API", e.getMessage());
             }
         }).start();
     }
-
-    //  POPUP
 
     private void afficherPopUp() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
@@ -169,8 +185,7 @@ public class AccueilFragment extends Fragment {
         builder.setView(view);
 
         AlertDialog dialog = builder.create();
-        dialog.getWindow().setBackgroundDrawable(
-                new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
 
         EditText nom     = view.findViewById(R.id.nom);
         EditText montant = view.findViewById(R.id.montant);
@@ -193,7 +208,6 @@ public class AccueilFragment extends Fragment {
                     String res = ApiHelper.post("/enveloppe", body.toString(), token);
                     JSONObject obj = new JSONObject(res);
 
-                    // FIX : montant String
                     Enveloppe env = new Enveloppe(
                             obj.getInt("id_enveloppe"),
                             obj.getString("titre"),
@@ -203,41 +217,52 @@ public class AccueilFragment extends Fragment {
                     if (isAdded()) {
                         getActivity().runOnUiThread(() -> {
                             listeEnveloppes.add(0, env);
-                            adapter.notifyItemInserted(0);
+                            rafraichirToutesLesListes();
                             recyclerView.scrollToPosition(0);
-
-                            recalculerCercle();
-                            sauvegarderCache();   // ← persistance
+                            sauvegarderCache();
                             dialog.dismiss();
                         });
                     }
-
                 } catch (Exception e) {
                     Log.e("API", e.getMessage());
                 }
             }).start();
         });
-
         dialog.show();
     }
 
-    //  CERCLE
-
     private void recalculerCercle() {
-        double total = 0;
+        double totalAlloue = 0;
         for (Enveloppe e : listeEnveloppes) {
             try {
-                // getMontant() retourne String, il faut parser
-                total += Double.parseDouble(e.getMontant());
-            } catch (NumberFormatException ex) {
-                Log.w("CALCUL", "Montant invalide : " + e.getMontant());
+
+                String mStr = e.getMontant().replace("$", "").trim();
+                totalAlloue += Double.parseDouble(mStr);
+            } catch (Exception ex) {
+                Log.w("CALCUL", "Erreur montant: " + e.getMontant());
             }
         }
 
-        int pct = soldeTotal > 0 ? (int) ((total / soldeTotal) * 100) : 0;
-        pct = Math.min(pct, 100);
 
-        ObjectAnimator anim = ObjectAnimator.ofInt(diagramme, "progress", 0, pct);
+        double budgetMois = 0;
+        try {
+            String sStr = soldeMois.getText().toString().replace("$", "").trim();
+            if (!sStr.isEmpty()) {
+                budgetMois = Double.parseDouble(sStr);
+            }
+        } catch (Exception ex) {
+            Log.w("CALCUL", "Erreur solde mois");
+        }
+
+        int pct = 0;
+        if (budgetMois > 0) {
+            pct = (int) ((totalAlloue * 100) / budgetMois);
+        }
+
+        if (pct > 100) pct = 100;
+        if (pct < 0) pct = 0;
+
+        ObjectAnimator anim = ObjectAnimator.ofInt(diagramme, "progress", diagramme.getProgress(), pct);
         anim.setDuration(800);
         anim.setInterpolator(new DecelerateInterpolator());
         anim.start();

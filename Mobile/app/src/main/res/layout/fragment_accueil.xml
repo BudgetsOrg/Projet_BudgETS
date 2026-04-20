@@ -5,78 +5,52 @@
     android:layout_height="match_parent">
 
     <LinearLayout
-        tools:context=".AccueilFragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:padding="10dp">
 
-        <!-- En-tête profil -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:orientation="horizontal"
-            android:padding="5dp">
-
-            <ImageView
-                android:id="@+id/ImgProfil"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:src="@drawable/img1"
-                android:background="@drawable/img_ronde"
-                android:scaleType="centerCrop"
-                android:clipToOutline="true" />
-
-        </LinearLayout>
-
-        <!-- Contenu principal — gravity="start" au lieu de "center"
-             pour que le RecyclerView s'affiche correctement après notifyDataSetChanged() -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:padding="10dp"
-            android:gravity="center_horizontal">
+            android:gravity="center">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Mes budgETS"
+                android:text="Mes budgets"
                 android:textSize="32sp"
                 android:textStyle="bold"
                 android:textColor="#000000"
-                android:layout_marginBottom="20dp" />
+                android:layout_marginBottom="20dp"/>
 
-            <!-- Solde du mois -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:padding="10dp"
+                android:padding="20dp"
                 android:gravity="center_vertical">
 
                 <TextView
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:text="Solde pour le mois :"
                     android:textStyle="bold"
                     android:textColor="#000000"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"
+                    android:layout_marginEnd="20dp"/>
 
-                <!-- BUG XML 1 FIX : soldeMois est maintenant lu ET mis à jour
-                     depuis l'API dans AccueilFragment.java (soldeTotalMois en mémoire).
-                     Le champ reste affichable mais n'est plus la source de vérité. -->
                 <EditText
                     android:id="@+id/soldeMois"
-                    android:layout_width="90dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:minHeight="48dp"
                     android:text="0$"
                     android:textColor="#9A000000"
                     android:textSize="16sp"
-                    android:inputType="numberDecimal" />
-
+                    android:inputType="numberDecimal"
+                    android:background="@android:color/transparent"/>
             </LinearLayout>
 
             <TextView
@@ -86,13 +60,11 @@
                 android:background="@drawable/fond_vert"
                 android:padding="10dp"
                 android:textAlignment="center"
-                android:text="Mes enveloppes:"
+                android:text="Mes enveloppes :"
                 android:textColor="#FFFFFF"
                 android:textSize="20sp"
-                android:layout_marginBottom="10dp"
-                android:layout_marginTop="10dp" />
+                android:layout_marginBottom="30dp"/>
 
-            <!-- Message "aucune enveloppe" -->
             <TextView
                 android:id="@+id/message"
                 android:layout_width="wrap_content"
@@ -100,57 +72,49 @@
                 android:text="Vous n'avez aucune enveloppe pour le moment"
                 android:textColor="#9A000000"
                 android:textSize="16sp"
-                android:layout_marginBottom="10dp" />
+                android:layout_marginBottom="20dp"/>
 
-            <!-- BUG XML 2 FIX : minHeight ajouté pour forcer le rendu même quand la liste
-                 est vide, évitant le problème de RecyclerView invisible dans ScrollView -->
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/listeEnveloppes"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                android:nestedScrollingEnabled="false"
-                android:minHeight="1dp" />
+                android:layout_marginBottom="20dp"
+                android:nestedScrollingEnabled="false"/>
 
             <Button
                 android:id="@+id/creerBudjet"
-                android:text="Créer un budjet"
+                android:text="Créer un budget"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:backgroundTint="#FF000000"
-                android:layout_marginTop="10dp"
-                android:textColor="#FFFFFF" />
+                android:layout_marginTop="15dp"
+                android:textColor="#FFFFFF"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Récemment consulté"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="#000000"
+                android:layout_gravity="start"
+                android:layout_marginTop="30dp"
+                android:layout_marginBottom="10dp" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recemmentConsulte"
+                android:layout_width="match_parent"
+                android:layout_height="160dp"
+                android:layout_marginBottom="20dp"
+                android:orientation="horizontal" />
 
         </LinearLayout>
 
-        <!-- Section "Récemment consulté" -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Récemment consulté"
-            android:textStyle="bold"
-            android:textColor="#000000"
-            android:textSize="16sp"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="5dp" />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recemmentConsulte"
-            android:layout_height="wrap_content"
-            android:layout_width="match_parent"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="10dp"
-            android:orientation="horizontal"
-            android:nestedScrollingEnabled="false" />
-
-        <!-- Cercle de progression -->
         <FrameLayout
             android:layout_width="250dp"
             android:layout_height="250dp"
             android:layout_gravity="center"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="20dp">
+            android:layout_marginTop="20dp">
 
             <ProgressBar
                 android:layout_width="match_parent"
@@ -158,7 +122,7 @@
                 android:indeterminate="false"
                 android:progress="100"
                 android:progressDrawable="@drawable/cercle_fond_gris"
-                style="?android:attr/progressBarStyleHorizontal" />
+                style="?android:attr/progressBarStyleHorizontal"/>
 
             <ProgressBar
                 android:id="@+id/diagramme"
@@ -169,7 +133,7 @@
                 android:progress="0"
                 android:rotation="-90"
                 android:progressDrawable="@drawable/progression_cercle"
-                style="?android:attr/progressBarStyleHorizontal" />
+                style="?android:attr/progressBarStyleHorizontal"/>
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -184,11 +148,8 @@
                     android:layout_height="wrap_content"
                     android:text="0%"
                     android:textSize="20sp"
-                    android:textColor="#FF000000" />
-
+                    android:textColor="#FF000000"/>
             </LinearLayout>
         </FrameLayout>
-
     </LinearLayout>
-
 </ScrollView>

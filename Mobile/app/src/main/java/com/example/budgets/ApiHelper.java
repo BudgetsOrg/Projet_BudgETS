@@ -12,7 +12,7 @@ import java.nio.charset.StandardCharsets;
 
 public class ApiHelper {
 
-    private static final String BASE_URL = "https://projetbudgets-backend.up.railway.app";
+    private static final String BASE_URL = "https://budgets-backend.up.railway.app";
     private static final String TAG = "API_HTTP";
 
     public static String get(String endpoint, String token) throws Exception {

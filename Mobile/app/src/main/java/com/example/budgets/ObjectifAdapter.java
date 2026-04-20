@@ -53,7 +53,7 @@ public class ObjectifAdapter extends RecyclerView.Adapter<ObjectifAdapter.MyView
                     .commit();
         });
         if (objectif.isCommun()) {
-            holder.itemView.setAlpha(0.85f); // léger effet visuel
+            holder.itemView.setAlpha(0.85f);
         }
     }
 

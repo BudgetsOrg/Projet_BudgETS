@@ -29,11 +29,10 @@ public class PagePrincipaleActivite extends AppCompatActivity {
     private TextView message;
     private Button creerBudjet;
 
-    // Utilisation d'une ArrayList pour être compatible avec les adapters
     private final ArrayList<Enveloppe> enveloppes = new ArrayList<>();
 
     private EnveloppeAdapter enveloppeAdapter;
-    private EnveloppeRecenteAdapter recenteAdapter; // Pour les carrés verts
+    private EnveloppeRecenteAdapter recenteAdapter;
 
     private double soldeTotal = 0.0;
 
@@ -42,46 +41,50 @@ public class PagePrincipaleActivite extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activite_page_principale);
 
-        // --- Liaison des vues ---
-        imgProfil           = findViewById(R.id.ImgProfil);
-        soldeMois           = findViewById(R.id.soldeMois);
+        imgProfil = findViewById(R.id.ImgProfil);
+        soldeMois = findViewById(R.id.soldeMois);
         listeEnveloppesView = findViewById(R.id.listeEnveloppes);
         recemmentConsulteView = findViewById(R.id.recemmentConsulte);
-        diagramme           = findViewById(R.id.diagramme);
-        pourcentage         = findViewById(R.id.pourcentage);
-        message             = findViewById(R.id.message);
-        creerBudjet         = findViewById(R.id.creerBudjet);
+        diagramme = findViewById(R.id.diagramme);
+        pourcentage = findViewById(R.id.pourcentage);
+        message = findViewById(R.id.message);
+        creerBudjet = findViewById(R.id.creerBudjet);
 
-        // --- 1. CONFIGURATION LISTE VERTICALE ---
-        // On passe bien le Runnable (this::mettreAJourAffichage) car ton adapter l'attend
         enveloppeAdapter = new EnveloppeAdapter(enveloppes);
+        enveloppeAdapter.onChange = () -> {
+            mettreAJourAffichage();
+            if (recenteAdapter != null) {
+                recenteAdapter.notifyDataSetChanged();
+            }
+        };
+
         listeEnveloppesView.setLayoutManager(new LinearLayoutManager(this));
         listeEnveloppesView.setAdapter(enveloppeAdapter);
 
-        // --- 2. CONFIGURATION CARRÉS VERTS (HORIZONTAL) ---
         recenteAdapter = new EnveloppeRecenteAdapter(enveloppes);
-        recemmentConsulteView.setLayoutManager(
-                new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-        );
+        recemmentConsulteView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         recemmentConsulteView.setAdapter(recenteAdapter);
+        recemmentConsulteView.setNestedScrollingEnabled(false);
 
-        // --- Événements ---
         soldeMois.setOnFocusChangeListener((v, hasFocus) -> {
             if (!hasFocus) lireSoldeUtilisateur();
         });
 
         creerBudjet.setOnClickListener(v -> afficherDialogCreerEnveloppe());
 
+        lireSoldeUtilisateur();
         mettreAJourAffichage();
     }
 
     private void afficherDialogCreerEnveloppe() {
+
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
         builder.setTitle("Créer une enveloppe");
 
         LinearLayout layout = new LinearLayout(this);
         layout.setOrientation(LinearLayout.VERTICAL);
-        layout.setPadding(50, 20, 50, 10);
+        layout.setPadding(50,20,50,10);
 
         EditText champNom = new EditText(this);
         champNom.setHint("Nom (ex: Épicerie)");
@@ -94,79 +97,105 @@ public class PagePrincipaleActivite extends AppCompatActivity {
 
         builder.setView(layout);
 
-        builder.setPositiveButton("Créer", (dialog, which) -> {
+        builder.setPositiveButton("Créer",(dialog,which)->{
+
             String nom = champNom.getText().toString().trim();
             String budgetStr = champBudget.getText().toString().trim();
 
-            if (nom.isEmpty() || budgetStr.isEmpty()) {
-                Toast.makeText(this, "Champs vides", Toast.LENGTH_SHORT).show();
+            if(nom.isEmpty() || budgetStr.isEmpty()){
+                Toast.makeText(this,"Champs vides",Toast.LENGTH_SHORT).show();
                 return;
             }
 
-            try {
+            try{
+
                 double budget = Double.parseDouble(budgetStr);
-                Enveloppe nouvelle = new Enveloppe(0, nom, String.valueOf(budget));
 
-                // On ajoute au début de la liste
-                enveloppes.add(0, nouvelle);
+                Enveloppe nouvelle = new Enveloppe(0,nom,String.valueOf(budget));
 
-                // --- 3. NOTIFIER LES DEUX ADAPTERS ---
+                enveloppes.add(0,nouvelle);
+
                 enveloppeAdapter.notifyItemInserted(0);
                 recenteAdapter.notifyItemInserted(0);
 
-                // Scroll au début pour voir l'ajout
                 listeEnveloppesView.scrollToPosition(0);
                 recemmentConsulteView.scrollToPosition(0);
 
                 mettreAJourAffichage();
-            } catch (Exception e) {
-                Toast.makeText(this, "Montant invalide", Toast.LENGTH_SHORT).show();
+
+            }catch(Exception e){
+                Toast.makeText(this,"Montant invalide",Toast.LENGTH_SHORT).show();
             }
+
         });
 
-        builder.setNegativeButton("Annuler", null);
+        builder.setNegativeButton("Annuler",null);
+
         builder.show();
     }
 
     public void mettreAJourAffichage() {
-        // Mise à jour de la visibilité du message
-        if (enveloppes.isEmpty()) {
-            message.setVisibility(View.VISIBLE);
-            diagramme.setProgress(0);
-            pourcentage.setText("0%");
-        } else {
-            message.setVisibility(View.GONE);
 
-            double totalAlloue = 0;
-            for (Enveloppe env : enveloppes) {
-                try {
-                    totalAlloue += Double.parseDouble(env.getMontant());
-                } catch (Exception e) { }
-            }
+        double totalAlloue = 0;
 
-            // Calcul du pourcentage par rapport au solde saisi
-            int pct = (soldeTotal > 0) ? (int) ((totalAlloue / soldeTotal) * 100) : 0;
-            pct = Math.min(pct, 100);
+        for(Enveloppe env : enveloppes){
 
-            diagramme.setProgress(pct);
-            pourcentage.setText(pct + "%");
+            try{
+
+                String montant = env.getMontant()
+                        .replace("$","")
+                        .trim();
+
+                totalAlloue += Double.parseDouble(montant);
+
+            }catch(Exception ignored){}
         }
 
-        // Sécurité : si on arrive ici via une suppression, on prévient l'adapter horizontal
-        if(recenteAdapter != null) recenteAdapter.notifyDataSetChanged();
+        int pct = 0;
+
+        if(soldeTotal > 0){
+            pct = (int)((totalAlloue / soldeTotal) * 100);
+        }
+
+        if(pct > 100) pct = 100;
+        if(pct < 0) pct = 0;
+
+        diagramme.setProgress(pct);
+        pourcentage.setText(pct + "%");
+
+        if(enveloppes.isEmpty()){
+            message.setVisibility(View.VISIBLE);
+        }else{
+            message.setVisibility(View.GONE);
+        }
+
+        if(recenteAdapter != null){
+            recenteAdapter.notifyDataSetChanged();
+        }
     }
 
     private void lireSoldeUtilisateur() {
-        String texte = soldeMois.getText().toString().replace("$", "").trim();
+
+        String texte = soldeMois.getText().toString()
+                .replace("$","")
+                .replace(",","")
+                .trim();
+
         try {
-            if (!texte.isEmpty()) {
+
+            if(!texte.isEmpty()){
+
                 soldeTotal = Double.parseDouble(texte);
-                soldeMois.setText(String.format("%.2f$", soldeTotal));
+
+                soldeMois.setText((int)soldeTotal + "$");
+
                 mettreAJourAffichage();
             }
-        } catch (NumberFormatException e) {
+
+        }catch(Exception e){
+
             soldeTotal = 0;
-            soldeMois.setText("0.00$");
+            soldeMois.setText("0$");
         }
     }
 }

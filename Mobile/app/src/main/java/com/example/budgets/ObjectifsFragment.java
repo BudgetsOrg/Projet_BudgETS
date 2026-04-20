@@ -105,7 +105,7 @@ public class ObjectifsFragment extends Fragment {
         }).start();
     }
 
-    // ─── Popup objectif personnel ────────────────────────────────────────────────
+
     private void ouvrirPopupPerso() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         View v = getLayoutInflater().inflate(R.layout.popup_ajout_objectif, null);
@@ -127,8 +127,7 @@ public class ObjectifsFragment extends Fragment {
         btnCreer.setOnClickListener(view -> {
             String titre = etTitre.getText().toString().trim();
 
-            //  remplacer virgule par point (locale FR/QC)
-            // supprimer les espaces et caractères invisibles
+
             String montantStr = etMontant.getText().toString()
                     .trim()
                     .replace(",", ".")
@@ -180,7 +179,7 @@ public class ObjectifsFragment extends Fragment {
         return 0;
     }
 
-    // ─── Appel API création objectif ────────────────────────────────────────────
+
     private void creerObjectifPersoBackend(String titre, double montant, AlertDialog dialog) {
         if (getActivity() == null) return;
         SharedPreferences prefs = requireActivity().getSharedPreferences("auth", Context.MODE_PRIVATE);
@@ -188,7 +187,7 @@ public class ObjectifsFragment extends Fragment {
 
         new Thread(() -> {
             try {
-                //  utiliser BigDecimal pour éviter la notation scientifique
+
 
                 BigDecimal montantDecimal = BigDecimal.valueOf(montant);
 
@@ -209,7 +208,7 @@ public class ObjectifsFragment extends Fragment {
 
                 JSONObject json = new JSONObject(response);
 
-                //  NestJS retourne message comme TABLEAU en cas d'erreur 400
+
 
                 if (!json.has("id_objectif")) {
                     // C'est une erreur — extraire le message correctement
@@ -219,7 +218,7 @@ public class ObjectifsFragment extends Fragment {
                     return;
                 }
 
-                // Succès
+
                 Objectif objectif = new Objectif(
                         json.optInt("id_objectif", 0),
                         json.optString("titre", titre),

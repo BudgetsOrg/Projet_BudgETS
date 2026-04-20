@@ -1,29 +1,27 @@
 package com.example.budgets;
 
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.Button;
-import android.widget.TextView;
-import android.widget.Toast;
-
+import android.widget.*;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import java.util.ArrayList;
 
 public class PageUneEnveloppe extends AppCompatActivity {
 
-    TextView titre, budget, pourcentage;
-    Button btnAjouter, btnSupprimer;
+    TextView titreTv, budgetTv, pourcentageTv;
+    Button btnAjouter, btnSupprimerEnv;
+    RecyclerView recycler;
 
-    double budgetTotal    = 0;
-    double depensesTotale = 0;
+    ArrayList<Depense> listeDepenses = new ArrayList<>();
+    DepenseAdapter adapter;
 
-    // BUG 1 FIX : l'id n'était jamais récupéré de l'Intent
-    // sans lui, impossible d'appeler le bon endpoint API
+    double budgetInitial = 0;
     int enveloppeId = 0;
 
     @Override
@@ -31,115 +29,101 @@ public class PageUneEnveloppe extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activite_page_une_enveloppe);
 
-        titre        = findViewById(R.id.titreEnveloppe);
-        budget       = findViewById(R.id.budgetMontant);
-        pourcentage  = findViewById(R.id.pourcentageDepense);
-        btnAjouter   = findViewById(R.id.btnAjouterDepense);
-        btnSupprimer = findViewById(R.id.btnSupprimer);
+        titreTv = findViewById(R.id.titreEnveloppe);
+        budgetTv = findViewById(R.id.budgetMontant);
+        pourcentageTv = findViewById(R.id.pourcentageDepense);
+        btnAjouter = findViewById(R.id.btnAjouterDepense);
 
-        // BUG 1 FIX : récupérer l'id transmis par EnveloppeRecenteAdapter
+        recycler = findViewById(R.id.recyclerDepenses);
+
         enveloppeId = getIntent().getIntExtra("id", 0);
-        String titreCourant = getIntent().getStringExtra("titre");
+        budgetInitial = getIntent().getDoubleExtra("budget", 0);
+        titreTv.setText(getIntent().getStringExtra("titre"));
+        budgetTv.setText(budgetInitial + "$");
 
-        // BUG 2 FIX : l'ancien code faisait getStringExtra("budget").replace("$","")
-        // suivi d'un Double.parseDouble() — crash si null ou si le format diffère.
-        // On utilise getDoubleExtra directement (EnveloppeRecenteAdapter passe déjà un double)
-        budgetTotal = getIntent().getDoubleExtra("budget", 0);
+        adapter = new DepenseAdapter(listeDepenses, id -> supprimerDepense(id));
+        recycler.setLayoutManager(new LinearLayoutManager(this));
+        recycler.setAdapter(adapter);
 
-        titre.setText(titreCourant != null ? titreCourant : "");
-        budget.setText(budgetTotal + "$");
+        btnAjouter.setOnClickListener(v -> popupAjouterDepense());
 
-        // BUG 3 FIX : charger les vraies dépenses via l'API
-        // L'ancien code appelait GET /enveloppe (liste complète) sans exploiter la réponse,
-        // et affichait toujours 0% car depensesTotale restait à 0
-        chargerDepenses();
-
-        // BUG 4 FIX : transmettre l'id de l'enveloppe à PageAjouterDepense
-        btnAjouter.setOnClickListener(v -> {
-            Intent intent = new Intent(PageUneEnveloppe.this, PageAjouterDepense.class);
-            intent.putExtra("enveloppeId", enveloppeId);
-            intent.putExtra("titre", titreCourant);
-            startActivity(intent);
-        });
-
-        // BUG 5 FIX : l'ancien code lançait PageSupprimerDepense (classe inexistante)
-        // Le bouton "Supprimer" dans ce layout supprime l'enveloppe entière via l'API
-        btnSupprimer.setOnClickListener(v -> confirmerSuppression(titreCourant));
+        chargerDonnees();
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        // Recharger les dépenses au retour de PageAjouterDepense
-        chargerDepenses();
+    private void popupAjouterDepense() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        final EditText input = new EditText(this);
+        input.setHint("0.00");
+        input.setInputType(android.text.InputType.TYPE_CLASS_NUMBER | android.text.InputType.TYPE_NUMBER_FLAG_DECIMAL);
+        builder.setTitle("Ajouter une dépense").setView(input);
+        builder.setPositiveButton("Ajouter", (d, w) -> envoyerDepense(input.getText().toString()));
+        builder.show();
     }
 
-    private void chargerDepenses() {
-        if (enveloppeId == 0) {
-            mettreAJourPourcentage();
-            return;
-        }
-
-        SharedPreferences prefs = getSharedPreferences("auth", MODE_PRIVATE);
-        String token = prefs.getString("token", "");
-
+    private void envoyerDepense(String m) {
+        if(m.isEmpty()) return;
         new Thread(() -> {
             try {
-                // BUG 3 FIX : bon endpoint — GET /depense/enveloppe/{id}
-                String response = ApiHelper.get("/depense/enveloppe/" + enveloppeId, token);
-                Log.d("API_DEBUG", "Dépenses enveloppe " + enveloppeId + " : " + response);
+                SharedPreferences prefs = getSharedPreferences("auth", MODE_PRIVATE);
+                JSONObject b = new JSONObject();
+                b.put("nom_depense", "Achat");
+                b.put("montant", Double.parseDouble(m));
+                b.put("enveloppeId", enveloppeId);
 
-                JSONArray array = new JSONArray(response);
-                double total = 0;
-
-                for (int i = 0; i < array.length(); i++) {
-                    JSONObject obj = array.getJSONObject(i);
-                    total += obj.optDouble("montant", 0);
-                }
-
-                final double totalFinal = total;
-                runOnUiThread(() -> {
-                    depensesTotale = totalFinal;
-                    mettreAJourPourcentage();
-                });
-
+                ApiHelper.post("/depense", b.toString(), prefs.getString("token", ""));
+                runOnUiThread(this::chargerDonnees);
             } catch (Exception e) {
-                Log.e("API_DEBUG", "Erreur chargement dépenses : " + e.getMessage());
-                runOnUiThread(this::mettreAJourPourcentage);
+                Log.e("DEBUG_APP", e.getMessage());
             }
         }).start();
     }
 
-    private void mettreAJourPourcentage() {
-        int calcul = (budgetTotal > 0) ? (int) ((depensesTotale * 100) / budgetTotal) : 0;
-        pourcentage.setText(Math.min(calcul, 100) + "%");
-    }
-
-    private void confirmerSuppression(String titreCourant) {
-        new AlertDialog.Builder(this)
-                .setTitle("Supprimer l'enveloppe")
-                .setMessage("Voulez-vous vraiment supprimer « " + titreCourant + " » ?\nToutes ses dépenses seront perdues.")
-                .setPositiveButton("Supprimer", (dialog, which) -> supprimerEnveloppe())
-                .setNegativeButton("Annuler", null)
-                .show();
-    }
-
-    private void supprimerEnveloppe() {
-        SharedPreferences prefs = getSharedPreferences("auth", MODE_PRIVATE);
-        String token = prefs.getString("token", "");
-
+    private void chargerDonnees() {
         new Thread(() -> {
             try {
-                ApiHelper.delete("/enveloppe/" + enveloppeId, token);
+                SharedPreferences prefs = getSharedPreferences("auth", MODE_PRIVATE);
+                String res = ApiHelper.get("/depense/enveloppe/" + enveloppeId, prefs.getString("token", ""));
+                JSONArray arr = new JSONArray(res);
+                ArrayList<Depense> temp = new ArrayList<>();
+                double totalDepenses = 0;
+
+                for (int i = 0; i < arr.length(); i++) {
+                    JSONObject o = arr.getJSONObject(i);
+                    double val = o.optDouble("montant", 0);
+                    int idD = o.optInt("id", o.optInt("id_depense", 0));
+                    String nom = o.optString("nom_depense", "Achat");
+
+                    totalDepenses += val;
+                    temp.add(new Depense(idD, nom, val, ""));
+                }
+
+                final double finalTotal = totalDepenses;
                 runOnUiThread(() -> {
-                    Toast.makeText(this, "Enveloppe supprimée", Toast.LENGTH_SHORT).show();
-                    finish();
+                    listeDepenses.clear();
+                    listeDepenses.addAll(temp);
+                    adapter.notifyDataSetChanged();
+
+                    if (budgetInitial > 0) {
+                        int pct = (int) ((finalTotal * 100) / budgetInitial);
+                        pourcentageTv.setText(pct + "%");
+                    } else {
+                        pourcentageTv.setText("0%");
+                    }
                 });
             } catch (Exception e) {
-                Log.e("API_DEBUG", "Erreur suppression : " + e.getMessage());
-                runOnUiThread(() ->
-                        Toast.makeText(this, "Erreur lors de la suppression", Toast.LENGTH_SHORT).show()
-                );
+                Log.e("DEBUG_APP", e.getMessage());
+            }
+        }).start();
+    }
+
+    private void supprimerDepense(int id) {
+        new Thread(() -> {
+            try {
+                SharedPreferences prefs = getSharedPreferences("auth", MODE_PRIVATE);
+                ApiHelper.delete("/depense/" + id, prefs.getString("token", ""));
+                runOnUiThread(this::chargerDonnees);
+            } catch (Exception e) {
+                Log.e("DEBUG_APP", e.getMessage());
             }
         }).start();
     }

@@ -65,7 +65,7 @@
             android:orientation="horizontal">
 
             <TextView
-                android:layout_width="0dp"
+                android:layout_width="114dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="Depense"
@@ -88,17 +88,6 @@
                 android:layout_marginHorizontal="15dp"
                 android:background="#D3D3D3" />
 
-            <Button
-                android:id="@+id/btnSupprimer"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:backgroundTint="#ED1C1C"
-                android:clickable="true"
-                android:focusable="true"
-                android:text="Supprimer"
-                android:textColor="#F8F6F6"
-                android:textSize="18sp"
-                android:textStyle="bold" />
         </LinearLayout>
 
         <LinearLayout

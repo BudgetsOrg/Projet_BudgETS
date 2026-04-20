@@ -98,7 +98,7 @@ export class MailService {
   }
 }
 
-@Cron('0 14 * * *') // TOus les jours @ 09:00
+/*@Cron('0 14 * * *') // TOus les jours @ 09:00
 async sendDailyReminder() {
     const allowedDomains = ['gmail.com', 'outlook.com', 'hotmail.com', 'yahoo.com', 'live.com'];
     const users = await this.userRepository.find();
@@ -142,6 +142,6 @@ async sendDailyReminder() {
             console.error(`FAILED: ${user.adresse_email}`, error);
         }
     }
-}
+}*/
 
 }

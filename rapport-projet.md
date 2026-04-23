@@ -14,7 +14,8 @@ Mobile développé avec: Android Studio (Developpé en Java)
 
 ## Choix des deux interfaces et les technologies/framework/librairies utilisés
 Web développé avec: HTML, Tailwind et css (modifié on a utilisé les deux en fin de compte), REACT , NestJs(TypeORM), REST API, cloudinary pour les images (ajouté)
-Mobile développé avec: Android Studio (Java, XML)
+Mobile développé avec: Android Studio (Java, XML), 
+Ajouté: OkHttp avec JSON pour communiquer avec le backend
 
 ## Choix de technologies/framework/librairies pour l'API REST
 Backend développé avec: NestJs(TypeORM) en Typescript
@@ -24,6 +25,10 @@ Brevo API pour envoyé les courriels transactionnels (ajouté)
 
 ## Diagramme d'architecture 
 <img width="1728" height="2304" alt="React_web_app_Vite_tailwind_css" src="https://github.com/user-attachments/assets/c194e91d-8328-4b40-bf8f-1bceb4746142" />
+
+## Revu des tâches 
+84 tâches total
+<img width="1004" height="294" alt="image" src="https://github.com/user-attachments/assets/df363cf2-a037-44f3-b83d-49a133e05dc2" />
 
 
 ## Amélioration possible 

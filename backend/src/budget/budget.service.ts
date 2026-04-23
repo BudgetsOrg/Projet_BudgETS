@@ -24,7 +24,7 @@ export class BudgetService{
         const budget = await this.budgetRepository.findOne({
             where: { user: { id_user: userId } }, //comme un JOIN entre budget et user pour trouver le budget associé à l'id du user
             relations: ['enveloppes'],
-            order: { id_budget: 'DESC' }, // retourne le budget le plus courant pour l'utilisateur.
+            order: { date_creation: 'DESC' }, // retourne le budget le plus courant pour l'utilisateur.
         });
 
         if (!budget) { //pour une reponse 404
@@ -41,7 +41,7 @@ export class BudgetService{
         return this.budgetRepository.find({
             where: { user: { id_user: userId } },
             relations: ['enveloppes'],
-            order: { id_budget: 'DESC' },
+            order: { date_creation: 'DESC' },
         });
     }      
 

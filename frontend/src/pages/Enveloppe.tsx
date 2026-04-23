@@ -1,5 +1,5 @@
 // Mohamed
-import { useState, useEffect } from "react"; // npm install
+import { useState, useEffect, useRef } from "react"; // npm install
 import type { Depense } from "../interfaces"; // ton interface est rendu dans la page pour ceux-ci
 import { GraphiqueEnveloppe } from "../components/graphiques/graphiqueEnveloppe.tsx"; // le graphique de la page enveloppe
 import { getToken } from "../../public/token.ts";
@@ -22,6 +22,9 @@ function Enveloppe() {
   const titre = location.state?.titre ?? "";
   const montantEnveloppe = Number(location.state?.montant) || 0;
   const imageInitiale = location.state?.image ?? "";
+  const [imageUrl, setImageUrl] = useState<string | null>(
+    location.state?.imageUrl ?? null,
+  );
 
   const [editDataSauvegarde, setEditDataSauvegarde] = useState({
     titre: "",
@@ -40,6 +43,9 @@ function Enveloppe() {
   const [modalOuvert, setModalOuvert] = useState(false);
   const [modeEdition, setModeEdition] = useState(false);
   const [indexEdition, setIndexEdition] = useState<number | null>(null);
+  const [editImageUrl, setEditImageUrl] = useState<string | null>(imageUrl);
+  const editImageRef = useRef<HTMLInputElement>(null);
+  const inputImageRef = useRef<HTMLInputElement>(null);
   const [nouvelleDepense, setNouvelleDepense] = useState<Depense>({
     id_depense: 0,
     nom_depense: "",
@@ -49,6 +55,15 @@ function Enveloppe() {
     enveloppeId: id_enveloppe,
     categorieId: 0,
   });
+
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = () => setImageUrl(reader.result as string);
+      reader.readAsDataURL(file);
+    }
+  };
 
   const {
     previewUrl: previewImageEnveloppe,

@@ -1,8 +1,12 @@
 import { useEffect, useState } from "react";
-import { getEnveloppe } from "../../../api/EnveloppeApi";
+import { getBudgetById, getLastBudget } from "../../../api/BudgetApi";
 import { PieChart } from "react-minimal-pie-chart";
 import type { Data } from "../../../interfaces";
 import type { Enveloppe } from "../../../interfaces";
+import {
+  getSelectedBudgetId,
+  setSelectedBudgetId,
+} from "../../../utils/budgetSelection";
 
 interface PieChartProps {
   refreshKey: number;
@@ -15,13 +19,33 @@ export function SummaryPieChart({ refreshKey }: PieChartProps) {
     loadEnveloppes();
   }, [refreshKey]);
 
-  // the hook is not used.
+  const normalizeBudget = (data: any): any | null => {
+    if (!data) return null;
+    if (Array.isArray(data)) {
+      if (data.length === 0) return null;
+      const sorted = [...data].sort((a: any, b: any) => {
+        const da = new Date(a?.date_creation ?? 0).getTime();
+        const db = new Date(b?.date_creation ?? 0).getTime();
+        return db - da;
+      });
+      return sorted[0];
+    }
+    return data;
+  };
+
   const loadEnveloppes = async () => {
     try {
-      const latestEnveloppes = await getEnveloppe();
-      setEnveloppes(latestEnveloppes);
+      const selectedId = getSelectedBudgetId();
+      let budget: any | null = null;
+      if (selectedId) budget = normalizeBudget(await getBudgetById(selectedId));
+      if (!budget) {
+        budget = normalizeBudget(await getLastBudget());
+        setSelectedBudgetId(budget?.id_budget);
+      }
+      setEnveloppes(budget?.enveloppes ?? []);
     } catch (error) {
       console.error("Erreur de chargement des enveloppes :", error);
+      setEnveloppes([]);
     } finally {
       setLoading(false);
     }
@@ -37,7 +61,7 @@ export function SummaryPieChart({ refreshKey }: PieChartProps) {
   }));
 
   if (dataTab.length === 0) {
-    return <div>Aucun graphique</div>;
+    return <div className="text-gray-500 text-center">Aucun graphique</div>;
   }
 
   return (

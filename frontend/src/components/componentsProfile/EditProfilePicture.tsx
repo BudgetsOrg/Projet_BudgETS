@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import addPhotoIcon from "../../img/add_photo_alternate_outlined.svg";
 import { useCloudinaryImage } from "../../hooks/useCloudinaryImage";
 import { updateUtilisateurImage } from "../../api/UtilisateurApi";
@@ -13,6 +13,7 @@ export function EditProfilePicture({
   onImageUpdated,
 }: EditProfilePictureProps) {
   const [showPopup, setShowPopup] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   const { previewUrl, file, uploading, error, onFileChange, upload, reset } =
     useCloudinaryImage({ initialUrl: profilePicture, folder: "profiles" });
@@ -79,11 +80,27 @@ export function EditProfilePicture({
           />
 
           <input
+            ref={fileInputRef}
             type="file"
             accept="image/*"
             onChange={onFileChange}
-            className="mb-4"
+            className="hidden"
+            disabled={uploading}
           />
+
+          <div className="flex flex-col items-center gap-2 mb-4">
+            <button
+              type="button"
+              className="confirm-button py-2 px-4 rounded-lg disabled:opacity-50"
+              onClick={() => fileInputRef.current?.click()}
+              disabled={uploading}
+            >
+              Choisir une image
+            </button>
+            <p className="text-sm text-gray-600">
+              {file ? file.name : "Aucun fichier n’a été sélectionné"}
+            </p>
+          </div>
 
           {error && <p className="text-red-500 text-sm mb-2">{error}</p>}
 

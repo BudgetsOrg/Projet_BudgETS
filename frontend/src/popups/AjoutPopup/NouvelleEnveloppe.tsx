@@ -74,7 +74,7 @@ export default function NouvelleEnveloppe({
           type="text"
           id="titre"
           name="titre"
-          className="border border-gray-300 rounded-lg w-full"
+          className="border border-gray-300 rounded-lg w-full p-2"
           value={titre}
           onChange={(e) => setTitre(e.target.value)}
         />

@@ -9,7 +9,7 @@ export default function HistoriqueBudget() {
       <div>
         <button
           onClick={() => setShowPopup(true)}
-          className="confirm-button bg-gradient-to-r from-[var(--color-secondary)] to-[var(--color-primary)] text-white font-bold py-2 px-4 rounded-lg"
+          className="confirm-button bg-gradient-to-r from-[var(--color-secondary)] to-[var(--color-primary)] text-white font-bold py-2 px-4 rounded-lg mt-2"
         >
           Consultez l'historique de vos budgets
         </button>

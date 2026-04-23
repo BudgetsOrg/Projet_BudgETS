@@ -13,13 +13,17 @@ Web développé avec: HTML, CSS, REST API, REACT (Javascript)
 Mobile développé avec: Android Studio (Developpé en Java)
 
 ## Choix des deux interfaces et les technologies/framework/librairies utilisés
-Web développé avec: HTML, Tailwind et css , REACT , NestJs(TypeORM), REST API, cloudinary pour les images
+Web développé avec: HTML, Tailwind et css (modifié on a utilisé les deux en fin de compte), REACT , NestJs(TypeORM), REST API, cloudinary pour les images (ajouté)
 Mobile développé avec: Android Studio (Java, XML)
 
 ## Choix de technologies/framework/librairies pour l'API REST
 Backend développé avec: NestJs(TypeORM) en Typescript
-Librairies utilisés: Cron + Swagger pour les courriels programmés et documentation API
-DB MYSQL hôté sur Railway
-Brevo API pour envoyé les courriels transactionnels
+Librairies utilisés: Cron + Swagger pour les courriels programmés et documentation API (ajouté)
+DB MYSQL hôté sur Railway (ajouté)
+Brevo API pour envoyé les courriels transactionnels (ajouté)
 
+## Amélioration possible 
+Nous aurions pu ne pas séparer nos tâches aussi drastiquement backend/frontend. Quand on a implémenté la liaison du backend avec le frontend, on a découvert des erreurs au backend. On a eu besoin de consulter les gens qui ont travaillé sur le backend, jour et nuit, pour tester, et comprendre comment les routes sont construites. Pour nous faciliter la tâche, les coéquipiers de backend et de frontend web auraient pu travailler sur les deux parties et ça aurait sauvé beaucoup de temps de communication.  
 
+## Prochain élément à implémenter 
+Nous aurions pu ajouter un agent IA comme plusieurs applications bancaires. Le but principal de celui-ci serait de convertir les dépenses de l'utilisateur à partir d'une prise d'écran de sa banque à des ajouts automatiques dans nos tables. On pourrait créer des enveloppes pluis appropriés et ce serait moins d'efforts pour l'utilisateur que d'entrer toutes ses dépenses une par une. 

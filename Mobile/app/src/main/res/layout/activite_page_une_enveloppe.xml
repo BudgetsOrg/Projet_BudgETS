@@ -73,7 +73,7 @@
             android:orientation="horizontal">
 
             <TextView
-                android:layout_width="0dp"
+                android:layout_width="155dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="Depenses"
@@ -87,6 +87,16 @@
                 android:layout_height="45dp"
                 android:backgroundTint="#AADD66"
                 android:text="Ajouter +"
+                android:textAllCaps="false"
+                android:textColor="#FFFFFF" />
+
+            <Button
+                android:id="@+id/btnRetour"
+                android:layout_width="wrap_content"
+                android:layout_height="45dp"
+                android:backgroundTint="#000000"
+                android:text="Retour"
+                android:layout_marginLeft="10dp"
                 android:textAllCaps="false"
                 android:textColor="#FFFFFF" />
         </LinearLayout>

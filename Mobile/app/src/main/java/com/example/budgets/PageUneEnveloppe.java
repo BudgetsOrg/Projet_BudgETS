@@ -1,5 +1,6 @@
 package com.example.budgets;
 
+import android.annotation.SuppressLint;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
@@ -20,6 +21,7 @@ public class PageUneEnveloppe extends AppCompatActivity {
     ProgressBar barre;
     Button btnAjouter;
     RecyclerView recycler;
+    Button retour;
 
     ArrayList<Depense> listeDepenses = new ArrayList<>();
     DepenseAdapter adapter;
@@ -27,6 +29,7 @@ public class PageUneEnveloppe extends AppCompatActivity {
     double budgetInitial = 0;
     int enveloppeId = 0;
 
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,6 +41,7 @@ public class PageUneEnveloppe extends AppCompatActivity {
         barre = findViewById(R.id.barreEnveloppe);
         btnAjouter = findViewById(R.id.btnAjouterDepense);
         recycler = findViewById(R.id.recyclerDepenses);
+        retour = findViewById(R.id.btnRetour);
 
         enveloppeId = getIntent().getIntExtra("id", 0);
         budgetInitial = getIntent().getDoubleExtra("budget", 0);
@@ -47,6 +51,9 @@ public class PageUneEnveloppe extends AppCompatActivity {
         adapter = new DepenseAdapter(listeDepenses, id -> supprimerDepense(id));
         recycler.setLayoutManager(new LinearLayoutManager(this));
         recycler.setAdapter(adapter);
+
+        // Action du bouton retour
+        retour.setOnClickListener(v -> finish());
 
         btnAjouter.setOnClickListener(v -> popupAjouterDepense());
 
@@ -120,15 +127,12 @@ public class PageUneEnveloppe extends AppCompatActivity {
         pourcentageTv.setText(progress + "%");
 
         if (progress >= 80) {
-            // rouge = presque plus de budget
             barre.setProgressTintList(ColorStateList.valueOf(Color.parseColor("#E32424")));
         }
         else if (progress >= 50) {
-            // orange
             barre.setProgressTintList(ColorStateList.valueOf(Color.parseColor("#EE9300")));
         }
         else {
-            //vert
             barre.setProgressTintList(ColorStateList.valueOf(Color.parseColor("#AADD66")));
         }
     }

@@ -47,12 +47,10 @@ export class AuthService {
       return this.signToken(user.id_user, user.adresse_email);
 
     } catch (error:any) {
-      const BdError = error as { code: string };
-      if (BdError.code === 'ER_DUP_ENTRY') {
+      if (error.code === 'ER_DUP_ENTRY') {
         throw new ForbiddenException('Identifiants déjà utilisés');
       }
       throw error;
-      
     }
   }
 /**

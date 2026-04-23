@@ -40,19 +40,27 @@
                 android:id="@+id/budgetMontant"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="150$"
+                android:text="0$"
                 android:textColor="#000000"
                 android:textSize="24sp"
                 android:textStyle="bold"
                 android:layout_marginStart="10dp" />
         </LinearLayout>
 
+        <ProgressBar
+            android:id="@+id/barreEnveloppe"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="15dp"
+            android:layout_marginTop="20dp"
+            android:progressDrawable="@drawable/barre_obj" />
+
         <TextView
             android:id="@+id/pourcentageDepense"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end"
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="5dp"
             android:text="0%"
             android:textColor="#9E9E9E"
             android:textSize="18sp" />
@@ -65,10 +73,10 @@
             android:orientation="horizontal">
 
             <TextView
-                android:layout_width="114dp"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Depense"
+                android:text="Depenses"
                 android:textColor="#9E9E9E"
                 android:textSize="22sp"
                 android:textStyle="bold" />
@@ -81,13 +89,6 @@
                 android:text="Ajouter +"
                 android:textAllCaps="false"
                 android:textColor="#FFFFFF" />
-
-            <View
-                android:layout_width="1dp"
-                android:layout_height="25dp"
-                android:layout_marginHorizontal="15dp"
-                android:background="#D3D3D3" />
-
         </LinearLayout>
 
         <LinearLayout

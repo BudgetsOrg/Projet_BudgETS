@@ -127,11 +127,11 @@ public class PageObjectifFragment extends Fragment {
             montantCible.setText(cible + "$");
 
             if (progress >= 80)
-                barre.setProgressTintList(ColorStateList.valueOf(Color.RED));
+                barre.setProgressTintList(ColorStateList.valueOf(Color.parseColor("#AADD66")));//vert
             else if (progress >= 50)
-                barre.setProgressTintList(ColorStateList.valueOf(Color.rgb(255, 165, 0)));
+                barre.setProgressTintList(ColorStateList.valueOf(Color.parseColor("#EE9300")));//orange
             else
-                barre.setProgressTintList(ColorStateList.valueOf(Color.GREEN));
+                barre.setProgressTintList(ColorStateList.valueOf(Color.parseColor("#E32424")));//rouge
 
         } catch (Exception e) {
             Log.e("UI_ERROR", "Format invalide");

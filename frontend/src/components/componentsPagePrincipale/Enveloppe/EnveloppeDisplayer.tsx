@@ -22,6 +22,7 @@ export function EnveloppesBudgetaires({
   // getterSetter Enveloppes, même choses pour loading
   const [enveloppes, setEnveloppes] = useState<Enveloppe[]>([]);
   const [loading, setLoading] = useState(true);
+  const [singulier, setSingulier] = useState(true);
 
   // useRef() ne prévoque pas de refresh, utilisé pour le premier chargement
   const hasLoadedOnceRef = useRef(false);
@@ -83,7 +84,9 @@ export function EnveloppesBudgetaires({
   return (
     <div className="custom-scrollbar overflow-x-scroll">
       <h6 className=" text-md p-4 text-align-center text-black">
-        {enveloppes.length} enveloppes
+        {enveloppes.length === 1
+          ? "1 enveloppe"
+          : `${enveloppes.length} enveloppes`}
       </h6>
       <div className="flex gap-4 pb-4">
         {enveloppes.map((env) => (

@@ -179,9 +179,9 @@ function Enveloppe() {
 
   const couleurBarre = (pct: number): string => {
     // Interpolation jaune (#e6b800) → orange (#e8442a)
-    const r = Math.round(230 + (232 - 230) * (pct / 100));
-    const g = Math.round(184 + (68 - 184) * (pct / 100));
-    const b = Math.round(0 + (42 - 0) * (pct / 100));
+    const r = Math.round(170 + (227 - 170) * (pct / 100));
+    const g = Math.round(221 + (36 - 221) * (pct / 100));
+    const b = Math.round(102 + (36 - 102) * (pct / 100));
     return `rgb(${r}, ${g}, ${b})`;
   };
   // Lorsqu'on relie le backend au frontend on utilisera la version en bas.

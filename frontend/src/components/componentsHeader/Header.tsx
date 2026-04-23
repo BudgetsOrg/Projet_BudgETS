@@ -2,7 +2,7 @@
 import { getUtilisateur } from "../../api/UtilisateurApi";
 import { useState, useEffect } from "react";
 import { getToken, viderSessionStorage } from "../../../public/token";
-import logo from "../../img/logo.png";
+
 import DropDownProfile from "./DropDownProfile";
 import type { Utilisateur } from "../../interfaces";
 
@@ -40,7 +40,7 @@ function Header() {
           <ul>
             <li className="sous_sujet">
               <img
-                src={logo}
+                src="../../../public/favicon.io"
                 className="image_header"
                 onClick={redirigerPageAcceuil}
               />

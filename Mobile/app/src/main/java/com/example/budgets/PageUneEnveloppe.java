@@ -1,6 +1,8 @@
 package com.example.budgets;
 
 import android.content.SharedPreferences;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.*;
@@ -15,7 +17,8 @@ import java.util.ArrayList;
 public class PageUneEnveloppe extends AppCompatActivity {
 
     TextView titreTv, budgetTv, pourcentageTv;
-    Button btnAjouter, btnSupprimerEnv;
+    ProgressBar barre;
+    Button btnAjouter;
     RecyclerView recycler;
 
     ArrayList<Depense> listeDepenses = new ArrayList<>();
@@ -32,8 +35,8 @@ public class PageUneEnveloppe extends AppCompatActivity {
         titreTv = findViewById(R.id.titreEnveloppe);
         budgetTv = findViewById(R.id.budgetMontant);
         pourcentageTv = findViewById(R.id.pourcentageDepense);
+        barre = findViewById(R.id.barreEnveloppe);
         btnAjouter = findViewById(R.id.btnAjouterDepense);
-
         recycler = findViewById(R.id.recyclerDepenses);
 
         enveloppeId = getIntent().getIntExtra("id", 0);
@@ -102,18 +105,32 @@ public class PageUneEnveloppe extends AppCompatActivity {
                     listeDepenses.clear();
                     listeDepenses.addAll(temp);
                     adapter.notifyDataSetChanged();
-
-                    if (budgetInitial > 0) {
-                        int pct = (int) ((finalTotal * 100) / budgetInitial);
-                        pourcentageTv.setText(pct + "%");
-                    } else {
-                        pourcentageTv.setText("0%");
-                    }
+                    rafraichirBarre(finalTotal);
                 });
             } catch (Exception e) {
                 Log.e("DEBUG_APP", e.getMessage());
             }
         }).start();
+    }
+
+    private void rafraichirBarre(double totalActuel) {
+        int progress = (budgetInitial > 0) ? (int) ((totalActuel / budgetInitial) * 100) : 0;
+
+        barre.setProgress(Math.min(progress, 100));
+        pourcentageTv.setText(progress + "%");
+
+        if (progress >= 80) {
+            // rouge = presque plus de budget
+            barre.setProgressTintList(ColorStateList.valueOf(Color.parseColor("#E32424")));
+        }
+        else if (progress >= 50) {
+            // orange
+            barre.setProgressTintList(ColorStateList.valueOf(Color.parseColor("#EE9300")));
+        }
+        else {
+            //vert
+            barre.setProgressTintList(ColorStateList.valueOf(Color.parseColor("#AADD66")));
+        }
     }
 
     private void supprimerDepense(int id) {

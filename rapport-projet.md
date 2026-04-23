@@ -22,6 +22,10 @@ Librairies utilisés: Cron + Swagger pour les courriels programmés et documenta
 DB MYSQL hôté sur Railway (ajouté)
 Brevo API pour envoyé les courriels transactionnels (ajouté)
 
+## Diagramme d'architecture 
+<img width="1728" height="2304" alt="React_web_app_Vite_tailwind_css" src="https://github.com/user-attachments/assets/c194e91d-8328-4b40-bf8f-1bceb4746142" />
+
+
 ## Amélioration possible 
 Nous aurions pu ne pas séparer nos tâches aussi drastiquement backend/frontend. Quand on a implémenté la liaison du backend avec le frontend, on a découvert des erreurs au backend. On a eu besoin de consulter les gens qui ont travaillé sur le backend, jour et nuit, pour tester, et comprendre comment les routes sont construites. Pour nous faciliter la tâche, les coéquipiers de backend et de frontend web auraient pu travailler sur les deux parties et ça aurait sauvé beaucoup de temps de communication.  
 

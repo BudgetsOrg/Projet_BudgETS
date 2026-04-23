@@ -1,5 +1,5 @@
+@import url("https://googleapis.com");
 @import "../style/pages/style_tailwind.css";
-
 @import "./pages/Inscription.css";
 @import "./pages/Connexion.css";
 @import "./pages/Enveloppe.css";

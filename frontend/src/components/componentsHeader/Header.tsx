@@ -49,18 +49,15 @@ function Header() {
               <li className="sous_sujet">
                 <a href="/PagePrincipale">Page Principale</a>
               </li>
-
-            ) : null} {/* Lorsqu'on aura fini de faire la page catégorie et de relier au backend on rendra visible cette partie.
+            ) : null}{" "}
+            {/* Lorsqu'on aura fini de faire la page catégorie et de relier au backend on rendra visible cette partie.
             {estConnecte ? <li className="sous_sujet">
               <a href="/CategoriesDeDepense">Catégories de dépense</a>
             </li> : null}
             */}
             <li className="sous_sujet">
-              <a href="/EducationFinanciere">Page Éducation Financière</a>
+              <a href="/EducationFinanciere">Éducation financière</a>
             </li>
-
-
-
           </ul>
         </li>
 

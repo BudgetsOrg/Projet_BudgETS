@@ -3,7 +3,7 @@ import { useObjectif } from "../../../hooks/useObjectifs";
 import { ObjectifRow } from "./ObjectifRow";
 import NouvelObjectif from "../../../popups/AjoutPopup/NouvelObjectif";
 
-export default function ObjectifList() {
+export default function ObjectifList({ readOnly }: { readOnly?: boolean }) {
   // state pour montrer le popup d'un nouvelObjectif
   const [showNouveauObjectifPopup, setShowNouveauObjectifPopup] =
     useState(false);
@@ -25,16 +25,18 @@ export default function ObjectifList() {
     <div>
       <div className="flex flex-row gap-4">
         <h1 className="text-4xl font-bold p-4">Mes objectifs</h1>
-        <button
-          className="cursor-pointer bg-black hover:bg-gray-800 text-white font-bold py-2 px-4 rounded-lg h-10 self-center"
-          onClick={() => setShowNouveauObjectifPopup(true)}
-        >
-          Ajouter un objectif
-        </button>
+        {!readOnly && (
+          <button
+            className="cursor-pointer bg-black hover:bg-gray-800 text-white font-bold py-2 px-4 rounded-lg h-10 self-center"
+            onClick={() => setShowNouveauObjectifPopup(true)}
+          >
+            Ajouter un objectif
+          </button>
+        )}
       </div>
       <div className="space-y-4">
         {objectifs.length === 0 ? (
-          <p className="text-gray-500 text-center">
+          <p className="text-gray-500 text-start">
             Aucun objectif trouvé. Ajoutez-en un !
           </p>
         ) : (
@@ -44,20 +46,23 @@ export default function ObjectifList() {
               <ObjectifRow
                 onRefresh={handleObjectifChange}
                 objectif={objectif}
+                readOnly={readOnly}
               />
             </div>
           ))
         )}
       </div>
       <div className="absolute ">
-        <NouvelObjectif
-          // showPopup est associé au bool du state showNouveauObjectif
-          showPopup={showNouveauObjectifPopup}
-          // close quand on set à false
-          closePopup={() => setShowNouveauObjectifPopup(false)}
-          // une fois que le nouvel objectif est ajouté, on refresh la liste pour que le nouvel objectif s'affiche
-          onSaved={handleObjectifChange}
-        ></NouvelObjectif>
+        {!readOnly && (
+          <NouvelObjectif
+            // showPopup est associé au bool du state showNouveauObjectif
+            showPopup={showNouveauObjectifPopup}
+            // close quand on set à false
+            closePopup={() => setShowNouveauObjectifPopup(false)}
+            // une fois que le nouvel objectif est ajouté, on refresh la liste pour que le nouvel objectif s'affiche
+            onSaved={handleObjectifChange}
+          ></NouvelObjectif>
+        )}
       </div>
     </div>
   );

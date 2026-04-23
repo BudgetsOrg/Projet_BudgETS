@@ -1,9 +1,10 @@
 // Mohamed
 import { useState } from "react";
-import { getToken, setToken } from "../../public/token";
+import { setToken } from "../../public/token";
 import { postConnexion } from "../api/UtilisateurApi";
 import img_retour from "../img/arrow_left_alt.png";
 import img_plante from "../img/image_inscription_plante.png";
+import { clearSelectedBudgetId } from "../utils/budgetSelection";
 
 function Connexion() {
   const [erreur, setErreur] = useState("");
@@ -29,6 +30,8 @@ function Connexion() {
       const data = await reponse.json();
       console.log("Utilisateur connecte");
       setToken(data.access_token);
+      // Ensure PagePrincipale starts on latest budget after a new login
+      clearSelectedBudgetId();
     } catch (error) {
       setErreur("L'email ou le mot de passe est incorrect.");
       return;

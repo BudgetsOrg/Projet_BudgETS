@@ -20,6 +20,11 @@ export function TableInfoProfil({
   const [showSuppressionPopup, setShowSuppressionPopup] = useState(false);
   const navigate = useNavigate();
 
+  const inputClassName = (isEditing: boolean) =>
+    isEditing
+      ? "min-w-0 w-full max-w-full border rounded px-2 py-1"
+      : "min-w-0 w-full max-w-full border-none outline-none bg-transparent p-0";
+
   const formatDateForInput = (date: string | undefined | null) => {
     if (!date) return "";
 
@@ -86,9 +91,7 @@ export function TableInfoProfil({
                 value={user.nom}
                 onChange={(e) => changementUtilisateur("nom", e.target.value)}
                 readOnly={!editMode}
-                className={
-                  !editMode ? "border-none outline-none" : "border rounded px-1"
-                }
+                className={inputClassName(editMode)}
               />
             </td>
             <td className="font-semibold p-4">
@@ -102,9 +105,7 @@ export function TableInfoProfil({
                   changementUtilisateur("prenom", e.target.value)
                 }
                 readOnly={!editMode}
-                className={
-                  !editMode ? "border-none outline-none" : "border rounded px-1"
-                }
+                className={inputClassName(editMode)}
               />
             </td>
           </tr>
@@ -121,9 +122,7 @@ export function TableInfoProfil({
                   changementUtilisateur("date_naissance", e.target.value)
                 }
                 readOnly={!editMode}
-                className={
-                  !editMode ? "border-none outline-none" : "border rounded px-1"
-                }
+                className={inputClassName(editMode)}
               />
             </td>
           </tr>
@@ -145,9 +144,7 @@ export function TableInfoProfil({
                   changementUtilisateur("telephone", e.target.value)
                 }
                 readOnly={!editMode}
-                className={
-                  !editMode ? "border-none outline-none" : "border rounded px-1"
-                }
+                className={inputClassName(editMode)}
               />
             </td>
           </tr>

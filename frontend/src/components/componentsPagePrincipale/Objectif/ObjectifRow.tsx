@@ -5,11 +5,19 @@ import { deleteObjectif } from "../../../api/ObjectifApi";
 interface ObjectifRowProps {
   objectif: Objectif;
   onRefresh: () => void;
+  readOnly?: boolean;
 }
-export function ObjectifRow({ onRefresh, objectif }: ObjectifRowProps) {
+export function ObjectifRow({
+  onRefresh,
+  objectif,
+  readOnly,
+}: ObjectifRowProps) {
   const navigate = useNavigate();
 
+  const hasImage = Boolean(objectif.image?.trim());
+
   const nbUtilisateurs = objectif.users ? objectif.users.length - 1 : 0;
+
   const handleClick = () => {
     navigate(`/PageObjectifs/${objectif.id_objectif}`, {
       state: {
@@ -41,17 +49,31 @@ export function ObjectifRow({ onRefresh, objectif }: ObjectifRowProps) {
       id={String(objectif.id_objectif)}
       onClick={handleClick}
     >
-      <img
-        className="w-full h-full object-cover rounded-xl"
-        src={objectif.image}
-        alt={objectif.titre}
-      />
-      <div className="absolute inset-0 bg-gradient-to-br from-black/70 via-black/30 to-transparent"></div>
-      <h3 className="absolute top-3 left-4 text-white text-lg font-bold">
-        {objectif.titre}
-      </h3>
+      {hasImage ? (
+        <>
+          <img
+            className="w-full h-full object-cover rounded-xl"
+            src={objectif.image}
+            alt={objectif.titre}
+          />
+          <div className="absolute inset-0 bg-gradient-to-br from-black/70 via-black/30 to-transparent" />
+          <h3 className="absolute top-3 left-4 text-white text-lg font-bold">
+            {objectif.titre}
+          </h3>
+        </>
+      ) : (
+        <>
+          <div className="w-full h-full bg-[#ECEABE]" />
+          <h3 className="absolute top-3 left-4 text-black text-lg font-bold">
+            {objectif.titre}
+          </h3>
+        </>
+      )}
       <button
-        className="absolute delete-button bottom-2 rounded-lg right-2 hover:bg-red-600 width-20 h-8"
+        className={`absolute delete-button bottom-2 rounded-lg right-2 width-20 h-8 ${
+          readOnly ? "opacity-50 cursor-not-allowed" : "hover:bg-red-600"
+        }`}
+        disabled={!!readOnly}
         onClick={(e) => {
           e.stopPropagation(); // pour pas cliquer sur objectif quand clique sur quitter
           handleDelete();

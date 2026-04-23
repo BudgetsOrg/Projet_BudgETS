@@ -65,7 +65,7 @@ export default function NouvelObjectif({
   if (!showPopup) return null;
 
   return (
-    <div className="fixed top-40 h-120 w-100 left-20 bg-white bg-opacity-2 flex-col items-center justify-center rounded-lg shadow-lg">
+    <div className="fixed top-40 h-130 w-100 left-20 bg-white bg-opacity-2 flex-col items-center justify-center rounded-lg shadow-lg">
       <div className="w-full bg-[var(--color-primary)] px-6 py-4 rounded-lg text-center">
         <h4 className="font-bold text-lg p-4 text-align-center text-white">
           Créer un nouvel objectif
@@ -77,7 +77,7 @@ export default function NouvelObjectif({
           type="text"
           id="titre"
           name="titre"
-          className="border border-gray-300 rounded-lg w-full"
+          className="border border-gray-300 rounded-lg w-full p-2"
           value={titre}
           onChange={(e) => setTitre(e.target.value)}
         />

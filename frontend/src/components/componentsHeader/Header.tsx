@@ -40,7 +40,7 @@ function Header() {
           <ul>
             <li className="sous_sujet">
               <img
-                src="../../../public/favicon.io"
+                src="/favicon.io"
                 className="image_header"
                 onClick={redirigerPageAcceuil}
               />

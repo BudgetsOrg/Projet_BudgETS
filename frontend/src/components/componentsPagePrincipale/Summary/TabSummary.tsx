@@ -111,7 +111,7 @@ export function TabSummary({
           <img className="w-5 h-5" src={edit} alt="Edit" />
         </button>
       </div>
-      <div className="">
+      <div>
         <SoldeBudgetPrinc
           showPopup={showSoldePopup}
           closePopup={() => setShowSoldePopup(false)}

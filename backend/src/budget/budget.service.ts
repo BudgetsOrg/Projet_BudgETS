@@ -45,7 +45,7 @@ export class BudgetService{
         });
     }      
 
-    //Un budget spécifique
+    //Un budget spécifique a un user
     async findOneById(userId: number, id: number) {
         const budget = await this.budgetRepository.findOne({
             where: { id_budget: id, user: { id_user: userId } },

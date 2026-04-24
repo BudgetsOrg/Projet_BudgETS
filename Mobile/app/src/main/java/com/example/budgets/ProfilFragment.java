@@ -3,12 +3,14 @@ package com.example.budgets;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,6 +23,7 @@ import org.json.JSONObject;
 public class ProfilFragment extends Fragment {
 
     private TextView etNom, etPrenom, etEmail;
+    private ImageView ivAvatarProfil, ivEditAvatarProfil;
     private Button btnDeconnexion, btnSupprimer, btnSauvegarder;
 
     @Nullable
@@ -38,6 +41,19 @@ public class ProfilFragment extends Fragment {
         btnDeconnexion = v.findViewById(R.id.btnDeconnexion);
         btnSupprimer = v.findViewById(R.id.btnSupprimer);
         btnSauvegarder = v.findViewById(R.id.btnModifier);
+
+        ivAvatarProfil = v.findViewById(R.id.ivAvatarProfil);
+        ivEditAvatarProfil = v.findViewById(R.id.ivEditAvatarProfil);
+
+
+
+        ivEditAvatarProfil.setOnClickListener(view -> {
+            Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+            intent.setType("image/*");
+            startActivityForResult(Intent.createChooser(intent, "Choisir une photo"), 100);
+
+
+        });
 
         btnDeconnexion.setOnClickListener(view -> {
             SharedPreferences prefs = requireActivity()
@@ -59,6 +75,24 @@ public class ProfilFragment extends Fragment {
 
         return v;
     }
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == 100 && resultCode == requireActivity().RESULT_OK && data != null) {
+            Uri imageUri = data.getData();
+
+            ivAvatarProfil.setImageURI(imageUri);
+
+            SharedPreferences prefs = requireActivity()
+                    .getSharedPreferences("profil", Context.MODE_PRIVATE);
+
+            prefs.edit()
+                    .putString("photo_profil", imageUri.toString())
+                    .apply();
+        }
+    }
+
 
     private void chargerProfil() {
         new Thread(() -> {

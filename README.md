@@ -1,5 +1,7 @@
 # Projet_BudgETS
 # Projet Intégrateur TCH099
+Page Web Frontend: https://budgets.up.railway.app/ <br>
+Page Web Documentation Backend: https://budgets-backend.up.railway.app/api <br>
 ## Description du projet
   Le public cible: Étudiants pour tous les genres dans un établissement québécois. 
   L'application est en français. Facultatif en anglais.

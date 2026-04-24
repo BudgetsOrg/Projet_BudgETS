@@ -1,7 +1,14 @@
 import { postResetPassword } from "../api/UtilisateurApi";
-
+/*
+Cette classe permet d'afficher la page qui changera le mot de passe de l'utilisateur.
+ */
 function PageCreationNouveauMdp() {
     const reinitializationMdp = async () => {
+        /* On Prend le token qui est stocké dans l'url et avec ce token on peut get l'utilisateur afin de changer son password
+        avec le nouveau que l'utilisateur insère.
+        Très important le token qui est dans le lien dure 15 minutes donc après 15 secondes on pourra plus get l'utilisateur
+        correspondant au token ou changer son mot de passe.
+        */
         const token = new URLSearchParams(window.location.search).get("token") ?? "";
         const password = (document.getElementById("input_nouveau_mdp") as HTMLInputElement).value;
 

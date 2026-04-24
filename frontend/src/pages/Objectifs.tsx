@@ -33,6 +33,7 @@ type TypePopup =
   | "editionEconomie"
   | null;
 
+  // Cette classe permet principalement d'afficher les objectifs d'un Utilisateur avec ces Économie.
 function Objectif() {
   const location = useLocation();
   const idObjectif = location.state?.id_objectif;
@@ -108,7 +109,7 @@ function Objectif() {
   const couleurBarre = (pct: number): string => {
     const p = Math.min(Math.max(pct, 0), 100);
 
-    // 0% → 50% (rouge vers jaune)
+    // 0% -> 50% (rouge vers jaune)
     if (p <= 50) {
       const ratio = p / 50;
 
@@ -119,7 +120,7 @@ function Objectif() {
       return `rgb(${r}, ${g}, ${b})`;
     }
 
-    // 50% → 100% (jaune vers vert)
+    // 50% -> 100% (jaune vers vert)
     const ratio = (p - 50) / 50;
 
     const r = Math.round(223 + (127 - 223) * ratio);
@@ -157,12 +158,14 @@ function Objectif() {
     }
   };
 
-  // POPUP INVITATION
+  // Pop Up Invitation.
   const handleEnvoyerInvitation = async (): Promise<void> => {
     if (email.trim()) {
       console.log("Invitation envoyée à () :", email);
 
       try {
+        //Ici on envoie le mail à l'utilisateur pour lui dire qu'il à 
+        // été ajouté et on l'ajoute l'objectif à aux objectifs de l'utilisateur relié au mail.
         await inviteUtilisateurObjectif(idObjectif, email);
 
         setEmailEnvoye(true);
@@ -187,6 +190,7 @@ function Objectif() {
 
         setEmailEnvoye(false);
       }
+      window.location.reload();
     }
   };
 
@@ -202,6 +206,7 @@ function Objectif() {
     setPopupOuvert("ajouter");
   };
 
+  // On ajoute l'économie avec les informations entrées dans le pop up.
   const handleAjouterEconomie = async (): Promise<void> => {
     const montantNum = parseFloat(nouveauMontant.replace(",", "."));
     if (isNaN(montantNum) || montantNum <= 0 || !nouvelleDate) return;
@@ -220,7 +225,7 @@ function Objectif() {
     setPopupOuvert(null);
   };
 
-  // MODE SUPPRIMER
+  // Mode Supprimer Économie.
   const activerModeSupprimer = (): void => {
     setModeSupprimer(true);
     setSelectionnes([]);
@@ -324,6 +329,7 @@ function Objectif() {
     setPopupOuvert(null);
   };
 
+  // On modifie la économie qu'on à choisi de modifier en cliquant sur son boutton modifier.
   const handleModifierEconomie = async (): Promise<void> => {
     if (!economieEnEdition) return;
     const montantNum = parseFloat(editEconomieMontant.replace(",", "."));

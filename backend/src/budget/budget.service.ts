@@ -15,7 +15,7 @@ export class BudgetService{
 
     async create(userId: number, createBudgetDto: CreateBudgetDto) {
     const budget = this.budgetRepository.create(createBudgetDto);
-    budget.user = { id_user: userId } as User;  // assigned after, not passed into create()
+    budget.user = { id_user: userId } as User;  // associe le budget à l'utilisateur en utilisant son ID
     return this.budgetRepository.save(budget);
 }
 
@@ -45,7 +45,7 @@ export class BudgetService{
         });
     }      
 
-    //Un budget spécifique
+    //Un budget spécifique a un user
     async findOneById(userId: number, id: number) {
         const budget = await this.budgetRepository.findOne({
             where: { id_budget: id, user: { id_user: userId } },
@@ -69,7 +69,7 @@ export class BudgetService{
             throw new NotFoundException('Budget non trouvé');
         }
 
-        Object.assign(budget, updateBudgetDto); //coie les champs de updateBudgetDto dans l'entité budget existante
+        Object.assign(budget, updateBudgetDto); //copie les champs de updateBudgetDto dans l'entité budget existante
         return this.budgetRepository.save(budget);
     }
 
@@ -96,7 +96,7 @@ export class BudgetService{
 
         const totalAllocated = budget.enveloppes
             .reduce((sum, env) => sum + Number(env.montant), 0);
-
+        //On ne veut pas que le nouveau solde soit inférieur au total des enveloppes déjà existantes
         if (newSolde < totalAllocated) {
             throw new BadRequestException('Le solde ne peut pas être inférieur au total des enveloppes.');
         }

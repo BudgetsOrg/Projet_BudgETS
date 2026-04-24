@@ -15,6 +15,9 @@ import { useLocation } from "react-router-dom";
 import { getEnveloppeById, updateEnveloppe } from "../api/EnveloppeApi.ts";
 import { useCloudinaryImage } from "../hooks/useCloudinaryImage";
 
+// Cette classe permet d'afficher une Enveloppe ainsi que modifier l'Enveloppe et de visualiser les Dépenses de l'enveloppe.
+// Elle permet aussi de supprimer/modifier/ajouter des dépenses.
+
 function Enveloppe() {
   // pour récupérer le id de l'enveloppe à partir de la page précédente
   const location = useLocation();

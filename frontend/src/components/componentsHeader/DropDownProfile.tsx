@@ -2,11 +2,11 @@ import { useState, useEffect } from "react";
 import type { Utilisateur } from "../../interfaces";
 import { viderSessionStorage } from "../../../public/token";
 
+
+//Cette classe permet d'afficher les options de déconnexion et de rediriger vers la page Profil
+//contenant les informations de celui-ci.
 function DropDownProfile({ utilisateurCourant }: { utilisateurCourant: Utilisateur | null }) {
     const redirigerPageAcceuil = () => {
-        /**
-         * Pour l'instant on rediriger vers la page principale mais a changer plus tard pour rediriger vers la page d'acceuil.
-         */
         window.location.href = "/";
     }
     const redirigerPageProfile = () => {

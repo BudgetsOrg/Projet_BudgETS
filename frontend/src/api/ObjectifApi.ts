@@ -10,6 +10,9 @@ const local = false;
 
 // getObjectif, inviteUtilisateurObjectif, postObjectif, deleteObjectif, updateObjectif, inviteUtilisateurObjectif
 
+
+// Cette objectif va nous permettre de get les objectifs qui sont associé à un Utilisateur pour
+// les affichers dans la page Principale.
 export async function getObjectif() {
   const token = getToken() ?? "";
 
@@ -23,6 +26,8 @@ export async function getObjectif() {
   return response.json();
 }
 
+
+//Cette méthode permet de changer les informations d'un objectifs dans la base de données.
 export async function updateObjectif(objectif: Objectif) {
   const token = getToken() ?? "";
 
@@ -47,6 +52,7 @@ export async function updateObjectif(objectif: Objectif) {
   return response.json();
 }
 
+// Cette méthode permet de supprimer un objectif de la base de données et elle prend en paramètre le id de l'objectif à supprimer.
 export async function deleteObjectif(id_objectif: number) {
   const token = getToken() ?? "";
 
@@ -80,6 +86,7 @@ export async function deleteObjectif(id_objectif: number) {
   }
 }
 
+//Cette méthode permet d'ajouter un objectif cette action sera faite dans la page principale.
 export async function postObjectif(objectif: Objectif) {
   const token = getToken() ?? "";
 
@@ -103,6 +110,9 @@ export async function postObjectif(objectif: Objectif) {
 
   return response.json();
 }
+
+//Cette méthode permet d'ajouter un utilisateur à un objectif.
+//Une fois que le deuxième utilisatuer a été invité ça rend l'objectif commun et accessible aux différents utilisateur qui sont dans l'objectifs.
 export async function inviteUtilisateurObjectif(
   id_objectif: number,
   email: string,

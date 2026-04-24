@@ -54,7 +54,7 @@ public class EnveloppesFragment extends Fragment {
     }
 
 
-    // ─────────────────────────── CACHE ───────────────────────────
+
 
     private void sauvegarderCache() {
         if (getActivity() == null) return;
@@ -100,7 +100,7 @@ public class EnveloppesFragment extends Fragment {
         }
     }
 
-    // ─────────────────────────── API (GET) ───────────────────────────
+
 
     private void chargerEnveloppes() {
         if (getActivity() == null) return;
@@ -140,7 +140,7 @@ public class EnveloppesFragment extends Fragment {
         }).start();
     }
 
-    // ─────────────────────────── POPUP & POST ───────────────────────────
+
 
     private void ouvrirPopup() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());

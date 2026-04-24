@@ -14,6 +14,9 @@ import PageMdpOublie from "./pages/PageMotDePasseOublie";
 import PageObjectifs from "./pages/Objectifs";
 import PageCreationNouveauMdp from "./pages/PageCreationNouveauMdp";
 import CategoriesDeDepense from "./pages/CategoriesDeDepense";
+
+//Cette fonction est la classe Principale qui permet de gérer 
+//les routes de chaque pages et de donner un chemin en url pour chaque page.
 function AppContent() {
   const location = useLocation();
 

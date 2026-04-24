@@ -31,7 +31,7 @@ export class AuthController {
   @ApiResponse({ status: 201, description: 'Si message = "Email de récupération envoyé" alors la demande est traitée avec succès \n Si message = "Si ce compte existe, un email a été envoyé" alors le compte n\'existe pas, mais le code statut est 200 pour evité de dévoiler si un compte existe.' })
   @Post('forgot-password')
   forgotPassword(@Body() dto: ForgotPasswordDto) {
-    return this.authService.forgotPassword(dto.adresse_email);
+    return this.authService.forgotPassword(dto);
   }
 
   @ApiOperation({ summary: 'Réinitialisation du mot de passe en utilisant le token envoyé par courriel' })

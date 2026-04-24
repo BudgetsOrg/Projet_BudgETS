@@ -9,6 +9,9 @@ const local = false;
 
 // getEconomie, getOneEconomie, postEconomie, deleteEconomie, updateEconomie
 
+
+// Cette fonction permet de récuperer toutes les économies d'un objectif pour pouvoir prendre les bonnes économies
+// on passe en paramètre le id de l'objectif qu'on veux récuperer les Économies.
 export async function getEconomie(id_objectif: number) {
   const token = getToken() ?? "";
 
@@ -53,6 +56,8 @@ export async function getEconomie(id_objectif: number) {
   }
 }
 
+// Cette fonction permet de recuperer une seul économie.Cette fonction permet de 
+// selectionner une économie en particulier en passant par son id qui est passé en paramètre.
 export async function getOneEconomie(id_economie: number) {
   const token = getToken() ?? "";
 
@@ -75,6 +80,7 @@ export async function getOneEconomie(id_economie: number) {
   }
 }
 
+// Cette fonction permet d'ajoute une économie elle sera ajouté à un objectif.
 export async function postEconomie(economie: Economie) {
   const token = getToken() ?? "";
 
@@ -101,6 +107,8 @@ export async function postEconomie(economie: Economie) {
   }
 }
 
+
+//Cette fonction permet de retirer une seul économie.Afin de selectionner la bonne économie on passe le id en paramètre.
 export async function deleteEconomie(id_economie: number) {
   const token = getToken() ?? "";
 
@@ -123,6 +131,8 @@ export async function deleteEconomie(id_economie: number) {
   }
 }
 
+
+//Cette fonction permet de modifier la ou les informations d'une Économie.
 export async function updateEconomie(economie: Economie) {
   const token = getToken() ?? "";
 

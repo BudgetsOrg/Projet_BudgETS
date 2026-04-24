@@ -164,6 +164,8 @@ function Objectif() {
       console.log("Invitation envoyée à () :", email);
 
       try {
+        //Ici on envoie le mail à l'utilisateur pour lui dire qu'il à 
+        // été ajouté et on l'ajoute l'objectif à aux objectifs de l'utilisateur relié au mail.
         await inviteUtilisateurObjectif(idObjectif, email);
 
         setEmailEnvoye(true);
@@ -188,6 +190,7 @@ function Objectif() {
 
         setEmailEnvoye(false);
       }
+      window.location.reload();
     }
   };
 

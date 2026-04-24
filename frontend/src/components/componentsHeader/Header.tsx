@@ -6,8 +6,15 @@ import { getToken, viderSessionStorage } from "../../../public/token";
 import DropDownProfile from "./DropDownProfile";
 import type { Utilisateur } from "../../interfaces";
 
+
+//Cette classe permet d'afficher l'en tête et elle s'adapte pour afficher ce 
+//qu'elle doit afficher au bon moment et dépendamment de si un Utilisateur est connecté.
 function Header() {
   const token = getToken();
+
+  // Permet de faire en sorte que si un utilisateur est connecté le btn Connexion passe à un Slider qui afficher
+  // certaines informations comme le Nom,Prenom,Mail,Photo de profil de l'utilisateur 
+  // et le slider permet de se diriger vers la page Profil ou de se déconnecter.
   const estConnecte = token !== "";
   const [openProfile, setOpenProfile] = useState(false);
 

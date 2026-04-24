@@ -5,7 +5,6 @@ export interface Enveloppe {
   image?: string;
 }
 
-// Payload used when creating an enveloppe (no id yet)
 export type EnveloppeCreate = Omit<Enveloppe, "id_enveloppe">;
 
 // pour le pie chart
@@ -15,6 +14,8 @@ export interface Data {
   color: string;
 }
 
+
+//Interface pour stocker le budget.
 export interface Budget {
   id_budget?: number;
   soldeDuMois: number;
@@ -25,7 +26,9 @@ export interface Budget {
   categories?: Categorie[];
 }
 
-// à faire
+// En rendant falcultatif la majoritées des attributs 
+// on permets de modifier ce que l'en veux sans devoir inserer une valeurs pour tous les attributs.
+//Interface pour stocker et gerer les objectifs.
 export interface Objectif {
   id_objectif?: number;
   titre: string;
@@ -35,6 +38,11 @@ export interface Objectif {
   users: Utilisateur[];
 }
 
+
+
+// En rendant falcultatif la majoritées des attributs 
+// on permets de modifier ce que l'en veux sans devoir inserer une valeurs pour tous les attributs.
+//Interface pour gerer et stocker les Utilisateurs.
 export interface Utilisateur {
   id_user?: number;
   nom: string;
@@ -47,7 +55,10 @@ export interface Utilisateur {
   soldeDumois?: number;
 }
 
-// vérifier l'id
+
+// En rendant falcultatif la majoritées des attributs 
+// on permets de modifier ce que l'en veux sans devoir inserer une valeurs pour tous les attributs.
+//Interface pour gerer et stocker les Depenses.
 export interface Depense {
   id_depense: number;
   nom_depense: string;
@@ -58,7 +69,10 @@ export interface Depense {
   categorieId: number;
 }
 
-// à faire
+
+// En rendant falcultatif la majoritées des attributs 
+// on permets de modifier ce que l'en veux sans devoir inserer une valeurs pour tous les attributs.
+//Interface pour gerer et stocker les Categories.
 export interface Categorie {
   id_categorie: number;
   nom_categorie: string;
@@ -67,7 +81,14 @@ export interface Categorie {
   id_user: number;
 }
 
-// vérifier l'id
+
+
+
+// En rendant falcultatif la majoritées des attributs 
+// on permets de modifier ce que l'en veux sans devoir inserer une valeurs pour tous les attributs.
+
+//Interface pour gerer et stocker les Économies.
+
 export interface Economie {
   id_economie: number;
   montant: number;

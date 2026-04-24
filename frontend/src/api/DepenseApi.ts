@@ -7,6 +7,9 @@ const local = false;
 
 // getDepenses, getOneDepense, postDepense, deleteDepense, updateDepense
 
+
+//Cette fonction permet de récuperer toutes les Dépenses qui sont relié à une seul Enveloppe.
+// Afin de choisir la bonne Enveloppe on passe en paramètre le id de l'Enveloppe.
 export async function getDepenses(id_enveloppe: number) {
   const token = getToken() ?? "";
 
@@ -63,6 +66,9 @@ export async function getDepenses(id_enveloppe: number) {
   }
 }
 
+
+//Cette fonction permet de get une seul dépense pour prendre
+//la bonne dépense on passe en paramètre l'id de la dépense qu'on veux récuperer.
 export async function getOneDepense(id_depense: number) {
   const token = getToken() ?? "";
 
@@ -85,6 +91,8 @@ export async function getOneDepense(id_depense: number) {
   }
 }
 
+
+//Cette fonction permet d'ajouter une dépense qui sera relié à un objectif et relié à un Utilisateur.
 export async function postDepense(depense: Depense) {
   const token = getToken() ?? "";
 
@@ -111,6 +119,9 @@ export async function postDepense(depense: Depense) {
   }
 }
 
+//Cette fonction permet de supprimer une dépense et non toutes les dépenses
+//d'une Enveloppe pour pouvoir sélectionner cette dépense qu'on veux supprimer on va
+//passer en paramètre le id de la dépense qu'on veux supprimer.
 export async function deleteDepense(id_depense: number) {
   const token = getToken() ?? "";
 
@@ -133,6 +144,8 @@ export async function deleteDepense(id_depense: number) {
   }
 }
 
+
+//Cette méthode permet de changer certaine(s) informations d'une dépense.
 export async function updateDepense(depense: Depense) {
   const token = getToken() ?? "";
 

@@ -53,6 +53,7 @@
             android:background="@drawable/fond_blanc"
             android:textColor="#FF000000"/>
 
+
         <Button
             android:id="@+id/changerMdp"
             android:text="Changer mot de passe"

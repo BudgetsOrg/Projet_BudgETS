@@ -43,7 +43,7 @@ public class ObjectifAdapter extends RecyclerView.Adapter<ObjectifAdapter.MyView
             PageObjectifFragment detailFrag = new PageObjectifFragment();
 
             Bundle args = new Bundle();
-            args.putSerializable("objectif", objectif); // ✅ FIX IMPORTANT
+            args.putSerializable("objectif", objectif);
             detailFrag.setArguments(args);
 
             AppCompatActivity activity = (AppCompatActivity) v.getContext();

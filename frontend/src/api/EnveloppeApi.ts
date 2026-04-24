@@ -8,6 +8,9 @@ const local = false;
 
 // getEnveloppe, getEnveloppeById, postEnveloppe, deleteEnveloppe, updateEnveloppe
 
+
+// Cette fonction permet de get tous les enveloppes qui
+// sont reliée à un Utilisateur pour pouvoir les afficher dans la page principale.
 export async function getEnveloppe() {
   const token = getToken() ?? "";
 
@@ -46,6 +49,8 @@ export async function getEnveloppe() {
   }
 }
 
+// Cette méthode permet de selectionner une seul Enveloppe que l'on voudra afficher une information dessus comme par exemple
+//  lorsque on rentre dans la page qui affiche les détails d'une Enveloppe.
 export async function getEnveloppeById(id_enveloppe: number) {
   const token = getToken() ?? "";
 
@@ -71,6 +76,7 @@ export async function getEnveloppeById(id_enveloppe: number) {
   }
 }
 
+//Cette méthode permet d'ajouter une Enveloppe à l'utilisateur dans la base de données.
 export async function postEnveloppe(enveloppe: EnveloppeCreate) {
   const token = getToken() ?? "";
 
@@ -97,6 +103,8 @@ export async function postEnveloppe(enveloppe: EnveloppeCreate) {
   }
 }
 
+// Cette méthode permet de retirer une Enveloppe associé à un Utilisateur.
+// Afin de choisir la bonne Enveloppe la méthode prend en paramètre le id de l'enveloppe à supprimer.
 export async function deleteEnveloppe(id_enveloppe: number) {
   const token = getToken() ?? "";
 
@@ -122,6 +130,7 @@ export async function deleteEnveloppe(id_enveloppe: number) {
   }
 }
 
+// Cette fonction permet de modifier dans la base de données une Enveloppe.
 export async function updateEnveloppe(enveloppe: Enveloppe) {
   const token = getToken() ?? "";
 

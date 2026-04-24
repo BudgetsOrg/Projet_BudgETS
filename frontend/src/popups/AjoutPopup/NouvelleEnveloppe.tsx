@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import type { Enveloppe } from "../../interfaces";
+import { useState } from "react";
+import type { EnveloppeCreate } from "../../interfaces";
 import { postEnveloppe } from "../../api/EnveloppeApi";
 import { useCloudinaryImage } from "../../hooks/useCloudinaryImage";
 import addPhotoIcon from "../../img/add_photo_alternate_outlined.svg";
@@ -31,7 +31,7 @@ export default function NouvelleEnveloppe({
       return;
     }
 
-    const nouvelleEnveloppe: Enveloppe = {
+    const nouvelleEnveloppe: EnveloppeCreate = {
       titre: titre.trim(),
       montant: Number(montant),
       image: undefined,

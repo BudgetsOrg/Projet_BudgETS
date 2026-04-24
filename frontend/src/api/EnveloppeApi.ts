@@ -1,5 +1,5 @@
 import { getToken } from "../../public/token";
-import type { Enveloppe } from "../interfaces";
+import type { Enveloppe, EnveloppeCreate } from "../interfaces";
 const API_URL_GLOBAL = "https://budgets-backend.up.railway.app";
 const API_URL_LOCAL = "http://localhost:3000";
 const debug = false;
@@ -71,7 +71,7 @@ export async function getEnveloppeById(id_enveloppe: number) {
   }
 }
 
-export async function postEnveloppe(enveloppe: Enveloppe) {
+export async function postEnveloppe(enveloppe: EnveloppeCreate) {
   const token = getToken() ?? "";
 
   if (local) {

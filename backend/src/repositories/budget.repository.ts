@@ -15,7 +15,7 @@ export class BudgetRepository {
     const newBudget = this.repo.create({
       soldeDuMois: solde,
       user: user,
-    }); // .create() prépare l'entité
+    }); // .create() prépare l'entite
     return await this.repo.save(newBudget);
   }
 
@@ -41,7 +41,7 @@ export class BudgetRepository {
     });
   }
 
-  // Récupérer le budget actuel (le dernier créé)
+  // Recuperer le budget actuel (le dernier cree)
   async findLatestByUserId(userId: number): Promise<Budget | null> {
     return await this.repo.findOne({
       where: { user: { id_user: userId } },

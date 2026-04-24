@@ -4,7 +4,6 @@ import { BrevoClient } from '@getbrevo/brevo';
 import { InjectRepository } from '@nestjs/typeorm/dist/common/typeorm.decorators';
 import { User } from 'src/entities/user.entity';
 import { Repository } from 'typeorm/repository/Repository';
-import { Cron } from '@nestjs/schedule/dist/decorators/cron.decorator';
 
 @Injectable()
 export class MailService {

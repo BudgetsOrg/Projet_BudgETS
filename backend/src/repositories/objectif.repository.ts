@@ -2,10 +2,11 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Objectif, User } from 'src/entities';
 import { Repository } from 'typeorm';
+import { UserRepository } from './user.repository';
 
 /**
  * @class ObjectifRepository
- * but: custom repository 
+ * 
  * 
  */
 
@@ -14,8 +15,8 @@ export class ObjectifRepository {
   constructor(
     @InjectRepository(Objectif)
     private readonly repo: Repository<Objectif>,
-    @InjectRepository(User)
-    private readonly userRepo: Repository<User>,
+    
+    private readonly userRepo: UserRepository,
   ) {}
 
   //Create
@@ -79,9 +80,9 @@ export class ObjectifRepository {
     //Si l'objectif n'est pas trouver tu envoie une erreur 
     if (!objectif) throw new NotFoundException('Objectif introuvable');
 
-    //Tu cherche l'utilisateur a ajouter en utilisant le userRepo 
+    //Cherche l'utilisateur a ajouter en utilisant le userRepo 
     //qui se trouve dans le fichier les repositorie
-    const userToAdd = await this.userRepo.findOneBy({ adresse_email: email });
+    const userToAdd = await this.userRepo.findByEmail(email);
 
     //si il trouve pas le user a ajouter il y a erreur
     if (!userToAdd)
@@ -89,12 +90,15 @@ export class ObjectifRepository {
 
     // Vérifier s'il est déjà membre pour éviter les doublons
 
-    //Methode 1: si on utilise some ill va parcourir le tableau de user dans les objectif
-    //et pour chaque element elle va voir si elle est vrai 
-    //si vrai, elle s'arrete et elle retourne
-    // const isAlreadyMember = objectif.users.some(
-    //   (u) => u.id_user === userToAdd.id_user,
-    // );
+    /*
+    Methode 1: si on utilise some ill va parcourir le tableau de user dans les objectif
+    et pour chaque element elle va voir si elle est vrai 
+    si vrai, elle s'arrete et elle retourne
+    
+     const isAlreadyMember = objectif.users.some(
+       (u) => u.id_user === userToAdd.id_user,
+    );
+    */ 
 
     ////Methode 2: 
     let isAlreadyMember = false;

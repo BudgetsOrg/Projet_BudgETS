@@ -10,8 +10,6 @@ import { UpdateUserDto } from './dto';
 @Controller('users')
 @ApiResponse({ status: 401, description: 'Non autorisé' })
 export class UserController {
-    // Passe le service dans le controller pour pouvoir l'utiliser dans les méthodes du controller en mode readonly pour prevenir les modifications accidentelles.
-    // il faut toujours que ça pointe vers une instance de UserService pour que les méthodes du service soient accessibles dans le controller.
     constructor(private readonly userService: UserService) {} 
     
     // UPDATE USER 

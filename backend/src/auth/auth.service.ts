@@ -121,7 +121,7 @@ export class AuthService {
 
   async forgotPassword(dto:ForgotPasswordDto) {
 
-    //chercher le user par email
+    // Chercher le user par email
     const user = await this.userService.findByEmail(dto.adresse_email);
 
     // Ne pas dire si l'email n'existe pas

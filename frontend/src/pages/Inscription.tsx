@@ -10,6 +10,11 @@ import img_plante from "../img/image_inscription_plante_coupe.png";
 import img_avatar_default from "../img/image_avatar_default.png";
 
 
+
+/*
+Cette classe permet à l'utilisateur de se créer un compte et vérifie si les entrées sont valide pour pouvoir 
+les inserer dans la base de données.
+*/
 function Inscription() {
   const [erreur, setErreur] = useState<string | null>(null);
   const [donneeInscription, setDonneeInscription] = useState<Utilisateur>({

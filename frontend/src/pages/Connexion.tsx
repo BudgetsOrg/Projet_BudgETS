@@ -6,6 +6,10 @@ import img_plante from "../img/image_inscription_plante.png";
 import { clearSelectedBudgetId } from "../utils/budgetSelection";
 import ChangerBudget from "../popups/ChangerBudget";
 
+/*
+Cette classe permet à l'utilisateur de 1) se connecter pour avoir accès à plus de fonctionalité
+2) donne l'option d'aller vers la page Inscription et 3) aller vers la réinitialization du mot de passe.
+*/
 function Connexion() {
   const [erreur, setErreur] = useState("");
   const [showPopup, setPopup] = useState(false);

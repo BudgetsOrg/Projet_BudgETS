@@ -17,7 +17,7 @@ export class EconomieService {
     ) {}
     
     async create(userId: number, createEconomieDto: CreateEconomieDto) {
-        // Find the objectif and verify the user is one of its owners
+        // Trouve l'objectif et verifie que l'utilisateur est propriétaire de l'objectif
         const objectif = await this.objectifRepository.findOne({
             where: { id_objectif: createEconomieDto.objectifId },
             relations: ['users'],
@@ -26,7 +26,8 @@ export class EconomieService {
         if (!objectif) {
             throw new NotFoundException('Objectif non trouvé');
         }
-
+        //C'est comme ça qu'on vérifie le propriétaire d'un objet avec une relation ManyToMany
+        //.som() va iterer sur les utilisateurs associés et vérifier si un d'eux a le même id
         const isOwner = objectif.users.some(user => user.id_user === userId);
         if (!isOwner) {
             throw new NotFoundException('Objectif non trouvé');

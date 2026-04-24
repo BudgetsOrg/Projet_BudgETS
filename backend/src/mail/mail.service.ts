@@ -4,6 +4,7 @@ import { BrevoClient } from '@getbrevo/brevo';
 import { InjectRepository } from '@nestjs/typeorm/dist/common/typeorm.decorators';
 import { User } from 'src/entities/user.entity';
 import { Repository } from 'typeorm/repository/Repository';
+import { Cron } from '@nestjs/schedule';
 
 @Injectable()
 export class MailService {
@@ -97,7 +98,7 @@ export class MailService {
   }
 }
 
-/*@Cron('0 14 * * *') // TOus les jours @ 09:00
+@Cron('0 14 * * *') // TOus les jours @ 09:00
 async sendDailyReminder() {
     const allowedDomains = ['gmail.com', 'outlook.com', 'hotmail.com', 'yahoo.com', 'live.com'];
     const users = await this.userRepository.find();
@@ -141,6 +142,6 @@ async sendDailyReminder() {
             console.error(`FAILED: ${user.adresse_email}`, error);
         }
     }
-}*/
+}
 
 }

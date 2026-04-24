@@ -40,6 +40,7 @@ export class BudgetController{
     }
 
     //Récupère le budget spécifique du user avec l'id du budget et l'id du user obtenus du JWT
+    //ParseIntPipe pour convertir l'id du budget de string à number
     @ApiOperation({ summary: 'Récupérer un budget spécifique de l\'utilisateur' })
     @ApiParam({ name: 'id', type: Number, description: 'ID du budget' })
     @ApiResponse({ status: 200, description: 'Budget trouvé avec enveloppes, dépenses et catégories' })

@@ -76,7 +76,7 @@ export class UserService {
     });
   }
 
-  // vallidation des champ
+  // validation des champ
   private validationChamp(userData:InscriptionDto){
     if (!userData.nom) {
       throw new BadRequestException('Le nom est obligatoire.');
@@ -97,7 +97,7 @@ export class UserService {
     //verifier que tu as bel est bien un nom ,un prenom et un email
      this.validationChamp(userData)
 
-    //  Vérification de l'âge
+    //  Verification de l'age
     if (userData.date_naissance) {
       const dateUser = new Date(userData.date_naissance);
       const age = this.calculAge(dateUser);
@@ -112,7 +112,7 @@ export class UserService {
       throw new BadRequestException("L'email est obligatoire.");
     }
 
-    // Verification si l'email existe déjà
+    // Verification si l'email existe deja
     const existingUser = await this.userRepository.findByEmail(
       userData.adresse_email,
     );
@@ -124,13 +124,13 @@ export class UserService {
     }
     const newUser = await this.userRepository.create(userData);
     await this.budgetRepository.create(userData.soldeDumois, newUser);
-    // Création
+    // Creation d'un objet user
     return newUser;
   }
 
   async updatePassword(id: number, hash: string) {
     return await this.userRepository.update(id, { password: hash });
-}
+  }
 
   async findByEmail(email: string) {
     return await this.userRepository.findByEmail(email);

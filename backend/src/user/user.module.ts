@@ -12,6 +12,6 @@ import { ObjectifModule } from 'src/objectif/objectif.module';
   imports: [TypeOrmModule.forFeature([User]),BudgetModule,ObjectifModule ],
   controllers: [UserController], 
   providers: [UserService, UserRepository ],
-  exports: [UserService, UserRepository], //permet de partager le service avec les autres modules de l'application.
+  exports: [UserService, UserRepository], 
 })
 export class UserModule {}

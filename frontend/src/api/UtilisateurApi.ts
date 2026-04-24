@@ -12,6 +12,9 @@ const local = false;
 // getUtilisateur, postUtilisateur, updateUtilisateur, updateUtilisateurImage, deleteUtilisateur, login,
 // postConnexion, postForgotPassword, postResetPassword
 
+
+// La fonction getUtilisateur permet de récuperer les informations de l'utilisateur comme le nom ou prenom.
+// pour récuperer le bon Utilisateur on utilise le token qui permet de get l'utilisateur relier au jwt_token. 
 export async function getUtilisateur() {
   const token = getToken() ?? "";
 
@@ -51,7 +54,7 @@ export async function getUtilisateur() {
     }
   }
 }
-
+// Cette méthode permet d'inserer un Utilisateur dans la base de données.
 export async function postUtilisateur(
   nouvelleUtilisateur: Utilisateur,
 ): Promise<Response> {
@@ -72,6 +75,7 @@ export async function postUtilisateur(
   return reponse;
 }
 
+//Cette méthode permet de change certaine informations de l'utilisateur comme son nom,prénom etc.
 export async function updateUtilisateur(
   nom: string,
   prenom: string,
@@ -103,6 +107,7 @@ export async function updateUtilisateur(
   return response.json();
 }
 
+//Cette méthode permet de modifier l'image qui en mémoire de l'utilisateur soit son logo.
 export async function updateUtilisateurImage(image: string) {
   const token = getToken() ?? "";
 
@@ -129,6 +134,8 @@ export async function updateUtilisateurImage(image: string) {
   return response.json();
 }
 
+
+// Cette fonction permet de retirer l'utilisateur de la base de données cette méthode retire l'utilisateur qui est relié au jwt_token
 export async function deleteUtilisateur() {
   const token = getToken() ?? "";
 
@@ -151,6 +158,7 @@ export async function deleteUtilisateur() {
   }
 }
 
+//Cette méthode permet que durant la connexion on get le jwt-token relier au email et password insérer.
 export async function postConnexion(
   adresse_email: string,
   password: string,
@@ -204,6 +212,7 @@ export async function login(adresse_email: string, password: string) {
   }
 }
 
+//Cette méthode permet de faire le demander au mail pour reset le password.
 export async function postForgotPassword(adresse_email: string) {
   const token = getToken() ?? "";
 
@@ -221,6 +230,7 @@ export async function postForgotPassword(adresse_email: string) {
 
   return reponse;
 }
+//Cette méthode permet de changer le mdp associé au token.
 export async function postResetPassword(token: string, password: string) {
   const url = local
     ? `${API_URL_LOCAL}/auth/reset-password`

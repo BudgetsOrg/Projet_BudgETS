@@ -1,16 +1,28 @@
 import { postForgotPassword } from "../api/UtilisateurApi";
 import { useState } from "react";
 
+/*
+Cette page permet de mettre le email de l'utilisateur pour permettre d'envoyer un mail à l'utilisateur 
+qui permettra de reset de le password.
+ */
 export function PageMotDePasseOublie() {
 
+    //setErreur permettra d'afficher l'erreur qu'on veux afficher à l'utilisateur par exemple si l'utilisateur
+    //  entre un mail qui n'existe pas dans la base de données.
     const [erreur, setErreur] = useState<string | null>(null);
 
     const envoyerMailResetPassword = async () => {
         const email = (document.getElementById("input_adresse_email") as HTMLInputElement).value;
 
         setErreur(null);
+
+        
         try {
+            // On appelle la route qui permet d'envoyer le mail oublié au mail qui est insérer dans le input.
             const reponse = await postForgotPassword(email);
+
+            // Dans le cas où la reponse n'est pas un code 200 à 299 alors c'est qu'il
+            // n'y a pas d'utilisateur avec ce mail ainsi il est impossible de reset le mdp donc on l'affiche à l'utilisareur.
             if (!reponse.ok) {
             const errorData = await reponse.json();
             const message = Array.isArray(errorData.message)

@@ -5,6 +5,9 @@ export interface Enveloppe {
   image?: string;
 }
 
+// Payload used when creating an enveloppe (no id yet)
+export type EnveloppeCreate = Omit<Enveloppe, "id_enveloppe">;
+
 // pour le pie chart
 export interface Data {
   title: string;

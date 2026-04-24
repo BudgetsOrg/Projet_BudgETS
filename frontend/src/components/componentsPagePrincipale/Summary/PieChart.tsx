@@ -73,22 +73,18 @@ export function SummaryPieChart({ refreshKey }: PieChartProps) {
 }
 
 function seedColors(id: number, position: number) {
-  console.log(`id: ${id}, position: ${position}`);
   const colors = ["#125b48", "#96c16e", "#013528", "#6fb4a3", "#0fa17c"];
-  if (position > colors.length) {
-    return genColor(id);
-  } else {
-    return colors[position];
-  }
+  if (position >= colors.length) return genColor(id);
+  return colors[position];
 }
 
 // Source : https://stackoverflow.com/a/8134122
 function genColor(seed: number) {
   let color = Math.floor(Math.abs(Math.sin(seed) * 16777215)).toString(16);
-  // pad any colors shorter than 6 characters with leading 0s
+
   while (color.length < 6) {
     color = "0" + color;
   }
 
-  return color;
+  return `#${color}`;
 }

@@ -1,6 +1,6 @@
 // Mohamed
-import { useState, useEffect, useRef } from "react"; // npm install
-import type { Depense } from "../interfaces"; // ton interface est rendu dans la page pour ceux-ci
+import React, { useState, useEffect, useRef } from "react"; // npm install
+import type { Categorie, Depense } from "../interfaces"; // ton interface est rendu dans la page pour ceux-ci
 import { GraphiqueEnveloppe } from "../components/graphiques/graphiqueEnveloppe.tsx"; // le graphique de la page enveloppe
 import { getToken } from "../../public/token.ts";
 import {
@@ -9,6 +9,7 @@ import {
   deleteDepense,
   updateDepense,
 } from "../api/DepenseApi.ts";
+import { getCategorie } from "../api/CategorieApi.ts";
 import img_edit from "../img/edit.png";
 import addPhotoIcon from "../img/add_photo_alternate_outlined.svg";
 import { useLocation } from "react-router-dom";
@@ -34,6 +35,10 @@ function Enveloppe() {
     budgetAlloue: 0,
     image: "",
   });
+
+
+  const [categories, setCategories] = useState<Categorie[]>([]);
+
   const [editData, setEditData] = useState({
     titre: titre,
     budgetAlloue: montantEnveloppe,
@@ -77,6 +82,30 @@ function Enveloppe() {
     upload: uploadImageEnveloppe,
     reset: resetImageEnveloppe,
   } = useCloudinaryImage({ initialUrl: imageInitiale, folder: "enveloppes" });
+
+
+  useEffect(() => {
+    const recupererCategories = async () => {
+      try {
+        const data = await getCategorie();
+
+        if (Array.isArray(data)) {
+          const dataConverti = data.map((c: any) => ({
+            ...c,
+            id_categorie: Number(c.id_categorie),
+          }));
+
+          console.log("Catégories :", dataConverti);
+
+          setCategories(dataConverti);
+        }
+      } catch (error: any) {
+        console.log("Erreur chargement des catégories.");
+      }
+    };
+
+    recupererCategories();
+  }, []);
 
   const modifierInformationEnveloppe = async () => {
     try {
@@ -131,18 +160,22 @@ function Enveloppe() {
           alert("Erreur : impossible de charger les dépenses");
           return;
         }
+
         const dataConverti = data.map((d: any) => ({
           ...d,
           montant: parseFloat(d.montant) || 0,
+          categorieId: Number(d.categorieId), // ✅ FIX ICI
         }));
 
-        console.log("Dépenses reçues :", data);
+        console.log("Dépenses converties :", dataConverti);
+
         setDepenses(dataConverti);
       } catch (error: any) {
         console.error(error);
         alert(error.message);
       }
     };
+
     recupererDepenses();
   }, []);
 
@@ -387,6 +420,7 @@ function Enveloppe() {
             <tr>
               {modeSupprimer && <th></th>}
               <th>Nom</th>
+              <th>Catégorie</th>
               <th>Montant</th>
               <th>Date</th>
               {!modeSupprimer && <th>Action</th>}
@@ -395,44 +429,28 @@ function Enveloppe() {
 
           <tbody>
             {depenses.map((depense, index) => (
-              <>
-                <tr key={index}>
+              <React.Fragment key={index}>
+                <tr>
                   {modeSupprimer && (
                     <td>
-                      <input
-                        type="checkbox"
-                        checked={selectionnes.includes(index)}
-                        onChange={() => toggleSelection(index)}
-                      />
+                      <input type="checkbox" checked={selectionnes.includes(index)} onChange={() => toggleSelection(index)} />
                     </td>
                   )}
                   <td>{depense.nom_depense}</td>
-                  <td>{formatPrix(depense.montant)}</td>
+                  <td>{categories.find(c => c.id_categorie === depense.categorieId)?.nom_categorie ?? "-"}</td>                  <td>{formatPrix(depense.montant)}</td>
                   <td>{formatDate(depense.date ?? "")}</td>
-
                   {!modeSupprimer && (
                     <td className="cell_actions">
-                      <button
-                        className="btn_modifier"
-                        onClick={() => handleEdit(depense, index)}
-                      >
-                        Modifier
-                      </button>
+                      <button className="btn_modifier" onClick={() => handleEdit(depense, index)}>Modifier</button>
                     </td>
                   )}
                 </tr>
                 <tr>
-                  <td colSpan={modeSupprimer ? 6 : 5}>
-                    <div
-                      style={{
-                        height: "5px",
-                        backgroundColor: "#D9D9D9",
-                        width: "100%",
-                      }}
-                    />
+                  <td colSpan={modeSupprimer ? 7 : 6}>
+                    <div style={{ height: "5px", backgroundColor: "#D9D9D9", width: "100%" }} />
                   </td>
                 </tr>
-              </>
+              </React.Fragment>
             ))}
           </tbody>
         </table>
@@ -465,6 +483,25 @@ function Enveloppe() {
                 })
               }
             />
+
+
+            <select
+              value={nouvelleDepense.categorieId || ""}
+              onChange={(e) =>
+                setNouvelleDepense({
+                  ...nouvelleDepense,
+                  categorieId: parseInt(e.target.value),
+                })
+              }
+              style={{ height: "36px", borderRadius: "8px", border: "1px solid #d5d5d5", padding: "0 12px" }}
+            >
+              <option value="">-- Choisir une catégorie --</option>
+              {categories.map((cat) => (
+                <option key={cat.id_categorie} value={cat.id_categorie}>
+                  {cat.nom_categorie}
+                </option>
+              ))}
+            </select>
 
             <input
               type="date"
@@ -523,9 +560,9 @@ function Enveloppe() {
                 style={
                   previewImageEnveloppe || editData.image
                     ? {
-                        backgroundImage: `url(${previewImageEnveloppe || editData.image || ""})`,
-                        borderStyle: "solid",
-                      }
+                      backgroundImage: `url(${previewImageEnveloppe || editData.image || ""})`,
+                      borderStyle: "solid",
+                    }
                     : undefined
                 }
                 onClick={() => {

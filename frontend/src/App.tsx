@@ -50,6 +50,7 @@ function AppContent() {
           path="/PageCreationNouveauMdp"
           element={<PageCreationNouveauMdp />}
         />
+        <Route path="/CategorieDepense" element = {<CategoriesDeDepense/>}></Route>
       </Routes>
       {showHeader && <Footer />}
       {/*</div>*/}
